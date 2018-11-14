@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,14 +38,35 @@ namespace GreetNGroup.Filters
              */
             ClaimsPrincipal claims = action.RequestContext.Principal as ClaimsPrincipal;
 
-            /*
-             * Lambda function used in ClaimsPrincipal.HasClaim function to check whether
-             * or not the current user has the correct claim or claimValue to perform
-             * specific action
-             */
-            if (claims.HasClaim(x => x.Type == Claim && x.Value == ClaimValue))
+            if (claims != null)
             {
+                /*
+                 * 1. Check for authentication of user
+                 *
+                 * Accesses the ClaimsPrincipal Identity and Checks for authentification
+                 */
+                if (!claims.Identity.IsAuthenticated)
+                {
+                    /*
+                     * User is not authenticated, Unauthorized message is returned
+                     */
+                    return Task.FromResult<object>(HttpStatusCode.Unauthorized);
+                }
 
+                /*
+                 * 2. Check for claims
+                 * 
+                 * Lambda function used in ClaimsPrincipal.HasClaim function to check whether
+                 * or not the current user has the correct claim or claimValue to perform
+                 * specific action
+                 */
+                if (!claims.HasClaim(x => x.Type == Claim && x.Value == ClaimValue))
+                {
+                    /*
+                     * Claims on current user do not meet required claims for authorization
+                     */
+                    return Task.FromResult<object>(HttpStatusCode.Unauthorized);
+                }
             }
 
             /*
