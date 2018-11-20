@@ -17,7 +17,7 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.GetUserName();
+            actual = Dylan.Username;
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -30,7 +30,7 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.GetPassword();
+            actual = Dylan.Password;
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -43,7 +43,7 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.GetCity();
+            actual = Dylan.Cityloc;
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -56,7 +56,115 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.GetState();
+            actual = Dylan.Stateloc;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetCountry_CorrectCountry()
+        {
+            // Arrange
+            string expected = "USA";
+            string actual;
+
+            // Act
+            actual = Dylan.Countryloc;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetDOB_CorrectDOB()
+        {
+            // Arrange
+            string expected = "12/25/1996";
+            string actual;
+
+            // Act
+            actual = Dylan.DOB;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetSecurityQuestion_CorrectSecurityQuestion()
+        {
+            // Arrange
+            string expected = "What is your favorite book?";
+            string actual;
+
+            // Act
+            actual = Dylan.SecurityQ;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetSecurityAnswer_CorrectSecurityAnswer()
+        {
+            // Arrange
+            string expected = "Cat in the Hat";
+            string actual;
+
+            // Act
+            actual = Dylan.SecurityA;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetUserName_ValidEntry_True()
+        {
+            // Arrange
+            Boolean expected = true;
+            Boolean actual = false;
+
+            // Act
+            try
+            {
+                Dylan.Username = "Bob";
+                if(Dylan.Username == "Bob")
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetUserName_InvalidEntryInteger_False()
+        {
+            // Arrange
+            Boolean expected = false;
+            Boolean actual = false;
+
+            // Act
+            try
+            {
+                //Dylan.Username = 1;
+                if (Dylan.Username == "Bob")
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (Exception)
+            {
+                actual = false;
+            }
 
             // Assert
             Assert.AreEqual(expected, actual);
