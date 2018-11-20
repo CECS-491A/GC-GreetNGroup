@@ -1,5 +1,4 @@
 ﻿using System;
-using GreetNGroup.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTestProject1
@@ -7,7 +6,7 @@ namespace UnitTestProject1
     [TestClass]
     public class UserTest
     {
-        User Dylan = new User("dylanchhin123@gmail.com", "123", "Lakewood", "CA", "USA", "12/25/1996", 
+        User Dylan = new User("dylanchhin123@gmail.com", "123", "Lakewood", "CA", "USA", "12/25/1996",
                                 "What is your favorite book?", "Cat in the Hat");
         [TestMethod]
         public void GetUserName_Pass()
