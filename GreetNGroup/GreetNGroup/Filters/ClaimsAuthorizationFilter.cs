@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,32 +26,32 @@ namespace GreetNGroup.Filters
          *
          * It is called when a call requires authorization and is asynchronous 
          */
-        public override Task OnAuthorizationAsync(HttpActionContext action, CancellationToken tok)
+        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken tok)
         {
             /*
-             * Goals - 
-             *   1: check if the current user making a request is authenticated
-             *   2: if the user is authenticated --check claims allowed for this user
-             *
              *      The following line reads in the user from the current http request
              *      presented by the HttpActionContext argument
              *      and retrieves the claims principle from that user
+             *
+             *      actionContext.RequestContext.Principal represents the user
+             *      ClaimsPrinciple is used to allow/give us access to the user's claims
              */
-            ClaimsPrincipal claims = action.RequestContext.Principal as ClaimsPrincipal;
-
+            ClaimsPrincipal claims = actionContext.RequestContext.Principal as ClaimsPrincipal;
+            
             if (claims != null)
             {
                 /*
                  * 1. Check for authentication of user
                  *
-                 * Accesses the ClaimsPrincipal Identity and Checks for authentification
+                 * Accesses the ClaimsPrincipal Identity and Checks for authentication
                  */
                 if (!claims.Identity.IsAuthenticated)
                 {
                     /*
                      * User is not authenticated, Unauthorized message is returned
                      */
-                    return Task.FromResult<object>(HttpStatusCode.Unauthorized);
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    return Task.FromResult<object>(null);
                 }
 
                 /*
@@ -65,8 +66,17 @@ namespace GreetNGroup.Filters
                     /*
                      * Claims on current user do not meet required claims for authorization
                      */
-                    return Task.FromResult<object>(HttpStatusCode.Unauthorized);
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    return Task.FromResult<object>(null);
                 }
+            }
+            else
+            {
+                /*
+                 * User claims does not exist in this context
+                 */
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Task.FromResult<object>(null);
             }
 
             /*
