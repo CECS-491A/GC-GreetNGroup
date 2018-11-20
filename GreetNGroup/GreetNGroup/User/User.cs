@@ -41,75 +41,134 @@ namespace GreetNGroup.User
             SecurityAnswer = securityA;
         }
         /// <summary>
-        /// Returns the account user name
+        /// Returns the account user name or sets a new username
         /// </summary>
-        /// <returns>The user name</returns>
-        public string GetUserName()
+        public string Username
         {
-            return UserName;
+            get
+            {
+                return this.UserName;
+            }
+            set
+            {
+                this.UserName = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account password
+        /// Returns the account password or Sets a new Passwrod
         /// </summary>
-        /// <returns>The password</returns>
-        public string GetPassword()
+        public string Password
         {
-            return PassWord;
+
+            get
+            {
+                return this.PassWord;
+            }
+            set
+            {
+                this.PassWord = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account City Location
+        /// Returns the account City Location or Sets a new City
         /// </summary>
-        /// <returns>The city</returns>
-        public string GetCity()
+        public string Cityloc
         {
-            return City;
+
+            get
+            {
+                return this.City;
+            }
+            set
+            {
+                this.City = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account State Location
+        /// Returns the account State Location or sets a new State
         /// </summary>
-        /// <returns>The state</returns>
-        public string GetState()
+        public string Stateloc
         {
-            return State;
+
+            get
+            {
+                return this.State;
+            }
+            set
+            {
+                this.State = value;
+            }
         }
 
         /// <summary>
         /// Returns the account Country Location
         /// </summary>
-        /// <returns>The user name</returns>
-        public string GetCountry()
+        public string Countryloc
         {
-            return Country;
+
+            get
+            {
+                return this.Country;
+            }
+            set
+            {
+                this.Country = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account Date of Birth
+        /// Returns the account Date of Birth or sets a new Date of Birth
         /// </summary>
-        /// <returns>The date of birth</returns>
-        public string GetDOB()
+        public string DOB
         {
-            return DateofBirth;
+
+            get
+            {
+                return this.DateofBirth;
+            }
+            set
+            {
+                this.DateofBirth = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account Security Question
+        /// Returns the account Security Question or sets a new Security Question
         /// </summary>
-        /// <returns>The security question</returns>
-        public string GetSecurityQuestion()
+        public string SecurityQ
         {
-            return SecurityQuestion;
+
+            get
+            {
+                return this.SecurityQuestion;
+            }
+            set
+            {
+                this.SecurityQuestion = value;
+            }
         }
 
         /// <summary>
-        /// Returns the account Security question Answer
+        /// Returns the account Security question Answer or sets a new answer
         /// </summary>
-        /// <returns>The answer to security question</returns>
-        public string GetSecurityAnswer()
+        public string SecurityA
         {
-            return SecurityAnswer;
+
+            get
+            {
+                return this.SecurityAnswer;
+            }
+            set
+            {
+                this.SecurityAnswer = value;
+            }
+        }
+        public Boolean DoesNameExist(User[] list)
+        {
+            return true;
         }
 
 
