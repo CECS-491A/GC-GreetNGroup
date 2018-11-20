@@ -11,6 +11,8 @@ namespace GreetNGroup.User
     {
         private string UserName;
         private string PassWord;
+        private string FirstName;
+        private string LastName;
         private string City;
         private string State;
         private string Country;
@@ -23,16 +25,20 @@ namespace GreetNGroup.User
         /// </summary>
         /// <param name="userN">Passed user name</param>
         /// <param name="pword">Passed Password</param>
+        /// <param name="FName">Passed user name</param>
+        /// <param name="LName">Passed Password</param>
         /// <param name="city">Passed City</param>
         /// <param name="state">Passed State</param>
         /// <param name="country">Passed Country</param>
         /// <param name="DOB">Passed Date of Birth</param>
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
-        public User(string userN, string pword, string city, string state, string country, string DOB, string securityQ, string securityA)
+        public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA)
         {
             UserName = userN;
             PassWord = pword;
+            FirstName = FName;
+            LastName = LName;
             City = city;
             State = state;
             Country = country;
@@ -68,6 +74,36 @@ namespace GreetNGroup.User
             set
             {
                 this.PassWord = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the first name of user or Sets a new first name
+        /// </summary>
+        public string firstname
+        {
+            get
+            {
+                return this.FirstName;
+            }
+            set
+            {
+                this.FirstName = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the last name of user or sets a new last name
+        /// </summary>
+        public string lastname
+        {
+            get
+            {
+                return this.LastName;
+            }
+            set
+            {
+                this.LastName = value;
             }
         }
 
