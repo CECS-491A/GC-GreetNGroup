@@ -19,6 +19,7 @@ namespace GreetNGroup.User
         private string DateofBirth;
         private string SecurityQuestion;
         private string SecurityAnswer;
+        private string uniqueID;
 
         /// <summary>
         /// Cnstructor to set up a user account
@@ -33,7 +34,7 @@ namespace GreetNGroup.User
         /// <param name="DOB">Passed Date of Birth</param>
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
-        public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA)
+        public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA, string id)
         {
             UserName = userN;
             PassWord = pword;
@@ -45,6 +46,7 @@ namespace GreetNGroup.User
             DateofBirth = DOB;
             SecurityQuestion = securityQ;
             SecurityAnswer = securityA;
+            uniqueID = id;
         }
         /// <summary>
         /// Returns the account user name or sets a new username
@@ -202,10 +204,25 @@ namespace GreetNGroup.User
                 this.SecurityAnswer = value;
             }
         }
+
+        public string userID
+        {
+            get
+            {
+                return this.uniqueID;
+            }
+
+            set
+            {
+                this.uniqueID = value;
+            }
+        }
+
         public Boolean DoesNameExist(User[] list)
         {
             return true;
         }
+
 
 
     }

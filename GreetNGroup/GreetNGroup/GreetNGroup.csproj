@@ -185,6 +185,7 @@
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Claim_Controls\ClaimsPool.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Filters\ClaimsAuthorizationFilter.cs" />
     <Compile Include="Global.asax.cs">

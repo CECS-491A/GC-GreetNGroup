@@ -8,7 +8,7 @@ namespace UnitTestProject1
     public class UserTest
     {
         User Dylan = new User("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
-                                "What is your favorite book?", "Cat in the Hat");
+                                "What is your favorite book?", "Cat in the Hat", "1a2s3d4f");
 
         //Tests that are expected to pass
 
@@ -172,6 +172,20 @@ namespace UnitTestProject1
             // Assert
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void GetID_Pass()
+        {
+            // Arrange
+            string expected = "1a2s3d4f";
+            string actual;
+
+            // Act
+            actual = Dylan.userID;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
 
 
 
@@ -324,6 +338,19 @@ namespace UnitTestProject1
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetID_Fail()
+        {
+            // Arrange
+            string expected = "1b2n3m5z";
+            string actual;
+
+            // Act
+            actual = Dylan.userID;
+
+            // Assert
+            Assert.AreNotEqual(expected, actual);
         }
     }
 }
