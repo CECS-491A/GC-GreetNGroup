@@ -1,18 +1,31 @@
+using System.Collections.Generic;
+using System.Linq;
+using GreetNGroup.Tokens;
 using Microsoft.Ajax.Utilities;
 
 namespace GreetNGroup.Claim_Controls
 {
     public class ClaimsAuthorization
     {
-        // will take reference to user/user token to check relevant claims, returns pass or fail
-        public bool VerifyClaims(Var userRef, ClaimsPool.Claims[] claimsReq)
+        /**
+         * Compares list of Claims held within the Token <tok>
+         * with required claims in <claimsReq>
+         *
+         * Except removes all existing recurrences of values in
+         * ----> ListName.Except(removeFromList)
+         * 
+         * Then !ListName.Any() checks if any objects still exist in the list
+         *
+         * This is used to check if all the claims within the token
+         * pass the required claims
+         */
+        public bool VerifyClaims(Token tok, List<ClaimsPool.Claims> claimsReq)
         {
-            for (int i = 0; i < claimsReq.Length; i++)
-            {
-                // check all claims within the userRef with that of the claimsReq
-                // if at least one does not match the claimsReq return false
-            }
-            return true;
+            var pass = false;
+            var currClaims = tok.Claims;
+            var claimsCheck = claimsReq.Except(currClaims);
+            pass = !claimsCheck.Any();
+            return pass;
         }        
     }
 }
