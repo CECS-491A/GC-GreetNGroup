@@ -21,7 +21,7 @@ namespace GreetNGroup.User
         private string SecurityAnswer;
 
         /// <summary>
-        /// Cnstructor to set up a user account
+        /// Constructor to set up a user account
         /// </summary>
         /// <param name="userN">Passed user name</param>
         /// <param name="pword">Passed Password</param>

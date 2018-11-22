@@ -13,6 +13,7 @@ namespace UnitTest.PasswordTest
     [TestClass]
     public class PasswordCheckerTest
     {
+        
         [TestMethod]
         public void GetFirst5Chars_Pass()
         {
@@ -36,7 +37,7 @@ namespace UnitTest.PasswordTest
         }
 
         [TestMethod]
-        public async Task GetPwnedPassword_Pass()
+        public async Task PwnedPasswordExists_Pass()
         {
             //Arrange
             string password = "password";
@@ -47,6 +48,31 @@ namespace UnitTest.PasswordTest
 
             //Assert
             Assert.AreEqual(expected, actual);
+        }
+
+
+
+        //Fail Tests
+        [TestMethod]
+        public void GetFirst5Chars_Fail()
+        {
+            string password = "password";
+            string expected = "384FW";
+
+            string actual = PasswordChecker.GetFirst5HashChars(password);
+
+            Assert.AreNotEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetPassSuffix_Fail()
+        {
+            string password = "password";
+            string expected = "28FG4B93F3F0682250B6CF8331B7EE68FD8";
+
+            string actual = PasswordChecker.GetHashSuffix(password);
+
+            Assert.AreNotEqual(expected, actual);
         }
     }
 }

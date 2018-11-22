@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 
+//TODO:
+//Add deconstructor to deconstruct static objects when do using
+
 namespace GreetNGroup.Passwords
 {
     
@@ -23,13 +26,22 @@ namespace GreetNGroup.Passwords
 
         }
 
+        /// <summary>
+        /// Method to get the hash of the password and return the first 5 characters 
+        /// </summary>
+        /// <param name="pass">The password to be hashed</param>
+        /// <returns>First 5 characters of the hash</returns>
         public static string GetFirst5HashChars(string pass)
         {
             string hashedPassword = sha1.ConvertToHash(pass);
             string firstFiveChars = hashedPassword.Substring(0, 5);
             return firstFiveChars;
         }
-
+        /// <summary>
+        /// Method to get the last 35 characters of the password hash
+        /// </summary>
+        /// <param name="pass">The password to be hashed</param>
+        /// <returns>Last 35 characters of the hash</returns>
         public static string GetHashSuffix(string pass)
         {
             string hashedPassword = sha1.ConvertToHash(pass);
@@ -37,6 +49,11 @@ namespace GreetNGroup.Passwords
             return passwordSuffix;
         }
 
+        /// <summary>
+        /// Method to get a list of all hashes that match the first 5 characters of the original hash
+        /// </summary>
+        /// <param name="pass">The password to be hashed</param>
+        /// <returns>HTTPContent of the page</returns>
         public static async Task<HttpContent> GetIdenticalHashes(string pass)
         {
             HttpContent passwordHashPrefixes = null;
@@ -65,11 +82,15 @@ namespace GreetNGroup.Passwords
             StreamReader contentReader = new StreamReader(await passwordHashes.ReadAsStreamAsync());
             string hashSuffix = GetHashSuffix(pass);
 
+            //Content reader holds all the returned hashes
             using (contentReader)
             {
+                //While loop reads each hash line by line
                 while (!contentReader.EndOfStream)
                 {
+                    //Variable passwordInfo holds the hash as it's read
                     var passwordInfo = await contentReader.ReadLineAsync();
+                    //Split the hash using semicolon to get the hash suffix in the first index and count in the second index
                     var splitToCount = passwordInfo.Split(':');
                     if (splitToCount.Length == 2 && splitToCount[0].Equals(hashSuffix))
                     {
@@ -81,21 +102,49 @@ namespace GreetNGroup.Passwords
             return 0;
         }
 
+        //TODO:
+        //Delete above IsPasswordPwnedmethod
         public static async Task<bool> IsPasswordPwned(string pass)
         {
-            bool isPwned = false;
+            bool identicalHashExists = false;
+            HttpContent passwordHashPrefixes = null;
+            string firstFiveChars = GetFirst5HashChars(pass);
+            string hashSuffix = GetHashSuffix(pass);
 
-            HttpContent hashedPasswords = await GetIdenticalHashes(pass);
-            int count = await FindMatchingCount(hashedPasswords, pass);
-            if (count > 0)
+            string path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
+            StreamReader contentReader = new StreamReader(await passwordHashPrefixes.ReadAsStreamAsync());
+
+            try
             {
-                isPwned = true;
+                HttpResponseMessage response = await client.GetAsync(path);
+                if (response.IsSuccessStatusCode)
+                {
+                    passwordHashPrefixes = response.Content;
+                }
             }
-            else
+            catch (Exception e)
             {
-                isPwned = false;
+                //This is where logging should go
             }
-            return isPwned;
+
+            //Content reader holds all the returned hashes
+            using (contentReader)
+            {
+                //While loop reads each hash line by line
+                while (!contentReader.EndOfStream)
+                {
+                    //Variable passwordInfo holds the hash as it's read
+                    var passwordInfo = await contentReader.ReadLineAsync();
+                    //Split the hash using semicolon to get the hash suffix in the first index and count in the second index
+                    var splitToCount = passwordInfo.Split(':');
+                    if (splitToCount.Length == 2 && splitToCount[0].Equals(hashSuffix))
+                    {
+                        identicalHashExists = true;
+                        return identicalHashExists;
+                    }
+                }
+            }
+            return identicalHashExists;
         }
     }
 }
