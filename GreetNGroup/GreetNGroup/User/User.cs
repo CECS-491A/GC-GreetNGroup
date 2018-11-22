@@ -9,17 +9,6 @@ namespace GreetNGroup.User
 {
     public class User
     {
-        private string UserName;
-        private string PassWord;
-        private string FirstName;
-        private string LastName;
-        private string City;
-        private string State;
-        private string Country;
-        private string DateofBirth;
-        private string SecurityQuestion;
-        private string SecurityAnswer;
-
         /// <summary>
         /// Cnstructor to set up a user account
         /// </summary>
@@ -33,180 +22,54 @@ namespace GreetNGroup.User
         /// <param name="DOB">Passed Date of Birth</param>
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
-        public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA)
+        public User(string userN, string pword, string FName, string LName, string city, 
+            string state, string country, string DOB, string securityQ, string securityA)
         {
-            UserName = userN;
-            PassWord = pword;
-            FirstName = FName;
-            LastName = LName;
-            City = city;
-            State = state;
-            Country = country;
-            DateofBirth = DOB;
-            SecurityQuestion = securityQ;
-            SecurityAnswer = securityA;
+            Username = userN;
+            Password = pword;
+            Firstname = FName;
+            Lastname = LName;
+            Cityloc = city;
+            Stateloc = state;
+            Countryloc = country;
+            this.DOB = DOB;
+            SecurityQ = securityQ;
+            SecurityA = securityA;
         }
-        /// <summary>
+        
         /// Returns the account user name or sets a new username
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return this.UserName;
-            }
-            set
-            {
-                this.UserName = value;
-            }
-        }
+        public string Username { get; set; }
 
-        /// <summary>
-        /// Returns the account password or Sets a new Passwrod
-        /// </summary>
-        public string Password
-        {
+        /// Returns the account password or Sets a new Password
+        public string Password { get; set; }
 
-            get
-            {
-                return this.PassWord;
-            }
-            set
-            {
-                this.PassWord = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the first name of user or Sets a new first name
-        /// </summary>
-        public string firstname
-        {
-            get
-            {
-                return this.FirstName;
-            }
-            set
-            {
-                this.FirstName = value;
-            }
-        }
+        public string Firstname { get; set; }
 
-        /// <summary>
         /// Returns the last name of user or sets a new last name
-        /// </summary>
-        public string lastname
-        {
-            get
-            {
-                return this.LastName;
-            }
-            set
-            {
-                this.LastName = value;
-            }
-        }
+        public string Lastname { get; set; }
 
-        /// <summary>
         /// Returns the account City Location or Sets a new City
-        /// </summary>
-        public string Cityloc
-        {
+        public string Cityloc { get; set; }
 
-            get
-            {
-                return this.City;
-            }
-            set
-            {
-                this.City = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account State Location or sets a new State
-        /// </summary>
-        public string Stateloc
-        {
+        public string Stateloc { get; set; }
 
-            get
-            {
-                return this.State;
-            }
-            set
-            {
-                this.State = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account Country Location
-        /// </summary>
-        public string Countryloc
-        {
+        public string Countryloc { get; set; }
 
-            get
-            {
-                return this.Country;
-            }
-            set
-            {
-                this.Country = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account Date of Birth or sets a new Date of Birth
-        /// </summary>
-        public string DOB
-        {
+        public string DOB { get; set; }
 
-            get
-            {
-                return this.DateofBirth;
-            }
-            set
-            {
-                this.DateofBirth = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account Security Question or sets a new Security Question
-        /// </summary>
-        public string SecurityQ
-        {
+        public string SecurityQ { get; set; }
 
-            get
-            {
-                return this.SecurityQuestion;
-            }
-            set
-            {
-                this.SecurityQuestion = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account Security question Answer or sets a new answer
-        /// </summary>
-        public string SecurityA
-        {
+        public string SecurityA { get; set; }
 
-            get
-            {
-                return this.SecurityAnswer;
-            }
-            set
-            {
-                this.SecurityAnswer = value;
-            }
-        }
         public Boolean DoesNameExist(User[] list)
         {
             return true;
         }
-
-
     }
 }
