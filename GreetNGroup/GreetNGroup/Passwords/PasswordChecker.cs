@@ -18,7 +18,6 @@ namespace GreetNGroup.Passwords
     /// </summary>
     public class PasswordChecker
     {
-        private static UTF8ToSHA1 sha1 = new UTF8ToSHA1();
         private static HttpClient client = new HttpClient();
 
         public PasswordChecker()
@@ -33,6 +32,7 @@ namespace GreetNGroup.Passwords
         /// <returns>First 5 characters of the hash</returns>
         public static string GetFirst5HashChars(string pass)
         {
+            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
             string hashedPassword = sha1.ConvertToHash(pass);
             string firstFiveChars = hashedPassword.Substring(0, 5);
             return firstFiveChars;
@@ -44,6 +44,7 @@ namespace GreetNGroup.Passwords
         /// <returns>Last 35 characters of the hash</returns>
         public static string GetHashSuffix(string pass)
         {
+            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
             string hashedPassword = sha1.ConvertToHash(pass);
             string passwordSuffix = hashedPassword.Substring(5);
             return passwordSuffix;
