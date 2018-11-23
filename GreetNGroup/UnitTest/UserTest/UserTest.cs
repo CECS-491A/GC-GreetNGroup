@@ -11,7 +11,7 @@ namespace UnitTestProject1
                                 "What is your favorite book?", "Cat in the Hat");
 
         //Tests that are expected to pass
-
+        //Get Methods
         [TestMethod]
         public void GetUserName_Pass()
         {
@@ -144,38 +144,154 @@ namespace UnitTestProject1
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        //Tests that are expected to pass
+        //Set Methods
         [TestMethod]
         public void SetUserName_Pass()
         {
             // Arrange
-            Boolean expected = true;
-            Boolean actual = false;
+            string expected = "BobJoe@yahoo.com";
+            string actual;
 
             // Act
-            try
-            {
-                Dylan.Username = "Bob";
-                if (Dylan.Username == "Bob")
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
-            }
-            catch (Exception ex)
-            {
+            Dylan.Username = "BobJoe@yahoo.com";
+            actual = Dylan.Username;
+            
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetPassword_Pass()
+        {
+            // Arrange
+            string expected = "qwerty";
+            string actual;
 
-            }
+            // Act
+            Dylan.Password = "qwerty";
+            actual = Dylan.Password;
+          
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetFirstName_Pass()
+        {
+            // Arrange
+            string expected = "Bob";
+            string actual;
+
+            // Act
+            Dylan.Firstname = "Bob";
+            actual = Dylan.Firstname;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetLastName_Pass()
+        {
+            // Arrange
+            string expected = "Joe";
+            string actual;
+
+            // Act
+            Dylan.Lastname = "Joe";
+            actual = Dylan.Lastname;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetCity_Pass()
+        {
+            // Arrange
+            string expected = "Las Vegas";
+            string actual;
+
+            // Act
+            Dylan.Cityloc = "Las Vegas";
+            actual = Dylan.Cityloc;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetState_Pass()
+        {
+            // Arrange
+            string expected = "Nevada";
+            string actual;
+
+            // Act
+            Dylan.Stateloc = "Nevada";
+            actual = Dylan.Stateloc;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetCountry_Pass()
+        {
+            // Arrange
+            string expected = "Canada";
+            string actual;
+
+            // Act
+            Dylan.Countryloc = "Canada";
+            actual = Dylan.Countryloc;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetDOB_Pass()
+        {
+            // Arrange
+            string expected = "12/22/1996";
+            string actual;
+
+            // Act
+            Dylan.DOB = "12/22/1996";
+            actual = Dylan.DOB;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetSecurityQuestion_Pass()
+        {
+            // Arrange
+            string expected = "What state were you born in?";
+            string actual;
+
+            // Act
+            Dylan.SecurityQ = "What state were you born in?";
+            actual = Dylan.SecurityQ;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void SetSecurityAnswer_Pass()
+        {
+            // Arrange
+            string expected = "NY";
+            string actual;
+
+            // Act
+            Dylan.SecurityA = "NY";
+            actual = Dylan.SecurityA;
 
             // Assert
             Assert.AreEqual(expected, actual);
         }
 
 
-
         //Tests that are expected to fail
+        //Get Methods
 
         [TestMethod]
         public void GetUserName_Fail()
@@ -297,31 +413,285 @@ namespace UnitTestProject1
             // Assert
             Assert.AreNotEqual(expected, actual);
         }
+
+        //Tests that are take other inputs
+
         [TestMethod]
-        public void SetUserName_Fail()
+        public void SetUserName_InputEmptyString()
         {
             // Arrange
-            Boolean expected = false;
-            Boolean actual = false;
+            String expected = "";
+            String actual;
 
             // Act
-            try
-            {
-                //Dylan.Username = 1;
-                if (Dylan.Username == "Bob")
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
-            }
-            catch (Exception)
-            {
-                actual = false;
-            }
+            Dylan.Username = "";
+            actual = Dylan.Username;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
 
+        [TestMethod]
+        public void SetUserName_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Username = null;
+            actual = Dylan.Username;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetPassword_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Password = "";
+            actual = Dylan.Password;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetPassword_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Password = null;
+            actual = Dylan.Password;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetFirstName_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Firstname = "";
+            actual = Dylan.Firstname;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetFirstName_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Firstname = null;
+            actual = Dylan.Firstname;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetLastName_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Lastname = "";
+            actual = Dylan.Lastname;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetLastName_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Lastname = null;
+            actual = Dylan.Lastname;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetCity_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Cityloc = "";
+            actual = Dylan.Cityloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetCity_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Cityloc = null;
+            actual = Dylan.Cityloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetState_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Stateloc = "";
+            actual = Dylan.Stateloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetState_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Stateloc = null;
+            actual = Dylan.Stateloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetCountry_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.Countryloc = "";
+            actual = Dylan.Countryloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetCountry_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.Countryloc = null;
+            actual = Dylan.Countryloc;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetDOB_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.DOB = "";
+            actual = Dylan.DOB;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetDOB_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.DOB = null;
+            actual = Dylan.DOB;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetSecurityQuestion_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.SecurityQ = "";
+            actual = Dylan.SecurityQ;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetSecurityQuestion_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.SecurityQ  = null;
+            actual = Dylan.SecurityQ;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetSecurityAnswer_InputEmptyString()
+        {
+            // Arrange
+            String expected = "";
+            String actual;
+
+            // Act
+            Dylan.SecurityA = "";
+            actual = Dylan.SecurityA;
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SetSecurityAnswer_InputNull()
+        {
+            // Arrange
+            String expected = null;
+            String actual;
+
+            // Act
+            Dylan.SecurityA = null;
+            actual = Dylan.SecurityA;
             // Assert
             Assert.AreEqual(expected, actual);
         }
