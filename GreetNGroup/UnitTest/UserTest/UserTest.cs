@@ -229,7 +229,7 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.UserID;
+            actual = Dylan.userID;
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -719,7 +719,7 @@ namespace UnitTestProject1
             string actual;
 
             // Act
-            actual = Dylan.UserID;
+            actual = Dylan.userID;
 
             // Assert
             Assert.AreNotEqual(expected, actual);

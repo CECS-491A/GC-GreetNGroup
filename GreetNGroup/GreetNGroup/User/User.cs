@@ -13,10 +13,13 @@ namespace GreetNGroup.User
         private string PassWord;
         private string FirstName;
         private string LastName;
-        private string DateofBirth;
         private string City;
         private string State;
         private string Country;
+        private string DateofBirth;
+        private string SecurityQuestion;
+        private string SecurityAnswer;
+        private string uniqueID;
 
         /// <summary>
         /// Constructor to set up a user account
@@ -32,8 +35,104 @@ namespace GreetNGroup.User
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
 
+        public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA, string id)
+        {
+            UserName = userN;
+            PassWord = pword;
+            FirstName = FName;
+            LastName = LName;
+            City = city;
+            State = state;
+            Country = country;
+            DateofBirth = DOB;
+            SecurityQuestion = securityQ;
+            SecurityAnswer = securityA;
+            uniqueID = id;
+        }
+        /// <summary>
+        /// Returns the account user name or sets a new username
+        /// </summary>
+        public string Username
+        {
+            get
+            {
+                return this.UserName;
+            }
+            set
+            {
+                this.UserName = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the account password or Sets a new Passwrod
+        /// </summary>
+        public string Password
+        {
+
+            get
+            {
+                return this.PassWord;
+            }
+            set
+            {
+                this.PassWord = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the first name of user or Sets a new first name
+        /// </summary>
+        public string firstname
+        {
+            get
+            {
+                return this.FirstName;
+            }
+            set
+            {
+                this.FirstName = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the last name of user or sets a new last name
+        /// </summary>
+        public string lastname
+        {
+            get
+            {
+                return this.LastName;
+            }
+            set
+            {
+                this.LastName = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the account City Location or Sets a new City
+        /// </summary>
+        public string Cityloc
+        {
+
+            get
+            {
+                return this.City;
+            }
+            set
+            {
+                this.City = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the account State Location or sets a new State
+        /// </summary>
+        public string Stateloc
+
         public User(string userN, string pword, string FName, string LName, string city, 
-            string state, string country, string DOB, string securityQ, string securityA, string userID)
+            string state, string country, string DOB, string securityQ, string securityA)
         {
             Username = userN;
             Password = pword;
@@ -45,7 +144,6 @@ namespace GreetNGroup.User
             this.DOB = DOB;
             SecurityQ = securityQ;
             SecurityA = securityA;
-            UserID = userID;
         }
         
 #region Getters and Setters
@@ -65,18 +163,44 @@ namespace GreetNGroup.User
         public string Cityloc { get; set; }
         public string Stateloc { get; set; }
         public string Countryloc { get; set; }
-
-        #endregion
-
+        
+    #endregion
+        
         /// Returns the account Security Question or sets a new Security Question
         public string SecurityQ { get; set; }
 
         /// Returns the account Security question Answer or sets a new answer
         /// </summary>
-        public string SecurityA { get; set; }
+        public string SecurityA
+        {
 
-        public string UserID { get; set; }
-        #endregion
+            get
+            {
+                return this.SecurityAnswer;
+            }
+            set
+            {
+                this.SecurityAnswer = value;
+            }
+        }
+
+        public string userID
+        {
+            get
+            {
+                return this.uniqueID;
+            }
+
+            set
+            {
+                this.uniqueID = value;
+            }
+        }
+
+        public string SecurityA { get; set; }
+        
+#endregion
+        
         public Boolean DoesNameExist(User[] list)
         {
             return true;
