@@ -7,10 +7,10 @@ using System.Web;
 */
 namespace GreetNGroup.User
 {
-    public class User
+    public class User : IIdentifiable
     {
         /// <summary>
-        /// Cnstructor to set up a user account
+        /// Constructor to set up a user account
         /// </summary>
         /// <param name="userN">Passed user name</param>
         /// <param name="pword">Passed Password</param>
@@ -37,36 +37,34 @@ namespace GreetNGroup.User
             SecurityA = securityA;
         }
         
-        /// Returns the account user name or sets a new username
+#region Getters and Setters
+        
+    #region IIdentifiable Declarations
+        
         public string Username { get; set; }
-
-        /// Returns the account password or Sets a new Password
         public string Password { get; set; }
-
-        /// Returns the first name of user or Sets a new first name
         public string Firstname { get; set; }
-
-        /// Returns the last name of user or sets a new last name
         public string Lastname { get; set; }
-
-        /// Returns the account City Location or Sets a new City
-        public string Cityloc { get; set; }
-
-        /// Returns the account State Location or sets a new State
-        public string Stateloc { get; set; }
-
-        /// Returns the account Country Location
-        public string Countryloc { get; set; }
-
-        /// Returns the account Date of Birth or sets a new Date of Birth
         public string DOB { get; set; }
-
+        
+    #endregion
+               
+    #region ILocatable Declarations
+        
+        public string Cityloc { get; set; }
+        public string Stateloc { get; set; }
+        public string Countryloc { get; set; }
+        
+    #endregion
+        
         /// Returns the account Security Question or sets a new Security Question
         public string SecurityQ { get; set; }
 
         /// Returns the account Security question Answer or sets a new answer
         public string SecurityA { get; set; }
-
+        
+#endregion
+        
         public Boolean DoesNameExist(User[] list)
         {
             return true;
