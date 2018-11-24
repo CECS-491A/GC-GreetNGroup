@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 
-//TODO:
-//Add deconstructor to deconstruct static objects when do using
-
 namespace GreetNGroup.Passwords
 {
     
