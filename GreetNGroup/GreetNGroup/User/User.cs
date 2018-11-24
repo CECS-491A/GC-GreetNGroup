@@ -7,7 +7,7 @@ using System.Web;
 */
 namespace GreetNGroup.User
 {
-    public class User
+    public class User : IIdentifiable
     {
         private string UserName;
         private string PassWord;
@@ -22,7 +22,7 @@ namespace GreetNGroup.User
         private string uniqueID;
 
         /// <summary>
-        /// Cnstructor to set up a user account
+        /// Constructor to set up a user account
         /// </summary>
         /// <param name="userN">Passed user name</param>
         /// <param name="pword">Passed Password</param>
@@ -34,6 +34,7 @@ namespace GreetNGroup.User
         /// <param name="DOB">Passed Date of Birth</param>
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
+
         public User(string userN, string pword, string FName, string LName, string city, string state, string country, string DOB, string securityQ, string securityA, string id)
         {
             UserName = userN;
@@ -129,67 +130,45 @@ namespace GreetNGroup.User
         /// Returns the account State Location or sets a new State
         /// </summary>
         public string Stateloc
+
+        public User(string userN, string pword, string FName, string LName, string city, 
+            string state, string country, string DOB, string securityQ, string securityA)
         {
-
-            get
-            {
-                return this.State;
-            }
-            set
-            {
-                this.State = value;
-            }
+            Username = userN;
+            Password = pword;
+            Firstname = FName;
+            Lastname = LName;
+            Cityloc = city;
+            Stateloc = state;
+            Countryloc = country;
+            this.DOB = DOB;
+            SecurityQ = securityQ;
+            SecurityA = securityA;
         }
-
-        /// <summary>
-        /// Returns the account Country Location
-        /// </summary>
-        public string Countryloc
-        {
-
-            get
-            {
-                return this.Country;
-            }
-            set
-            {
-                this.Country = value;
-            }
-        }
-
-        /// <summary>
-        /// Returns the account Date of Birth or sets a new Date of Birth
-        /// </summary>
-        public string DOB
-        {
-
-            get
-            {
-                return this.DateofBirth;
-            }
-            set
-            {
-                this.DateofBirth = value;
-            }
-        }
-
-        /// <summary>
+        
+#region Getters and Setters
+        
+    #region IIdentifiable Declarations
+        
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string DOB { get; set; }
+        
+    #endregion
+               
+    #region ILocatable Declarations
+        
+        public string Cityloc { get; set; }
+        public string Stateloc { get; set; }
+        public string Countryloc { get; set; }
+        
+    #endregion
+        
         /// Returns the account Security Question or sets a new Security Question
-        /// </summary>
-        public string SecurityQ
-        {
+        public string SecurityQ { get; set; }
 
-            get
-            {
-                return this.SecurityQuestion;
-            }
-            set
-            {
-                this.SecurityQuestion = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the account Security question Answer or sets a new answer
         /// </summary>
         public string SecurityA
@@ -218,12 +197,13 @@ namespace GreetNGroup.User
             }
         }
 
+        public string SecurityA { get; set; }
+        
+#endregion
+        
         public Boolean DoesNameExist(User[] list)
         {
             return true;
         }
-
-
-
     }
 }

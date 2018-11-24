@@ -5,7 +5,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace GreetNGroup.Claim_Controls
 {
-    public class ClaimsAuthorization
+    public static class ClaimsAuthorization
     {
         /**
          * Compares list of Claims held within the Token <tok>
@@ -19,7 +19,7 @@ namespace GreetNGroup.Claim_Controls
          * This is used to check if all the claims within the token
          * pass the required claims
          */
-        public bool VerifyClaims(Token tok, List<ClaimsPool.Claims> claimsReq)
+        public static bool VerifyClaims(Token tok, List<ClaimsPool.Claims> claimsReq)
         {
             var pass = false;
             var currClaims = tok.Claims;
