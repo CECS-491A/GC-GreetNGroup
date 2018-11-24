@@ -7,9 +7,12 @@ namespace UnitTestProject1
     [TestClass]
     public class UserTest
     {
+        #region Required Fields
         User Dylan = new User("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
                                 "What is your favorite book?", "Cat in the Hat");
-
+        #endregion
+        
+        #region Pass Tests
         //Tests that are expected to pass
         //Get Methods
         [TestMethod]
@@ -289,10 +292,10 @@ namespace UnitTestProject1
             Assert.AreEqual(expected, actual);
         }
 
-
-        //Tests that are expected to fail
+        #endregion
+        
+        #region Fail Tests
         //Get Methods
-
         [TestMethod]
         public void GetUserName_Fail()
         {
@@ -414,8 +417,9 @@ namespace UnitTestProject1
             Assert.AreNotEqual(expected, actual);
         }
 
-        //Tests that are take other inputs
-
+        #endregion
+        
+        #region Variable Input Tests
         [TestMethod]
         public void SetUserName_InputEmptyString()
         {
@@ -695,5 +699,6 @@ namespace UnitTestProject1
             // Assert
             Assert.AreEqual(expected, actual);
         }
+        #endregion
     }
 }
