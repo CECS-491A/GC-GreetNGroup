@@ -50,6 +50,19 @@ namespace UnitTest.PasswordTest
             Assert.AreEqual(expected, actual);
         }
 
+        [TestMethod]
+        public async Task PwnedPasswordOccurence_Pass()
+        {
+            //Arrange
+            string password = "password";
+            var expected = 3533661;
+
+            //Act
+            var actual = await PasswordChecker.passwordOccurences(password);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
 
 
         //Fail Tests
@@ -72,6 +85,32 @@ namespace UnitTest.PasswordTest
 
             string actual = PasswordChecker.GetHashSuffix(password);
 
+            Assert.AreNotEqual(expected, actual);
+        }
+        [TestMethod]
+        public async Task PwnedPasswordExists_Fail()
+        {
+            //Arrange
+            string password = "password";
+            var expected = false;
+
+            //Act
+            var actual = await PasswordChecker.IsPasswordPwned(password);
+
+            //Assert
+            Assert.AreNotEqual(expected, actual);
+        }
+        [TestMethod]
+        public async Task PwnedPasswordOccurence_Fail()
+        {
+            //Arrange
+            string password = "password";
+            var expected = 1;
+
+            //Act
+            var actual = await PasswordChecker.passwordOccurences(password);
+
+            //Assert
             Assert.AreNotEqual(expected, actual);
         }
     }
