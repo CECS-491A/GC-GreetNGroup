@@ -52,6 +52,7 @@
     <Compile Include="PasswordTest\PasswordCheckerTest.cs" />
     <Compile Include="PasswordTest\UTF8ToSHA1Test.cs" />
     <Compile Include="ClaimsTest\ClaimTest.cs" />
+    <Compile Include="UserManage\UserManageTest.cs" />
     <Compile Include="UserTest\UserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

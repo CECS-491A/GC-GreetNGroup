@@ -7,7 +7,7 @@ using System.Web;
 */
 namespace GreetNGroup.User
 {
-    public class User : IIdentifiable
+    public class UserAccount : IIdentifiable
     {
         private string UserName;
         private string PassWord;
@@ -18,6 +18,20 @@ namespace GreetNGroup.User
         private string State;
         private string Country;
 
+        public UserAccount()
+        {
+            Username = "";
+            Password = "";
+            Firstname = "";
+            Lastname = "";
+            Cityloc = "";
+            Stateloc = "";
+            Countryloc = "";
+            this.DOB = "";
+            SecurityQ = "";
+            SecurityA = "";
+            UserID = "";
+        }
         /// <summary>
         /// Constructor to set up a user account
         /// </summary>
@@ -32,7 +46,7 @@ namespace GreetNGroup.User
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
 
-        public User(string userN, string pword, string FName, string LName, string city, 
+        public UserAccount(string userN, string pword, string FName, string LName, string city, 
             string state, string country, string DOB, string securityQ, string securityA, string userID)
         {
             Username = userN;
@@ -47,6 +61,7 @@ namespace GreetNGroup.User
             SecurityA = securityA;
             UserID = userID;
         }
+        
         
 #region Getters and Setters
         
@@ -77,9 +92,54 @@ namespace GreetNGroup.User
 
         public string UserID { get; set; }
         #endregion
-        public Boolean DoesNameExist(User[] list)
+
+#region Overidden functions
+        /// <summary>
+        /// Overides equals function to compare to user account objects
+        /// </summary>
+        /// <param name="obj">The passed user account to be compared to</param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
         {
+            var user = obj as UserAccount;
+
+            if (user == null)
+                return false;
+
+            if (user.UserName != this.UserName)
+                return false;
+
+            if (user.PassWord != this.PassWord)
+                return false;
+
+            if (user.FirstName != this.FirstName)
+                return false;
+
+            if (user.Lastname != this.Lastname)
+                return false;
+
+            if (user.Cityloc != this.Cityloc)
+                return false;
+
+            if (user.Stateloc != this.Stateloc)
+                return false;
+
+            if (user.Countryloc != this.Countryloc)
+                return false;
+
+            if (user.DOB != this.DOB)
+                return false;
+
+            if (user.SecurityQ != this.SecurityQ)
+                return false;
+
+            if (user.SecurityA != this.SecurityA)
+                return false;
+
+            if (user.UserID != this.UserID)
+                return false;
             return true;
         }
+        #endregion
     }
 }

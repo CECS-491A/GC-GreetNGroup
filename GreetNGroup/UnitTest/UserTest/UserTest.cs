@@ -8,7 +8,7 @@ namespace UnitTestProject1
     public class UserTest
     {
         #region Required Fields
-        User Dylan = new User("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
+        UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
                                 "What is your favorite book?", "Cat in the Hat", "1a2s3d4f");
         #endregion
         
