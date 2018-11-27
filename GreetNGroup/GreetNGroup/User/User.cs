@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using GreetNGroup.Claim_Controls;
+
 /*
     Basic user account class with all fields needed for a registered account     
 */
@@ -17,6 +19,9 @@ namespace GreetNGroup.User
         private string City;
         private string State;
         private string Country;
+        
+        // will need to define how to assign claims to user
+        private List<ClaimsPool.Claims> Claims { get; set; }
 
         public UserAccount()
         {
@@ -37,8 +42,8 @@ namespace GreetNGroup.User
         /// </summary>
         /// <param name="userN">Passed user name</param>
         /// <param name="pword">Passed Password</param>
-        /// <param name="FName">Passed user name</param>
-        /// <param name="LName">Passed Password</param>
+        /// <param name="fName">Passed user name</param>
+        /// <param name="lName">Passed Password</param>
         /// <param name="city">Passed City</param>
         /// <param name="state">Passed State</param>
         /// <param name="country">Passed Country</param>
@@ -46,13 +51,13 @@ namespace GreetNGroup.User
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
 
-        public UserAccount(string userN, string pword, string FName, string LName, string city, 
+        public UserAccount(string userN, string pword, string fName, string lName, string city, 
             string state, string country, string DOB, string securityQ, string securityA, string userID)
         {
             Username = userN;
             Password = pword;
-            Firstname = FName;
-            Lastname = LName;
+            Firstname = fName;
+            Lastname = lName;
             Cityloc = city;
             Stateloc = state;
             Countryloc = country;
@@ -81,17 +86,15 @@ namespace GreetNGroup.User
         public string Stateloc { get; set; }
         public string Countryloc { get; set; }
 
-        #endregion
+    #endregion
 
         /// Returns the account Security Question or sets a new Security Question
         public string SecurityQ { get; set; }
-
         /// Returns the account Security question Answer or sets a new answer
-        /// </summary>
         public string SecurityA { get; set; }
-
         public string UserID { get; set; }
-        #endregion
+        
+#endregion
 
 #region Overidden functions
         /// <summary>
@@ -140,6 +143,6 @@ namespace GreetNGroup.User
                 return false;
             return true;
         }
-        #endregion
+#endregion
     }
 }

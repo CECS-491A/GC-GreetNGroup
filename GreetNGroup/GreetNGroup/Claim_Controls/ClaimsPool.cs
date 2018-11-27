@@ -2,9 +2,9 @@ namespace GreetNGroup.Claim_Controls
 {
     public static class ClaimsPool
     {
-        /**
-         * Enum pool for claims
-         */
+        /// <summary>
+        /// This is a pool of claims to be used for authorization
+        /// </summary>
         public enum Claims
         {
             CanViewEvents,

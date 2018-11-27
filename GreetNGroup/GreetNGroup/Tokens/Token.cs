@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GreetNGroup.Claim_Controls;
 
@@ -5,8 +6,10 @@ namespace GreetNGroup.Tokens
 {
     public class Token
     {
+        private DateTime assignmentDate = DateTime.Now;
+        private DateTime revokeDate = DateTime.Today.AddDays(1);
         public string UserId { get; set; }
-        public List<ClaimsPool.Claims> Claims { get; set; }
+        public string uniqueKey;
 
         /**
          * Basic constructor for tokens
@@ -14,10 +17,10 @@ namespace GreetNGroup.Tokens
          * Future implementation may only need id, and will use id to search
          * the related id database for claims linked to said id
          */
-        public Token(string id, List<ClaimsPool.Claims> claimList)
+        public Token(string id)
         {
             UserId = id;
-            Claims = claimList;
+            uniqueKey = KeyGen.GenerateRandomCryptoKey(32);
         }
     }
 }
