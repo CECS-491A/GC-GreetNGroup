@@ -8,8 +8,6 @@ using System.IO;
 
 namespace GreetNGroup.Passwords
 {
-    //TODO: add handling of passwords that don't occur at all
-
 
     /// <summary>
     /// Holds the methods that send the SHA1 to the HaveIBeenPwned API to check if
@@ -75,6 +73,28 @@ namespace GreetNGroup.Passwords
         }
 
         /// <summary>
+        /// Method GetResponseCode returns the response message when attempting a request
+        /// from the API
+        /// </summary>
+        /// <param name="path">String that holds the uri for the HttpClient to access</param>
+        /// <returns>The response code as an HttpResponseMessage object</returns>
+        public static async Task<HttpResponseMessage> GetResponseCode(string path)
+        {
+            //HttpResponseMessage will be used to hold the response code the API returns
+            HttpResponseMessage responseMessage = null;
+            try
+            {
+                var response = await client.GetAsync(path);
+                responseMessage = response;
+            }
+            catch (Exception e)
+            {
+                //This is where logging should go
+            }
+            return responseMessage;
+        }
+
+        /// <summary>
         /// Method PasswordOccurrences retrieves the amount of occurrences a password has been
         /// seen by sending the first five characters from the hashed password to Troy Hunt's API
         /// and retrieving a list of password hashes that match the prefix. The suffix hash is then
@@ -93,12 +113,10 @@ namespace GreetNGroup.Passwords
             string hashSuffix = GetHashSuffix(passwordToCheck);
             string path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
 
-
-            Console.WriteLine("asdf");
             try
             {
                 //Gets the response code from an Http request
-                var response = await client.GetAsync(path);
+                var response = await GetResponseCode(path);
                 //If response code is 200
                 if (response.IsSuccessStatusCode)
                 {
@@ -106,15 +124,17 @@ namespace GreetNGroup.Passwords
                     //Content reader holds all the returned hashes for reading
                     using (StreamReader contentReader = new StreamReader(await retrievedPasswordHashes.ReadAsStreamAsync()))
                     {
-                        //While loop reads each hash line by line
+                        //While reader is not at end of retrieved passwords
                         while (!contentReader.EndOfStream)
                         {
-                            //Variable passwordInfo holds the hash as it's read
+                            //Variable passwordInfo holds the hash suffix as it's read
                             var passwordInfo = await contentReader.ReadLineAsync();
                             //Split the hash using semicolon to get the hash suffix in the first index and count in the second index
                             var splitToCount = passwordInfo.Split(':');
                             if (splitToCount.Length == 2 && splitToCount[0].Equals(hashSuffix))
                             {
+                                //Get the value that a password has been seen. 
+                                //If it does not encounter a value count or fails to parse, count is 0
                                 int.TryParse(splitToCount[1], out int count);
                                 return count;
                             }
