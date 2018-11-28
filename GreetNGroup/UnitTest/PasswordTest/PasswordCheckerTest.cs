@@ -148,13 +148,12 @@ namespace UnitTest.PasswordTest
         {
             //Arrange
             string password = "#S@suqu3Uch1h4";
-            var expected = 0;
 
             //Act
             var actual = await PasswordChecker.PasswordOccurrences(password);
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(actual <= 0);
         }
 
         [TestMethod]
@@ -162,13 +161,12 @@ namespace UnitTest.PasswordTest
         {
             //Arrange
             string password = "#S@suqu3Uch1h4";
-            var expected = 1;
 
             //Act
             var actual = await PasswordChecker.PasswordOccurrences(password);
 
             //Assert
-            Assert.AreNotEqual(expected, actual);
+            Assert.IsFalse(actual > 1);
         }
 
         [TestMethod]
@@ -184,31 +182,33 @@ namespace UnitTest.PasswordTest
             //Assert
             Assert.AreNotEqual(expected, actual);
         }
+
         [TestMethod]
-        public async Task PwnedPasswordExists_Fail()
+        public async Task ResponseCode200_Pass()
         {
             //Arrange
-            string password = "password";
-            var expected = false;
+            var password = "password";
+            var firstFiveChars = PasswordChecker.GetFirst5HashChars(password);
+            var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
 
             //Act
-            var actual = await PasswordChecker.IsPasswordPwned(password);
+            var actual = await PasswordChecker.GetResponseCode(path);
 
             //Assert
-            Assert.AreNotEqual(expected, actual);
+            Assert.IsTrue(actual.IsSuccessStatusCode);
         }
+
         [TestMethod]
-        public async Task PwnedPasswordOccurence_Fail()
+        public async Task ResponseCodeUnsuccessful_Pass()
         {
             //Arrange
-            string password = "password";
-            var expected = 1;
+            var path = "https://api.pwnedpasswords.com/range/" + "helloworld";
 
             //Act
-            var actual = await PasswordChecker.passwordOccurences(password);
+            var actual = await PasswordChecker.GetResponseCode(path);
 
             //Assert
-            Assert.AreNotEqual(expected, actual);
+            Assert.IsFalse(actual.IsSuccessStatusCode);
         }
     }
 }

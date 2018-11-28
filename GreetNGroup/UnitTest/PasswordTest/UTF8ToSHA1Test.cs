@@ -26,6 +26,23 @@ namespace UnitTest.PasswordTest
         }
 
         [TestMethod]
+        public void GetHashUniquePassword_Pass()
+        {
+            //Arrange
+            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
+            string password = "#S@suqu3Uch1h4";
+
+            //expected retrieved from online SHA1 generator
+            string expected = "0AC8A08B1E8B7132DF9F016DAEAF4D2F48E80A95";
+
+            //Act
+            string actual = sha1.ConvertToHash(password);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void GetHash_Fail()
         {
             //Arrange
