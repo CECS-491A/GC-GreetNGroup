@@ -6,9 +6,10 @@ namespace GreetNGroup.Tokens
 {
     public class Token
     {
-        private DateTime assignmentDate = DateTime.Now;
-        private DateTime revokeDate = DateTime.Today.AddDays(1);
+        private DateTime assignmentDate;
+        private DateTime revokeDate;
         public string UserId { get; set; }
+        public List<ClaimsPool.Claims> Claims{ get; set; }
         public string uniqueKey;
 
         /**
@@ -20,6 +21,8 @@ namespace GreetNGroup.Tokens
         public Token(string id)
         {
             UserId = id;
+            assignmentDate = DateTime.Now;
+            revokeDate = DateTime.Today.AddDays(1);
             uniqueKey = KeyGen.GenerateRandomCryptoKey(32);
         }
     }
