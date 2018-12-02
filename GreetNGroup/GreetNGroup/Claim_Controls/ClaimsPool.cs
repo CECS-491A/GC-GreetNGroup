@@ -11,7 +11,8 @@ namespace GreetNGroup.Claim_Controls
             CanCreateEvents,
             CanFriendUsers,
             CanBlacklistUsers,
-            AdminRights
+            AdminRights,
+            Over18
         };
     }
 }

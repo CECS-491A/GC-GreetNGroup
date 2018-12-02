@@ -201,6 +201,7 @@
     <Compile Include="User\IIdentifiable.cs" />
     <Compile Include="User\ILocatable.cs" />
     <Compile Include="User\User.cs" />
+    <Compile Include="User\UserDatabaseTemp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
