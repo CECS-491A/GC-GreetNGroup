@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GreetNGroup.Tokens;
@@ -21,11 +22,20 @@ namespace GreetNGroup.Claim_Controls
          */
         public static bool VerifyClaims(Token tok, List<ClaimsPool.Claims> claimsReq)
         {
-            var pass = false;
-            var currClaims = tok.Claims;
-            var claimsCheck = claimsReq.Except(currClaims);
-            pass = !claimsCheck.Any();
-            return pass;
+            try
+            {
+                var pass = false;
+                var currClaims = tok.Claims;
+                var claimsCheck = claimsReq.Except(currClaims);
+                pass = !claimsCheck.Any();
+                return pass;
+            }
+            catch (Exception e)
+            {
+                // add logger here
+                Console.WriteLine(e);
+                throw;
+            }
         }        
     }
 }

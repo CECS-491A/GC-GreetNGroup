@@ -14,9 +14,7 @@ namespace GreetNGroup.Tokens
         public string UserId { get; set; }
         public List<ClaimsPool.Claims> Claims{ get; set; }
         public string uniqueKey;
-
         
-
         public Token(string id)
         {
             UserId = id;
