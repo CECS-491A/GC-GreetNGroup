@@ -198,6 +198,7 @@
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="UserManage\UserManager.cs" />
+    <Compile Include="User\AssignClaims.cs" />
     <Compile Include="User\IIdentifiable.cs" />
     <Compile Include="User\ILocatable.cs" />
     <Compile Include="User\User.cs" />
