@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using GreetNGroup.User;
+using GreetNGroup.Account_Fields_Random_Generator;
 namespace GreetNGroup.UserManage
 {
     /// <summary>
@@ -12,7 +13,8 @@ namespace GreetNGroup.UserManage
     {
         public static UserAccount addAccount(String userName, String city, String state, String country, String DOB)
         {
-            UserAccount newAccount = new UserAccount(userName, "", "", "", city, state, country, DOB,"", "", "");
+            string randomPassword = RandomFieldGenerator.generatePassword();
+            UserAccount newAccount = new UserAccount(userName, randomPassword, "", "", city, state, country, DOB,"", "", "");
 
 
             return newAccount;

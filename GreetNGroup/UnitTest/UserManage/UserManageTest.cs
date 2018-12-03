@@ -8,15 +8,34 @@ namespace UnitTest.UserManage
     [TestClass]
     public class UserManageTest
     {
+        UserAccount[] UserDB = new UserAccount[5];
         [TestMethod]
-        public void CreateAccount_Pass()
+        public void CreateAccount_EqualComparison_Pass()
         {
-            UserAccount Dylan = UserManager.addAccount("dylan","lakewood","CA","USA","12/26/1996");
+            //Arange
+            UserAccount actual = UserManager.addAccount("dylan","lakewood","CA","USA","12/26/1996");
+            UserAccount expected = new UserAccount("dylan", "", "", "", "lakewood", "CA", "USA", "12/26/1996", "", "", "");
 
-            UserAccount Dylan2 = new UserAccount("dylan", "", "", "", "lakewood", "CA", "USA", "12/26/1996", "", "", "");
+            //Act
+   
 
-            Assert.AreEqual(Dylan, Dylan2);
+            //Assert
+            Assert.AreEqual(actual, expected);
 
         }
+
+        [TestMethod]
+        public void CreateMultiAccount_Pass()
+        {
+            UserAccount Dylan = UserManager.addAccount("dylan", "lakewood", "CA", "USA", "12/26/1996");
+
+            UserDB[1] = Dylan;
+            
+
+            //Assert.AreEqual(Dylan, Dylan2);
+
+        }
+
+
     }
 }
