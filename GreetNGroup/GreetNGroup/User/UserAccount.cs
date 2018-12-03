@@ -7,7 +7,7 @@ using GreetNGroup.Claim_Controls;
 /*
     Basic user account class with all fields needed for a registered account     
 */
-namespace GreetNGroup.User
+namespace GreetNGroup.UserAccount
 {
     public class UserAccount : IIdentifiable
     {
@@ -19,6 +19,7 @@ namespace GreetNGroup.User
         private string City;
         private string State;
         private string Country;
+
         
         // will need to define how to assign claims to user
         private List<ClaimsPool.Claims> Claims { get; set; }
@@ -66,6 +67,8 @@ namespace GreetNGroup.User
             SecurityA = securityA;
             UserID = userID;
         }
+
+
         
         
 #region Getters and Setters
@@ -144,5 +147,10 @@ namespace GreetNGroup.User
             return true;
         }
 #endregion
+
+        public void addClaim(ClaimsPool.Claims  claimAdded)
+        {
+            Claims.Add(claimAdded);
+        }
     }
 }
