@@ -150,7 +150,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account Fields Random Generator\RandomPassword.cs" />
+    <Compile Include="Account Fields Random Generator\RandomGenerator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -200,7 +200,7 @@
     <Compile Include="UserManage\UserManager.cs" />
     <Compile Include="User\IIdentifiable.cs" />
     <Compile Include="User\ILocatable.cs" />
-    <Compile Include="User\User.cs" />
+    <Compile Include="User\UserAccount.cs" />
     <Compile Include="User\UserDatabaseTemp.cs" />
   </ItemGroup>
   <ItemGroup>
