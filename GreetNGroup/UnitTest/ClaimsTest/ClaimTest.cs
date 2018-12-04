@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GreetNGroup.Claim_Controls;
 using GreetNGroup.Tokens;
-using GreetNGroup.User;
+using GreetNGroup.SiteUser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.ClaimsTest
