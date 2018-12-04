@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using GreetNGroup.Claim_Controls;
+using GreetNGroup.SiteUser;
 
 /*
     Basic user account class with all fields needed for a registered account     
