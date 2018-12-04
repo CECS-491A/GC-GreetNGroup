@@ -7,7 +7,7 @@ using GreetNGroup.Claim_Controls;
 /*
     Basic user account class with all fields needed for a registered account     
 */
-namespace GreetNGroup.UserAccount
+namespace GreetNGroup.SiteUser
 {
     public class UserAccount : IIdentifiable
     {

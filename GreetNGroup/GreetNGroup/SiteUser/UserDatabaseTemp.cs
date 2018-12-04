@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GreetNGroup.Claim_Controls;
 
-namespace GreetNGroup.User
+namespace GreetNGroup.SiteUser
 {
     public class UserDatabaseTemp
     {

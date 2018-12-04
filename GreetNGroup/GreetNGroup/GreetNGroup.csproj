@@ -198,11 +198,11 @@
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="UserManage\UserManager.cs" />
-    <Compile Include="User\AssignClaims.cs" />
-    <Compile Include="User\IIdentifiable.cs" />
-    <Compile Include="User\ILocatable.cs" />
-    <Compile Include="User\UserAccount.cs" />
-    <Compile Include="User\UserDatabaseTemp.cs" />
+    <Compile Include="SiteUser\AssignClaims.cs" />
+    <Compile Include="SiteUser\IIdentifiable.cs" />
+    <Compile Include="SiteUser\ILocatable.cs" />
+    <Compile Include="SiteUser\UserAccount.cs" />
+    <Compile Include="SiteUser\UserDatabaseTemp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
