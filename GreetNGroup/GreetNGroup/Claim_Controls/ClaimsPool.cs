@@ -7,6 +7,7 @@ namespace GreetNGroup.Claim_Controls
         /// </summary>
         public enum Claims
         {
+            SystemAdmin,
             CanViewEvents,
             CanCreateEvents,
             CanFriendUsers,
