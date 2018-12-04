@@ -1,5 +1,4 @@
 ﻿using System;
-using GreetNGroup.Account;
 using GreetNGroup.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,7 +9,7 @@ namespace UnitTestProject1
     {
         #region Required Fields
         UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
-                                "What is your favorite book?", "Cat in the Hat", "1a2s3d4f", 0, true);
+                                "What is your favorite book?", "Cat in the Hat", "1a2s3d4f");
         #endregion
 
         #region Pass Tests
