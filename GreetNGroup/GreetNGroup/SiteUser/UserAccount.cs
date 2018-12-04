@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using GreetNGroup.Claim_Controls;
-using GreetNGroup.SiteUser;
 
 /*
     Basic user account class with all fields needed for a registered account     
@@ -69,10 +68,8 @@ namespace GreetNGroup.SiteUser
             UserID = userID;
         }
 
-
-        
-        
-#region Getters and Setters
+ 
+    #region Getters and Setters
         
     #region IIdentifiable Declarations
         
@@ -100,7 +97,7 @@ namespace GreetNGroup.SiteUser
         
 #endregion
 
-#region Overidden functions
+    #region Overidden functions
         /// <summary>
         /// Overides equals function to compare to user account objects
         /// </summary>
