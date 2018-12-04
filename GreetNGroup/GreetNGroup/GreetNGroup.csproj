@@ -197,8 +197,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
-    <Compile Include="UserManage\UserManager.cs" />
+    <Compile Include="UserManage\IUserManager.cs" />
     <Compile Include="User\AssignClaims.cs" />
+    <Compile Include="User\DataBaseQuery.cs" />
     <Compile Include="User\IIdentifiable.cs" />
     <Compile Include="User\ILocatable.cs" />
     <Compile Include="User\UserAccount.cs" />
