@@ -1,5 +1,5 @@
 ﻿using System;
-using GreetNGroup.User;
+using GreetNGroup.SiteUser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTestProject1

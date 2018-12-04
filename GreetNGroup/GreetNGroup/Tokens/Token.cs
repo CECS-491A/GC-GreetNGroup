@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GreetNGroup.Claim_Controls;
-using GreetNGroup.User;
+using GreetNGroup.SiteUser;
 
 namespace GreetNGroup.Tokens
 {
