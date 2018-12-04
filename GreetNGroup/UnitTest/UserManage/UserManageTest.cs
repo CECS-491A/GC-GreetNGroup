@@ -1,5 +1,4 @@
 ﻿using System;
-using GreetNGroup.Account;
 using GreetNGroup.SiteUser;
 using GreetNGroup.UserManage;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

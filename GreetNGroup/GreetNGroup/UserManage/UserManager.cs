@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using GreetNGroup.Account;
+using GreetNGroup.SiteUser;
+
 using GreetNGroup.Account_Fields_Random_Generator;
 namespace GreetNGroup.UserManage
 {
