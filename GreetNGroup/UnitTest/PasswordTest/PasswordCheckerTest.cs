@@ -14,13 +14,14 @@ namespace UnitTest.PasswordTest
     [TestClass]
     public class PasswordCheckerTest
     {
-        PasswordChecker pwCheck = new PasswordChecker();
+        
 
         [TestMethod]
         public async Task PwnedPasswordExists_Pass()
         {
             //Arrange
-            string password = "password";
+            PasswordChecker pwCheck = new PasswordChecker();
+            string password = "abc123";
             var expected = true;
 
             //Act
@@ -34,7 +35,8 @@ namespace UnitTest.PasswordTest
         public async Task PwnedPasswordOccurence_Pass()
         {
             //Arrange
-            string password = "password";
+            PasswordChecker pwCheck = new PasswordChecker();
+            string password = "abc123";
 
             //Act
             var actual = await pwCheck.PasswordOccurrences(password);
@@ -47,6 +49,7 @@ namespace UnitTest.PasswordTest
         public async Task PwnedPasswordExists_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "password";
             var expected = false;
 
@@ -61,6 +64,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPassword_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
             var expected = false;
 
@@ -75,6 +79,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPassword_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
             var expected = true;
 
@@ -89,6 +94,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPasswordOccurence_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
 
             //Act
@@ -102,6 +108,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPasswordOccurence_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
 
             //Act
@@ -115,6 +122,7 @@ namespace UnitTest.PasswordTest
         public async Task PwnedPasswordOccurence_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "password";
             var expected = 1;
 
@@ -129,6 +137,7 @@ namespace UnitTest.PasswordTest
         public async Task ResponseCode200_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             var password = "password";
 
             //Act
@@ -138,17 +147,5 @@ namespace UnitTest.PasswordTest
             Assert.IsTrue(actual.IsSuccessStatusCode);
         }
 
-        [TestMethod]
-        public async Task ResponseCodeUnsuccessful_Pass()
-        {
-            //Arrange
-            var password = "";
-
-            //Act
-            var actual = await pwCheck.GetResponseCode(password);
-
-            //Assert
-            Assert.IsFalse(actual.IsSuccessStatusCode);
-        }
     }
 }
