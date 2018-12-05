@@ -1,4 +1,4 @@
-namespace GreetNGroup.User
+namespace GreetNGroup.SiteUser
 {
     public interface ILocatable
     {

@@ -7,11 +7,13 @@ namespace GreetNGroup.Claim_Controls
         /// </summary>
         public enum Claims
         {
+            SystemAdmin,
             CanViewEvents,
             CanCreateEvents,
             CanFriendUsers,
             CanBlacklistUsers,
-            AdminRights
+            AdminRights,
+            Over18
         };
     }
 }

@@ -6,10 +6,10 @@ using System.Web;
 
 namespace GreetNGroup.Account_Fields_Random_Generator
 {
-    public static class RandomPassword
+    public static class RandomFieldGenerator
     {
         /// <summary>
-        /// Method that generates a random password
+        /// Method that generates a random 12 character password from a-z, A-Z, and 0-9
         /// </summary>
         /// <returns></returns>
         public static string generatePassword()
@@ -28,5 +28,11 @@ namespace GreetNGroup.Account_Fields_Random_Generator
 
             return password;
         }
+
+        //public static string generateSecurityQuestion()
+        //{
+            
+
+        //}
     }
 }
