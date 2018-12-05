@@ -16,9 +16,9 @@ namespace GreetNGroup.Passwords
     /// </summary>
     public class PasswordChecker
     {
-        //HttpClient connects to Troy Hunt's HaveIBeenPwned API to retrieve possibly pwned passwords
-        private HttpClient client = new HttpClient();
-        UTF8ToSHA1 sha1 = new UTF8ToSHA1();
+        //A constant integer that allows for easy change in how many occurences are considered for a pwned password
+        const int minimumPasswordOccurences = 1;
+        
         /// <summary>
         /// Default constructor for PasswordChecker
         /// </summary>
@@ -41,7 +41,7 @@ namespace GreetNGroup.Passwords
             bool identicalHashExists = false;
             int passwordOccurrenceCount = await PasswordOccurrences(passwordToCheck);
             
-            if(passwordOccurrenceCount > 0)
+            if(passwordOccurrenceCount >= minimumPasswordOccurences)
             {
                 identicalHashExists = true;
             }
@@ -56,8 +56,11 @@ namespace GreetNGroup.Passwords
         /// <returns>The response code as an HttpResponseMessage object</returns>
         public async Task<HttpResponseMessage> GetResponseCode(string passwordToCheck)
         {
-            //HttpResponseMessage will be used to hold the response code the API returns
-            HttpResponseMessage responseMessage = null;
+            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
+            //HttpClient connects to Troy Hunt's HaveIBeenPwned API to retrieve possibly pwned passwords
+            HttpClient client = new HttpClient();
+        //HttpResponseMessage will be used to hold the response code the API returns
+        HttpResponseMessage responseMessage = null;
             try
             {
                 var hashedPassword = sha1.ConvertToHash(passwordToCheck);
@@ -90,6 +93,7 @@ namespace GreetNGroup.Passwords
         /// </returns>
         public async Task<int> PasswordOccurrences(string passwordToCheck)
         {
+            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
             HttpContent retrievedPasswordHashes = null;
 
             var hashedPassword = sha1.ConvertToHash(passwordToCheck);
