@@ -14,7 +14,7 @@ namespace UnitTest.PasswordTest
     [TestClass]
     public class PasswordCheckerTest
     {
-        
+        PasswordChecker pwCheck = new PasswordChecker();
         [TestMethod]
         public void GetFirst5Chars_Pass()
         {
@@ -23,7 +23,7 @@ namespace UnitTest.PasswordTest
             string expected = "5BAA6";
 
             //Act
-            string actual = PasswordChecker.GetFirst5HashChars(password);
+            string actual = pwCheck.GetFirst5HashChars(password);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -51,7 +51,7 @@ namespace UnitTest.PasswordTest
             var expected = true;
 
             //Act
-            var actual = await PasswordChecker.IsPasswordPwned(password);
+            var actual = await pwCheck.IsPasswordPwned(password);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -65,7 +65,7 @@ namespace UnitTest.PasswordTest
             var expected = 3533661;
 
             //Act
-            var actual = await PasswordChecker.PasswordOccurrences(password);
+            var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -81,7 +81,7 @@ namespace UnitTest.PasswordTest
             string expected = "384FW";
 
             //Act
-            string actual = PasswordChecker.GetFirst5HashChars(password);
+            string actual = pwCheck.GetFirst5HashChars(password);
 
             //Assert
             Assert.AreNotEqual(expected, actual);
@@ -109,7 +109,7 @@ namespace UnitTest.PasswordTest
             var expected = false;
 
             //Act
-            var actual = await PasswordChecker.IsPasswordPwned(password);
+            var actual = await pwCheck.IsPasswordPwned(password);
 
             //Assert
             Assert.AreNotEqual(expected, actual);
@@ -123,7 +123,7 @@ namespace UnitTest.PasswordTest
             var expected = false;
 
             //Act
-            var actual = await PasswordChecker.IsPasswordPwned(password);
+            var actual = await pwCheck.IsPasswordPwned(password);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -137,7 +137,7 @@ namespace UnitTest.PasswordTest
             var expected = true;
 
             //Act
-            var actual = await PasswordChecker.IsPasswordPwned(password);
+            var actual = await pwCheck.IsPasswordPwned(password);
 
             //Assert
             Assert.AreNotEqual(expected, actual);
@@ -150,7 +150,7 @@ namespace UnitTest.PasswordTest
             string password = "#S@suqu3Uch1h4";
 
             //Act
-            var actual = await PasswordChecker.PasswordOccurrences(password);
+            var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
             Assert.IsTrue(actual <= 0);
@@ -163,7 +163,7 @@ namespace UnitTest.PasswordTest
             string password = "#S@suqu3Uch1h4";
 
             //Act
-            var actual = await PasswordChecker.PasswordOccurrences(password);
+            var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
             Assert.IsFalse(actual > 1);
@@ -177,7 +177,7 @@ namespace UnitTest.PasswordTest
             var expected = 1;
 
             //Act
-            var actual = await PasswordChecker.PasswordOccurrences(password);
+            var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
             Assert.AreNotEqual(expected, actual);
@@ -188,11 +188,11 @@ namespace UnitTest.PasswordTest
         {
             //Arrange
             var password = "password";
-            var firstFiveChars = PasswordChecker.GetFirst5HashChars(password);
+            var firstFiveChars = pwCheck.GetFirst5HashChars(password);
             var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
 
             //Act
-            var actual = await PasswordChecker.GetResponseCode(path);
+            var actual = await pwCheck.GetResponseCode(path);
 
             //Assert
             Assert.IsTrue(actual.IsSuccessStatusCode);
@@ -205,7 +205,7 @@ namespace UnitTest.PasswordTest
             var path = "https://api.pwnedpasswords.com/range/" + "helloworld";
 
             //Act
-            var actual = await PasswordChecker.GetResponseCode(path);
+            var actual = await pwCheck.GetResponseCode(path);
 
             //Assert
             Assert.IsFalse(actual.IsSuccessStatusCode);
