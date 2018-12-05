@@ -15,40 +15,14 @@ namespace UnitTest.PasswordTest
     [TestClass]
     public class PasswordCheckerTest
     {
-        PasswordChecker pwCheck = new PasswordChecker();
-        [TestMethod]
-        public void GetFirst5Chars_Pass()
-        {
-            //Arrange
-            string password = "password";
-            string expected = "5BAA6";
-
-            //Act
-            string actual = pwCheck.GetFirst5HashChars(password);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GetPassSuffix_Pass()
-        {
-            //Arrange
-            string password = "password";
-            string expected = "1E4C9B93F3F0682250B6CF8331B7EE68FD8";
-
-            //Act
-            string actual = PasswordChecker.GetHashSuffix(password);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
+        
 
         [TestMethod]
         public async Task PwnedPasswordExists_Pass()
         {
             //Arrange
-            string password = "password";
+            PasswordChecker pwCheck = new PasswordChecker();
+            string password = "abc123";
             var expected = true;
 
             //Act
@@ -62,50 +36,21 @@ namespace UnitTest.PasswordTest
         public async Task PwnedPasswordOccurence_Pass()
         {
             //Arrange
-            string password = "password";
-            var expected = 3533661;
+            PasswordChecker pwCheck = new PasswordChecker();
+            string password = "abc123";
 
             //Act
             var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-
-        //Fail Tests
-        [TestMethod]
-        public void GetFirst5Chars_Fail()
-        {
-            //Arrange
-            string password = "password";
-            string expected = "384FW";
-
-            //Act
-            string actual = pwCheck.GetFirst5HashChars(password);
-
-            //Assert
-            Assert.AreNotEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GetPassSuffix_Fail()
-        {
-            //Arrange
-            string password = "password";
-            string expected = "28FG4B93F3F0682250B6CF8331B7EE68FD8";
-
-            //Act
-            string actual = PasswordChecker.GetHashSuffix(password);
-
-            //Assert
-            Assert.AreNotEqual(expected, actual);
+            Assert.IsTrue(actual > 1);
         }
 
         [TestMethod]
         public async Task PwnedPasswordExists_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "password";
             var expected = false;
 
@@ -120,6 +65,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPassword_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
             var expected = false;
 
@@ -134,6 +80,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPassword_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
             var expected = true;
 
@@ -148,6 +95,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPasswordOccurence_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
 
             //Act
@@ -161,6 +109,7 @@ namespace UnitTest.PasswordTest
         public async Task NotPwnedPasswordOccurence_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "#S@suqu3Uch1h4";
 
             //Act
@@ -174,6 +123,7 @@ namespace UnitTest.PasswordTest
         public async Task PwnedPasswordOccurence_Fail()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             string password = "password";
             var expected = 1;
 
@@ -188,12 +138,11 @@ namespace UnitTest.PasswordTest
         public async Task ResponseCode200_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             var password = "password";
-            var firstFiveChars = pwCheck.GetFirst5HashChars(password);
-            var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
 
             //Act
-            var actual = await pwCheck.GetResponseCode(path);
+            var actual = await pwCheck.GetResponseCode(password);
 
             //Assert
             Assert.IsTrue(actual.IsSuccessStatusCode);
