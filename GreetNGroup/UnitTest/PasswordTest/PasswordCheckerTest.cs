@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnitTest.PasswordTest
 {
+    
     /// <summary>
     /// PasswordCheckerTest holds all test methods for PasswordChecker class to ensure
     /// method returns the proper values
@@ -210,5 +211,6 @@ namespace UnitTest.PasswordTest
             //Assert
             Assert.IsFalse(actual.IsSuccessStatusCode);
         }
+
     }
 }

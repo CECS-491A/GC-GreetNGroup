@@ -5,7 +5,8 @@ using System.Web;
 using GreetNGroup.Claim_Controls;
 using GreetNGroup.Tokens;
 using GreetNGroup.UserManage;
-
+using System.Data.Sql;
+using System.Data.SqlClient;
 /*
     Basic user account class with all fields needed for a registered account     
 */
@@ -111,7 +112,8 @@ namespace GreetNGroup.SiteUser
         public int accountLvl { get; set; }
 
         #endregion
-        #region User Managent
+
+        #region User Management
         /// <summary>
         /// Creats a new USer Account given the attributes and if the Username has not been taken.
         /// </summary>
@@ -149,6 +151,7 @@ namespace GreetNGroup.SiteUser
                 throw new System.ArgumentException("Username already exist", "Database");
             }
 
+
         }
         /// <summary>
         /// Checks claims of the users and returns if the user can delete and the account be deleted
@@ -182,6 +185,7 @@ namespace GreetNGroup.SiteUser
         /// <param name="isEnabled">Truth value of the accounts enabled status</param>
         public void ChangeEnable(UserAccount account, Boolean isEnabled)
         {
+            /**
             List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
             var currentUserToken = new Token(Username);
             var changeUserToken = new Token(account.Username);
@@ -206,6 +210,31 @@ namespace GreetNGroup.SiteUser
                 }
 
             }
+        **/
+            System.Diagnostics.Debug.WriteLine("Hello");
+            string connetionString = null;
+            string sql = null;
+            connetionString = "Server = greetngroupdb.cj74stlentvn.us-west-1.rds.amazonaws.com; " +
+                                                  "Database = Test;User Id=gucci;Password=password123!;";
+            SqlConnection cnn = new SqlConnection(connetionString);
+            
+            sql = "insert into TestTable (name, password,id) values('dylan','123','2e3r4t5y')";
+            try
+            {
+                cnn.Open();
+                if (cnn.State == System.Data.ConnectionState.Open)
+                {
+                    SqlCommand cmd = new SqlCommand(sql, cnn);
+                    cmd.ExecuteNonQuery();
+                    System.Diagnostics.Debug.WriteLine("your message here");
+
+                }
+                cnn.Close();
+            }catch(Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Fail");
+            }
+            
 
         }
         #endregion

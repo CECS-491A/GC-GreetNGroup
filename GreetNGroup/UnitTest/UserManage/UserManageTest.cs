@@ -247,7 +247,7 @@ public class UserManageTest
         //Arange
         Boolean expected = false;
         Boolean actual;
-
+        System.Diagnostics.Debug.WriteLine("Hello");
         //Act
         try
         {

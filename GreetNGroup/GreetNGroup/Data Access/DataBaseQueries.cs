@@ -24,22 +24,22 @@ namespace GreetNGroup.Data_Access
         /// <param name="fromArg"></param> what to FROM from
         /// <param name="whereArg"></param>
         /// <returns></returns>
-        public string QuerySelectWhere(string selectArg, string fromArg, string whereArg)
-        {
-            string q = "SELECT " + selectArg + " FROM " + fromArg + " WHERE " + whereArg ";";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(q), connection)
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            return reader[selectArg];
-                        }
-                    }
-                }
-            }
-        }
+        //public string QuerySelectWhere(string selectArg, string fromArg, string whereArg)
+        //{
+            //string q = "SELECT " + selectArg + " FROM " + fromArg + " WHERE " + whereArg ";";
+            //using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+                //using (SqlCommand cmd = new SqlCommand(q), connection)
+                //{
+                    //using (SqlDataReader reader = command.ExecuteReader())
+                    //{
+                        //while (reader.Read())
+                        //{
+                            //return reader[selectArg];
+                        //}
+                    //}
+                //}
+            //}
+        //}
     }
 }
