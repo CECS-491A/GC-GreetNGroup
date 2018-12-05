@@ -195,9 +195,10 @@
     <Compile Include="Passwords\PasswordChecker.cs" />
     <Compile Include="Passwords\UTF8ToSHA1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteUser\DataBaseQuery.cs" />
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
-    <Compile Include="UserManage\UserManager.cs" />
+    <Compile Include="UserManage\IUserManager.cs" />
     <Compile Include="SiteUser\AssignClaims.cs" />
     <Compile Include="SiteUser\IIdentifiable.cs" />
     <Compile Include="SiteUser\ILocatable.cs" />
