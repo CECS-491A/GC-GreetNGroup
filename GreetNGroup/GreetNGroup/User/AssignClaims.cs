@@ -4,9 +4,9 @@ namespace GreetNGroup.User
 {
     public class AssignClaims
     {
-        public void AssignClaimToUser(ClaimsPool.Claims claim, User userAcc)
-        {
+        //public void AssignClaimToUser(ClaimsPool.Claims claim, User userAcc)
+        //{
             
-        }
+        //}
     }
 }
