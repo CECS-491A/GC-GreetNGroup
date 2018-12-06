@@ -27,7 +27,7 @@ namespace GreetNGroup.SiteUser
         internal List<ClaimsPool.Claims> claimsList;
 
         // will need to define how to assign claims to user
-        private List<ClaimsPool.Claims> Claims { get; set; }
+        private List<string> Claims { get; set; }
 
         public UserAccount()
         {
@@ -78,11 +78,19 @@ namespace GreetNGroup.SiteUser
             UserID = userID;
             if (accountLvl == 1)
             {
-                Claims = new List<ClaimsPool.Claims> { ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers, ClaimsPool.Claims.AdminRights, ClaimsPool.Claims.CanBlacklistUsers, };
+                Claims = new List<string>
+                {
+                    "CanCreateEvents", "CanViewEvents", "CanFriendUsers", "AdminRights", "CanBlackListUsers"
+                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers, ClaimsPool.Claims.AdminRights, ClaimsPool.Claims.CanBlacklistUsers,
+                };
             }
             else
             {
-                Claims = new List<ClaimsPool.Claims> { ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers };
+                Claims = new List<string>
+                {
+                    "CanCreateEvents", "CanViewEvents", "CanFriendUsers"
+                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers
+                };
             }
             Enable = isEnable;
         }
@@ -131,7 +139,32 @@ namespace GreetNGroup.SiteUser
         /// <returns>A new User Account Object</returns>
         public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
-  
+        /*
+            //User is first checked if they have the Admin rights claim to be able to create an account
+            //List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+            List<string> _requireAdminRights = new List<string> {"AdminRights"};//List<ClaimsPool.Claims> ClaimsPool.Claims.AdminRights };
+            var currentUserToken = new Token(UserID);
+            currentUserToken.Claims = Claims;
+            var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+            //If they have the claims they will be able to create a new account but if they don't the function will throw an error
+            if (canAdd == false)
+            {
+                throw new System.ArgumentException("User does not have the right Claims", "Claims");
+            }
+            //Compares username to the database and will only create an account if the username is unique
+            var isDupe = DataBaseQuery.isUserNameDuplicate(userName, Users);
+            if (isDupe == false)
+            {
+                //var randomPassword = RandomFieldGenerator.generatePassword();
+
+                UserAccount newAccount = new UserAccount(userName, "", "", "", city, state, country, DOB, "", "", "", 0, true);
+                return newAccount;
+            }
+            else
+            {
+                throw new System.ArgumentException("Username already exist", "Database");
+            }
+        */
             ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
 
         }
@@ -142,6 +175,24 @@ namespace GreetNGroup.SiteUser
         /// <returns>If user is able to delete the account or not</returns>
         public void DeleteAccount(string UserId)
         {
+            Boolean deletable = false;
+            List<string> _requireAdminRights = new List<string> {"AdminRights"};
+                                                          //new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+            var currentUserToken = new Token(Username);
+            var deleteUserToken = new Token(deleteUser.Username);
+            currentUserToken.Claims = Claims;
+            deleteUserToken.Claims = deleteUser.Claims;
+            var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+            var canBeDelete = ClaimsAuthorization.VerifyClaims(deleteUserToken, _requireAdminRights);
+            if (canDelete == false || canBeDelete == true)
+            {
+                throw new System.ArgumentException("One of the Users does not have the right Claims", "Claims");
+            }
+            else
+            {
+                deletable = true;
+            }
+            return deletable;
             Console.WriteLine("hello");
             ValidationManager.CheckDeleteToken(Claims,UserId);
         }
@@ -218,7 +269,7 @@ namespace GreetNGroup.SiteUser
         }
         #endregion
 
-        public void addClaim(ClaimsPool.Claims  claimAdded)
+        public void addClaim(string claimAdded)
         {
             Claims.Add(claimAdded);
         }

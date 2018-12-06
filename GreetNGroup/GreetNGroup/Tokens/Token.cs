@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GreetNGroup.Claim_Controls;
+using GreetNGroup.Data_Access;
 using GreetNGroup.SiteUser;
 
 namespace GreetNGroup.Tokens
@@ -12,12 +13,13 @@ namespace GreetNGroup.Tokens
         private DateTime assignmentDate;
         private DateTime revokeDate;
         public string UserId { get; set; }
-        public List<ClaimsPool.Claims> Claims{ get; set; }
+        public List<string> Claims{ get; set; }
         public string uniqueKey;
         
         public Token(string id)
         {
             UserId = id;
+            Claims = DataBaseQueries.FindClaimsFromUser(id);
             assignmentDate = DateTime.Now;
             revokeDate = DateTime.Today.AddDays(1);
             /*

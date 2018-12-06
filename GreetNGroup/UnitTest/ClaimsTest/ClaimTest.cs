@@ -12,6 +12,7 @@ namespace UnitTest.ClaimsTest
     [TestClass]
     public class ClaimTest
     {
+        //May no longer be needed
         #region Testable Required Fields
         private List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims>
             {ClaimsPool.Claims.AdminRights};
@@ -38,57 +39,43 @@ namespace UnitTest.ClaimsTest
         
         #region Pass Tests
         [TestMethod]
-        public void RequireCreateAndViewClaimsPass()
+        public void RequireViewAndSystemAdminPass()
         {
             // Arrange
-            var expected = true;
-            var actual = false;
-            userDatabaseCreator = new UserDatabaseTemp();
-            userDatabaseCreator.SetupTable();
-            userData = userDatabaseCreator.ReturnUserTable();
+            const bool expected = true;
+            var actual = false; 
+            const string id = "p01dj9wjd99u3u";
+            var claims = DataBaseQueries.FindClaimsFromUser(id);
+            List<string> claimTest = new List<string>(){"CanViewEvents","SystemAdmin"};
             
             // Act
             var userToken1 = new Token(_userId1);
-            
-            /*
-             * This if statement represents a query call to find the
-             * specified user, and retrieve claims
-             */
-            if (userData.ContainsKey(userToken1.UserId))
+            if (!(claimTest.Except(claims).Any()))
             {
-                userToken1.Claims = userData[userToken1.UserId];
+                actual = true;
             }
-            
-            actual = ClaimsAuthorization.VerifyClaims(userToken1, _requireCreateAndViewEvents);
             
             // Assert
             Assert.AreEqual(expected, actual);
         }
         
         [TestMethod]
-        public void RequireCreateAndViewClaimsPass2()
+        public void RequireFriendAndBlackList()
         {
             // Arrange
-            var expected = true;
-            var actual = false;
-            userDatabaseCreator = new UserDatabaseTemp();
-            userDatabaseCreator.SetupTable();
-            userData = userDatabaseCreator.ReturnUserTable();
-
+            const bool expected = true;
+            var actual = false; 
+            const string id = "p0499dj238e92j2";
+            var claims = DataBaseQueries.FindClaimsFromUser(id);
+            List<string> claimTest = new List<string>(){"CanFriendUsers","CanBlackListUsers"};
+            
             // Act
             var userToken1 = new Token(_userId1);
-
-            /*
-             * This if statement represents a query call to find the
-             * specified user, and retrieve claims
-             */
-            if (userData.ContainsKey(userToken1.UserId))
+            if (!(claimTest.Except(claims).Any()))
             {
-                userToken1.Claims = userData[userToken1.UserId];
+                actual = true;
             }
-
-            actual = ClaimsAuthorization.VerifyClaims(userToken1, _requireViewEvents);
-
+            
             // Assert
             Assert.AreEqual(expected, actual);
         }
@@ -99,84 +86,42 @@ namespace UnitTest.ClaimsTest
         public void RequireCreateAndViewClaimsFail()
         {
             // Arrange
-            var expected = false;
-            var actual = true;
-            userDatabaseCreator = new UserDatabaseTemp();
-            userDatabaseCreator.SetupTable();
-            userData = userDatabaseCreator.ReturnUserTable();
-
+            const bool expected = false;
+            var actual = true; 
+            const string id = "p0499dj238e92j2";
+            var claims = DataBaseQueries.FindClaimsFromUser(id);
+            List<string> claimTest = new List<string>(){"CanViewEvents","CanCreateEvents"};
+            
             // Act
-            var userToken2 = new Token(_userId2);
-
-            /*
-             * This if statement represents a query call to find the
-             * specified user, and retrieve claims
-             */
-            if (userData.ContainsKey(userToken2.UserId))
+            var userToken1 = new Token(_userId1);
+            if (claimTest.Except(claims).Any())
             {
-                userToken2.Claims = userData[userToken2.UserId];
+                actual = false;
             }
-
-            actual = ClaimsAuthorization.VerifyClaims(userToken2, _requireCreateAndViewEvents);
-
+            
             // Assert
             Assert.AreEqual(expected, actual);
         }
         
         [TestMethod]
-        public void RequireAdminRightsFail()
+        public void RequireSystemAdminRightsFail()
         {
             // Arrange
-            var expected = false;
-            var actual = true;
-            userDatabaseCreator = new UserDatabaseTemp();
-            userDatabaseCreator.SetupTable();
-            userData = userDatabaseCreator.ReturnUserTable();
-
+            const bool expected = false;
+            var actual = true; 
+            const string id = "p0499dj238e92j2";
+            var claims = DataBaseQueries.FindClaimsFromUser(id);
+            List<string> claimTest = new List<string>(){"SystemAdmin"};
+            
             // Act
-            var userToken3 = new Token(_userId3);
-
-            /*
-             * This if statement represents a query call to find the
-             * specified user, and retrieve claims
-             */
-            if (userData.ContainsKey(userToken3.UserId))
+            var userToken1 = new Token(_userId1);
+            if (claimTest.Except(claims).Any())
             {
-                userToken3.Claims = userData[userToken3.UserId];
+                actual = false;
             }
-            actual = ClaimsAuthorization.VerifyClaims(userToken3, _requireAdminRights);
-
+            
             // Assert
             Assert.AreEqual(expected, actual);
-        }
-        
-        #endregion
-        
-        #region Database Test
-
-        /*
-        [TestMethod]
-        public void TestClaim()
-        {
-
-            bool p = true;
-            DataBaseQueries.AddClaimsToUsers("0001", "p01q2w9o38ei4r");
-            Assert.IsTrue(p);
-        }*/
-
-        [TestMethod]
-        public void TestSelect()
-        {
-            bool pass = false;
-            string id = "p01q2w9o38ei4r";
-            List<string> claims;
-            claims = DataBaseQueries.FindClaimsFromUser(id);
-            List<string> claimTest = new List<string>(){"CanViewEvents","SystemAdmin","CanRate"};
-            if (!(claimTest.Except(claims).Any()))
-            {
-                pass = true;
-            }
-            Assert.IsTrue(pass);
         }
         
         #endregion

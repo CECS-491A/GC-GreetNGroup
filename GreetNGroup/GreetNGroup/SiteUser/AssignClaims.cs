@@ -19,9 +19,9 @@ namespace GreetNGroup.SiteUser
         /// 
         /// <param name="userAcc"></param>
         /// Holds the reference to the user that the claim should be added to
-        public void AssignClaimToUser(Token editor, ClaimsPool.Claims claim , UserAccount userAcc)
+        public void AssignClaimToUser(Token editor, string claim , UserAccount userAcc)
         {
-            List<ClaimsPool.Claims> systemAdminExclude = new List<ClaimsPool.Claims>(){ClaimsPool.Claims.SystemAdmin};
+            List<string> systemAdminExclude = new List<string>() {"SystemAdmin"};//ClaimsPool.Claims.SystemAdmin};
             
             if (ClaimsAuthorization.VerifyClaims(editor, systemAdminExclude))
             {

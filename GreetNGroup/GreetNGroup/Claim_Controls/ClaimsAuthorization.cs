@@ -20,7 +20,7 @@ namespace GreetNGroup.Claim_Controls
          * This is used to check if all the claims within the token
          * pass the required claims
          */
-        public static bool VerifyClaims(Token tok, List<ClaimsPool.Claims> claimsReq)
+        public static bool VerifyClaims(Token tok, List<string> claimsReq)//List<ClaimsPool.Claims> claimsReq)
         {
             try
             {
