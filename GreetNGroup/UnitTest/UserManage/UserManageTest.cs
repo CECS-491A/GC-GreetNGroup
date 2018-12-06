@@ -35,7 +35,7 @@ public class UserManageTest
         {
             using (var ctx = new Model2())
             {
-                var stud = new UserTable() { UserId = "1qazxs23ede" };
+                var stud = new UserTable() { UserId = "2qaasdf8ede" };
 
                 ctx.UserTables.Add(stud);
                 ctx.SaveChanges();
