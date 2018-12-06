@@ -22,7 +22,7 @@ namespace GreetNGroup.SiteUser
         public void AssignClaimToUser(Token editor, ClaimsPool.Claims claim , UserAccount userAcc)
         {
             List<ClaimsPool.Claims> systemAdminExclude = new List<ClaimsPool.Claims>(){ClaimsPool.Claims.SystemAdmin};
-
+            
             if (ClaimsAuthorization.VerifyClaims(editor, systemAdminExclude))
             {
                 userAcc.addClaim(claim);
