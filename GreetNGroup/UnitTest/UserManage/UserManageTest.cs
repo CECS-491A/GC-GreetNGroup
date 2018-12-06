@@ -10,179 +10,352 @@ using System.Data.Entity;
 using GreetNGroup;
 using System.Data.Entity.Validation;
 
+
 [TestClass]
 public class UserManageTest
 {
-    List<UserAccount> Users = new List<UserAccount>();
-    UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "Asdfg123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
+    UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "Asdfg123", "Dylan", "Chin", "Lakewood", "CA", "USA", new DateTime(1996, 12, 25),
                            "What is your favorite book?", "Cat in the Hat", "1a2s3d4f", 1, true);
-    UserAccount Bob = new UserAccount("bobby@gmail.com", "Qwerty123", "Bobby", "Chang", "Long Beach", "CA", "USA", "01/25/1998",
-                           "What is your favorite book?", "Harry Potter", "5r6y7u8i", 0, false);
-    UserAccount Jake = new UserAccount("jklmao@gmail.com", "Zxcvb123", "Jake", "Keja", "Los Angelos", "CA", "USA", "09/07/1997",
-                           "What is your favorite book?", "Goosebumps", "7b3c5v9i", 1, true);
-    UserAccount Chris = new UserAccount("chrism@gmail.com", "Tgnuj8346", "Chris", "Evans", "Los Angelos", "CA", "USA", "11/07/1997",
+    UserAccount Chris = new UserAccount("chrism@gmail.com", "Tgnuj8346", "Chris", "Evans", "Los Angelos", "CA", "USA", new DateTime(1990, 6, 10),
                            "What is your favorite book?", "Charlie and the Chocolate Factory", "2d4e5f5w", 0, true);
 
+
     [TestMethod]
-    public void test()
+    public void AddAccount_ValidParameters_Pass()
+    {
+
+        //Arange
+        Boolean expected = true;
+        Boolean actual = false;
+        //Act
+        try
+        {
+            Dylan.AddAccount("HowdyYall@gmail.com", "Houston", "TX", "USA", new DateTime(2007, 5, 28));
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserName == "HowdyYall@gmail.com");
+                foreach(var i in stud)
+                {
+                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Houston") && i.State.Equals("Texas") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2007, 5, 28)) == 0)) 
+                    {
+                        Console.WriteLine("Pass");
+                        actual = true;
+                    }
+                    else
+                    {
+                        actual = false;
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            actual = false;
+        }
+        //Assert
+        Assert.AreEqual(actual, expected);
+    }
+    [TestMethod]
+    public void AddAccount_UserNameExist_Fail()
     {
 
         //Arange
         Boolean expected = true;
         Boolean actual = true;
-
-       try
+        //Act
+       
+        try
         {
+            Dylan.AddAccount("HowdyYall@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = new UserClaim() { ClaimId = "0008" , UserId = "p01q2w9o38ei4r", };
+                var stud = ctx.UserTables
+                              .Where(s => s.UserName == "HowdyYall@gmail.com");
+                foreach (var i in stud)
+                {
+                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Sacramento") && i.State.Equals("CA") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
+                    {
+                        Console.WriteLine("Pass");
+                        actual = true;
+                    }
+                    else
+                    {
+                        actual = false;
+                    }
+                }
 
-                ctx.UserClaims.Add(stud);
-                ctx.SaveChanges();
+
             }
         }
-          catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e);
-        }
-
-        Assert.AreEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void AddAccount_EqualComparison_Pass()
-    {
-
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-        UserAccount newA = new UserAccount("dylan", "", "", "", "lakewood", "CA", "USA", "12/26/1996", "", "", "", 0, true);
-
-        Users.Add(Dylan);
-        //Act
-        try
-        {
-            UserAccount actualA = (UserAccount)Dylan.AddAccount("dylan", "lakewood", "CA", "USA", "12/26/1996", Users);
-            if (actualA.Equals(newA))
-            {
-
-                actual = true;
-            }
-            else
-            {
-                actual = false;
-            }
-        }
-        catch (Exception e)
-        {
             actual = false;
         }
-        //Assert
-        Assert.AreEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void AddAccount_toDatabase_Pass()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-        Users.Add(Dylan);
-        //Act
-        try
-        {
-            UserAccount actualA = (UserAccount)Dylan.AddAccount("helloprof@gmail.com", "lakewood", "CA", "USA", "12/26/1996", Users);
-            DataBaseQuery.insertUser(actualA, Users);
-            if (Users[1].Username.Equals("helloprof@gmail.com"))
-            {
-                actual = true;
-            }
-            else
-            {
-                actual = false;
-            }
-
-
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-
-
-        //Assert
-        Assert.AreEqual(actual, expected);
-
-    }
-
-    [TestMethod]
-    public void AddAccount_ExistingUserName_Fail()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-        Users.Add(Dylan);
-        //Act
-        try
-        {
-            UserAccount actualA = (UserAccount)Dylan.AddAccount("dylanchhin123@gmail.com", "lakewood", "CA", "USA", "12/26/1996", Users);
-            actual = true;
-
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-
         //Assert
         Assert.AreNotEqual(actual, expected);
-
     }
-
     [TestMethod]
-    public void AddAccount_UserWithoutValidClaim_Fail()
+    public void AddAccount_WrongClaims_Fail()
     {
+
         //Arange
         Boolean expected = true;
-        Boolean actual;
-        Users.Add(Dylan);
-        Users.Add(Bob);
+        Boolean actual = true;
         //Act
+
         try
         {
-            UserAccount actualA = (UserAccount)Bob.AddAccount("Peter@gmail.com", "lakewood", "CA", "USA", "12/26/1996", Users);
-            actual = true;
+            Chris.AddAccount("newAccount@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserName == "newAccount@gmail.com").Count();
+                if(stud > 0)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
 
+
+            }
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             actual = false;
         }
-
-
         //Assert
         Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void AddAccount_InvalidAttributesnull_Fail()
+    {
 
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+
+        try
+        {
+            Chris.AddAccount(null, null, null, null, new DateTime(2008, 5, 28));
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserName == null);
+                foreach (var i in stud)
+                {
+                    if (i.UserName.Equals(null) && i.City.Equals(null) && i.State.Equals(null) && i.Country.Equals(null) && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
+                    {
+                        Console.WriteLine("Pass");
+                        actual = true;
+                    }
+                    else
+                    {
+                        actual = false;
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            actual = false;
+        }
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void AddAccount_InvalidAttributesEmptyString_Fail()
+    {
+
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+
+        try
+        {
+            Chris.AddAccount("", "", "", "", new DateTime());
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserName == "");
+                foreach (var i in stud)
+                {
+                    if (i.UserName.Equals("") && i.City.Equals("") && i.State.Equals("") && i.Country.Equals("") && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
+                    {
+                        Console.WriteLine("Pass");
+                        actual = true;
+                    }
+                    else
+                    {
+                        actual = false;
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            actual = false;
+        }
+        //Assert
+        Assert.AreNotEqual(actual, expected);
     }
     [TestMethod]
     public void deleteAccount_Pass()
     {
         //Arange
         Boolean expected = true;
-        Boolean actual;
-        Users.Add(Dylan);
-        Users.Add(Bob);
-        Users.Add(Jake);
+        Boolean actual = false;
         //Act
         try
         {
-            var canDelete = Dylan.DeleteAccount(Bob);
-            if (canDelete == true)
+            Dylan.DeleteAccount("test");
+            using (var ctx = new GreetNGroupContext())
             {
-                DataBaseQuery.deleteUser(Bob, Users);
-                if (Users.Contains(Bob) != true)
+                var stud = ctx.UserTables
+                                .Where(s => s.UserName == "test@gmail.com").Count();
+                if (stud > 0)
+                {
+                    actual = false;
+                }
+                else
+                {
+                    actual = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            actual = false;
+        }
+        //Assert
+        Assert.AreEqual(actual, expected);
+    }
+    [TestMethod]
+    public void deleteAccount_WrongClaims_Fail()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+
+        Chris.DeleteAccount("test");
+        using (var ctx = new GreetNGroupContext())
+        {
+            var stud = ctx.UserTables
+                            .Where(s => s.UserName == "test@gmail.com").Count();
+            if(stud > 0)
+            {
+                actual = false;
+            }
+            else
+            {
+                actual = true;
+            }
+
+
+        }
+
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void deleteAccount_AccountWrongClaims_Fail()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+
+        Dylan.DeleteAccount("p01q2w9o38ei4r");
+        using (var ctx = new GreetNGroupContext())
+        {
+            var stud = ctx.UserTables
+                          .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
+            if (stud > 0)
+            {
+                actual = false;
+            }
+            else
+            {
+                actual = true;
+            }
+        }
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void deleteAccount_InvalidUserIDNull_Fail()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+        var check = ValidationManager.CheckDeletedAttributes(null);
+        if (check == true)
+        {
+            actual = true;
+        }
+        else
+        {
+            actual = false;
+        }
+
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void deleteAccount_InvalidUserIDEmptyString_Fail()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+        //Act
+        var check = ValidationManager.CheckDeletedAttributes("");
+        if (check == true)
+        {
+            actual = true;
+        }
+        else
+        {
+            actual = false;
+        }
+        
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    [TestMethod]
+    public void changeEnable_TruetoFalse_Pass()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual;
+        System.Diagnostics.Debug.WriteLine("Hello");
+        //Act
+        try
+        {
+            Dylan.ChangeEnable("p03d928ej2838fo", false);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
+                if (stud.isActivated == false)
                 {
                     actual = true;
                 }
@@ -191,104 +364,10 @@ public class UserManageTest
                     actual = false;
                 }
             }
-            else
-            {
-                actual = false;
-            }
         }
         catch (Exception e)
         {
             actual = false;
-        }
-        //Assert
-        Assert.AreEqual(actual, expected);
-    }
-
-    [TestMethod]
-    public void deleteAccount_UserWithoutValidClaim_Fail()
-    {
-        //Arange
-        Boolean actual = false;
-
-        Boolean expected = true;
-
-        Users.Add(Dylan);
-        Users.Add(Bob);
-        Users.Add(Jake);
-        //Act
-        try
-        {
-            var canDelete = Bob.DeleteAccount(Dylan);
-            if (canDelete == true)
-            {
-                actual = true;
-            }
-            else
-            {
-                actual = false;
-            }
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void deleteAccount_AccountwithoutValidClaim_Fail()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-
-        Users.Add(Dylan);
-        Users.Add(Bob);
-        Users.Add(Jake);
-        //Act
-        try
-        {
-            var canDelete = Dylan.DeleteAccount(Jake);
-            if (canDelete == true)
-            {
-
-                actual = true;
-
-            }
-            else
-            {
-                actual = false;
-            }
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void changeEnable_TruetoFalse_Pass()
-    {
-        //Arange
-        Boolean expected = false;
-        Boolean actual;
-        System.Diagnostics.Debug.WriteLine("Hello");
-        //Act
-        try
-        {
-            Dylan.ChangeEnable(Chris, false);
-            actual = Chris.Enable;
-        }
-        catch (Exception e)
-        {
-            actual = true;
         }
 
 
@@ -297,124 +376,101 @@ public class UserManageTest
         Assert.AreEqual(actual, expected);
 
     }
-
     [TestMethod]
     public void changeEnable_FalsetoTrue_Pass()
     {
         //Arange
         Boolean expected = true;
         Boolean actual;
-
         //Act
         try
         {
-            Dylan.ChangeEnable(Bob, true);
-            actual = Bob.Enable;
+            Dylan.ChangeEnable("p0499dj238e92j2", true);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "p0499dj238e92j2").Single();
+                if (stud.isActivated == true)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
         }
         catch (Exception e)
         {
             actual = false;
         }
-
-
-
         //Assert
         Assert.AreEqual(actual, expected);
 
     }
     [TestMethod]
-    public void changeEnable_UserWithoutValidClaim_Fail()
+    public void changeEnable_WrongClaim_Pass()
     {
         //Arange
-        Boolean expected = true;
+        Boolean expected = false;
         Boolean actual;
-
         //Act
         try
         {
-            Bob.ChangeEnable(Chris, true);
-
-            actual = Chris.Enable;
+            Chris.ChangeEnable("test", false);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "test").Single();
+                if (stud.isActivated == false)
+                {
+                    actual = false;
+                }
+                else
+                {
+                    actual = true;
+                }
+            }
         }
         catch (Exception e)
         {
-            actual = false;
+            actual = true;
         }
-
-
-
         //Assert
         Assert.AreNotEqual(actual, expected);
 
     }
     [TestMethod]
-    public void changeEnable_AccountWithoutValidClaim_Fail()
+    public void changeEnable_AccountWrongClaim_Pass()
     {
         //Arange
-        Boolean expected = true;
+        Boolean expected = false;
         Boolean actual;
-
         //Act
         try
         {
-            Dylan.ChangeEnable(Jake, true);
-
-            actual = Jake.Enable;
+            Chris.ChangeEnable("p01dj9wjd99u3u", false);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "p01dj9wjd99u3u").Single();
+                if (stud.isActivated == false)
+                {
+                    actual = false;
+                }
+                else
+                {
+                    actual = true;
+                }
+            }
         }
         catch (Exception e)
         {
-            actual = false;
+            actual = true;
         }
-
         //Assert
         Assert.AreNotEqual(actual, expected);
 
     }
-    [TestMethod]
-    public void changeEnable_AccountAlreadyDisabled_Fail()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
 
-        //Act
-        try
-        {
-            Dylan.ChangeEnable(Chris, true);
-
-            actual = Chris.Enable;
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void changeEnable_AccountAlreadyEnabled_Fail()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-
-        //Act
-        try
-        {
-            Dylan.ChangeEnable(Bob, false);
-
-            actual = Bob.Enable;
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-        //Assert.AreEqual(Dylan, Dylan2);
-
-    }
 }

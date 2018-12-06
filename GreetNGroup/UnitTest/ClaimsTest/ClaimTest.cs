@@ -158,6 +158,7 @@ namespace UnitTest.ClaimsTest
         [TestMethod]
         public void TestClaim()
         {
+
             bool p = true;
             DataBaseQueries.AddClaimsToUsers("0001", "p01q2w9o38ei4r");
             Assert.IsTrue(p);

@@ -7,8 +7,9 @@ using GreetNGroup.Tokens;
 using GreetNGroup.UserManage;
 using System.Data.Sql;
 using System.Data.SqlClient;
+using GreetNGroup.Validation;
 /*
-    Basic user account class with all fields needed for a registered account     
+Basic user account class with all fields needed for a registered account     
 */
 namespace GreetNGroup.SiteUser
 {
@@ -23,6 +24,7 @@ namespace GreetNGroup.SiteUser
         private string State;
         private string Country;
         private Boolean isEnabled;
+        internal List<ClaimsPool.Claims> claimsList;
 
         // will need to define how to assign claims to user
         private List<ClaimsPool.Claims> Claims { get; set; }
@@ -36,7 +38,7 @@ namespace GreetNGroup.SiteUser
             Cityloc = "";
             Stateloc = "";
             Countryloc = "";
-            this.DOB = "";
+            this.DOB = new DateTime(0, 0, 0);
             SecurityQ = "";
             SecurityA = "";
             UserID = "";
@@ -56,9 +58,12 @@ namespace GreetNGroup.SiteUser
         /// <param name="DOB">Passed Date of Birth</param>
         /// <param name="securityQ">Passed Security Question</param>
         /// <param name="securityA">Passed Answer to Security Question</param>
+        /// <param name="userID">Passed UserID</param>
+        /// <param name="AccountLvl">Passed lvl of the account</param>
+        /// <param name="isEnabled">Passed current state of account</param> 
 
         public UserAccount(string userN, string pword, string fName, string lName, string city, 
-            string state, string country, string DOB, string securityQ, string securityA, string userID, int accountLvl, Boolean isEnable)
+            string state, string country, DateTime DOB, string securityQ, string securityA, string userID, int accountLvl, Boolean isEnable)
         {
             Username = userN;
             Password = pword;
@@ -91,7 +96,7 @@ namespace GreetNGroup.SiteUser
         public string Password { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public string DOB { get; set; }
+        public DateTime DOB { get; set; }
         
     #endregion
                
@@ -124,33 +129,10 @@ namespace GreetNGroup.SiteUser
         /// <param name="DOB">New user's Date of birth</param>
         /// <param name="Users">The list of Current users</param>
         /// <returns>A new User Account Object</returns>
-        public Object AddAccount(String userName, String city, String state, String country, String DOB, List<UserAccount> Users)
+        public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
-
-            //User is first checked if they have the Admin rights claim to be able to create an account
-            List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
-            var currentUserToken = new Token(UserID);
-            currentUserToken.Claims = Claims;
-            var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            //If they have the claims they will be able to create a new account but if they don't the function will throw an error
-            if (canAdd == false)
-            {
-                throw new System.ArgumentException("User does not have the right Claims", "Claims");
-            }
-            //Compares username to the database and will only create an account if the username is unique
-            var isDupe = DataBaseQuery.isUserNameDuplicate(userName, Users);
-            if (isDupe == false)
-            {
-                //var randomPassword = RandomFieldGenerator.generatePassword();
-
-                UserAccount newAccount = new UserAccount(userName, "", "", "", city, state, country, DOB, "", "", "", 0, true);
-                return newAccount;
-            }
-            else
-            {
-                throw new System.ArgumentException("Username already exist", "Database");
-            }
-
+  
+            ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
 
         }
         /// <summary>
@@ -158,84 +140,20 @@ namespace GreetNGroup.SiteUser
         /// </summary>
         /// <param name="deleteUser">User Account that will be deletd</param>
         /// <returns>If user is able to delete the account or not</returns>
-        public Boolean DeleteAccount(UserAccount deleteUser)
+        public void DeleteAccount(string UserId)
         {
-            Boolean deletable = false;
-            List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
-            var currentUserToken = new Token(Username);
-            var deleteUserToken = new Token(deleteUser.Username);
-            currentUserToken.Claims = Claims;
-            deleteUserToken.Claims = deleteUser.Claims;
-            var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            var canBeDelete = ClaimsAuthorization.VerifyClaims(deleteUserToken, _requireAdminRights);
-            if (canDelete == false || canBeDelete == true)
-            {
-                throw new System.ArgumentException("One of the Users does not have the right Claims", "Claims");
-            }
-            else
-            {
-                deletable = true;
-            }
-            return deletable;
+            Console.WriteLine("hello");
+            ValidationManager.CheckDeleteToken(Claims,UserId);
         }
         /// <summary>
         /// Enables or disables an account
         /// </summary>
         /// <param name="account">Account that is being enabled or disabled</param>
         /// <param name="isEnabled">Truth value of the accounts enabled status</param>
-        public void ChangeEnable(UserAccount account, Boolean isEnabled)
+        public void ChangeEnable(string UserId, Boolean changeState)
         {
-            /**
-            List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
-            var currentUserToken = new Token(Username);
-            var changeUserToken = new Token(account.Username);
-            currentUserToken.Claims = Claims;
-            changeUserToken.Claims = account.Claims;
-            var canEnable = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            var canBeEnabled = ClaimsAuthorization.VerifyClaims(changeUserToken, _requireAdminRights);
-            if (canEnable == false || canBeEnabled == true)
-            {
-                System.Diagnostics.Debug.WriteLine("error");
-                throw new System.ArgumentException("One of the Users does not have the right Claims", "Claims");
-            }
-            else
-            {
-                if (account.Enable == isEnabled)
-                {
-                    throw new System.ArgumentException("Account is already enabled or disabled", "Activate/Deactivate");
-                }
-                else
-                {
-                    account.Enable = isEnabled;
-                }
-
-            }
-        **/
-            System.Diagnostics.Debug.WriteLine("Hello");
-            string connetionString = null;
-            string sql = null;
-            connetionString = "Server = greetngroupdb.cj74stlentvn.us-west-1.rds.amazonaws.com; " +
-                                                  "Database = Test;User Id=gucci;Password=password123!;";
-            SqlConnection cnn = new SqlConnection(connetionString);
-            
-            sql = "insert into TestTable (name, password,id) values('dylan','123','2e3r4t5y')";
-            try
-            {
-                cnn.Open();
-                if (cnn.State == System.Data.ConnectionState.Open)
-                {
-                    SqlCommand cmd = new SqlCommand(sql, cnn);
-                    cmd.ExecuteNonQuery();
-                    System.Diagnostics.Debug.WriteLine("your message here");
-
-                }
-                cnn.Close();
-            }catch(Exception)
-            {
-                System.Diagnostics.Debug.WriteLine("Fail");
-            }
-            
-
+            Console.WriteLine("hello");
+            ValidationManager.CheckEnableToken(Claims, UserId, changeState);
         }
         #endregion
 
