@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using GreetNGroup.Data_Access;
 
 namespace GreetNGroup.Data_Access
 {
     public static class DataBaseQueries
     {
-        //public void AddClaim
+        public static void AddClaimsToUsers(string claimId, string userId)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var claim = new UserClaim() { UserId = userId, ClaimId = claimId };
+                ctx.UserClaims.Add(claim);
+                ctx.SaveChanges();
+            }
+        }
+        
+        public static void AddUser(string )
         //
         // all of the following is not using entity framework --plain sql server code -- not agnostic
         //

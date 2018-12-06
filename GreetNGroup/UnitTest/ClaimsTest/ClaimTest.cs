@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using GreetNGroup.Claim_Controls;
-using GreetNGroup.Code_First;
 using GreetNGroup.Tokens;
 using GreetNGroup.SiteUser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GreetNGroup;
+using GreetNGroup.Data_Access;
 
 namespace UnitTest.ClaimsTest
 {
@@ -156,14 +156,9 @@ namespace UnitTest.ClaimsTest
         [TestMethod]
         public void TestClaim()
         {
-            using (var ctx = new GreetNGroupContext())
-            {
-                var claim = new ClaimPool() { ClaimId = "1"};
-                bool p = true;
-                //ctx.Claims.Add(claim);
-                //ctx.SaveChanges();
-                //Assert.IsTrue(p);
-            }
+            bool p = true;
+            DataBaseQueries.AddClaimsToUsers("0001", "p01q2w9o38ei4r");
+            Assert.IsTrue(p);
         }
         
         #endregion

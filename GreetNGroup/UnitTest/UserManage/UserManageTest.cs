@@ -9,7 +9,6 @@ using System.Web;
 using System.Data.Entity;
 using GreetNGroup;
 using System.Data.Entity.Validation;
-using GreetNGroup.Code_First;
 
 [TestClass]
 public class UserManageTest
