@@ -25,7 +25,7 @@ namespace GreetNGroup.SiteUser
         private Boolean isEnabled;
 
         // will need to define how to assign claims to user
-        private List<ClaimsPool.Claims> Claims { get; set; }
+        private List<string> Claims { get; set; }
 
         public UserAccount()
         {
@@ -73,11 +73,19 @@ namespace GreetNGroup.SiteUser
             UserID = userID;
             if (accountLvl == 1)
             {
-                Claims = new List<ClaimsPool.Claims> { ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers, ClaimsPool.Claims.AdminRights, ClaimsPool.Claims.CanBlacklistUsers, };
+                Claims = new List<string>
+                {
+                    "CanCreateEvents", "CanViewEvents", "CanFriendUsers", "AdminRights", "CanBlackListUsers"
+                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers, ClaimsPool.Claims.AdminRights, ClaimsPool.Claims.CanBlacklistUsers,
+                };
             }
             else
             {
-                Claims = new List<ClaimsPool.Claims> { ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers };
+                Claims = new List<string>
+                {
+                    "CanCreateEvents", "CanViewEvents", "CanFriendUsers"
+                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers
+                };
             }
             Enable = isEnable;
         }
@@ -128,7 +136,8 @@ namespace GreetNGroup.SiteUser
         {
 
             //User is first checked if they have the Admin rights claim to be able to create an account
-            List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+            //List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+            List<string> _requireAdminRights = new List<string> {"AdminRights"};//List<ClaimsPool.Claims> ClaimsPool.Claims.AdminRights };
             var currentUserToken = new Token(UserID);
             currentUserToken.Claims = Claims;
             var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
@@ -161,7 +170,8 @@ namespace GreetNGroup.SiteUser
         public Boolean DeleteAccount(UserAccount deleteUser)
         {
             Boolean deletable = false;
-            List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+            List<string> _requireAdminRights = new List<string> {"AdminRights"};
+                                                          //new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
             var currentUserToken = new Token(Username);
             var deleteUserToken = new Token(deleteUser.Username);
             currentUserToken.Claims = Claims;
@@ -300,7 +310,7 @@ namespace GreetNGroup.SiteUser
         }
         #endregion
 
-        public void addClaim(ClaimsPool.Claims  claimAdded)
+        public void addClaim(string claimAdded)
         {
             Claims.Add(claimAdded);
         }
