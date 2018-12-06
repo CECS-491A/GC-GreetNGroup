@@ -43,6 +43,14 @@ namespace GreetNGroup
         [Column(TypeName = "date")]
         public DateTime? DoB { get; set; }
 
+        [StringLength(50)]
+        public string SecurityQuestion { get; set; }
+
+        [StringLength(30)]
+        public string SecurityAnswer { get; set; }
+
+        public bool? isActivated { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClaimsTable> ClaimsTables { get; set; }
     }
