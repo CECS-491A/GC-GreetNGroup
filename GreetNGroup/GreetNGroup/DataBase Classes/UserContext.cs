@@ -7,11 +7,11 @@ namespace GreetNGroup.DataBase_Classes
 {
     public class UserContext : DbContext
     {
-        public UserContext() : base()
+        public UserContext() : base("Model1")
         {
 
         }
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserTable> Users { get; set; }
     }
         
 }
