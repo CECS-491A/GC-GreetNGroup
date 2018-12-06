@@ -175,32 +175,13 @@ namespace GreetNGroup.SiteUser
         /// <returns>If user is able to delete the account or not</returns>
         public void DeleteAccount(string UserId)
         {
-            Boolean deletable = false;
-            List<string> _requireAdminRights = new List<string> {"AdminRights"};
-                                                          //new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
-            var currentUserToken = new Token(Username);
-            var deleteUserToken = new Token(deleteUser.Username);
-            currentUserToken.Claims = Claims;
-            deleteUserToken.Claims = deleteUser.Claims;
-            var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            var canBeDelete = ClaimsAuthorization.VerifyClaims(deleteUserToken, _requireAdminRights);
-            if (canDelete == false || canBeDelete == true)
-            {
-                throw new System.ArgumentException("One of the Users does not have the right Claims", "Claims");
-            }
-            else
-            {
-                deletable = true;
-            }
-            return deletable;
-            Console.WriteLine("hello");
             ValidationManager.CheckDeleteToken(Claims,UserId);
         }
         /// <summary>
         /// Enables or disables an account
         /// </summary>
         /// <param name="account">Account that is being enabled or disabled</param>
-        /// <param name="isEnabled">Truth value of the accounts enabled status</param>
+        /// <param name="changestate">Truth value of the accounts enabled status</param>
         public void ChangeEnable(string UserId, Boolean changeState)
         {
             Console.WriteLine("hello");

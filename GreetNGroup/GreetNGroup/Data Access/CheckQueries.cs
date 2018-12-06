@@ -86,16 +86,13 @@ namespace GreetNGroup.Data_Access
                                   .Where(s => s.UserId == UID).Count();
                     if (stud > 0)
                     {
-                    Console.WriteLine("hello");
                         using (var ctx2 = new GreetNGroupContext())
                         {
                             var claimslist = ctx2.UserClaims
                                          .Where(s => s.UserId == UID).ToList();
-                            Console.WriteLine("hello");
                             Boolean canDelete = ValidationManager.checkAccountEditable(claimslist);
                             if (canDelete == true)
                             {
-                                Console.WriteLine("hello1234");
                                 DeleteUser(UID);
                             }
                             else
@@ -127,10 +124,8 @@ namespace GreetNGroup.Data_Access
                                   .Where(s => s.UserId == UID).Count();
                     if (stud > 0)
                     {
-                        Console.WriteLine("hello");
                         var claimslist = ctx.UserClaims
                                         .Where(s => s.UserId == UID).ToList();
-                        Console.WriteLine("hello");
                         Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
                         if (canEdit == true)
                         {

@@ -9,7 +9,7 @@ using System.Web;
 using System.Data.Entity;
 using GreetNGroup;
 using System.Data.Entity.Validation;
-
+using GreetNGroup.Validation;
 
 [TestClass]
 public class UserManageTest
@@ -37,7 +37,7 @@ public class UserManageTest
                               .Where(s => s.UserName == "HowdyYall@gmail.com");
                 foreach(var i in stud)
                 {
-                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Houston") && i.State.Equals("Texas") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2007, 5, 28)) == 0)) 
+                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Houston") && i.State.Equals("TX") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2007, 5, 28)) == 0)) 
                     {
                         Console.WriteLine("Pass");
                         actual = true;
@@ -146,7 +146,7 @@ public class UserManageTest
 
         try
         {
-            Chris.AddAccount(null, null, null, null, new DateTime(2008, 5, 28));
+            ValidationManager.checkAddAttributes(null, null, null, null, new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
                 var stud = ctx.UserTables
@@ -163,8 +163,6 @@ public class UserManageTest
                         actual = false;
                     }
                 }
-
-
             }
         }
         catch (Exception e)
@@ -186,7 +184,7 @@ public class UserManageTest
 
         try
         {
-            Chris.AddAccount("", "", "", "", new DateTime());
+            ValidationManager.checkAddAttributes("", "", "", "", new DateTime());
             using (var ctx = new GreetNGroupContext())
             {
                 var stud = ctx.UserTables
@@ -346,7 +344,6 @@ public class UserManageTest
         //Arange
         Boolean expected = true;
         Boolean actual;
-        System.Diagnostics.Debug.WriteLine("Hello");
         //Act
         try
         {
@@ -441,7 +438,7 @@ public class UserManageTest
 
     }
     [TestMethod]
-    public void changeEnable_AccountWrongClaim_Pass()
+    public void changeEnable_AccountWrongClaim_Fail()
     {
         //Arange
         Boolean expected = false;
@@ -472,5 +469,74 @@ public class UserManageTest
         Assert.AreNotEqual(actual, expected);
 
     }
+    [TestMethod]
+    public void changeEnable_TruetoTrue_Fail()
+    {
+        //Arange
+        Boolean expected = false;
+        Boolean actual;
+        //Act
+        try
+        {
+            Dylan.ChangeEnable("p03d928ej2838fo", true);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
+                if (stud.isActivated == true)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            actual = true;
+        }
 
+
+
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+
+    }
+    [TestMethod]
+    public void changeEnable_FalsetoFalse_Fail()
+    {
+        //Arange
+        Boolean expected = true;
+        Boolean actual;
+        //Act
+        try
+        {
+            Dylan.ChangeEnable("p03d928ej2838fo", false);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var stud = ctx.UserTables
+                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
+                if (stud.isActivated == false)
+                {
+                    actual = false;
+                }
+                else
+                {
+                    actual = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            actual = false;
+        }
+
+
+
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+
+    }
 }

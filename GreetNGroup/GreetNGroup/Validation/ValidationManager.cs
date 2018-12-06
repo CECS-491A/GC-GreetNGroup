@@ -9,12 +9,12 @@ namespace GreetNGroup.Validation
 {
     public static class ValidationManager
     {
-        public static void checkAddToken(List<ClaimsPool.Claims> claims, String userName, String city, String state, String country, DateTime DOB)
+        public static void checkAddToken(List<string> claims, String userName, String city, String state, String country, DateTime DOB)
         {
             try
             {
                 string temp = "test";
-                List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+                List<string> _requireAdminRights = new List<string> { "AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
                 var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
@@ -44,20 +44,24 @@ namespace GreetNGroup.Validation
             
 
         }
-        public static void CheckDeleteToken(List<ClaimsPool.Claims> claims, string UID)
+        public static void CheckDeleteToken(List<string> claims, string UID)
         {
             try
             {
                 Console.WriteLine("hello");
                 string temp = "test";
-                List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+                List<string> _requireAdminRights = new List<string> {"AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
                 var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-                //If they have the claims they will be able to create a new account but if they don't the function will throw an error
+                
                 if (canDelete == true)
                 {
-                    CheckQueries.CheckDeleteClaim(UID);
+                    if(CheckDeletedAttributes(UID) == true)
+                    {
+                        CheckQueries.CheckDeleteClaim(UID);
+                    }
+                    
                 }
                 else
                 {
@@ -71,17 +75,16 @@ namespace GreetNGroup.Validation
             
         }
 
-        public static void CheckEnableToken(List<ClaimsPool.Claims> claims, string UID, Boolean changeState)
+        public static void CheckEnableToken(List<string> claims, string UID, Boolean changeState)
         {
             try
             {
                 Console.WriteLine("hello");
                 string temp = "test";
-                List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
+                List<string> _requireAdminRights = new List<string> {"AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
                 var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-                //If they have the claims they will be able to create a new account but if they don't the function will throw an error
                 if (canDelete == true)
                 {
                     CheckQueries.CheckEditClaim(UID, changeState);
