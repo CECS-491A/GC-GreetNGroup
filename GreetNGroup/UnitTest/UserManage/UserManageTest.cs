@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using GreetNGroup.DataBase_Classes;
 using GreetNGroup.SiteUser;
 using GreetNGroup.UserManage;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using System.Web;
+using System.Data.Entity;
+using GreetNGroup;
+using System.Data.Entity.Validation;
 
 [TestClass]
 public class UserManageTest
@@ -17,6 +23,34 @@ public class UserManageTest
     UserAccount Chris = new UserAccount("chrism@gmail.com", "Tgnuj8346", "Chris", "Evans", "Los Angelos", "CA", "USA", "11/07/1997",
                            "What is your favorite book?", "Charlie and the Chocolate Factory", "2d4e5f5w", 0, true);
 
+    [TestMethod]
+    public void test()
+    {
+
+        //Arange
+        Boolean expected = true;
+        Boolean actual = true;
+
+       try
+        {
+            using (var ctx = new Model2())
+            {
+                var stud = new UserTable() { UserId = "1qazxs23ede" };
+
+                ctx.UserTables.Add(stud);
+                ctx.SaveChanges();
+            }
+        }
+          catch(DbEntityValidationException e)
+        {
+            Console.WriteLine(e);
+        }
+        
+        
+
+        Assert.AreEqual(actual, expected);
+
+    }
     [TestMethod]
     public void AddAccount_EqualComparison_Pass()
     {

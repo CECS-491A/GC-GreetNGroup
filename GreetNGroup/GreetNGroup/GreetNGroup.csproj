@@ -54,7 +54,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -189,6 +191,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="DataBase Classes\ClaimsTable.cs" />
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Claim_Controls\ClaimsPool.cs" />
     <Compile Include="Code_First\ClaimPool.cs" />
@@ -205,6 +208,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="DataBase Classes\Model2.cs" />
     <Compile Include="Passwords\PasswordChecker.cs" />
     <Compile Include="Passwords\UTF8ToSHA1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -222,6 +226,7 @@
     <Compile Include="SiteUser\ILocatable.cs" />
     <Compile Include="SiteUser\UserAccount.cs" />
     <Compile Include="SiteUser\UserDatabaseTemp.cs" />
+    <Compile Include="DataBase Classes\UserTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

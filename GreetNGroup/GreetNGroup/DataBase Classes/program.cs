@@ -10,12 +10,19 @@ namespace GreetNGroup.DataBase_Classes
         static void Main(string[] args)
         {
 
-            using (var ctx = new UserContext())
+            try
             {
-                var stud = new User() { Firstname = "Bill" };
+                using (var ctx = new Model2())
+                {
+                    var stud = new UserTable() { UserId = "1q3e4r5t" };
 
-                ctx.Users.Add(stud);
-                ctx.SaveChanges();
+                    ctx.UserTables.Add(stud);
+                    ctx.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+
             }
         }
     }
