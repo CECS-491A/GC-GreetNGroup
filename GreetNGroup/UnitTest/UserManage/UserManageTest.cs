@@ -9,6 +9,7 @@ using System.Web;
 using System.Data.Entity;
 using GreetNGroup;
 using System.Data.Entity.Validation;
+using GreetNGroup.Code_First;
 
 [TestClass]
 public class UserManageTest
@@ -35,18 +36,16 @@ public class UserManageTest
         {
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = new UserTable() { UserId = "2qaasdf8ede" };
+                var stud = new UserClaim() { ClaimId = "0008" , UserId = "p01q2w9o38ei4r", };
 
-                ctx.UserTables.Add(stud);
+                ctx.UserClaims.Add(stud);
                 ctx.SaveChanges();
             }
         }
-          catch(DbEntityValidationException e)
+          catch(Exception e)
         {
             Console.WriteLine(e);
         }
-        
-        
 
         Assert.AreEqual(actual, expected);
 

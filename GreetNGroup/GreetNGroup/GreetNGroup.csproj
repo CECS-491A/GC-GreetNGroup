@@ -197,8 +197,6 @@
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Claim_Controls\ClaimsPool.cs" />
     <Compile Include="Code_First\ClaimPool.cs" />
-    <Compile Include="Code_First\ClaimContext.cs" />
-    <Compile Include="Code_First\UserClaim.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -208,7 +206,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="DataBase Classes\Model2.cs" />
     <Compile Include="DataBase Classes\GreetNGroupContext.cs" />
     <Compile Include="Passwords\PasswordChecker.cs" />
     <Compile Include="Passwords\UTF8ToSHA1.cs" />
@@ -221,6 +218,7 @@
     <Compile Include="SiteUser\DataBaseQuery.cs" />
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
+    <Compile Include="DataBase Classes\UserClaim.cs" />
     <Compile Include="UserManage\IUserManager.cs" />
     <Compile Include="SiteUser\AssignClaims.cs" />
     <Compile Include="SiteUser\IIdentifiable.cs" />
