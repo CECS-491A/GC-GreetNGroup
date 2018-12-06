@@ -9,6 +9,14 @@ namespace GreetNGroup.Validation
 {
     public static class ValidationManager
     {
+        /// <summary>
+        /// Checks to see if the person who is creating an accout is allowed to
+        /// </summary>
+        /// <param name="userName">New user Name</param>
+        /// <param name="city">New City Location</param>
+        /// <param name="state">New State Location</param>
+        /// <param name="country">New Country Location</param>
+        /// <param name="DOB">New user's Date of birth</param>
         public static void checkAddToken(List<string> claims, String userName, String city, String state, String country, DateTime DOB)
         {
             try
@@ -44,6 +52,11 @@ namespace GreetNGroup.Validation
             
 
         }
+        /// <summary>
+        /// Checks to see if the person who is deleting an account has the right claims
+        /// </summary>
+        /// <param name="claims">List of claims</param>
+        /// <param name="UID">User ID </param>
         public static void CheckDeleteToken(List<string> claims, string UID)
         {
             try
@@ -74,7 +87,12 @@ namespace GreetNGroup.Validation
             }
             
         }
-
+        /// <summary>
+        /// Checks to see if the person who is editing an account has the right claims
+        /// </summary>
+        /// <param name="claims">List of claims</param>
+        /// <param name="UID">User ID </param>
+        /// <param name="changeState">The new state(activated/deactivated) of the account</param>
         public static void CheckEnableToken(List<string> claims, string UID, Boolean changeState)
         {
             try
@@ -100,7 +118,15 @@ namespace GreetNGroup.Validation
             }
 
         }
-
+        /// <summary>
+        /// Checks the current attributes of a new user account
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="city"></param>
+        /// <param name="state"></param>
+        /// <param name="country"></param>
+        /// <param name="DOB"></param>
+        /// <returns>Whether the inputs are valid or not</returns>
         public static Boolean checkAddAttributes(String userName, String city, String state, String country, DateTime DOB)
         {
             if(userName.Equals(null) || city.Equals(null) || state.Equals(null) || country.Equals(null) || DOB == null)
@@ -114,18 +140,22 @@ namespace GreetNGroup.Validation
             //Validates Input
             return true;
         }
-
+        /// <summary>
+        /// Verifies the userId and makes sure its valid
+        /// </summary>
+        /// <param name="UID">The passed userid</param>
+        /// <returns>If the input is valid or not</returns>
         public static Boolean CheckDeletedAttributes(String UID)
         {
             try
             {
                 if (UID.Equals(null))
                 {
-                    throw new System.ArgumentException("User attributes are not correct", "Attributes");
+                    throw new System.ArgumentException("User attributes are not correct null", "Attributes");
                 }
                 if (UID.Equals(""))
                 {
-                    throw new System.ArgumentException("User attributes are not correct", "Attributes");
+                    throw new System.ArgumentException("User attributes are not correct emptystring", "Attributes");
                 }
             }
            catch(Exception e)
@@ -136,7 +166,11 @@ namespace GreetNGroup.Validation
             //Validates Input
             return true;
         }
-
+        /// <summary>
+        /// Checks if the account can be edited
+        /// </summary>
+        /// <param name="items">List of claims the user in the database has</param>
+        /// <returns>Whether or not the account can be changed</returns>
         public static Boolean checkAccountEditable (List<UserClaim> items)
         {
             Console.WriteLine("hello");
