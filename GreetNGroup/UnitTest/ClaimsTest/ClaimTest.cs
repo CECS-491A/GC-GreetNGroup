@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GreetNGroup.Claim_Controls;
+using GreetNGroup.Code_First;
 using GreetNGroup.Tokens;
 using GreetNGroup.SiteUser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -145,6 +146,23 @@ namespace UnitTest.ClaimsTest
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+        
+        #endregion
+        
+        #region Database Test
+
+        [TestMethod]
+        public void TestClaim()
+        {
+            using (var ctx = new ClaimContext())
+            {
+                var claim = new ClaimPool() { ClaimId = "1"};
+                bool p = true;
+                ctx.Claims.Add(claim);
+                ctx.SaveChanges();
+                Assert.IsTrue(p);
+            }
         }
         
         #endregion

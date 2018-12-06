@@ -9,7 +9,7 @@ namespace GreetNGroup.Code_First
             
         }
 
-        public DbSet<Claim> Claims { get; set; }
+        public DbSet<ClaimPool> Claims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
     }
 }

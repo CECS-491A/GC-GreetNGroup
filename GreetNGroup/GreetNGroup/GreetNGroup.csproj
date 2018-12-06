@@ -191,7 +191,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Claim_Controls\ClaimsPool.cs" />
-    <Compile Include="Code_First\Claim.cs" />
+    <Compile Include="Code_First\ClaimPool.cs" />
     <Compile Include="Code_First\ClaimContext.cs" />
     <Compile Include="Code_First\UserClaim.cs" />
     <Compile Include="Controllers\HomeController.cs" />
