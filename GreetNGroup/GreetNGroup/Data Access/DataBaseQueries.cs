@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Internal;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using GreetNGroup.Claim_Controls;
 using GreetNGroup.Data_Access;
+using Microsoft.Ajax.Utilities;
 
 namespace GreetNGroup.Data_Access
 {
@@ -17,8 +21,31 @@ namespace GreetNGroup.Data_Access
                 ctx.SaveChanges();
             }
         }
+
+        public static List<string> FindClaimsFromUser(string userId)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                List<ClaimsTable> claimsTable = new List<ClaimsTable>();
+                ClaimsTable currTable;
+                List<string> claims = new List<string>();
+                
+                List<UserClaim> userClaims = ctx.UserClaims.Where(c => userId.Contains(c.UserId)).ToList();
+
+                foreach (var t in userClaims)
+                {
+                    var currClaim = t.ClaimId;
+                    claimsTable.Add(ctx.ClaimsTables.Where(u => currClaim.Equals(u.ClaimId)).ToList()[0]);
+                }
+
+                foreach (var t1 in claimsTable)
+                {
+                    claims.Add(t1.Claim);
+                }
+                return claims;
+            }
+        }
         
-        public static void AddUser(string )
         //
         // all of the following is not using entity framework --plain sql server code -- not agnostic
         //

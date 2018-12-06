@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GreetNGroup.Claim_Controls;
 using GreetNGroup.Tokens;
 using GreetNGroup.SiteUser;
@@ -153,12 +154,28 @@ namespace UnitTest.ClaimsTest
         
         #region Database Test
 
+        /*
         [TestMethod]
         public void TestClaim()
         {
             bool p = true;
             DataBaseQueries.AddClaimsToUsers("0001", "p01q2w9o38ei4r");
             Assert.IsTrue(p);
+        }*/
+
+        [TestMethod]
+        public void TestSelect()
+        {
+            bool pass = false;
+            string id = "p01q2w9o38ei4r";
+            List<string> claims;
+            claims = DataBaseQueries.FindClaimsFromUser(id);
+            List<string> claimTest = new List<string>(){"CanViewEvents","SystemAdmin","CanRate"};
+            if (!(claimTest.Except(claims).Any()))
+            {
+                pass = true;
+            }
+            Assert.IsTrue(pass);
         }
         
         #endregion
