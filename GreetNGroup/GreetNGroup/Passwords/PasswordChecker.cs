@@ -17,7 +17,7 @@ namespace GreetNGroup.Passwords
     public class PasswordChecker
     {
         //A constant integer that allows for easy change in how many occurences are considered for a pwned password
-        const int minimumPasswordOccurences = 1;
+        private const int MIN_PASSWORD_OCCURRENCES = 1;
         
         /// <summary>
         /// Default constructor for PasswordChecker
@@ -38,10 +38,10 @@ namespace GreetNGroup.Passwords
         /// </returns>
         public async Task<bool> IsPasswordPwned(string passwordToCheck)
         {
-            bool identicalHashExists = false;
-            int passwordOccurrenceCount = await PasswordOccurrences(passwordToCheck);
+            var identicalHashExists = false;
+            var passwordOccurrenceCount = await PasswordOccurrences(passwordToCheck);
             
-            if(passwordOccurrenceCount >= minimumPasswordOccurences)
+            if(passwordOccurrenceCount >= MIN_PASSWORD_OCCURRENCES)
             {
                 identicalHashExists = true;
             }
@@ -57,24 +57,14 @@ namespace GreetNGroup.Passwords
         public async Task<HttpResponseMessage> GetResponseCode(string URL)
         {
             //HttpClient connects to Troy Hunt's HaveIBeenPwned API to retrieve possibly pwned passwords
-            HttpClient client = new HttpClient();
+            var client = new HttpClient();
             //HttpResponseMessage will be used to hold the response code the API returns
             HttpResponseMessage responseMessage = null;
-            try
-            {
-                
-                var response = await client.GetAsync(URL);
-                responseMessage = response;
-                //If not successful then log the event
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception)
-            {
-                //This is where logging should go
-            }
+
+            //HttpResponseMessage is set to the response given when the client attempts
+            //a GET request from the API url
+            responseMessage = await client.GetAsync(URL);
+            
             return responseMessage;
         }
 
@@ -93,9 +83,17 @@ namespace GreetNGroup.Passwords
             UTF8ToSHA1 sha1 = new UTF8ToSHA1();
             HttpContent retrievedPasswordHashes = null;
 
+            if(string.IsNullOrEmpty(passwordToCheck))
+            {
+                return -1;
+                throw new ArgumentNullException();
+            }
+
+            //Get the hash of the password and get the prefix and suffix of that password
             var hashedPassword = sha1.ConvertToHash(passwordToCheck);
             var hashSuffix = hashedPassword.Substring(5);
             var firstFiveChars = hashedPassword.Substring(0, 5);
+            //Concat url to the prefix to retrieve passwords that match the prefix
             var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
 
             try
@@ -104,10 +102,18 @@ namespace GreetNGroup.Passwords
 
                 if (response.IsSuccessStatusCode)
                 {
+                    //Get the password suffixes that matched the given prefix as HttpContent
                     retrievedPasswordHashes = response.Content;
 
+                    //If the retrievedPasswordHashes is still null, throw exception
+                    if(retrievedPasswordHashes == null)
+                    {
+                        return -1;
+                        throw new NullReferenceException();
+                    }
+
                     //Content reader holds all the returned hashes for reading
-                    using (StreamReader contentReader = new StreamReader(await retrievedPasswordHashes.ReadAsStreamAsync()))
+                    using (var contentReader = new StreamReader(await retrievedPasswordHashes.ReadAsStreamAsync()))
                     {
                         //While reader is not at end of retrieved passwords
                         while (!contentReader.EndOfStream)
@@ -126,6 +132,12 @@ namespace GreetNGroup.Passwords
                         }
                     }
                 }
+                //If response is not 200, throw exception
+                else
+                {
+                    return -1;
+                    throw new Exception();
+                }
             }
             catch (NullReferenceException)
             {
@@ -133,6 +145,20 @@ namespace GreetNGroup.Passwords
                 Trace.Listeners.Add(new TextWriterTraceListener("passwordlog.log"));
                 Trace.AutoFlush = true;
                 Trace.WriteLine("Cannot read an empty httpcontent");
+            }
+            catch (ArgumentNullException)
+            {
+                //Write the argumentnullexception onto a trace log
+                Trace.Listeners.Add(new TextWriterTraceListener("passwordlog.log"));
+                Trace.AutoFlush = true;
+                Trace.WriteLine("Empty or null password invalid");
+            }
+            catch (Exception)
+            {
+                //Write the exception onto a trace log
+                Trace.Listeners.Add(new TextWriterTraceListener("passwordlog.log"));
+                Trace.AutoFlush = true;
+                Trace.WriteLine("Unsuccessful API GET request");
             }
             return 0;
         }

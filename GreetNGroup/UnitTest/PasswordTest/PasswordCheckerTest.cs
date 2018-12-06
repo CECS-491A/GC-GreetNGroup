@@ -125,13 +125,12 @@ namespace UnitTest.PasswordTest
             //Arrange
             PasswordChecker pwCheck = new PasswordChecker();
             string password = "password";
-            var expected = 1;
 
             //Act
             var actual = await pwCheck.PasswordOccurrences(password);
 
             //Assert
-            Assert.AreNotEqual(expected, actual);
+            Assert.IsFalse(actual <= 0);
         }
 
         [TestMethod]
@@ -161,6 +160,22 @@ namespace UnitTest.PasswordTest
             //Assert
             Assert.IsFalse(actual.IsSuccessStatusCode);
         }
+
+        [TestMethod]
+        public async Task PasswordOccurrenceArgumentExceptionNull_Pass()
+        {
+            //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
+            string password = null;
+            var expected = -1;
+
+            //Act
+            var actual = await pwCheck.PasswordOccurrences(password);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
 
     }
 }
