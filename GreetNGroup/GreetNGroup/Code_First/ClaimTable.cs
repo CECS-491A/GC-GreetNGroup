@@ -1,18 +1,15 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Configuration;
 
 namespace GreetNGroup.Code_First
 {
-    public class ClaimPool
+    [Table("Claim Table")]
+    public partial class ClaimTable
     {
         [Key]
+        [StringLength(30)]
         public string ClaimId { get; set; }
+        [StringLength(30)]
         public string ClaimName { get; set; }
-    }
-
-    internal class TypeNameAttribute : Attribute
-    {
     }
 }
