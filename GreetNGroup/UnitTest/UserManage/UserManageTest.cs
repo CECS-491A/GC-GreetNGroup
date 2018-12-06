@@ -33,7 +33,7 @@ public class UserManageTest
 
        try
         {
-            using (var ctx = new Model2())
+            using (var ctx = new GreetNGroupContext())
             {
                 var stud = new UserTable() { UserId = "1qazxs23ede" };
 
