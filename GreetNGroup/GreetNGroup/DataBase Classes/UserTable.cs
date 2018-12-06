@@ -35,7 +35,7 @@ namespace GreetNGroup
         public string Country { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime? DoB { get; set; }
+        public DateTime DoB { get; set; }
 
         [StringLength(50)]
         public string SecurityQuestion { get; set; }

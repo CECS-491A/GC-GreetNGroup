@@ -10,8 +10,8 @@ namespace GreetNGroup.UserManage
     /// </summary>
     public interface IUserManager
     {
-        object AddAccount(String userName, String city, String state, String country, String DOB, List<UserAccount> Users);
-        Boolean DeleteAccount(UserAccount deleteUser);
-        void ChangeEnable(UserAccount user, Boolean enable);
+        void AddAccount(String userName, String city, String state, String country, DateTime DOB);
+        void DeleteAccount(string UID);
+        void ChangeEnable(string UID, Boolean enable);
     }
 }

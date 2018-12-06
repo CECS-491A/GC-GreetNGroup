@@ -156,14 +156,14 @@ namespace UnitTest.ClaimsTest
         [TestMethod]
         public void TestClaim()
         {
-            using (var ctx = new GreetNGroupContext())
-            {
-                var claim = new ClaimPool() { ClaimId = "1"};
-                bool p = true;
+            //using (var ctx = new GreetNGroupContext())
+            //{
+                //var claim = new ClaimPool() { ClaimId = "1"};
+                //bool p = true;
                 //ctx.Claims.Add(claim);
                 //ctx.SaveChanges();
                 //Assert.IsTrue(p);
-            }
+            //}
         }
         
         #endregion

@@ -1,3 +1,5 @@
+using System;
+
 namespace GreetNGroup.SiteUser
 {
     public interface IIdentifiable
@@ -15,6 +17,6 @@ namespace GreetNGroup.SiteUser
         string Lastname { get; set; }
         
         /// Returns the account Date of Birth or sets a new Date of Birth
-        string DOB { get; set; }
+        DateTime DOB { get; set; }
     }
 }

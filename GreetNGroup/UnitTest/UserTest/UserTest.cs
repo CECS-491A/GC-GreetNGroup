@@ -8,7 +8,7 @@ namespace UnitTestProject1
     public class UserTest
     {
         #region Required Fields
-        UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", "12/25/1996",
+        UserAccount Dylan = new UserAccount("dylanchhin123@gmail.com", "123", "Dylan", "Chin", "Lakewood", "CA", "USA", new DateTime(1996, 12, 25),
                                 "What is your favorite book?", "Cat in the Hat", "1a2s3d4f", 1, true);
         #endregion
 
@@ -38,7 +38,7 @@ namespace UnitTestProject1
             string actualCity;
             string actualState;
             string actualCountry;
-            string actualDOB;
+            DateTime actualDOB;
             string actualSecurityQ;
             string actualSecurityA;
             string actualUserID;
@@ -69,300 +69,7 @@ namespace UnitTestProject1
 
             Assert.AreEqual(expected, actual);
         }
-        //Tests that are expected to pass
-        //Get Methods
 
-        /**
-        [TestMethod]
-        public void GetUserName_Pass()
-        {
-            // Arrange
-            string expected = "dylanchhin123@gmail.com";
-            string actual;
-
-            // Act
-            actual = Dylan.Username;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetPassword_Pass()
-        {
-            // Arrange
-            string expected = "123";
-            string actual;
-
-            // Act
-            actual = Dylan.Password;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetFirstName_Pass()
-        {
-            // Arrange
-            string expected = "Dylan";
-            string actual;
-
-            // Act
-            actual = Dylan.Firstname;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetLastName_Pass()
-        {
-            // Arrange
-            string expected = "Chin";
-            string actual;
-
-            // Act
-            actual = Dylan.Lastname;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetCity_Pass()
-        {
-            // Arrange
-            string expected = "Lakewood";
-            string actual;
-
-            // Act
-            actual = Dylan.Cityloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetState_Pass()
-        {
-            // Arrange
-            string expected = "CA";
-            string actual;
-
-            // Act
-            actual = Dylan.Stateloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetCountry_Pass()
-        {
-            // Arrange
-            string expected = "USA";
-            string actual;
-
-            // Act
-            actual = Dylan.Countryloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetDOB_Pass()
-        {
-            // Arrange
-            string expected = "12/25/1996";
-            string actual;
-
-            // Act
-            actual = Dylan.DOB;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetSecurityQuestion_Pass()
-        {
-            // Arrange
-            string expected = "What is your favorite book?";
-            string actual;
-
-            // Act
-            actual = Dylan.SecurityQ;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetSecurityAnswer_Pass()
-        {
-            // Arrange
-            string expected = "Cat in the Hat";
-            string actual;
-
-            // Act
-            actual = Dylan.SecurityA;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        
-
-        //Tests that are expected to pass
-        //Set Methods
-        [TestMethod]
-        public void SetUserName_Pass()
-        {
-            // Arrange
-            string expected = "BobJoe@yahoo.com";
-            string actual;
-
-            // Act
-            Dylan.Username = "BobJoe@yahoo.com";
-            actual = Dylan.Username;
-            
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetPassword_Pass()
-        {
-            // Arrange
-            string expected = "qwerty";
-            string actual;
-
-            // Act
-            Dylan.Password = "qwerty";
-            actual = Dylan.Password;
-          
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetFirstName_Pass()
-        {
-            // Arrange
-            string expected = "Bob";
-            string actual;
-
-            // Act
-            Dylan.Firstname = "Bob";
-            actual = Dylan.Firstname;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetLastName_Pass()
-        {
-            // Arrange
-            string expected = "Joe";
-            string actual;
-
-            // Act
-            Dylan.Lastname = "Joe";
-            actual = Dylan.Lastname;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetCity_Pass()
-        {
-            // Arrange
-            string expected = "Las Vegas";
-            string actual;
-
-            // Act
-            Dylan.Cityloc = "Las Vegas";
-            actual = Dylan.Cityloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GetID_Pass()
-        {
-            // Arrange
-            string expected = "1a2s3d4f";
-            string actual;
-
-            // Act
-            actual = Dylan.UserID;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        public void SetState_Pass()
-        {
-            // Arrange
-            string expected = "Nevada";
-            string actual;
-
-            // Act
-            Dylan.Stateloc = "Nevada";
-            actual = Dylan.Stateloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetCountry_Pass()
-        {
-            // Arrange
-            string expected = "Canada";
-            string actual;
-
-            // Act
-            Dylan.Countryloc = "Canada";
-            actual = Dylan.Countryloc;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetDOB_Pass()
-        {
-            // Arrange
-            string expected = "12/22/1996";
-            string actual;
-
-            // Act
-            Dylan.DOB = "12/22/1996";
-            actual = Dylan.DOB;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetSecurityQuestion_Pass()
-        {
-            // Arrange
-            string expected = "What state were you born in?";
-            string actual;
-
-            // Act
-            Dylan.SecurityQ = "What state were you born in?";
-            actual = Dylan.SecurityQ;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void SetSecurityAnswer_Pass()
-        {
-            // Arrange
-            string expected = "NY";
-            string actual;
-
-            // Act
-            Dylan.SecurityA = "NY";
-            actual = Dylan.SecurityA;
-
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
-        **/
         [TestMethod]
         public void UserAccountSetMethods_Pass()
         {
@@ -375,7 +82,7 @@ namespace UnitTestProject1
             string expectedCity = "Las Vegas";
             string expectedState = "Nevada";
             string expectedCountry = "Canada";
-            string expectedDOB = "12/22/1996";
+            DateTime expectedDOB = new DateTime(1996, 12, 25);
             string expectedSecurityQ = "What state were you born in?";
             string expectedSecurityA = "NY";
             string expectedUserID = "1v3c5n6g";
@@ -388,7 +95,7 @@ namespace UnitTestProject1
             string actualCity;
             string actualState;
             string actualCountry;
-            string actualDOB;
+            DateTime actualDOB;
             string actualSecurityQ;
             string actualSecurityA;
             string actualUserID;
@@ -416,7 +123,7 @@ namespace UnitTestProject1
             Dylan.Countryloc = "Canada";
             actualCountry = Dylan.Countryloc;
 
-            Dylan.DOB = "12/22/1996";
+            Dylan.DOB = new DateTime(1995, 10, 15);
             actualDOB = Dylan.DOB;
 
             Dylan.SecurityQ = "What state were you born in?";
@@ -531,8 +238,8 @@ namespace UnitTestProject1
         public void GetDOB_Fail()
         {
             // Arrange
-            string expected = "12/22/1996";
-            string actual;
+            DateTime expected = new DateTime(1990, 6, 10);
+            DateTime actual;
 
             // Act
             actual = Dylan.DOB;
@@ -771,10 +478,10 @@ namespace UnitTestProject1
         {
             // Arrange
             String expected = "";
-            String actual;
+            DateTime actual;
 
             // Act
-            Dylan.DOB = "";
+            Dylan.DOB = new DateTime(1990, 6, 10);
             actual = Dylan.DOB;
             // Assert
             Assert.AreEqual(expected, actual);
@@ -785,10 +492,10 @@ namespace UnitTestProject1
         {
             // Arrange
             String expected = null;
-            String actual;
+            DateTime actual;
 
             // Act
-            Dylan.DOB = null;
+            Dylan.DOB = new DateTime(1990, 6, 10);
             actual = Dylan.DOB;
             // Assert
             Assert.AreEqual(expected, actual);
