@@ -54,19 +54,16 @@ namespace GreetNGroup.Passwords
         /// </summary>
         /// <param name="path">String that holds the uri for the HttpClient to access</param>
         /// <returns>The response code as an HttpResponseMessage object</returns>
-        public async Task<HttpResponseMessage> GetResponseCode(string passwordToCheck)
+        public async Task<HttpResponseMessage> GetResponseCode(string URL)
         {
-            UTF8ToSHA1 sha1 = new UTF8ToSHA1();
             //HttpClient connects to Troy Hunt's HaveIBeenPwned API to retrieve possibly pwned passwords
             HttpClient client = new HttpClient();
-        //HttpResponseMessage will be used to hold the response code the API returns
-        HttpResponseMessage responseMessage = null;
+            //HttpResponseMessage will be used to hold the response code the API returns
+            HttpResponseMessage responseMessage = null;
             try
             {
-                var hashedPassword = sha1.ConvertToHash(passwordToCheck);
-                var firstFiveChars = hashedPassword.Substring(0, 5);
-                var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
-                var response = await client.GetAsync(path);
+                
+                var response = await client.GetAsync(URL);
                 responseMessage = response;
                 //If not successful then log the event
                 if (!responseMessage.IsSuccessStatusCode)
@@ -98,10 +95,12 @@ namespace GreetNGroup.Passwords
 
             var hashedPassword = sha1.ConvertToHash(passwordToCheck);
             var hashSuffix = hashedPassword.Substring(5);
+            var firstFiveChars = hashedPassword.Substring(0, 5);
+            var path = "https://api.pwnedpasswords.com/range/" + firstFiveChars;
+
             try
             {
-                
-                var response = await GetResponseCode(passwordToCheck);
+                var response = await GetResponseCode(path);
 
                 if (response.IsSuccessStatusCode)
                 {

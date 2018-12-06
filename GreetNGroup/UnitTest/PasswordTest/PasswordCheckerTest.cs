@@ -139,10 +139,10 @@ namespace UnitTest.PasswordTest
         {
             //Arrange
             PasswordChecker pwCheck = new PasswordChecker();
-            var password = "password";
+            var path = "https://api.pwnedpasswords.com/range/" + "5baa6";
 
             //Act
-            var actual = await pwCheck.GetResponseCode(password);
+            var actual = await pwCheck.GetResponseCode(path);
 
             //Assert
             Assert.IsTrue(actual.IsSuccessStatusCode);
@@ -152,6 +152,7 @@ namespace UnitTest.PasswordTest
         public async Task ResponseCodeUnsuccessful_Pass()
         {
             //Arrange
+            PasswordChecker pwCheck = new PasswordChecker();
             var path = "https://api.pwnedpasswords.com/range/" + "helloworld";
 
             //Act
