@@ -9,12 +9,6 @@ namespace GreetNGroup
     [Table("UserTable")]
     public partial class UserTable
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserTable()
-        {
-            ClaimsTables = new HashSet<ClaimsTable>();
-        }
-
         [StringLength(30)]
         public string FirstName { get; set; }
 
@@ -50,8 +44,5 @@ namespace GreetNGroup
         public string SecurityAnswer { get; set; }
 
         public bool? isActivated { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClaimsTable> ClaimsTables { get; set; }
     }
 }

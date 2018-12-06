@@ -4,6 +4,7 @@ namespace GreetNGroup
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using GreetNGroup.Code_First;
 
     public partial class GreetNGroupContext : DbContext
     {
@@ -14,6 +15,7 @@ namespace GreetNGroup
 
         public virtual DbSet<ClaimsTable> ClaimsTables { get; set; }
         public virtual DbSet<UserTable> UserTables { get; set; }
+        public virtual DbSet<UserClaim> UserClaims { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -24,11 +26,6 @@ namespace GreetNGroup
             modelBuilder.Entity<ClaimsTable>()
                 .Property(e => e.Claim)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<ClaimsTable>()
-                .HasMany(e => e.UserTables)
-                .WithMany(e => e.ClaimsTables)
-                .Map(m => m.ToTable("UserClaims").MapLeftKey("ClaimId").MapRightKey("UserId"));
 
             modelBuilder.Entity<UserTable>()
                 .Property(e => e.FirstName)
@@ -68,6 +65,14 @@ namespace GreetNGroup
 
             modelBuilder.Entity<UserTable>()
                 .Property(e => e.SecurityAnswer)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserClaim>()
+                .Property(e => e.UserId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserClaim>()
+                .Property(e => e.ClaimId)
                 .IsUnicode(false);
         }
     }
