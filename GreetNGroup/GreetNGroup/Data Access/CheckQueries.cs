@@ -76,6 +76,10 @@ namespace GreetNGroup.Data_Access
             
             
         }
+        /// <summary>
+        /// Checks the claims of the account that is going to be deleted
+        /// </summary>
+        /// <param name="UID">Delete account user ID</param>
         public static void CheckDeleteClaim(string UID)
         {
             try
@@ -113,7 +117,11 @@ namespace GreetNGroup.Data_Access
                 //Log Excepetion
                 Console.WriteLine(e);
             }
-        }
+        }/// <summary>
+        /// Checks to see of the account you want to edit is editable
+        /// </summary>
+        /// <param name="UID">User ID</param>
+        /// <param name="changeState">The state of isActivated</param>
         public static void CheckEditClaim(string UID, Boolean changeState)
         {
             try
@@ -137,14 +145,13 @@ namespace GreetNGroup.Data_Access
                             }
                             else
                             {
-                                Console.WriteLine("hello1234");
                                 ChangeState(UID, changeState);
                             }
                            
                         }
                         else
                         {
-                            throw new System.ArgumentException("Account cannot be deleted", "Claim");
+                            throw new System.ArgumentException("Account cannot be edited", "Claim");
                         }
                         
                     }
@@ -161,10 +168,13 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uID"></param>
+        /// <param name="changeState"></param>
         public static void ChangeState(string uID, Boolean changeState)
         {
-            Console.WriteLine("hello123");
 
             try
             {
@@ -174,7 +184,6 @@ namespace GreetNGroup.Data_Access
                                    .Where(s => s.UserId == uID).Single();
                     stud.isActivated = changeState;
                     ctx.SaveChanges();
-                    Console.WriteLine("Hello");
                 }
             }
             catch (Exception e)
@@ -191,7 +200,6 @@ namespace GreetNGroup.Data_Access
         /// <param name="UID">User ID</param>
         public static void DeleteUser(String UID)
         {
-            Console.WriteLine("hello123");
 
             try
             {
@@ -204,7 +212,6 @@ namespace GreetNGroup.Data_Access
                     ctx.UserClaims.RemoveRange(Userclaims);
                     ctx.UserTables.Remove(stud);
                     ctx.SaveChanges();
-                    Console.WriteLine("Hello");
                 }
             }
             catch (Exception e)

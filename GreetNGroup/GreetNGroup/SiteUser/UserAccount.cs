@@ -135,36 +135,9 @@ namespace GreetNGroup.SiteUser
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New user's Date of birth</param>
-        /// <param name="Users">The list of Current users</param>
         /// <returns>A new User Account Object</returns>
         public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
-        /*
-            //User is first checked if they have the Admin rights claim to be able to create an account
-            //List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims> { ClaimsPool.Claims.AdminRights };
-            List<string> _requireAdminRights = new List<string> {"AdminRights"};//List<ClaimsPool.Claims> ClaimsPool.Claims.AdminRights };
-            var currentUserToken = new Token(UserID);
-            currentUserToken.Claims = Claims;
-            var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            //If they have the claims they will be able to create a new account but if they don't the function will throw an error
-            if (canAdd == false)
-            {
-                throw new System.ArgumentException("User does not have the right Claims", "Claims");
-            }
-            //Compares username to the database and will only create an account if the username is unique
-            var isDupe = DataBaseQuery.isUserNameDuplicate(userName, Users);
-            if (isDupe == false)
-            {
-                //var randomPassword = RandomFieldGenerator.generatePassword();
-
-                UserAccount newAccount = new UserAccount(userName, "", "", "", city, state, country, DOB, "", "", "", 0, true);
-                return newAccount;
-            }
-            else
-            {
-                throw new System.ArgumentException("Username already exist", "Database");
-            }
-        */
             ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
 
         }
@@ -172,7 +145,6 @@ namespace GreetNGroup.SiteUser
         /// Checks claims of the users and returns if the user can delete and the account be deleted
         /// </summary>
         /// <param name="deleteUser">User Account that will be deletd</param>
-        /// <returns>If user is able to delete the account or not</returns>
         public void DeleteAccount(string UserId)
         {
             ValidationManager.CheckDeleteToken(Claims,UserId);
