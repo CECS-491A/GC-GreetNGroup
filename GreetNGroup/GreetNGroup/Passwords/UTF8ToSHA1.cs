@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace GreetNGroup.Passwords
 {
@@ -10,22 +11,23 @@ namespace GreetNGroup.Passwords
     /// </summary>
     public class UTF8ToSHA1
     {
-        //SHA1CryptoServiceProvider object contains methods to convert plaintext to SHA1 hash
-        private SHA1CryptoServiceProvider sha1Password = new SHA1CryptoServiceProvider();
 
         /// <summary>
         /// Converts string input (passwords) into a SHA1 hash using the methods provided
         /// by the SHA1CryptoServiceProvider class
         /// </summary>
-        /// <param name="input">the string to be converted to a SHA1 hash</param>
+        /// <param name="password">the string to be converted to a SHA1 hash</param>
         /// <returns>The SHA1 hash in string form. Returns null if "" or null input.</returns>
-        public string ConvertToHash(string input)
+        public string ConvertToHash(string password)
         {
+            //SHA1CryptoServiceProvider object contains methods to convert plaintext to SHA1 hash
+            SHA1CryptoServiceProvider sha1Password = new SHA1CryptoServiceProvider();
 
+            string hashAsString = null;
             try
             {
                 //If password is null or "", return null and throw NullReferenceException
-                if (string.IsNullOrEmpty(input) == true)
+                if (string.IsNullOrEmpty(password) == true)
                 {
                     return null;
                     throw new NullReferenceException();
@@ -33,7 +35,7 @@ namespace GreetNGroup.Passwords
                 using (sha1Password)
                 {
                     //Computes hash based on UTF8 encoding
-                    var passwordHash = sha1Password.ComputeHash(Encoding.UTF8.GetBytes(input));
+                    var passwordHash = sha1Password.ComputeHash(Encoding.UTF8.GetBytes(password));
                     var hashToString = new StringBuilder(passwordHash.Length * 2);
                     foreach (byte b in passwordHash)
                     {
@@ -42,14 +44,17 @@ namespace GreetNGroup.Passwords
                     }
                     //SHA1CryptoServiceProvider extends IDisposable and can be disposed for optimizing runtime
                     sha1Password.Dispose();
-                    return hashToString.ToString();
+                    hashAsString = hashToString.ToString();
                 }
             }
             catch (ArgumentNullException)
             {
-                //This is where logging should go
-                return null;
+                //Write the nullreferenceexception onto a trace log
+                Trace.Listeners.Add(new TextWriterTraceListener("passwordlog.log"));
+                Trace.AutoFlush = true;
+                Trace.WriteLine("Cannot convert an empty/null password");
             }
+            return hashAsString;
 
         }
     }
