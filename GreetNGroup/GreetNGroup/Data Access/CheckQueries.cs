@@ -243,8 +243,8 @@ namespace GreetNGroup.Data_Access
                 using (ctx)
                 {
                     var userToUpdate = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
-                    userAttributes = userToUpdate.ToList();
+                                   .Where(s => s.UserId == UserID);
+                    //userAttributes = userToUpdate
                 }
             }
             catch (Exception e)
@@ -267,7 +267,7 @@ namespace GreetNGroup.Data_Access
                     var userToUpdate = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
                     ctx.Rows.Add(userAttributes.ToArray());
-                    //update dbcontext with userToUpdate
+                    ctx.
                     ctx.SaveChanges();
                 }
                 
