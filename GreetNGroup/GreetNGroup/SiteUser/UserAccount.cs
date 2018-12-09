@@ -24,7 +24,7 @@ namespace GreetNGroup.SiteUser
         private string State;
         private string Country;
         private Boolean isEnabled;
-        internal List<ClaimsPool.Claims> claimsList;
+        //internal List<ClaimsPool.Claims> claimsList;
 
         // will need to define how to assign claims to user
         private List<string> Claims { get; set; }
@@ -157,9 +157,9 @@ namespace GreetNGroup.SiteUser
             ValidationManager.CheckEnableToken(Claims, UserID, changeState);
         }
 
-        public void UpdateAccount(string UserID, List<string> attributesToUpdate, List<string> attributeContents)
+        public void UpdateAccount(string UserID, Boolean state)
         {
-            ValidationManager.CheckEditToken(Claims, UserID, attributesToUpdate, attributeContents);
+            ValidationManager.CheckEditToken(Claims, UserID, state);
         }
 
         #endregion
