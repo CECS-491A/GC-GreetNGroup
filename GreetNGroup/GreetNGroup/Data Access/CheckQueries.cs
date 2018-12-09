@@ -235,14 +235,14 @@ namespace GreetNGroup.Data_Access
 
         public static void UpdateUser(string UserID, List<string> attributesToUpdate, List<string> attributeContents)
         {
-            string firstname;
-            string lastname;
-            string username;
-            string password;
-            string city;
-            string state;
-            string country;
-            string DOB;
+            string firstname = "";
+            string lastname = "";
+            string username = "";
+            string password = "";
+            string city = "";
+            string state = "";
+            string country = "";
+            string DOB = "";
 
             //Try statement to fill the variables with user's current attributes
             try
@@ -280,8 +280,7 @@ namespace GreetNGroup.Data_Access
                 }else if(attributesToUpdate[i] == "Password")
                 {
                     password = attributeContents[i];
-                }
-                else if(attributesToUpdate[i] == "City")
+                }else if(attributesToUpdate[i] == "City")
                 {
                     city = attributeContents[i];
                 }else if(attributesToUpdate[i] == "State")
@@ -296,7 +295,29 @@ namespace GreetNGroup.Data_Access
                 }
             }
             //Try statement update the user in the database
-            
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var userToUpdate = ctx.UserTables
+                                   .Where(s => s.UserId == UserID).Single();
+                    userToUpdate.FirstName = firstname;
+                    userToUpdate.LastName = lastname;
+                    userToUpdate.UserName = username;
+                    userToUpdate.Password = password;
+                    userToUpdate.City = city;
+                    userToUpdate.State = state;
+                    userToUpdate.Country = country;
+                    userToUpdate.DoB = Convert.ToDateTime(DOB);
+                    //update dbcontext with userToUpdate
+                    ctx.SaveChanges();
+                }
+                
+            }
+            catch(Exception e)
+            {
+                //log
+            }
         }
 
         /// <summary>
