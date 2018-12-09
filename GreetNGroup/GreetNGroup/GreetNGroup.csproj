@@ -200,7 +200,6 @@
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Code_First\ClaimPool.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data Access\DataBaseQueries.cs" />
     <Compile Include="DataBase Classes\UserContext.cs" />

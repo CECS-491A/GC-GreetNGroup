@@ -136,7 +136,7 @@ namespace GreetNGroup.Data_Access
             }
         }
 
-        public static void CheckEditClaim(string UserID, List<string> attributesToUpdate)
+        public static void CheckEditClaim(string UserID, Boolean state)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace GreetNGroup.Data_Access
                             Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
                             if (canEdit)
                             {
-                                UpdateUser(UserID, attributesToUpdate);
+                                ChangeState(UserID, state);
                             }
                             else
                             {
