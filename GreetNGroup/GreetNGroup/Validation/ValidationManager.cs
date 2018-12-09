@@ -93,7 +93,7 @@ namespace GreetNGroup.Validation
         /// <param name="claims">List of claims</param>
         /// <param name="UID">User ID </param>
         /// <param name="changeState">The new state(activated/deactivated) of the account</param>
-        public static void CheckEnableToken(List<string> claims, string UID, Boolean changeState)
+        public static void CheckEnableToken(List<string> claims, string UserID, Boolean changeState)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace GreetNGroup.Validation
                 var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
                 if (canDelete == true)
                 {
-                    CheckQueries.CheckEditClaim(UID, changeState);
+                    CheckQueries.CheckStateClaim(UserID, changeState);
                 }
                 else
                 {
@@ -118,6 +118,27 @@ namespace GreetNGroup.Validation
             }
 
         }
+        public static void CheckEditToken(List<string> claims, string UserID, List<string> attributesToUpdate, List<string> attributeContents)
+        {
+            try
+            {
+                Console.WriteLine("Editing User");
+                string temp = "test";
+                List<string> _requireAdminRights = new List<string> { "AdminRights" };
+                var currentUserToken = new Token(temp);
+                currentUserToken.Claims = claims;
+                var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+                if (canEdit)
+                {
+                    CheckQueries.CheckEditClaim(UserID, attributesToUpdate);
+                }
+            }
+            catch (Exception e)
+            {
+                //log
+            }
+        }
+
         /// <summary>
         /// Checks the current attributes of a new user account
         /// </summary>
@@ -183,6 +204,7 @@ namespace GreetNGroup.Validation
             }
             return true;
         }
+
 
     }
 }

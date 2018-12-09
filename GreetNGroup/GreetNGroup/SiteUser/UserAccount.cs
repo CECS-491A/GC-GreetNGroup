@@ -145,20 +145,26 @@ namespace GreetNGroup.SiteUser
         /// Checks claims of the users and returns if the user can delete and the account be deleted
         /// </summary>
         /// <param name="deleteUser">User Account that will be deletd</param>
-        public void DeleteAccount(string UserId)
+        public void DeleteAccount(string UserID)
         {
-            ValidationManager.CheckDeleteToken(Claims,UserId);
+            ValidationManager.CheckDeleteToken(Claims, UserID);
         }
         /// <summary>
         /// Enables or disables an account
         /// </summary>
         /// <param name="account">Account that is being enabled or disabled</param>
         /// <param name="changestate">Truth value of the accounts enabled status</param>
-        public void ChangeEnable(string UserId, Boolean changeState)
+        public void ChangeEnable(string UserID, Boolean changeState)
         {
             Console.WriteLine("hello");
-            ValidationManager.CheckEnableToken(Claims, UserId, changeState);
+            ValidationManager.CheckEnableToken(Claims, UserID, changeState);
         }
+
+        public void UpdateAccount(string UserID, List<string> attributesToUpdate, List<string> attributeContents)
+        {
+            ValidationManager.CheckEditToken(Claims, UserID, attributesToUpdate, attributeContents);
+        }
+
         #endregion
 
         #region Overidden functions
