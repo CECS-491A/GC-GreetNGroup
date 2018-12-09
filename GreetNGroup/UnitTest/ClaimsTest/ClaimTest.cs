@@ -12,29 +12,10 @@ namespace UnitTest.ClaimsTest
     [TestClass]
     public class ClaimTest
     {
-        //May no longer be needed
         #region Testable Required Fields
-        private List<ClaimsPool.Claims> _requireAdminRights = new List<ClaimsPool.Claims>
-            {ClaimsPool.Claims.AdminRights};
-        
-        private List<ClaimsPool.Claims> _requireCreateAndViewEvents = new List<ClaimsPool.Claims>
-            {ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents};
-
-        private List<ClaimsPool.Claims> _requireViewEvents = new List<ClaimsPool.Claims>
-            {ClaimsPool.Claims.CanViewEvents};
-
         private string _userId1 = "19452746";
         private string _userId2 = "10294753";
         private string _userId3 = "45892987";
-        /*
-         * The following attributes are temporary
-         * They represent the database holding users that will
-         * be referenced by the token, in order to grab
-         * user claims
-         */
-        private UserDatabaseTemp userDatabaseCreator;
-        private Dictionary<string, List<ClaimsPool.Claims>> userData;
-        //
         #endregion
         
         #region Pass Tests
