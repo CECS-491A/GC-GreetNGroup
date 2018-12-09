@@ -81,7 +81,6 @@ namespace GreetNGroup.SiteUser
                 Claims = new List<string>
                 {
                     "CanCreateEvents", "CanViewEvents", "CanFriendUsers", "AdminRights", "CanBlackListUsers"
-                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers, ClaimsPool.Claims.AdminRights, ClaimsPool.Claims.CanBlacklistUsers,
                 };
             }
             else
@@ -89,16 +88,14 @@ namespace GreetNGroup.SiteUser
                 Claims = new List<string>
                 {
                     "CanCreateEvents", "CanViewEvents", "CanFriendUsers"
-                    //ClaimsPool.Claims.CanCreateEvents, ClaimsPool.Claims.CanViewEvents, ClaimsPool.Claims.CanFriendUsers
                 };
             }
             Enable = isEnable;
         }
 
- 
-    #region Getters and Setters
+        #region Getters and Setters
         
-    #region IIdentifiable Declarations
+        #region IIdentifiable Declarations
         
         public string Username { get; set; }
         public string Password { get; set; }
@@ -106,15 +103,15 @@ namespace GreetNGroup.SiteUser
         public string Lastname { get; set; }
         public DateTime DOB { get; set; }
         
-    #endregion
+        #endregion
                
-    #region ILocatable Declarations
+        #region ILocatable Declarations
         
         public string Cityloc { get; set; }
         public string Stateloc { get; set; }
         public string Countryloc { get; set; }
 
-    #endregion
+        #endregion
 
         /// Returns the account Security Question or sets a new Security Question
         public string SecurityQ { get; set; }
