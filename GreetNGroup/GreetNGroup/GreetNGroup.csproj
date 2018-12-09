@@ -198,14 +198,12 @@
     <Compile Include="Data Access\CheckQueries.cs" />
     <Compile Include="DataBase Classes\ClaimsTable.cs" />
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
-    <Compile Include="Claim_Controls\ClaimsPool.cs" />
     <Compile Include="Code_First\ClaimPool.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data Access\DataBaseQueries.cs" />
     <Compile Include="DataBase Classes\UserContext.cs" />
-    <Compile Include="Filters\ClaimsAuthorizationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -227,7 +225,6 @@
     <Compile Include="SiteUser\IIdentifiable.cs" />
     <Compile Include="SiteUser\ILocatable.cs" />
     <Compile Include="SiteUser\UserAccount.cs" />
-    <Compile Include="SiteUser\UserDatabaseTemp.cs" />
     <Compile Include="DataBase Classes\UserTable.cs" />
     <Compile Include="Validation\ValidationManager.cs" />
   </ItemGroup>
