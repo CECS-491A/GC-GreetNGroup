@@ -119,7 +119,7 @@ namespace GreetNGroup.Validation
 
         }
 
-        public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents)
+        public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
             try
             {
                 Console.WriteLine("Editing User");
@@ -128,7 +128,7 @@ namespace GreetNGroup.Validation
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
                 var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-                if (canEdit)
+                if (canEdit && checkEditAttributes(attributeContents))
                 {
                     CheckQueries.CheckEditClaim(UserID, attributeContents);
                 }
@@ -204,7 +204,27 @@ namespace GreetNGroup.Validation
             }
             return true;
         }
-
+        /// <summary>
+        /// Checks the current attributes of a new user account
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="city"></param>
+        /// <param name="state"></param>
+        /// <param name="country"></param>
+        /// <param name="DOB"></param>
+        /// <returns>Whether the inputs are valid or not</returns>
+        public static Boolean checkEditAttributes(List<string> attributeContents)
+        {
+            for(int i = 0; i < attributeContents.Count; i++)
+            {
+                if (attributeContents[i].Equals(""))
+                {
+                    throw new System.ArgumentException("User attributes cannot be empty", "Attributes");
+                }
+            }
+            //Validates Input
+            return true;
+        }
 
     }
 }
