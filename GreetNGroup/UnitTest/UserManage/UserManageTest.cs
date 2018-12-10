@@ -338,6 +338,19 @@ public class UserManageTest
         //Assert
         Assert.AreNotEqual(actual, expected);
     }
+
+    [TestMethod]
+    public void editUser_ValidString_Pass()
+    {
+        Boolean expected = true;
+        Boolean actual = true;
+        List<string> attributesToEdit = new List<string>();
+        attributesToEdit = 
+        if (!ValidationManager.checkEditAttributes(attributesToEdit)){
+            actual = false;
+        }
+        Assert.AreNotEqual(actual, expected);
+
     [TestMethod]
     public void changeEnable_TruetoFalse_Pass()
     {

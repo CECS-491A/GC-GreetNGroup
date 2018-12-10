@@ -238,16 +238,37 @@ namespace GreetNGroup.Data_Access
 
         public static void UpdateUser(string UserID, List<string> attributeContents)
         {
-            List<string> userAttributes = new List<string>();
-            var ctx = new GreetNGroupContext()
+            var ctx = new GreetNGroupContext();
+            string firstname = "";
+            string lastname = "";
+            string username = "";
+            string password = "";
+            string city = "";
+            string state = "";
+            string country = "";
+            string DOB = "";
+            string securityquestion = "";
+            string securityanswer = "";
+            string isactivated = "";
             //Try statement to fill the variables with user's current attributes
             try
             {
                 using (ctx)
                 {
                     var userToUpdate = ctx.UserTables
-                                   .Where(s => s.UserId == UserID);
-                    //userAttributes = userToUpdate
+                                   .Where(s => s.UserId == UserID).Single();
+                    firstname = userToUpdate.FirstName;
+                    lastname = userToUpdate.LastName;
+                    username = userToUpdate.UserName;
+                    password = userToUpdate.Password;
+                    city = userToUpdate.City;
+                    state = userToUpdate.State;
+                    country = userToUpdate.Country;
+                    DOB = userToUpdate.DoB.ToString();
+                    securityquestion = userToUpdate.SecurityQuestion;
+                    securityanswer = userToUpdate.SecurityAnswer;
+                    isactivated = userToUpdate.isActivated.ToString();
+
                 }
             }
             catch (Exception e)
@@ -257,9 +278,49 @@ namespace GreetNGroup.Data_Access
             //For loop to update the attributes with new values, if there are values to update it to
             for (int i = 0; i < attributeContents.Count; i++)
             {
-                if(attributeContents[i] != null)
+                if (i == 0 && attributeContents[i] != null)
                 {
-                    userAttributes[i] = attributeContents[i];
+                    firstname = attributeContents[i];
+                }
+                else if (i == 1 && attributeContents[i] != null)
+                {
+                    lastname = attributeContents[i];
+                }
+                else if (i == 2 && attributeContents[i] != null)
+                {
+                    username = attributeContents[i];
+                }
+                else if (i == 3 && attributeContents[i] != null)
+                {
+                    password = attributeContents[i];
+                }
+                else if (i == 4 && attributeContents[i] != null)
+                {
+                    city = attributeContents[i];
+                }
+                else if (i == 5 && attributeContents[i] != null)
+                {
+                    state = attributeContents[i];
+                }
+                else if (i == 6 && attributeContents[i] != null)
+                {
+                    country = attributeContents[i];
+                }
+                else if (i == 7 && attributeContents[i] != null)
+                {
+                    DOB = attributeContents[i];
+                }
+                else if (i == 8 && attributeContents[i] != null)
+                {
+                    securityquestion = attributeContents[i];
+                }
+                else if (i == 9 && attributeContents[i] != null)
+                {
+                    securityanswer = attributeContents[i];
+                }
+                else if (i == 10 && attributeContents[i] != null)
+                {
+                    isactivated = attributeContents[i];
                 }
             }
             //Try statement update the user in the database
@@ -269,8 +330,17 @@ namespace GreetNGroup.Data_Access
                 {
                     var userToUpdate = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-                    ctx.Rows.Add(userAttributes.ToArray());
-                    ctx.
+                    userToUpdate.FirstName = firstname;
+                    userToUpdate.LastName = lastname;
+                    userToUpdate.UserName = username;
+                    userToUpdate.Password = password;
+                    userToUpdate.City = city;
+                    userToUpdate.State = state;
+                    userToUpdate.Country = country;
+                    userToUpdate.DoB = Convert.ToDateTime(DOB);
+                    userToUpdate.SecurityQuestion = securityquestion;
+                    userToUpdate.SecurityAnswer = securityanswer;
+                    userToUpdate.isActivated = isactivated.Equals("true");
                     ctx.SaveChanges();
                 }
                 
