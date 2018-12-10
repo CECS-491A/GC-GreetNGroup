@@ -257,7 +257,7 @@ public class UserManageTest
         using (var ctx = new GreetNGroupContext())
         {
             var stud = ctx.UserTables
-                            .Where(s => s.UserName == "test@gmail.com").Count();
+                            .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
             if(stud > 0)
             {
                 actual = false;
@@ -342,7 +342,7 @@ public class UserManageTest
     public void changeEnable_TruetoFalse_Pass()
     {
         //Arange
-        Boolean expected = true;
+        Boolean expected = false;
         Boolean actual;
         //Act
         try
@@ -354,11 +354,11 @@ public class UserManageTest
                               .Where(s => s.UserId == "p03d928ej2838fo").Single();
                 if (stud.isActivated == false)
                 {
-                    actual = true;
+                    actual = false;
                 }
                 else
                 {
-                    actual = false;
+                    actual = true;
                 }
             }
         }

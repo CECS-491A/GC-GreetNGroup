@@ -10,35 +10,25 @@ namespace GreetNGroup.Tokens
 {
     public class Token
     {
-        private DateTime assignmentDate;
         private DateTime revokeDate;
         public string UserId { get; set; }
         public List<string> Claims{ get; set; }
         public string uniqueKey;
         
+        /// <summary>
+        /// Creates a token holding user information and information
+        /// unique to the token like its revoke date
+        /// </summary>
+        /// <param name="id"> user ID to reference the user with </param>
         public Token(string id)
         {
             UserId = id;
             Claims = DataBaseQueries.FindClaimsFromUser(id);
-            assignmentDate = DateTime.Now;
             revokeDate = DateTime.Today.AddDays(1);
             /*
-             * Use the uniqueKey generated here as the key to hashing the value
-             * representative of this token, this key should be held in a .pem file
-             * in our project, and will not be held by the token itself
-             *
-             * The hashed value that is made will be held by this token
-             * and when the token is sent back to the server to check, only for some functions,
-             * it will check to see if the hash has been changed, to verify weather or not
-             * the user has done something to the token.
-             *
-             * This will not happen on every pass, to lessen the load on the server, by making it so that
-             * the front end does not need to constantly talk to the backend
-             *
-             * This is because, in general, the token has hold of the claims that needs to be checked,
-             * thus it does not need to contact the backend in most situations
-             *
-             * 
+             * The unique key here is temporary -- will later be used for
+             * hashing the token before it is given to the user
+             * The key itself will not be stored here
              */
             uniqueKey = KeyGen.GenerateRandomCryptoKey(32);
         }

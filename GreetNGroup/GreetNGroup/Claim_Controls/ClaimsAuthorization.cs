@@ -8,19 +8,14 @@ namespace GreetNGroup.Claim_Controls
 {
     public static class ClaimsAuthorization
     {
-        /**
-         * Compares list of Claims held within the Token <tok>
-         * with required claims in <claimsReq>
-         *
-         * Except removes all existing recurrences of values in
-         * ----> ListName.Except(removeFromList)
-         * 
-         * Then !ListName.Any() checks if any objects still exist in the list
-         *
-         * This is used to check if all the claims within the token
-         * pass the required claims
-         */
-        public static bool VerifyClaims(Token tok, List<string> claimsReq)//List<ClaimsPool.Claims> claimsReq)
+        /// <summary>
+        /// This function compares claims located on the token with the claims required
+        /// to perform the action requested by the user
+        /// </summary>
+        /// <param name="tok"> token </param>
+        /// <param name="claimsReq"> required claims </param>
+        /// <returns></returns>
+        public static bool VerifyClaims(Token tok, List<string> claimsReq)
         {
             try
             {
@@ -32,7 +27,6 @@ namespace GreetNGroup.Claim_Controls
             }
             catch (Exception e)
             {
-                // add logger here
                 Console.WriteLine(e);
                 throw;
             }

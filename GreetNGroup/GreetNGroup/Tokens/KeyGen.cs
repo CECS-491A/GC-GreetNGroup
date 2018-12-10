@@ -9,7 +9,7 @@ namespace GreetNGroup.Tokens
     {
         /// <summary>
         /// This function is used to create a random key of size keyLength
-        /// the key will be used to reference an assigned token
+        /// the key will be used to has the given token
         /// </summary>
         /// <param name="keyLength"></param>
         /// <returns></returns>

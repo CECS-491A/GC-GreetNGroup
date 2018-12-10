@@ -118,8 +118,8 @@ namespace GreetNGroup.Validation
             }
 
         }
+
         public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents)
-        {
             try
             {
                 Console.WriteLine("Editing User");
