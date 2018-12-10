@@ -87,6 +87,7 @@ namespace GreetNGroup.Validation
             }
             
         }
+        /**
         /// <summary>
         /// Checks to see if the person who is editing an account has the right claims
         /// </summary>
@@ -118,7 +119,7 @@ namespace GreetNGroup.Validation
             }
 
         }
-
+    **/
         public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
             try
             {
@@ -192,15 +193,17 @@ namespace GreetNGroup.Validation
         /// </summary>
         /// <param name="items">List of claims the user in the database has</param>
         /// <returns>Whether or not the account can be changed</returns>
-        public static Boolean checkAccountEditable (List<UserClaim> items)
+        public static Boolean checkAccountEditable (List<string> accountBeingEdittedclaims)
         {
+            string temp = "test";
+            List<string> _requireAdminRights = new List<string> { "AdminRights" };
+            var currentUserToken = new Token(temp);
+            currentUserToken.Claims = accountBeingEdittedclaims;
+            var cantEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
             Console.WriteLine("hello");
-            foreach (var i in items)
+            if(cantEdit)
             {
-                if(i.ClaimId.Equals("0005"))
-                {
-                    return false;
-                }
+                return false;
             }
             return true;
         }
@@ -227,4 +230,5 @@ namespace GreetNGroup.Validation
         }
 
     }
+
 }
