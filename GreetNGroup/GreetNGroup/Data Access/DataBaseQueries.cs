@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Deployment.Internal;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using GreetNGroup.Claim_Controls;
-using GreetNGroup.Data_Access;
-using Microsoft.Ajax.Utilities;
 
 namespace GreetNGroup.Data_Access
 {

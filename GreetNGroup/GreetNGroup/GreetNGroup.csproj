@@ -193,16 +193,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Code_First\ClaimTable.cs" />
-    <Compile Include="Code_First\UserClaimTable.cs" />
     <Compile Include="Data Access\CheckQueries.cs" />
     <Compile Include="DataBase Classes\ClaimsTable.cs" />
     <Compile Include="Claim_Controls\ClaimsAuthorization.cs" />
-    <Compile Include="Code_First\ClaimPool.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data Access\DataBaseQueries.cs" />
-    <Compile Include="DataBase Classes\UserContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
