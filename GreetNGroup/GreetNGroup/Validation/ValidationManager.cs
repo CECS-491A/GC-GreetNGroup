@@ -118,8 +118,8 @@ namespace GreetNGroup.Validation
             }
 
         }
-        public static void CheckEditToken(List<string> claims, string UserID, Boolean state)
-        {
+
+        public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents)
             try
             {
                 Console.WriteLine("Editing User");
@@ -130,7 +130,7 @@ namespace GreetNGroup.Validation
                 var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
                 if (canEdit)
                 {
-                    CheckQueries.CheckEditClaim(UserID, state);
+                    CheckQueries.CheckEditClaim(UserID, attributeContents);
                 }
             }
             catch (Exception e)

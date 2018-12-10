@@ -136,7 +136,8 @@ namespace GreetNGroup.Data_Access
             }
         }
 
-        public static void CheckEditClaim(string UserID, Boolean state)
+        public static void CheckEditClaim(string UserID, List<string> attributeContents)
+
         {
             try
             {
@@ -153,7 +154,9 @@ namespace GreetNGroup.Data_Access
                             Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
                             if (canEdit)
                             {
-                                ChangeState(UserID, state);
+
+                                UpdateUser(UserID, attributeContents);
+
                             }
                             else
                             {
@@ -233,32 +236,18 @@ namespace GreetNGroup.Data_Access
             }
         }
 
-        public static void UpdateUser(string UserID, List<string> attributesToUpdate, List<string> attributeContents)
+        public static void UpdateUser(string UserID, List<string> attributeContents)
         {
-            string firstname;
-            string lastname;
-            string username;
-            string password;
-            string city;
-            string state;
-            string country;
-            string DOB;
-
+            List<string> userAttributes = new List<string>();
+            var ctx = new GreetNGroupContext()
             //Try statement to fill the variables with user's current attributes
             try
             {
-                using (var ctx = new GreetNGroupContext())
+                using (ctx)
                 {
                     var userToUpdate = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
-                    firstname = userToUpdate.FirstName;
-                    lastname = userToUpdate.LastName;
-                    username = userToUpdate.UserName;
-                    password = userToUpdate.Password;
-                    city = userToUpdate.City;
-                    state = userToUpdate.State;
-                    country = userToUpdate.Country;
-                    DOB = userToUpdate.DoB.ToString();
+                                   .Where(s => s.UserId == UserID);
+                    //userAttributes = userToUpdate
                 }
             }
             catch (Exception e)
@@ -266,37 +255,30 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
             //For loop to update the attributes with new values, if there are values to update it to
-            for (int i = 0; i < attributesToUpdate.Count; i++)
+            for (int i = 0; i < attributeContents.Count; i++)
             {
-                if(attributesToUpdate[i] == "FirstName")
+                if(attributeContents[i] != null)
                 {
-                    firstname = attributeContents[i];
-                }else if(attributesToUpdate[i] == "LastName")
-                {
-                    lastname = attributeContents[i];
-                }else if(attributesToUpdate[i] == "UserName")
-                {
-                    username = attributeContents[i];
-                }else if(attributesToUpdate[i] == "Password")
-                {
-                    password = attributeContents[i];
-                }
-                else if(attributesToUpdate[i] == "City")
-                {
-                    city = attributeContents[i];
-                }else if(attributesToUpdate[i] == "State")
-                {
-                    state = attributeContents[i];
-                }else if(attributesToUpdate[i] == "Country")
-                {
-                    country = attributeContents[i];
-                }else if(attributesToUpdate[i] == "DOB")
-                {
-                    DOB = attributeContents[i];
+                    userAttributes[i] = attributeContents[i];
                 }
             }
             //Try statement update the user in the database
-            
+            try
+            {
+                using (ctx)
+                {
+                    var userToUpdate = ctx.UserTables
+                                   .Where(s => s.UserId == UserID).Single();
+                    ctx.Rows.Add(userAttributes.ToArray());
+                    ctx.
+                    ctx.SaveChanges();
+                }
+                
+            }
+            catch(Exception e)
+            {
+                //log
+            }
         }
 
         /// <summary>
