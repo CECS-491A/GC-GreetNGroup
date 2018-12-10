@@ -57,20 +57,18 @@ namespace GreetNGroup.Data_Access
                                   .Where(s => s.UserId == UserID).Count();
                     if (stud > 0)
                     {
-                        using (var ctx2 = new GreetNGroupContext())
+
+                        List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(UserID);
+                        Boolean canDelete = ValidationManager.checkAccountEditable(checkClaims);
+                        if (canDelete == true)
                         {
-                            var claimslist = ctx2.UserClaims
-                                         .Where(s => s.UserId == UserID).ToList();
-                            Boolean canDelete = ValidationManager.checkAccountEditable(claimslist);
-                            if (canDelete == true)
-                            {
-                                DeleteUser(UserID);
-                            }
-                            else
-                            {
-                                throw new System.ArgumentException("Account cannot be deleted", "Claim");
-                            }
+                            DeleteUser(UserID);
                         }
+                        else
+                        {
+                            throw new System.ArgumentException("Account cannot be deleted", "Claim");
+                        }
+                        
                     }
                     else
                     {
@@ -84,7 +82,9 @@ namespace GreetNGroup.Data_Access
                 //Log Excepetion
                 Console.WriteLine(e);
             }
-        }/// <summary>
+        }
+        /**
+        /// <summary>
         /// Checks to see of the account you want to edit is editable
         /// </summary>
         /// <param name="UID">User ID</param>
@@ -135,41 +135,26 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-
+    **/
         public static void CheckEditClaim(string UserID, List<string> attributeContents)
 
         {
             try
             {
-                using (var ctx = new GreetNGroupContext())
+
+                var stud = DataBaseQueries.FindClaimsFromUser(UserID);
+                Boolean canEdit = ValidationManager.checkAccountEditable(stud);
+                if (canEdit)
                 {
-                    var stud = ctx.UserClaims
-                                  .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
-                    {
-                        using (var ctx2 = new GreetNGroupContext())
-                        {
-                            var claimslist = ctx2.UserClaims
-                                         .Where(s => s.UserId == UserID).ToList();
-                            Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
-                            if (canEdit)
-                            {
 
-                                UpdateUser(UserID, attributeContents);
-
-                            }
-                            else
-                            {
-                                throw new System.ArgumentException("Account cannot be updated", "Claim");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("User ID doesn't exist exist", "Database");
-                    }
+                    UpdateUser(UserID, attributeContents);
 
                 }
+                else
+                {
+                    throw new System.ArgumentException("Account cannot be updated", "Claim");
+                }
+   
             }
             catch (Exception e)
             {
