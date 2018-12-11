@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using GreetNGroup.Claim_Controls;
-using GreetNGroup.Tokens;
 using GreetNGroup.UserManage;
-using System.Data.Sql;
-using System.Data.SqlClient;
 using GreetNGroup.Validation;
 /*
 Basic user account class with all fields needed for a registered account     
