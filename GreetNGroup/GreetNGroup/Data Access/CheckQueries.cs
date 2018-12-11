@@ -52,9 +52,9 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserClaims
+                    var userClaims = ctx.UserClaims
                                   .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
+                    if (userClaims > 0)
                     {
 
                         List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(UserID);
@@ -88,8 +88,8 @@ namespace GreetNGroup.Data_Access
             try
             {
 
-                var stud = DataBaseQueries.FindClaimsFromUser(UserID);
-                Boolean canEdit = ValidationManager.checkAccountEditable(stud);
+                var claims = DataBaseQueries.FindClaimsFromUser(UserID);
+                Boolean canEdit = ValidationManager.checkAccountEditable(claims);
                 if (canEdit)
                 {
 
@@ -242,9 +242,9 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-                    stud.isActivated = changeState;
+                    user.isActivated = changeState;
                     ctx.SaveChanges();
                 }
             }

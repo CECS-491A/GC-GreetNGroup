@@ -211,7 +211,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="SiteUser\DataBaseQuery.cs" />
     <Compile Include="Tokens\KeyGen.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="DataBase Classes\UserClaim.cs" />
