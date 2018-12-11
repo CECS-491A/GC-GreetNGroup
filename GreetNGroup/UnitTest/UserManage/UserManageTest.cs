@@ -344,12 +344,16 @@ public class UserManageTest
     {
         Boolean expected = true;
         Boolean actual = true;
-        List<string> attributesToEdit = new List<string>();
-        attributesToEdit = 
-        if (!ValidationManager.checkEditAttributes(attributesToEdit)){
+
+        var attributesToEdit = new List<string> { "Bob", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
+            , "United States", null, null, null };
+
+        if (!ValidationManager.checkEditAttributes(attributesToEdit))
+        {
             actual = false;
         }
         Assert.AreNotEqual(actual, expected);
+    }
 
     [TestMethod]
     public void changeEnable_TruetoFalse_Pass()
@@ -395,7 +399,9 @@ public class UserManageTest
         //Act
         try
         {
-            Dylan.ChangeEnable("p0499dj238e92j2", true);
+            var attributesToEdit = new List<string> { null, null, null, null, null
+            , null, null, null, "true" };
+            Dylan.UpdateAccount("p0499dj238e92j2", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
                 var stud = ctx.UserTables
@@ -427,7 +433,9 @@ public class UserManageTest
         //Act
         try
         {
-            Chris.ChangeEnable("test", false);
+            var attributesToEdit = new List<string> { null, null, null, null, null
+            , null, null, null, "false" };
+            Chris.UpdateAccount("test", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
                 var stud = ctx.UserTables
@@ -459,7 +467,9 @@ public class UserManageTest
         //Act
         try
         {
-            Chris.ChangeEnable("p01dj9wjd99u3u", false);
+            var attributesToEdit = new List<string> { null, null, null, null, null
+            , null, null, null, "false" };
+            Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
                 var stud = ctx.UserTables
@@ -482,74 +492,5 @@ public class UserManageTest
         Assert.AreNotEqual(actual, expected);
 
     }
-    [TestMethod]
-    public void changeEnable_TruetoTrue_Fail()
-    {
-        //Arange
-        Boolean expected = false;
-        Boolean actual;
-        //Act
-        try
-        {
-            Dylan.ChangeEnable("p03d928ej2838fo", true);
-            using (var ctx = new GreetNGroupContext())
-            {
-                var stud = ctx.UserTables
-                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
-                if (stud.isActivated == true)
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            actual = true;
-        }
-
-
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-
-    }
-    [TestMethod]
-    public void changeEnable_FalsetoFalse_Fail()
-    {
-        //Arange
-        Boolean expected = true;
-        Boolean actual;
-        //Act
-        try
-        {
-            Dylan.ChangeEnable("p03d928ej2838fo", false);
-            using (var ctx = new GreetNGroupContext())
-            {
-                var stud = ctx.UserTables
-                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
-                if (stud.isActivated == false)
-                {
-                    actual = false;
-                }
-                else
-                {
-                    actual = true;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            actual = false;
-        }
-
-
-
-        //Assert
-        Assert.AreNotEqual(actual, expected);
-
-    }
+    //TODO: Add unit tests for editing other attributes
 }

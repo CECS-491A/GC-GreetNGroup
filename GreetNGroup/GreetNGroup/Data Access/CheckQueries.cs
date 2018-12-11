@@ -233,11 +233,9 @@ namespace GreetNGroup.Data_Access
                 {
                     var userToUpdate = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-
                     currentAttributes.Add(userToUpdate.FirstName);
                     currentAttributes.Add(userToUpdate.LastName);
                     currentAttributes.Add(userToUpdate.UserName);
-                    currentAttributes.Add(userToUpdate.Password);
                     currentAttributes.Add(userToUpdate.City);
                     currentAttributes.Add(userToUpdate.State);
                     currentAttributes.Add(userToUpdate.Country);
@@ -245,12 +243,11 @@ namespace GreetNGroup.Data_Access
                     currentAttributes.Add(userToUpdate.SecurityQuestion);
                     currentAttributes.Add(userToUpdate.SecurityAnswer);
                     currentAttributes.Add(userToUpdate.isActivated.ToString());
-
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                //log
             }
             //For loop to update the attributes with new values, if there are values to update it to
             for (int i = 0; i < attributeContents.Count; i++)
@@ -270,17 +267,15 @@ namespace GreetNGroup.Data_Access
                     userToUpdate.FirstName = currentAttributes[0];
                     userToUpdate.LastName = currentAttributes[1];
                     userToUpdate.UserName = currentAttributes[2];
-                    userToUpdate.Password = currentAttributes[3];
-                    userToUpdate.City = currentAttributes[4];
-                    userToUpdate.State = currentAttributes[5];
-                    userToUpdate.Country = currentAttributes[6];
-                    userToUpdate.DoB = Convert.ToDateTime(currentAttributes[7]);
-                    userToUpdate.SecurityQuestion = currentAttributes[8];
-                    userToUpdate.SecurityAnswer = currentAttributes[9];
-                    userToUpdate.isActivated = currentAttributes[11].Equals("true");
+                    userToUpdate.City = currentAttributes[3];
+                    userToUpdate.State = currentAttributes[4];
+                    userToUpdate.Country = currentAttributes[5];
+                    userToUpdate.DoB = Convert.ToDateTime(currentAttributes[6]);
+                    userToUpdate.SecurityQuestion = currentAttributes[7];
+                    userToUpdate.SecurityAnswer = currentAttributes[8];
+                    userToUpdate.isActivated = currentAttributes[9].Equals("true");
                     ctx.SaveChanges();
                 }
-                
             }
             catch(Exception e)
             {
