@@ -200,7 +200,7 @@ namespace GreetNGroup.Data_Access
             //For loop to update the attributes with new values, if there are values to update it to
             for (int i = 0; i < attributeContents.Count; i++)
             {
-                if (attributeContents[i] != null)
+                if (!attributeContents[i].Equals("."))
                 {
                     currentAttributes[i] = attributeContents[i];
                 }

@@ -325,14 +325,14 @@ public class UserManageTest
         Boolean expected = true;
         Boolean actual = true;
         var attributesToEdit = new List<string> { "Bob", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
-            , "United States", null, null, null, null };
+            , "United States", ".", ".", ".", "." };
         //Act
-        if (!ValidationManager.checkEditAttributes(attributesToEdit))
+        if (ValidationManager.checkEditAttributes(attributesToEdit))
         {
-            actual = false;
+            actual = true;
         }
         //Assert
-        Assert.AreNotEqual(actual, expected);
+        Assert.AreEqual(actual, expected);
     }
 
     [TestMethod]
@@ -342,14 +342,14 @@ public class UserManageTest
         Boolean expected = false;
         Boolean actual = true;
         var attributesToEdit = new List<string> { "", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
-            , "United States", null, null, null, null };
+            , "United States", ".", ".", ".", "." };
         //Act
         if (!ValidationManager.checkEditAttributes(attributesToEdit))
         {
             actual = false;
         }
         //Assert
-        Assert.AreNotEqual(actual, expected);
+        Assert.AreEqual(actual, expected);
     }
 
     [TestMethod]
@@ -358,8 +358,8 @@ public class UserManageTest
         //Arange
         Boolean expected = false;
         Boolean actual;
-        var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, null, "false" };
+        var attributesToEdit = new List<string> { ".", ".", ".", ".", "."
+            , ".", ".", ".", ".", "false" };
         //Act
         try
         {
@@ -395,8 +395,8 @@ public class UserManageTest
         //Act
         try
         {
-            var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, null, "true" };
+            var attributesToEdit = new List<string> { ".", ".", ".", ".", "."
+            , ".", ".", ".", ".", "true" };
             Dylan.UpdateAccount("p0499dj238e92j2", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
@@ -429,8 +429,7 @@ public class UserManageTest
         //Act
         try
         {
-            var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, null, "false" };
+            var attributesToEdit = new List<string> { ".",".",".",".",".",".",".",".",".", "false" };
             Chris.UpdateAccount("test", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
@@ -463,8 +462,7 @@ public class UserManageTest
         //Act
         try
         {
-            var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, null, "false" };
+            var attributesToEdit = new List<string> { ".", ".", ".", ".", ".", ".", ".", ".", ".", "false" };
             Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {

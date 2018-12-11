@@ -186,9 +186,10 @@ namespace GreetNGroup.Validation
         {
             for(int i = 0; i < attributeContents.Count; i++)
             {
-                if (attributeContents[i].Equals(""))
+                if (String.IsNullOrWhiteSpace(attributeContents[i]))
                 {
-                    throw new System.ArgumentException("User attributes cannot be empty", "Attributes");
+                    //Log "User attributes cannot be empty"
+                    return false;
                 }
             }
             //Validates Input
