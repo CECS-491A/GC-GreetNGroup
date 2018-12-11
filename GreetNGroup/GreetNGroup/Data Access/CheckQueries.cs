@@ -3,7 +3,6 @@ using GreetNGroup.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace GreetNGroup.Data_Access
 {
@@ -17,22 +16,22 @@ namespace GreetNGroup.Data_Access
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New Date of birth</param>
-        public static void CheckDuplicates(String userName, String city, String state, String country, DateTime DOB)
+        public static Boolean CheckDuplicates(String userName)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                   .Where(s => s.UserName == userName).Any();
-                    Console.WriteLine(stud);
-                    if(stud == false)
+                    Console.WriteLine(user);
+                    if(user == false)
                     {
-                        InsertUser(userName, city, state,country,DOB);
+                        return false;
                     }
                     else
                     {
-                        throw new System.ArgumentException("Name already exist", "Database");
+                        return true;
                     }
 
                 }
@@ -40,7 +39,7 @@ namespace GreetNGroup.Data_Access
             catch (Exception e)
             {
                 //Log Excepetion
-                //Console.WriteLine(e);
+                return true;
             }
         }
         /// <summary>
@@ -53,9 +52,9 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserClaims
+                    var userClaims = ctx.UserClaims
                                   .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
+                    if (userClaims > 0)
                     {
 
                         List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(UserID);
@@ -83,67 +82,14 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-        /**
-        /// <summary>
-        /// Checks to see of the account you want to edit is editable
-        /// </summary>
-        /// <param name="UID">User ID</param>
-        /// <param name="changeState">The state of isActivated</param>
-        public static void CheckStateClaim(string UserID, Boolean changeState)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var stud = ctx.UserClaims
-                                  .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
-                    {
-                        var claimslist = ctx.UserClaims
-                                        .Where(s => s.UserId == UserID).ToList();
-                        Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
-                        if (canEdit == true)
-                        {
-                            var currentState = ctx.UserTables
-                                            .Where(s => s.UserId == UserID).Single();
-                            if(currentState.isActivated == changeState)
-                            {
-                                throw new System.ArgumentException("Account cannot not be changed to same state", "State Attribute");
-                            }
-                            else
-                            {
-                                ChangeState(UserID, changeState);
-                            }
-                           
-                        }
-                        else
-                        {
-                            throw new System.ArgumentException("Account cannot be edited", "Claim");
-                        }
-                        
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("user ID doesn't exist exist", "Database");
-                    }
-
-                }
-            }
-            catch (Exception e)
-            {
-                //Log Excepetion
-                Console.WriteLine(e);
-            }
-        }
-    **/
         public static void CheckEditClaim(string UserID, List<string> attributeContents)
 
         {
             try
             {
 
-                var stud = DataBaseQueries.FindClaimsFromUser(UserID);
-                Boolean canEdit = ValidationManager.checkAccountEditable(stud);
+                var claims = DataBaseQueries.FindClaimsFromUser(UserID);
+                Boolean canEdit = ValidationManager.checkAccountEditable(claims);
                 if (canEdit)
                 {
 
@@ -176,25 +122,43 @@ namespace GreetNGroup.Data_Access
         {
             try
             {
-                using (var ctx = new GreetNGroupContext())
+                var isDupe = CheckDuplicates(userName);
+                if(isDupe == false)
                 {
-                    string UID = RandomFieldGenerator.generatePassword();
-                    var newUser = new UserTable() { UserName = userName, City = city, State = state, Country = country, DoB = DOB, UserId = UID };
-                    var newClaims1 = new UserClaim() { UserId = UID, ClaimId = "0001" };
-                    var newClaims2 = new UserClaim() { UserId = UID, ClaimId = "0002" };
-                    var newClaims3 = new UserClaim() { UserId = UID, ClaimId = "0003" };
-                    ctx.UserTables.Add(newUser);
-                    ctx.UserClaims.Add(newClaims1);
-                    ctx.UserClaims.Add(newClaims2);
-                    ctx.UserClaims.Add(newClaims3);
-                    ctx.SaveChanges();
+                    string UID = RandomFieldGenerator.generateID();
+                    using (var ctx = new GreetNGroupContext())
+                    {
+                        Console.WriteLine("Insert");
+                        string password = RandomFieldGenerator.generatePassword();
+                        var newUser = new UserTable() { UserName = userName, Password = password, City = city, State = state, Country = country, DoB = DOB, UserId = UID };
+                        ctx.UserTables.Add(newUser);
+                        ctx.SaveChanges();
+                    }
+                    using (var ctx = new GreetNGroupContext())
+                    {
+                        //Basic Claims everyuser should have
+                        var newClaims1 = new UserClaim() { UserId = UID, ClaimId = "0001" };
+                        var newClaims2 = new UserClaim() { UserId = UID, ClaimId = "0002" };
+                        var newClaims3 = new UserClaim() { UserId = UID, ClaimId = "0003" };
+                        ctx.UserClaims.Add(newClaims1);
+                        ctx.UserClaims.Add(newClaims2);
+                        ctx.UserClaims.Add(newClaims3);
+                        ctx.SaveChanges();
+                    }
                 }
+                else
+                {
+                    throw new System.ArgumentException("User name already Exist", "Database");
+                }
+               
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 //Log excepetion e
             }
         }
+
         /// <summary>
         /// Deletes a user in the database given the following UID
         /// </summary>
@@ -207,10 +171,10 @@ namespace GreetNGroup.Data_Access
                 {
                     var Userclaims = ctx.UserClaims
                                    .Where(s => s.UserId == UserID);
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
                     ctx.UserClaims.RemoveRange(Userclaims);
-                    ctx.UserTables.Remove(stud);
+                    ctx.UserTables.Remove(user);
                     ctx.SaveChanges();
                 }
             }
@@ -252,7 +216,7 @@ namespace GreetNGroup.Data_Access
             //For loop to update the attributes with new values, if there are values to update it to
             for (int i = 0; i < attributeContents.Count; i++)
             {
-                if (attributeContents[i] != null)
+                if (!attributeContents[i].Equals("."))
                 {
                     currentAttributes[i] = attributeContents[i];
                 }
@@ -294,9 +258,9 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-                    stud.isActivated = changeState;
+                    user.isActivated = changeState;
                     ctx.SaveChanges();
                 }
             }

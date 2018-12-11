@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using GreetNGroup.Claim_Controls;
-using GreetNGroup.Tokens;
 using GreetNGroup.UserManage;
-using System.Data.Sql;
-using System.Data.SqlClient;
 using GreetNGroup.Validation;
 /*
 Basic user account class with all fields needed for a registered account     
@@ -132,7 +126,6 @@ namespace GreetNGroup.SiteUser
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New user's Date of birth</param>
-        /// <returns>A new User Account Object</returns>
         public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
             ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
@@ -141,22 +134,17 @@ namespace GreetNGroup.SiteUser
         /// <summary>
         /// Checks claims of the users and returns if the user can delete and the account be deleted
         /// </summary>
-        /// <param name="deleteUser">User Account that will be deletd</param>
+        /// <param name="UserID">User Account that will be deletd</param>
         public void DeleteAccount(string UserID)
         {
             ValidationManager.CheckDeleteToken(Claims, UserID);
         }
         /**
         /// <summary>
-        /// Enables or disables an account
+        /// Updates account information
         /// </summary>
-        /// <param name="account">Account that is being enabled or disabled</param>
-        /// <param name="changestate">Truth value of the accounts enabled status</param>
-        public void ChangeEnable(string UserID, Boolean changeState)
-        {
-            Console.WriteLine("hello");
-            ValidationManager.CheckEnableToken(Claims, UserID, changeState);
-        }
+        /// <param name="UserID">Account that is being updated</param>
+        /// <param name="changedAttributes">The attributes the account will change into</param>
         **/
         public void UpdateAccount(string UserID, List<string> changedAttributes)
         {

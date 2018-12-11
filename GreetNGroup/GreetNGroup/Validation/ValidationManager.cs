@@ -1,10 +1,8 @@
 ﻿using GreetNGroup.Claim_Controls;
 using GreetNGroup.Data_Access;
-using GreetNGroup.SiteUser;
 using GreetNGroup.Tokens;
 using System;
 using System.Collections.Generic;
-using GreetNGroup;
 namespace GreetNGroup.Validation
 {
     public static class ValidationManager
@@ -32,7 +30,7 @@ namespace GreetNGroup.Validation
                     var attributeCheck = checkAddAttributes(userName, city, state, country, DOB);
                     if (attributeCheck == true)
                     {
-                        CheckQueries.CheckDuplicates(userName, city, state, country, DOB);
+                        CheckQueries.InsertUser(userName, city, state, country, DOB);
                     }
                     else
                     {
@@ -87,39 +85,6 @@ namespace GreetNGroup.Validation
             }
             
         }
-        /**
-        /// <summary>
-        /// Checks to see if the person who is editing an account has the right claims
-        /// </summary>
-        /// <param name="claims">List of claims</param>
-        /// <param name="UID">User ID </param>
-        /// <param name="changeState">The new state(activated/deactivated) of the account</param>
-        public static void CheckEnableToken(List<string> claims, string UserID, Boolean changeState)
-        {
-            try
-            {
-                Console.WriteLine("hello");
-                string temp = "test";
-                List<string> _requireAdminRights = new List<string> {"AdminRights" };
-                var currentUserToken = new Token(temp);
-                currentUserToken.Claims = claims;
-                var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-                if (canDelete == true)
-                {
-                    CheckQueries.CheckStateClaim(UserID, changeState);
-                }
-                else
-                {
-                    throw new System.ArgumentException("User does not have the right Claims", "Claims");
-                }
-            }
-            catch (Exception e)
-            {
-                //log
-            }
-
-        }
-    **/
         public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
             try
             {
@@ -162,6 +127,7 @@ namespace GreetNGroup.Validation
             //Validates Input
             return true;
         }
+
         /// <summary>
         /// Verifies the userId and makes sure its valid
         /// </summary>
@@ -220,9 +186,10 @@ namespace GreetNGroup.Validation
         {
             for(int i = 0; i < attributeContents.Count; i++)
             {
-                if (attributeContents[i].Equals(""))
+                if (String.IsNullOrWhiteSpace(attributeContents[i]))
                 {
-                    throw new System.ArgumentException("User attributes cannot be empty", "Attributes");
+                    //Log "User attributes cannot be empty"
+                    return false;
                 }
             }
             //Validates Input
