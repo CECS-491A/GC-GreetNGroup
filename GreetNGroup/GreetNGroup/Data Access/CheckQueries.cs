@@ -22,8 +22,7 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var user = ctx.UserTables
-                                  .Where(s => s.UserName == userName).Any();
+                    var user = ctx.UserTables.Any(s => s.UserName == userName);
                     Console.WriteLine(user);
                     if(user == false)
                     {
@@ -52,8 +51,7 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var userClaims = ctx.UserClaims
-                                  .Where(s => s.UserId == UserID).Count();
+                    var userClaims = ctx.UserClaims.Count(s => s.UserId == UserID);
                     if (userClaims > 0)
                     {
 
@@ -171,8 +169,7 @@ namespace GreetNGroup.Data_Access
                 {
                     var Userclaims = ctx.UserClaims
                                    .Where(s => s.UserId == UserID);
-                    var user = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
+                    var user = ctx.UserTables.Single(s => s.UserId == UserID);
                     ctx.UserClaims.RemoveRange(Userclaims);
                     ctx.UserTables.Remove(user);
                     ctx.SaveChanges();
@@ -195,8 +192,7 @@ namespace GreetNGroup.Data_Access
             {
                 using (ctx)
                 {
-                    var userToUpdate = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
+                    var userToUpdate = ctx.UserTables.Single(s => s.UserId == UserID);
                     currentAttributes.Add(userToUpdate.FirstName);
                     currentAttributes.Add(userToUpdate.LastName);
                     currentAttributes.Add(userToUpdate.UserName);
@@ -226,8 +222,7 @@ namespace GreetNGroup.Data_Access
             {
                 using (ctx)
                 {
-                    var userToUpdate = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
+                    var userToUpdate = ctx.UserTables.Single(s => s.UserId == UserID);
                     userToUpdate.FirstName = currentAttributes[0];
                     userToUpdate.LastName = currentAttributes[1];
                     userToUpdate.UserName = currentAttributes[2];
@@ -258,8 +253,7 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var user = ctx.UserTables
-                                   .Where(s => s.UserId == UserID).Single();
+                    var user = ctx.UserTables.Single(s => s.UserId == UserID);
                     user.isActivated = changeState;
                     ctx.SaveChanges();
                 }
