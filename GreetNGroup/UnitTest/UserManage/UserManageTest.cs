@@ -325,7 +325,24 @@ public class UserManageTest
         Boolean expected = true;
         Boolean actual = true;
         var attributesToEdit = new List<string> { "Bob", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
-            , "United States", null, null, null };
+            , "United States", null, null, null, null };
+        //Act
+        if (!ValidationManager.checkEditAttributes(attributesToEdit))
+        {
+            actual = false;
+        }
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+
+    [TestMethod]
+    public void editUser_ValidString_Fail()
+    {
+        //Arrange
+        Boolean expected = false;
+        Boolean actual = true;
+        var attributesToEdit = new List<string> { "", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
+            , "United States", null, null, null, null };
         //Act
         if (!ValidationManager.checkEditAttributes(attributesToEdit))
         {
@@ -342,7 +359,7 @@ public class UserManageTest
         Boolean expected = false;
         Boolean actual;
         var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, "false" };
+            , null, null, null, null, "false" };
         //Act
         try
         {
@@ -379,7 +396,7 @@ public class UserManageTest
         try
         {
             var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, "true" };
+            , null, null, null, null, "true" };
             Dylan.UpdateAccount("p0499dj238e92j2", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
@@ -413,7 +430,7 @@ public class UserManageTest
         try
         {
             var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, "false" };
+            , null, null, null, null, "false" };
             Chris.UpdateAccount("test", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
@@ -447,7 +464,7 @@ public class UserManageTest
         try
         {
             var attributesToEdit = new List<string> { null, null, null, null, null
-            , null, null, null, "false" };
+            , null, null, null, null, "false" };
             Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
@@ -470,7 +487,53 @@ public class UserManageTest
         //Assert
         Assert.AreNotEqual(actual, expected);
     }
-
-    #endregion
     //TODO: Add unit tests for editing other attributes
+
+    [TestMethod]
+    public void editUserAccount_Pass()
+    {
+        //Arrange
+        Boolean expected = true;
+        Boolean actual = true;
+        var attributesToEdit = new List<string> { "Winn", "Moo", "bob@gmail.com", "Fountain Valley", "California"
+            , "United States", new DateTime(1996, 1, 1).ToString(), "What's your favorite food", "Chicken", "true" };
+        //Act
+        try
+        {
+            Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
+            using (var ctx = new GreetNGroupContext())
+            {
+                var user = ctx.UserTables
+                              .Where(s => s.UserId == "p01dj9wjd99u3u").Single();
+                var afterUpdatedAttributes = new List<string>();
+                afterUpdatedAttributes.Add(user.FirstName);
+                afterUpdatedAttributes.Add(user.LastName);
+                afterUpdatedAttributes.Add(user.UserName);
+                afterUpdatedAttributes.Add(user.City);
+                afterUpdatedAttributes.Add(user.State);
+                afterUpdatedAttributes.Add(user.Country);
+                afterUpdatedAttributes.Add(user.DoB.ToString());
+                afterUpdatedAttributes.Add(user.SecurityQuestion);
+                afterUpdatedAttributes.Add(user.SecurityAnswer);
+                afterUpdatedAttributes.Add(user.isActivated.ToString());
+                if (attributesToEdit.SequenceEqual(afterUpdatedAttributes))
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            actual = true;
+        }
+        //Assert
+        Assert.AreNotEqual(actual, expected);
+    }
+    #endregion
+
 }
