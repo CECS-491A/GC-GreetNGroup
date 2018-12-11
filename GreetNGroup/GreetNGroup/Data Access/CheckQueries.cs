@@ -57,20 +57,18 @@ namespace GreetNGroup.Data_Access
                                   .Where(s => s.UserId == UserID).Count();
                     if (stud > 0)
                     {
-                        using (var ctx2 = new GreetNGroupContext())
+
+                        List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(UserID);
+                        Boolean canDelete = ValidationManager.checkAccountEditable(checkClaims);
+                        if (canDelete == true)
                         {
-                            var claimslist = ctx2.UserClaims
-                                         .Where(s => s.UserId == UserID).ToList();
-                            Boolean canDelete = ValidationManager.checkAccountEditable(claimslist);
-                            if (canDelete == true)
-                            {
-                                DeleteUser(UserID);
-                            }
-                            else
-                            {
-                                throw new System.ArgumentException("Account cannot be deleted", "Claim");
-                            }
+                            DeleteUser(UserID);
                         }
+                        else
+                        {
+                            throw new System.ArgumentException("Account cannot be deleted", "Claim");
+                        }
+                        
                     }
                     else
                     {
@@ -84,7 +82,9 @@ namespace GreetNGroup.Data_Access
                 //Log Excepetion
                 Console.WriteLine(e);
             }
-        }/// <summary>
+        }
+        /**
+        /// <summary>
         /// Checks to see of the account you want to edit is editable
         /// </summary>
         /// <param name="UID">User ID</param>
@@ -135,41 +135,26 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-
+    **/
         public static void CheckEditClaim(string UserID, List<string> attributeContents)
 
         {
             try
             {
-                using (var ctx = new GreetNGroupContext())
+
+                var stud = DataBaseQueries.FindClaimsFromUser(UserID);
+                Boolean canEdit = ValidationManager.checkAccountEditable(stud);
+                if (canEdit)
                 {
-                    var stud = ctx.UserClaims
-                                  .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
-                    {
-                        using (var ctx2 = new GreetNGroupContext())
-                        {
-                            var claimslist = ctx2.UserClaims
-                                         .Where(s => s.UserId == UserID).ToList();
-                            Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
-                            if (canEdit)
-                            {
 
-                                UpdateUser(UserID, attributeContents);
-
-                            }
-                            else
-                            {
-                                throw new System.ArgumentException("Account cannot be updated", "Claim");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("User ID doesn't exist exist", "Database");
-                    }
+                    UpdateUser(UserID, attributeContents);
 
                 }
+                else
+                {
+                    throw new System.ArgumentException("Account cannot be updated", "Claim");
+                }
+   
             }
             catch (Exception e)
             {
@@ -238,18 +223,9 @@ namespace GreetNGroup.Data_Access
 
         public static void UpdateUser(string UserID, List<string> attributeContents)
         {
+            List<string> currentAttributes = new List<string>();
             var ctx = new GreetNGroupContext();
-            string firstname = "";
-            string lastname = "";
-            string username = "";
-            string password = "";
-            string city = "";
-            string state = "";
-            string country = "";
-            string DOB = "";
-            string securityquestion = "";
-            string securityanswer = "";
-            string isactivated = "";
+
             //Try statement to fill the variables with user's current attributes
             try
             {
@@ -257,17 +233,18 @@ namespace GreetNGroup.Data_Access
                 {
                     var userToUpdate = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-                    firstname = userToUpdate.FirstName;
-                    lastname = userToUpdate.LastName;
-                    username = userToUpdate.UserName;
-                    password = userToUpdate.Password;
-                    city = userToUpdate.City;
-                    state = userToUpdate.State;
-                    country = userToUpdate.Country;
-                    DOB = userToUpdate.DoB.ToString();
-                    securityquestion = userToUpdate.SecurityQuestion;
-                    securityanswer = userToUpdate.SecurityAnswer;
-                    isactivated = userToUpdate.isActivated.ToString();
+
+                    currentAttributes.Add(userToUpdate.FirstName);
+                    currentAttributes.Add(userToUpdate.LastName);
+                    currentAttributes.Add(userToUpdate.UserName);
+                    currentAttributes.Add(userToUpdate.Password);
+                    currentAttributes.Add(userToUpdate.City);
+                    currentAttributes.Add(userToUpdate.State);
+                    currentAttributes.Add(userToUpdate.Country);
+                    currentAttributes.Add(userToUpdate.DoB.ToString());
+                    currentAttributes.Add(userToUpdate.SecurityQuestion);
+                    currentAttributes.Add(userToUpdate.SecurityAnswer);
+                    currentAttributes.Add(userToUpdate.isActivated.ToString());
 
                 }
             }
@@ -278,49 +255,9 @@ namespace GreetNGroup.Data_Access
             //For loop to update the attributes with new values, if there are values to update it to
             for (int i = 0; i < attributeContents.Count; i++)
             {
-                if (i == 0 && attributeContents[i] != null)
+                if (attributeContents[i] != null)
                 {
-                    firstname = attributeContents[i];
-                }
-                else if (i == 1 && attributeContents[i] != null)
-                {
-                    lastname = attributeContents[i];
-                }
-                else if (i == 2 && attributeContents[i] != null)
-                {
-                    username = attributeContents[i];
-                }
-                else if (i == 3 && attributeContents[i] != null)
-                {
-                    password = attributeContents[i];
-                }
-                else if (i == 4 && attributeContents[i] != null)
-                {
-                    city = attributeContents[i];
-                }
-                else if (i == 5 && attributeContents[i] != null)
-                {
-                    state = attributeContents[i];
-                }
-                else if (i == 6 && attributeContents[i] != null)
-                {
-                    country = attributeContents[i];
-                }
-                else if (i == 7 && attributeContents[i] != null)
-                {
-                    DOB = attributeContents[i];
-                }
-                else if (i == 8 && attributeContents[i] != null)
-                {
-                    securityquestion = attributeContents[i];
-                }
-                else if (i == 9 && attributeContents[i] != null)
-                {
-                    securityanswer = attributeContents[i];
-                }
-                else if (i == 10 && attributeContents[i] != null)
-                {
-                    isactivated = attributeContents[i];
+                    currentAttributes[i] = attributeContents[i];
                 }
             }
             //Try statement update the user in the database
@@ -330,17 +267,17 @@ namespace GreetNGroup.Data_Access
                 {
                     var userToUpdate = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
-                    userToUpdate.FirstName = firstname;
-                    userToUpdate.LastName = lastname;
-                    userToUpdate.UserName = username;
-                    userToUpdate.Password = password;
-                    userToUpdate.City = city;
-                    userToUpdate.State = state;
-                    userToUpdate.Country = country;
-                    userToUpdate.DoB = Convert.ToDateTime(DOB);
-                    userToUpdate.SecurityQuestion = securityquestion;
-                    userToUpdate.SecurityAnswer = securityanswer;
-                    userToUpdate.isActivated = isactivated.Equals("true");
+                    userToUpdate.FirstName = currentAttributes[0];
+                    userToUpdate.LastName = currentAttributes[1];
+                    userToUpdate.UserName = currentAttributes[2];
+                    userToUpdate.Password = currentAttributes[3];
+                    userToUpdate.City = currentAttributes[4];
+                    userToUpdate.State = currentAttributes[5];
+                    userToUpdate.Country = currentAttributes[6];
+                    userToUpdate.DoB = Convert.ToDateTime(currentAttributes[7]);
+                    userToUpdate.SecurityQuestion = currentAttributes[8];
+                    userToUpdate.SecurityAnswer = currentAttributes[9];
+                    userToUpdate.isActivated = currentAttributes[11].Equals("true");
                     ctx.SaveChanges();
                 }
                 

@@ -146,6 +146,7 @@ namespace GreetNGroup.SiteUser
         {
             ValidationManager.CheckDeleteToken(Claims, UserID);
         }
+        /**
         /// <summary>
         /// Enables or disables an account
         /// </summary>
@@ -156,10 +157,10 @@ namespace GreetNGroup.SiteUser
             Console.WriteLine("hello");
             ValidationManager.CheckEnableToken(Claims, UserID, changeState);
         }
-
-        public void UpdateAccount(string UserID, Boolean state)
+        **/
+        public void UpdateAccount(string UserID, List<string> changedAttributes)
         {
-            ValidationManager.CheckEditToken(Claims, UserID, state);
+            ValidationManager.CheckEditToken(Claims, UserID, changedAttributes);
         }
 
         #endregion
