@@ -3,7 +3,6 @@ using GreetNGroup.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace GreetNGroup.Data_Access
 {
@@ -23,10 +22,10 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                   .Where(s => s.UserName == userName).Any();
-                    Console.WriteLine(stud);
-                    if(stud == false)
+                    Console.WriteLine(user);
+                    if(user == false)
                     {
                         InsertUser(userName, city, state,country,DOB);
                     }
@@ -83,59 +82,6 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-        /**
-        /// <summary>
-        /// Checks to see of the account you want to edit is editable
-        /// </summary>
-        /// <param name="UID">User ID</param>
-        /// <param name="changeState">The state of isActivated</param>
-        public static void CheckStateClaim(string UserID, Boolean changeState)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var stud = ctx.UserClaims
-                                  .Where(s => s.UserId == UserID).Count();
-                    if (stud > 0)
-                    {
-                        var claimslist = ctx.UserClaims
-                                        .Where(s => s.UserId == UserID).ToList();
-                        Boolean canEdit = ValidationManager.checkAccountEditable(claimslist);
-                        if (canEdit == true)
-                        {
-                            var currentState = ctx.UserTables
-                                            .Where(s => s.UserId == UserID).Single();
-                            if(currentState.isActivated == changeState)
-                            {
-                                throw new System.ArgumentException("Account cannot not be changed to same state", "State Attribute");
-                            }
-                            else
-                            {
-                                ChangeState(UserID, changeState);
-                            }
-                           
-                        }
-                        else
-                        {
-                            throw new System.ArgumentException("Account cannot be edited", "Claim");
-                        }
-                        
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("user ID doesn't exist exist", "Database");
-                    }
-
-                }
-            }
-            catch (Exception e)
-            {
-                //Log Excepetion
-                Console.WriteLine(e);
-            }
-        }
-    **/
         public static void CheckEditClaim(string UserID, List<string> attributeContents)
 
         {
@@ -180,6 +126,7 @@ namespace GreetNGroup.Data_Access
                 {
                     string UID = RandomFieldGenerator.generatePassword();
                     var newUser = new UserTable() { UserName = userName, City = city, State = state, Country = country, DoB = DOB, UserId = UID };
+                    //Basic Claims everyuser should have
                     var newClaims1 = new UserClaim() { UserId = UID, ClaimId = "0001" };
                     var newClaims2 = new UserClaim() { UserId = UID, ClaimId = "0002" };
                     var newClaims3 = new UserClaim() { UserId = UID, ClaimId = "0003" };
@@ -195,6 +142,7 @@ namespace GreetNGroup.Data_Access
                 //Log excepetion e
             }
         }
+
         /// <summary>
         /// Deletes a user in the database given the following UID
         /// </summary>
@@ -207,10 +155,10 @@ namespace GreetNGroup.Data_Access
                 {
                     var Userclaims = ctx.UserClaims
                                    .Where(s => s.UserId == UserID);
-                    var stud = ctx.UserTables
+                    var user = ctx.UserTables
                                    .Where(s => s.UserId == UserID).Single();
                     ctx.UserClaims.RemoveRange(Userclaims);
-                    ctx.UserTables.Remove(stud);
+                    ctx.UserTables.Remove(user);
                     ctx.SaveChanges();
                 }
             }

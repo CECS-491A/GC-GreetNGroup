@@ -1,6 +1,4 @@
-﻿
-using GreetNGroup.SiteUser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace GreetNGroup.UserManage
@@ -12,6 +10,6 @@ namespace GreetNGroup.UserManage
     {
         void AddAccount(String userName, String city, String state, String country, DateTime DOB);
         void DeleteAccount(string UID);
-        void ChangeEnable(string UID, Boolean enable);
+        void UpdateAccount(string UserID, List<string> changedAttributes);
     }
 }
