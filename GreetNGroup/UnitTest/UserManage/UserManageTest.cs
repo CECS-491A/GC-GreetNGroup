@@ -31,7 +31,6 @@ public class UserManageTest
                               .Where(s => s.UserName == "HowdyYall@gmail.com").Single();
                 if (user.UserName.Equals("HowdyYall@gmail.com") && user.City.Equals("Houston") && user.State.Equals("TX") && user.Country.Equals("USA") && (DateTime.Compare(user.DoB, new DateTime(2007, 5, 28)) == 0)) 
                 {
-                    Console.WriteLine("Pass");
                     actual = true;
                 }
                 else
@@ -206,7 +205,7 @@ public class UserManageTest
             using (var ctx = new GreetNGroupContext())
             {
                 var user = ctx.UserTables
-                                .Where(s => s.UserName == "test@gmail.com").Count();
+                                .Where(s => s.UserName == "test").Count();
                 if (user > 0)
                 {
                     actual = false;

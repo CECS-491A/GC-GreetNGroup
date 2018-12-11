@@ -30,7 +30,7 @@ namespace GreetNGroup.Validation
                     var attributeCheck = checkAddAttributes(userName, city, state, country, DOB);
                     if (attributeCheck == true)
                     {
-                        CheckQueries.CheckDuplicates(userName, city, state, country, DOB);
+                        CheckQueries.InsertUser(userName, city, state, country, DOB);
                     }
                     else
                     {
