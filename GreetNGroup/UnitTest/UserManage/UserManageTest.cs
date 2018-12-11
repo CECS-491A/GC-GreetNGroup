@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GreetNGroup.DataBase_Classes;
 using GreetNGroup.SiteUser;
-using GreetNGroup.UserManage;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Web;
-using System.Data.Entity;
 using GreetNGroup;
-using System.Data.Entity.Validation;
 using GreetNGroup.Validation;
 
 [TestClass]
@@ -33,20 +28,19 @@ public class UserManageTest
             Dylan.AddAccount("HowdyYall@gmail.com", "Houston", "TX", "USA", new DateTime(2007, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
-                              .Where(s => s.UserName == "HowdyYall@gmail.com");
-                foreach(var i in stud)
+                var user = ctx.UserTables
+                              .Where(s => s.UserName == "HowdyYall@gmail.com").Single();
+
+                if (user.UserName.Equals("HowdyYall@gmail.com") && user.City.Equals("Houston") && user.State.Equals("TX") && user.Country.Equals("USA") && (DateTime.Compare(user.DoB, new DateTime(2007, 5, 28)) == 0)) 
                 {
-                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Houston") && i.State.Equals("TX") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2007, 5, 28)) == 0)) 
-                    {
-                        Console.WriteLine("Pass");
-                        actual = true;
-                    }
-                    else
-                    {
-                        actual = false;
-                    }
+                    Console.WriteLine("Pass");
+                    actual = true;
                 }
+                else
+                {
+                    actual = false;
+                }
+                
 
 
             }
@@ -73,20 +67,19 @@ public class UserManageTest
             Dylan.AddAccount("HowdyYall@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
-                              .Where(s => s.UserName == "HowdyYall@gmail.com");
-                foreach (var i in stud)
+                var user = ctx.UserTables
+                              .Where(s => s.UserName == "HowdyYall@gmail.com").Single();
+               
+                if (user.UserName.Equals("HowdyYall@gmail.com") && user.City.Equals("Sacramento") && user.State.Equals("CA") && user.Country.Equals("USA") && (DateTime.Compare(user.DoB, new DateTime(2008, 5, 28)) == 0))
                 {
-                    if (i.UserName.Equals("HowdyYall@gmail.com") && i.City.Equals("Sacramento") && i.State.Equals("CA") && i.Country.Equals("USA") && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
-                    {
-                        Console.WriteLine("Pass");
-                        actual = true;
-                    }
-                    else
-                    {
-                        actual = false;
-                    }
+                    Console.WriteLine("Pass");
+                    actual = true;
                 }
+                else
+                {
+                    actual = false;
+                }
+                
 
 
             }
@@ -113,9 +106,9 @@ public class UserManageTest
             Chris.AddAccount("newAccount@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserName == "newAccount@gmail.com").Count();
-                if(stud > 0)
+                if(user > 0)
                 {
                     actual = true;
                 }
@@ -149,9 +142,9 @@ public class UserManageTest
             ValidationManager.checkAddAttributes(null, null, null, null, new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserName == null);
-                foreach (var i in stud)
+                foreach (var i in user)
                 {
                     if (i.UserName.Equals(null) && i.City.Equals(null) && i.State.Equals(null) && i.Country.Equals(null) && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
                     {
@@ -187,9 +180,9 @@ public class UserManageTest
             ValidationManager.checkAddAttributes("", "", "", "", new DateTime());
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserName == "");
-                foreach (var i in stud)
+                foreach (var i in user)
                 {
                     if (i.UserName.Equals("") && i.City.Equals("") && i.State.Equals("") && i.Country.Equals("") && (DateTime.Compare(i.DoB, new DateTime(2008, 5, 28)) == 0))
                     {
@@ -225,9 +218,9 @@ public class UserManageTest
             Dylan.DeleteAccount("test");
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                                 .Where(s => s.UserName == "test@gmail.com").Count();
-                if (stud > 0)
+                if (user > 0)
                 {
                     actual = false;
                 }
@@ -256,9 +249,9 @@ public class UserManageTest
         Chris.DeleteAccount("test");
         using (var ctx = new GreetNGroupContext())
         {
-            var stud = ctx.UserTables
+            var user = ctx.UserTables
                             .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
-            if(stud > 0)
+            if(user > 0)
             {
                 actual = false;
             }
@@ -284,9 +277,9 @@ public class UserManageTest
         Dylan.DeleteAccount("p01q2w9o38ei4r");
         using (var ctx = new GreetNGroupContext())
         {
-            var stud = ctx.UserTables
+            var user = ctx.UserTables
                           .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
-            if (stud > 0)
+            if (user > 0)
             {
                 actual = false;
             }
@@ -367,9 +360,9 @@ public class UserManageTest
             Dylan.ChangeEnable("p03d928ej2838fo", false);
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserId == "p03d928ej2838fo").Single();
-                if (stud.isActivated == false)
+                if (user.isActivated == false)
                 {
                     actual = false;
                 }
@@ -404,9 +397,9 @@ public class UserManageTest
             Dylan.UpdateAccount("p0499dj238e92j2", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserId == "p0499dj238e92j2").Single();
-                if (stud.isActivated == true)
+                if (user.isActivated == true)
                 {
                     actual = true;
                 }
@@ -438,9 +431,9 @@ public class UserManageTest
             Chris.UpdateAccount("test", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserId == "test").Single();
-                if (stud.isActivated == false)
+                if (user.isActivated == false)
                 {
                     actual = false;
                 }
@@ -472,9 +465,9 @@ public class UserManageTest
             Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var stud = ctx.UserTables
+                var user = ctx.UserTables
                               .Where(s => s.UserId == "p01dj9wjd99u3u").Single();
-                if (stud.isActivated == false)
+                if (user.isActivated == false)
                 {
                     actual = false;
                 }
