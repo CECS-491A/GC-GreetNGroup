@@ -203,6 +203,10 @@ namespace GreetNGroup.Data_Access
                     currentAttributes.Add(userToUpdate.SecurityQuestion);
                     currentAttributes.Add(userToUpdate.SecurityAnswer);
                     currentAttributes.Add(userToUpdate.isActivated.ToString());
+                    //Instead of naming all the columns in the table
+                    //Use some method to get all the column data 
+                    //in a row and add it to the list to allow for new columns to be added
+                    //and column names aren't hardcoded
                 }
             }
             catch (Exception e)
@@ -234,6 +238,8 @@ namespace GreetNGroup.Data_Access
                     userToUpdate.SecurityAnswer = currentAttributes[8];
                     userToUpdate.isActivated = currentAttributes[9].Equals("true");
                     ctx.SaveChanges();
+                    //Instead of calling each index, use a for loop with some method to 
+                    //take all list values and put into the row 
                 }
             }
             catch(Exception e)
