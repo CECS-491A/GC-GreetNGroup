@@ -23,17 +23,14 @@ namespace UnitTest.ClaimsTest
         public void RequireViewAndSystemAdminPass()
         {
             // Arrange
-            const bool expected = true;
-            var actual = false; 
+            const bool expected = false;
+            var actual = true; 
             const string id = "p01dj9wjd99u3u";
             List<string> claimTest = new List<string>(){"CanViewEvents","SystemAdmin"};
             
             // Act
             var userToken1 = new Token(id);
-            if (!(claimTest.Except(userToken1.Claims).Any()))
-            {
-                actual = true;
-            }
+            actual = claimTest.Except(userToken1.Claims).Any();
             
             // Assert
             Assert.AreEqual(expected, actual);
@@ -43,17 +40,14 @@ namespace UnitTest.ClaimsTest
         public void RequireFriendAndBlackList()
         {
             // Arrange
-            const bool expected = true;
-            var actual = false; 
+            const bool expected = false;
+            var actual = true; 
             const string id = "p0499dj238e92j2";
             List<string> claimTest = new List<string>(){"CanFriendUsers","CanBlackListUsers"};
             
             // Act
             var userToken1 = new Token(id);
-            if (!(claimTest.Except(claimTest).Any()))
-            {
-                actual = true;
-            }
+            actual = claimTest.Except(userToken1.Claims).Any();
             
             // Assert
             Assert.AreEqual(expected, actual);
@@ -65,17 +59,14 @@ namespace UnitTest.ClaimsTest
         public void RequireCreateAndViewClaimsFail()
         {
             // Arrange
-            const bool expected = false;
-            var actual = true; 
+            const bool expected = true;
+            var actual = false; 
             const string id = "p0499dj238e92j2";
             List<string> claimTest = new List<string>(){"CanViewEvents","CanCreateEvents"};
             
             // Act
             var userToken1 = new Token(id);
-            if (claimTest.Except(userToken1.Claims).Any())
-            {
-                actual = false;
-            }
+            actual = claimTest.Except(userToken1.Claims).Any();
             
             // Assert
             Assert.AreEqual(expected, actual);
@@ -85,17 +76,14 @@ namespace UnitTest.ClaimsTest
         public void RequireSystemAdminRightsFail()
         {
             // Arrange
-            const bool expected = false;
-            var actual = true; 
+            const bool expected = true;
+            var actual = false; 
             const string id = "p0499dj238e92j2";
             List<string> claimTest = new List<string>(){"SystemAdmin"};
             
             // Act
             var userToken1 = new Token(id);
-            if (claimTest.Except(userToken1.Claims).Any())
-            {
-                actual = false;
-            }
+            actual = claimTest.Except(userToken1.Claims).Any();
             
             // Assert
             Assert.AreEqual(expected, actual);
