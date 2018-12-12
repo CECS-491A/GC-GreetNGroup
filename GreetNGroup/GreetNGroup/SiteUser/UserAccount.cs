@@ -128,6 +128,7 @@ namespace GreetNGroup.SiteUser
         /// <param name="DOB">New user's Date of birth</param>
         public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
+            //Check the current user's claim first
             ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
 
         }
