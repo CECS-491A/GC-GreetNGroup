@@ -26,12 +26,11 @@ namespace UnitTest.ClaimsTest
             const bool expected = true;
             var actual = false; 
             const string id = "p01dj9wjd99u3u";
-            var claims = DataBaseQueries.FindClaimsFromUser(id);
             List<string> claimTest = new List<string>(){"CanViewEvents","SystemAdmin"};
             
             // Act
-            var userToken1 = new Token(_userId1);
-            if (!(claimTest.Except(claims).Any()))
+            var userToken1 = new Token(id);
+            if (!(claimTest.Except(userToken1.Claims).Any()))
             {
                 actual = true;
             }
@@ -47,12 +46,11 @@ namespace UnitTest.ClaimsTest
             const bool expected = true;
             var actual = false; 
             const string id = "p0499dj238e92j2";
-            var claims = DataBaseQueries.FindClaimsFromUser(id);
             List<string> claimTest = new List<string>(){"CanFriendUsers","CanBlackListUsers"};
             
             // Act
-            var userToken1 = new Token(_userId1);
-            if (!(claimTest.Except(claims).Any()))
+            var userToken1 = new Token(id);
+            if (!(claimTest.Except(claimTest).Any()))
             {
                 actual = true;
             }
@@ -70,12 +68,11 @@ namespace UnitTest.ClaimsTest
             const bool expected = false;
             var actual = true; 
             const string id = "p0499dj238e92j2";
-            var claims = DataBaseQueries.FindClaimsFromUser(id);
             List<string> claimTest = new List<string>(){"CanViewEvents","CanCreateEvents"};
             
             // Act
-            var userToken1 = new Token(_userId1);
-            if (claimTest.Except(claims).Any())
+            var userToken1 = new Token(id);
+            if (claimTest.Except(userToken1.Claims).Any())
             {
                 actual = false;
             }
@@ -91,12 +88,11 @@ namespace UnitTest.ClaimsTest
             const bool expected = false;
             var actual = true; 
             const string id = "p0499dj238e92j2";
-            var claims = DataBaseQueries.FindClaimsFromUser(id);
             List<string> claimTest = new List<string>(){"SystemAdmin"};
             
             // Act
-            var userToken1 = new Token(_userId1);
-            if (claimTest.Except(claims).Any())
+            var userToken1 = new Token(id);
+            if (claimTest.Except(userToken1.Claims).Any())
             {
                 actual = false;
             }
