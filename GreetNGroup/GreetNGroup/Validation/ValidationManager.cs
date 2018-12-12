@@ -19,17 +19,21 @@ namespace GreetNGroup.Validation
         {
             try
             {
+                //Check the required claims
                 string temp = "test";
                 List<string> _requireAdminRights = new List<string> { "AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
+                //Compare currrent user's claim
                 var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
                 //If they have the claims they will be able to create a new account but if they don't the function will throw an error
                 if (canAdd == true)
                 {
+                    //validate the passing attributes
                     var attributeCheck = checkAddAttributes(userName, city, state, country, DOB);
                     if (attributeCheck == true)
                     {
+                        //Insert the user in the database
                         CheckQueries.InsertUser(userName, city, state, country, DOB);
                     }
                     else
@@ -59,6 +63,7 @@ namespace GreetNGroup.Validation
         {
             try
             {
+                //Check the required claims
                 Console.WriteLine("hello");
                 string temp = "test";
                 List<string> _requireAdminRights = new List<string> {"AdminRights" };
@@ -68,8 +73,10 @@ namespace GreetNGroup.Validation
                 
                 if (canDelete == true)
                 {
+                    //Check the passed userid
                     if(CheckDeletedAttributes(UID) == true)
                     {
+                        //Check user being deleted claim
                         CheckQueries.CheckDeleteClaim(UID);
                     }
                     
@@ -88,14 +95,17 @@ namespace GreetNGroup.Validation
         public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
             try
             {
+                //Check current user's claims
                 Console.WriteLine("Editing User");
                 string temp = "test";
                 List<string> _requireAdminRights = new List<string> { "AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
                 var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+                //Check the passed list of attributes
                 if (canEdit && checkEditAttributes(attributeContents))
                 {
+                    //Check editted account claims
                     CheckQueries.CheckEditClaim(UserID, attributeContents);
                 }
             }
@@ -155,7 +165,7 @@ namespace GreetNGroup.Validation
             return true;
         }
         /// <summary>
-        /// Checks if the account can be edited
+        /// Checks if the queried account can be edited
         /// </summary>
         /// <param name="items">List of claims the user in the database has</param>
         /// <returns>Whether or not the account can be changed</returns>

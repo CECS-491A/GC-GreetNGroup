@@ -22,8 +22,8 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    //Checks for any similar usernames
                     var user = ctx.UserTables.Any(s => s.UserName == userName);
-                    Console.WriteLine(user);
                     if(user == false)
                     {
                         return false;
@@ -51,11 +51,13 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    //Checks if the account exist/has any claims
                     var userClaims = ctx.UserClaims.Count(s => s.UserId == UserID);
                     if (userClaims > 0)
                     {
-
+                        //turn claims into a list
                         List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(UserID);
+                        //Checks if the account can be deleted
                         Boolean canDelete = ValidationManager.checkAccountEditable(checkClaims);
                         if (canDelete == true)
                         {
@@ -80,23 +82,44 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
+        /// <summary>
+        /// Checks if the account can be edited
+        /// </summary>
+        /// <param name="UserID">Editted Accounts user id</param>
+        /// <param name="attributeContents">List of attributes that will replace current attributes</param>
         public static void CheckEditClaim(string UserID, List<string> attributeContents)
 
         {
             try
             {
-
-                var claims = DataBaseQueries.FindClaimsFromUser(UserID);
-                Boolean canEdit = ValidationManager.checkAccountEditable(claims);
-                if (canEdit)
+                using (var ctx = new GreetNGroupContext())
                 {
+                    //Checks if the account exist/has any claims
+                    var user = ctx.UserTables.Count(s => s.UserId == UserID);
+                    if(user != 0)
+                    {
+                        //Retrive user claims
+                        var userClaims = ctx.UserClaims.Count(s => s.UserId == UserID);
+                        //Turns claims into a list
+                        var claims = DataBaseQueries.FindClaimsFromUser(UserID);
+                        //Check if account can be edited
+                        Boolean canEdit = ValidationManager.checkAccountEditable(claims);
+                        if (canEdit)
+                        {
 
-                    UpdateUser(UserID, attributeContents);
+                            UpdateUser(UserID, attributeContents);
 
-                }
-                else
-                {
-                    throw new System.ArgumentException("Account cannot be updated", "Claim");
+                        }
+                        else
+                        {
+                            throw new System.ArgumentException("Account cannot be updated", "Claim");
+                        }
+                    }
+                    else
+                    {
+                        throw new System.ArgumentException("Account does not exist", "Database");
+                    }
+                   
                 }
    
             }
@@ -120,15 +143,20 @@ namespace GreetNGroup.Data_Access
         {
             try
             {
+                //Checks for duplicate user names
                 var isDupe = CheckDuplicates(userName);
                 if(isDupe == false)
                 {
+                    //Generates random id
                     string UID = RandomFieldGenerator.generateID();
                     using (var ctx = new GreetNGroupContext())
                     {
                         Console.WriteLine("Insert");
+                        //Generates random password
                         string password = RandomFieldGenerator.generatePassword();
+                        //Creates a new user with given attributes
                         var newUser = new UserTable() { UserName = userName, Password = password, City = city, State = state, Country = country, DoB = DOB, UserId = UID };
+                        //Adds to the table
                         ctx.UserTables.Add(newUser);
                         ctx.SaveChanges();
                     }
@@ -167,10 +195,14 @@ namespace GreetNGroup.Data_Access
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    //Retrieve user claims
                     var Userclaims = ctx.UserClaims
                                    .Where(s => s.UserId == UserID);
+                    //Retrives user 
                     var user = ctx.UserTables.Single(s => s.UserId == UserID);
+                    //Remove claims first because UID is primary key
                     ctx.UserClaims.RemoveRange(Userclaims);
+                    //Delete user next
                     ctx.UserTables.Remove(user);
                     ctx.SaveChanges();
                 }
@@ -181,7 +213,11 @@ namespace GreetNGroup.Data_Access
                 Console.WriteLine(e);
             }
         }
-
+        /// <summary>
+        /// Updates the user with new content
+        /// </summary>
+        /// <param name="UserID">Edited User's user ID</param>
+        /// <param name="attributeContents">List that will replace old user information</param>
         public static void UpdateUser(string UserID, List<string> attributeContents)
         {
             List<string> currentAttributes = new List<string>();
@@ -242,27 +278,6 @@ namespace GreetNGroup.Data_Access
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uID"></param>
-        /// <param name="changeState"></param>
-        public static void ChangeState(string UserID, Boolean changeState)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var user = ctx.UserTables.Single(s => s.UserId == UserID);
-                    user.isActivated = changeState;
-                    ctx.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                //Log excepetion e
-                Console.WriteLine(e);
-            }
-        }
+        
     }
 }
