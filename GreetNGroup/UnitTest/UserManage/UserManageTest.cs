@@ -19,16 +19,15 @@ public class UserManageTest
     public void AddAccount_ValidParameters_Pass()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = false;
+        const bool expected = true;
+        bool actual = false;
         //Act
         try
         {
             Dylan.AddAccount("HowdyYall@gmail.com", "Houston", "TX", "USA", new DateTime(2007, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserName == "HowdyYall@gmail.com").Single();
+                var user = ctx.UserTables.Single(s => s.UserName == "HowdyYall@gmail.com");
                 if (user.UserName.Equals("HowdyYall@gmail.com") && user.City.Equals("Houston") && user.State.Equals("TX") && user.Country.Equals("USA") && (DateTime.Compare(user.DoB, new DateTime(2007, 5, 28)) == 0)) 
                 {
                     actual = true;
@@ -52,20 +51,18 @@ public class UserManageTest
     public void AddAccount_UserNameExist_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         try
         {
             Dylan.AddAccount("HowdyYall@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserName == "HowdyYall@gmail.com").Single();
+                var user = ctx.UserTables.Single(s => s.UserName == "HowdyYall@gmail.com");
                 if (user.UserName.Equals("HowdyYall@gmail.com") && user.City.Equals("Sacramento") && user.State.Equals("CA") && user.Country.Equals("USA") && (DateTime.Compare(user.DoB, new DateTime(2008, 5, 28)) == 0))
                 {
                     Console.WriteLine("Pass");
-                    actual = true;
                 }
                 else
                 {
@@ -86,24 +83,16 @@ public class UserManageTest
     public void AddAccount_WrongClaims_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         try
         {
             Chris.AddAccount("newAccount@gmail.com", "Sacramento", "CA", "USA", new DateTime(2008, 5, 28));
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserName == "newAccount@gmail.com").Count();
-                if(user > 0)
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
+                var user = ctx.UserTables.Count(s => s.UserName == "newAccount@gmail.com");
+                actual = user > 0;
             }
         }
         catch (Exception e)
@@ -120,8 +109,8 @@ public class UserManageTest
     public void AddAccount_InvalidAttributesnull_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         try
         {
@@ -157,8 +146,8 @@ public class UserManageTest
     public void AddAccount_InvalidAttributesEmptyString_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         try
         {
@@ -196,24 +185,16 @@ public class UserManageTest
     public void deleteAccount_Pass()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = false;
+        const bool expected = true;
+        var actual = false;
         //Act
         try
         {
             Dylan.DeleteAccount("test");
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                                .Where(s => s.UserName == "test").Count();
-                if (user > 0)
-                {
-                    actual = false;
-                }
-                else
-                {
-                    actual = true;
-                }
+                var user = ctx.UserTables.Count(s => s.UserName == "test");
+                actual = user > 0;
             }
         }
         catch (Exception e)
@@ -229,22 +210,15 @@ public class UserManageTest
     public void deleteAccount_WrongClaims_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         Chris.DeleteAccount("test");
         using (var ctx = new GreetNGroupContext())
         {
-            var user = ctx.UserTables
-                            .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
-            if(user > 0)
-            {
-                actual = false;
-            }
-            else
-            {
-                actual = true;
-            }
+            var user = ctx.UserTables.Count(s => s.UserName == "dylanchhinn@gmail.com");
+
+            actual = user > 0;
         }
         //Assert
         Assert.AreNotEqual(actual, expected);
@@ -254,22 +228,15 @@ public class UserManageTest
     public void deleteAccount_AccountWrongClaims_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        var actual = true;
         //Act
         Dylan.DeleteAccount("p01q2w9o38ei4r");
         using (var ctx = new GreetNGroupContext())
         {
-            var user = ctx.UserTables
-                          .Where(s => s.UserName == "dylanchhinn@gmail.com").Count();
-            if (user > 0)
-            {
-                actual = false;
-            }
-            else
-            {
-                actual = true;
-            }
+            var user = ctx.UserTables.Count(s => s.UserName == "dylanchhinn@gmail.com");
+
+            actual = user > 0;
         }
         //Assert
         Assert.AreNotEqual(actual, expected);
@@ -279,18 +246,13 @@ public class UserManageTest
     public void deleteAccount_InvalidUserIDNull_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        bool actual = true;
         //Act
         var check = ValidationManager.CheckDeletedAttributes(null);
-        if (check == true)
-        {
-            actual = true;
-        }
-        else
-        {
-            actual = false;
-        }
+
+        actual = check == true;
+
         //Assert
         Assert.AreNotEqual(actual, expected);
     }
@@ -299,18 +261,13 @@ public class UserManageTest
     public void deleteAccount_InvalidUserIDEmptyString_Fail()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        bool actual = true;
         //Act
         var check = ValidationManager.CheckDeletedAttributes("");
-        if (check == true)
-        {
-            actual = true;
-        }
-        else
-        {
-            actual = false;
-        }
+
+        actual = check == true;
+
         //Assert
         Assert.AreNotEqual(actual, expected);
     }
@@ -321,8 +278,8 @@ public class UserManageTest
     public void editUser_ValidString_Pass()
     {
         //Arrange
-        Boolean expected = true;
-        Boolean actual = true;
+        const bool expected = true;
+        bool actual = true;
         var attributesToEdit = new List<string> { "Bob", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
             , "United States", ".", ".", ".", "." };
         //Act
@@ -338,8 +295,8 @@ public class UserManageTest
     public void editUser_ValidString_Fail()
     {
         //Arrange
-        Boolean expected = false;
-        Boolean actual = true;
+        const bool expected = false;
+        bool actual = true;
         var attributesToEdit = new List<string> { "", "Dylan", "bobdylan@gmail.com", "Fountain Valley", "California"
             , "United States", ".", ".", ".", "." };
         //Act
@@ -355,8 +312,8 @@ public class UserManageTest
     public void changeEnable_TruetoFalse_Pass()
     {
         //Arange
-        Boolean expected = false;
-        Boolean actual;
+        const bool expected = false;
+        bool actual;
         var attributesToEdit = new List<string> { ".", ".", ".", ".", "."
             , ".", ".", ".", ".", "false" };
         //Act
@@ -365,16 +322,9 @@ public class UserManageTest
             Dylan.UpdateAccount("p03d928ej2838fo", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserId == "p03d928ej2838fo").Single();
-                if (user.isActivated == false)
-                {
-                    actual = false;
-                }
-                else
-                {
-                    actual = true;
-                }
+                var user = ctx.UserTables.Single(s => s.UserId == "p03d928ej2838fo");
+
+                actual = user.isActivated == false;
             }
         }
         catch (Exception e)
@@ -389,8 +339,8 @@ public class UserManageTest
     public void changeEnable_FalsetoTrue_Pass()
     {
         //Arange
-        Boolean expected = true;
-        Boolean actual;
+        const bool expected = true;
+        bool actual;
         //Act
         try
         {
@@ -399,16 +349,9 @@ public class UserManageTest
             Dylan.UpdateAccount("p0499dj238e92j2", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserId == "p0499dj238e92j2").Single();
-                if (user.isActivated == true)
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
+                var user = ctx.UserTables.Single(s => s.UserId == "p0499dj238e92j2");
+
+                actual = user.isActivated == true;
             }
         }
         catch (Exception e)
@@ -423,8 +366,8 @@ public class UserManageTest
     public void changeEnable_WrongClaim_Pass()
     {
         //Arange
-        Boolean expected = false;
-        Boolean actual;
+        const bool expected = false;
+        bool actual;
         //Act
         try
         {
@@ -432,8 +375,7 @@ public class UserManageTest
             Chris.UpdateAccount("test", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserId == "test").Single();
+                var user = ctx.UserTables.Single(s => s.UserId == "test");
                 if (user.isActivated == false)
                 {
                     actual = false;
@@ -465,16 +407,9 @@ public class UserManageTest
             Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserId == "p01dj9wjd99u3u").Single();
-                if (user.isActivated == false)
-                {
-                    actual = false;
-                }
-                else
-                {
-                    actual = true;
-                }
+                var user = ctx.UserTables.Single(s => s.UserId == "p01dj9wjd99u3u");
+
+                actual = user.isActivated == false;
             }
         }
         catch (Exception e)
@@ -500,8 +435,8 @@ public class UserManageTest
             Chris.UpdateAccount("p01dj9wjd99u3u", attributesToEdit);
             using (var ctx = new GreetNGroupContext())
             {
-                var user = ctx.UserTables
-                              .Where(s => s.UserId == "p01dj9wjd99u3u").Single();
+                var user = ctx.UserTables.Single(s => s.UserId == "p01dj9wjd99u3u");
+
                 var afterUpdatedAttributes = new List<string>();
                 afterUpdatedAttributes.Add(user.FirstName);
                 afterUpdatedAttributes.Add(user.LastName);
@@ -513,15 +448,8 @@ public class UserManageTest
                 afterUpdatedAttributes.Add(user.SecurityQuestion);
                 afterUpdatedAttributes.Add(user.SecurityAnswer);
                 afterUpdatedAttributes.Add(user.isActivated.ToString());
-                if (attributesToEdit.SequenceEqual(afterUpdatedAttributes))
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
 
+                actual = attributesToEdit.SequenceEqual(afterUpdatedAttributes);
             }
         }
         catch (Exception e)
