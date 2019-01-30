@@ -34,7 +34,7 @@ namespace GreetNGroup.Validation
                     if (attributeCheck == true)
                     {
                         //Insert the user in the database
-                        CheckQueries.InsertUser(userName, city, state, country, DOB);
+                        DataBaseInsert.InsertUser(userName, city, state, country, DOB);
                     }
                     else
                     {
