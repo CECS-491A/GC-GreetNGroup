@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GreetNGroup.Data_Access
 {
-    public class DataBaseUpdate
+    public static class DataBaseUpdate
     {
         /// <summary>
         /// Checks if the account can be edited
@@ -57,7 +57,7 @@ namespace GreetNGroup.Data_Access
         /// <param name="attributeContents">List that will replace old user information</param>
         private static void UpdateUser(string userID, List<string> attributeContents)
         {
-            List<string> currentAttributes = new List<string>();
+            var currentAttributes = new List<string>();
             var ctx = new GreetNGroupContext();
 
             //Try statement to fill the variables with user's current attributes

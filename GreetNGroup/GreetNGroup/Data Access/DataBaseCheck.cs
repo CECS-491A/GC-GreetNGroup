@@ -46,11 +46,5 @@ namespace GreetNGroup.Data_Access
                 return true;
             }
         }
-        
-        
-        /*
-         * CheckDeleteClaim and CheckEditClaim will be changed to purely make checks for specific
-         * claims needed to do their function, DataBaseDelete will handle the actual function
-         */
     }
 }
