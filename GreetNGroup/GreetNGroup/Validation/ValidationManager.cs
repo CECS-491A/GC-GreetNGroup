@@ -15,7 +15,7 @@ namespace GreetNGroup.Validation
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New user's Date of birth</param>
-        public static void checkAddToken(List<string> claims, String userName, String city, String state, String country, DateTime DOB)
+        public static void checkAddToken(List<string> claims, string userName, string city, string state, string country, DateTime DOB)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace GreetNGroup.Validation
                 if (canAdd == true)
                 {
                     //validate the passing attributes
-                    var attributeCheck = checkAddAttributes(userName, city, state, country, DOB);
+                    var attributeCheck = CheckAddAttributes(userName, city, state, country, DOB);
                     if (attributeCheck == true)
                     {
                         //Insert the user in the database
@@ -54,30 +54,30 @@ namespace GreetNGroup.Validation
             
 
         }
+        
         /// <summary>
         /// Checks to see if the person who is deleting an account has the right claims
         /// </summary>
         /// <param name="claims">List of claims</param>
-        /// <param name="UID">User ID </param>
-        public static void CheckDeleteToken(List<string> claims, string UID)
+        /// <param name="uID">User ID </param>
+        public static void CheckDeleteToken(List<string> claims, string uID)
         {
             try
             {
                 //Check the required claims
                 Console.WriteLine("hello");
                 string temp = "test";
-                List<string> _requireAdminRights = new List<string> {"AdminRights" };
+                List<string> requireAdminRights = new List<string> {"AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
-                var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+                var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
                 
                 if (canDelete == true)
                 {
                     //Check the passed userid
-                    if(CheckDeletedAttributes(UID) == true)
+                    if(CheckDeletedAttributes(uID) == true)
                     {
-                        //Check user being deleted claim
-                        CheckQueries.CheckDeleteClaim(UID);
+                        DataBaseDelete.CheckDeleteClaim(uID);
                     }
                     
                 }
@@ -92,6 +92,7 @@ namespace GreetNGroup.Validation
             }
             
         }
+        
         public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
             try
             {
@@ -103,10 +104,10 @@ namespace GreetNGroup.Validation
                 currentUserToken.Claims = claims;
                 var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
                 //Check the passed list of attributes
-                if (canEdit && checkEditAttributes(attributeContents))
+                if (canEdit && CheckEditAttributes(attributeContents))
                 {
                     //Check editted account claims
-                    CheckQueries.CheckEditClaim(UserID, attributeContents);
+                    DataBaseCheck.CheckEditClaim(UserID, attributeContents);
                 }
             }
             catch (Exception e)
@@ -124,7 +125,7 @@ namespace GreetNGroup.Validation
         /// <param name="country"></param>
         /// <param name="DOB"></param>
         /// <returns>Whether the inputs are valid or not</returns>
-        public static Boolean checkAddAttributes(String userName, String city, String state, String country, DateTime DOB)
+        public static bool CheckAddAttributes(string userName, string city, string state, string country, DateTime DOB)
         {
             if(userName.Equals(null) || city.Equals(null) || state.Equals(null) || country.Equals(null) || DOB == null)
             {
@@ -143,7 +144,7 @@ namespace GreetNGroup.Validation
         /// </summary>
         /// <param name="UID">The passed userid</param>
         /// <returns>If the input is valid or not</returns>
-        public static Boolean CheckDeletedAttributes(String UID)
+        public static bool CheckDeletedAttributes(string UID)
         {
             try
             {
@@ -153,7 +154,7 @@ namespace GreetNGroup.Validation
                 }
                 if (UID.Equals(""))
                 {
-                    throw new System.ArgumentException("User attributes are not correct emptystring", "Attributes");
+                    throw new System.ArgumentException("User attributes are not correct empty string", "Attributes");
                 }
             }
            catch(Exception e)
@@ -164,39 +165,17 @@ namespace GreetNGroup.Validation
             //Validates Input
             return true;
         }
-        /// <summary>
-        /// Checks if the queried account can be edited
-        /// </summary>
-        /// <param name="items">List of claims the user in the database has</param>
-        /// <returns>Whether or not the account can be changed</returns>
-        public static Boolean checkAccountEditable (List<string> accountBeingEdittedclaims)
-        {
-            string temp = "test";
-            List<string> _requireAdminRights = new List<string> { "AdminRights" };
-            var currentUserToken = new Token(temp);
-            currentUserToken.Claims = accountBeingEdittedclaims;
-            var cantEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
-            Console.WriteLine("hello");
-            if(cantEdit)
-            {
-                return false;
-            }
-            return true;
-        }
+        
         /// <summary>
         /// Checks the current attributes of a new user account
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="city"></param>
-        /// <param name="state"></param>
-        /// <param name="country"></param>
-        /// <param name="DOB"></param>
+        /// <param name="attributeContents"></param>
         /// <returns>Whether the inputs are valid or not</returns>
-        public static Boolean checkEditAttributes(List<string> attributeContents)
+        public static bool CheckEditAttributes(List<string> attributeContents)
         {
-            for(int i = 0; i < attributeContents.Count; i++)
+            foreach(string i in attributeContents)
             {
-                if (String.IsNullOrWhiteSpace(attributeContents[i]))
+                if (string.IsNullOrWhiteSpace(i))
                 {
                     //Log "User attributes cannot be empty"
                     return false;
@@ -205,7 +184,5 @@ namespace GreetNGroup.Validation
             //Validates Input
             return true;
         }
-
     }
-
 }

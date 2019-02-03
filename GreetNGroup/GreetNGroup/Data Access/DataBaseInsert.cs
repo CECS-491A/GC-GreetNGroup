@@ -18,7 +18,7 @@ namespace GreetNGroup.Data_Access
             try
             {
                 //Checks for duplicate user names by checking if it exists
-                var isDupe = CheckQueries.FindUsername(userName);
+                var isDupe = DataBaseCheck.FindUsername(userName);
                 
                 if(isDupe == false)
                 {
@@ -37,7 +37,7 @@ namespace GreetNGroup.Data_Access
                     }
                     using (var ctx = new GreetNGroupContext())
                     {
-                        //Basic Claims everyuser should have
+                        //Basic Claims every user should have
                         var newClaims1 = new UserClaim() { UserId = uID, ClaimId = "0001" };
                         var newClaims2 = new UserClaim() { UserId = uID, ClaimId = "0002" };
                         var newClaims3 = new UserClaim() { UserId = uID, ClaimId = "0003" };
@@ -55,7 +55,22 @@ namespace GreetNGroup.Data_Access
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                //Log excepetion e
+                //Log exception e
+            }
+        }
+        
+        /// <summary>
+        /// Insert claims into user table
+        /// </summary>
+        /// <param name="claimId"> Id to reference claim in database </param>
+        /// <param name="userId"> Id to reference user in database </param>
+        public static void InsertClaimsInUser(string claimId, string userId)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var claim = new UserClaim() { UserId = userId, ClaimId = claimId };
+                ctx.UserClaims.Add(claim);
+                ctx.SaveChanges();
             }
         }
     }

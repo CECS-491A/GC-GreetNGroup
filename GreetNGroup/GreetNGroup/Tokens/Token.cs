@@ -23,7 +23,7 @@ namespace GreetNGroup.Tokens
         public Token(string id)
         {
             UserId = id;
-            Claims = DataBaseQueries.FindClaimsFromUser(id);
+            Claims = DataBaseQueries.ListUserClaims(id);
             revokeDate = DateTime.Today.AddDays(1);
             /*
              * The unique key here is temporary -- will later be used for

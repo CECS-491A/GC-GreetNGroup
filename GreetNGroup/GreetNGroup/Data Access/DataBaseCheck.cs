@@ -2,11 +2,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GreetNGroup.Claim_Controls;
+using GreetNGroup.Tokens;
 
 namespace GreetNGroup.Data_Access
 {
-    public static class CheckQueries
+    public static class DataBaseCheck
     {
+        /// <summary>
+        /// This function checks a userId's claims with the claim specified in the argument
+        /// returns true when the claim exists, else false
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="claimToCheck"></param>
+        /// <returns></returns>
+        public static bool FindClaim (string userId, string claimToCheck)
+        {
+            var claimsReq = new List<string> { claimToCheck };
+            var currentUserToken = new Token(userId);
+            var foundClaim = ClaimsAuthorization.VerifyClaims(currentUserToken, claimsReq);
+            
+            return foundClaim;
+        }
+        
         /// <summary>
         /// Finds a username from the database
         /// </summary>
@@ -36,74 +54,29 @@ namespace GreetNGroup.Data_Access
          */
         
         
-        
-        /// <summary>
-        /// Checks the claims of the account that is going to be deleted
-        /// </summary>
-        /// <param name="userID">Delete account user ID</param>
-        public static void CheckDeleteClaim(string userID)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    //Checks if the account exist/has any claims
-                    var userClaims = ctx.UserClaims.Count(s => s.UserId == userID);
-                    if (userClaims > 0)
-                    {
-                        //turn claims into a list
-                        List<string> checkClaims = DataBaseQueries.FindClaimsFromUser(userID);
-                        //Checks if the account can be deleted
-                        bool canDelete = ValidationManager.checkAccountEditable(checkClaims);
-                        
-                        if (canDelete == true)
-                        {
-                            
-                            
-                            // Will have to edit here
-                            
-                            
-                            //DeleteUser(userID);
-                        }
-                        else
-                        {
-                            throw new System.ArgumentException("Account cannot be deleted", "Claim");
-                        }                     
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("user ID doesn't exist exist", "Database");
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                //Log Excepetion
-                Console.WriteLine(e);
-            }
-        }
+
         
         /// <summary>
         /// Checks if the account can be edited
         /// </summary>
-        /// <param name="UserID">Editted Accounts user id</param>
+        /// <param name="UserID">Edited Accounts user id</param>
         /// <param name="attributeContents">List of attributes that will replace current attributes</param>
-        public static void CheckEditClaim(string UserID, List<string> attributeContents)
+        public static void CheckEditClaim(string userID, List<string> attributeContents)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
                     //Checks if the account exist/has any claims
-                    var user = ctx.UserTables.Count(s => s.UserId == UserID);
+                    var user = ctx.UserTables.Count(s => s.UserId == userID);
                     if(user != 0)
                     {
                         //Retrive user claims
-                        var userClaims = ctx.UserClaims.Count(s => s.UserId == UserID);
+                        var userClaims = ctx.UserClaims.Count(s => s.UserId == userID);
                         //Turns claims into a list
-                        var claims = DataBaseQueries.FindClaimsFromUser(UserID);
+                        var claims = DataBaseQueries.ListUserClaims(userID);
                         //Check if account can be edited
-                        Boolean canEdit = ValidationManager.checkAccountEditable(claims);
+                        bool canEdit = ValidationManager.checkAccountEditable(claims);
                         if (canEdit)
                         {
                             
@@ -125,7 +98,7 @@ namespace GreetNGroup.Data_Access
             }
             catch (Exception e)
             {
-                //Log Excepetion
+                //Log Exception
                 Console.WriteLine(e);
             }
         }    
