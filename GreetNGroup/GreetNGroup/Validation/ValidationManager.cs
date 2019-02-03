@@ -15,17 +15,23 @@ namespace GreetNGroup.Validation
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New user's Date of birth</param>
-        public static void checkAddToken(List<string> claims, string userName, string city, string state, string country, DateTime DOB)
+        public static void CheckAddToken(List<string> claims, string userName, string city, string state, string country, DateTime DOB)
         {
             try
             {
                 //Check the required claims
                 string temp = "test";
-                List<string> _requireAdminRights = new List<string> { "AdminRights" };
+                var requireAdminRights = new List<string> { "AdminRights" };
                 var currentUserToken = new Token(temp);
+                
+                
+                // Don't do this
                 currentUserToken.Claims = claims;
-                //Compare currrent user's claim
-                var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+                
+                
+                
+                //Compare current user's claim
+                var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
                 //If they have the claims they will be able to create a new account but if they don't the function will throw an error
                 if (canAdd == true)
                 {
@@ -77,13 +83,13 @@ namespace GreetNGroup.Validation
                     //Check the passed userid
                     if(CheckDeletedAttributes(uID) == true)
                     {
-                        DataBaseDelete.CheckDeleteClaim(uID);
+                        DataBaseDelete.DeleteUser(uID);
                     }
                     
                 }
                 else
                 {
-                    throw new System.ArgumentException("User does not have the right Claims", "Claims");
+                    throw new System.ArgumentException("User does not have the right Claims");
                 }
             }
             catch(Exception e)
@@ -97,17 +103,18 @@ namespace GreetNGroup.Validation
             try
             {
                 //Check current user's claims
-                Console.WriteLine("Editing User");
-                string temp = "test";
-                List<string> _requireAdminRights = new List<string> { "AdminRights" };
+                Console.WriteLine("Updating User");
+                var temp = "test";
+                var requireAdminRights = new List<string> { "AdminRights" };
                 var currentUserToken = new Token(temp);
                 currentUserToken.Claims = claims;
-                var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, _requireAdminRights);
+                var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
+                
                 //Check the passed list of attributes
                 if (canEdit && CheckEditAttributes(attributeContents))
                 {
-                    //Check editted account claims
-                    DataBaseCheck.CheckEditClaim(UserID, attributeContents);
+                    //Check edited account claims
+                    DataBaseUpdate.TryUpdateUser(UserID, attributeContents);
                 }
             }
             catch (Exception e)

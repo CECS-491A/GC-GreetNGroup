@@ -51,54 +51,21 @@ namespace GreetNGroup.Data_Access
                     {
                         // Stores Claims into a list
                         var claimsList = DataBaseQueries.ListUserClaims(userID);
-                        // Checks if the account can be deleted
-                        
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                
-            }
-        }
-        
-        /// <summary>
-        /// Checks the claims of the account that is going to be deleted
-        /// </summary>
-        /// <param name="userID">Delete account user ID</param>
-        public static void CheckDeleteClaim(string userID)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    //Checks if the account exist/has any claims
-                    var userClaims = ctx.UserClaims.Count(s => s.UserId == userID);
-                    if (userClaims > 0)
-                    {
-                        //turn claims into a list
-                        List<string> checkClaims = DataBaseQueries.ListUserClaims(userID);
-                        
-                        //Checks if the account can be deleted
-                        bool canDelete = ValidationManager.checkAccountEditable(checkClaims);
-                        
-                        if (canDelete == true)
+                        // Only non admins can be edited by admins
+                        var adminRights = DataBaseCheck.FindClaim(userID, "AdminRights");
+
+                        if (!adminRights)
                         {
-                            
-                            
-                            // Will have to edit here
-                            
-                            
-                            //DeleteUser(userID);
+                            DeleteUser(userID);
                         }
                         else
                         {
-                            throw new System.ArgumentException("Account cannot be deleted", "Claim");
-                        }                     
+                            throw new System.ArgumentException("Account cannot be deleted");
+                        }   
                     }
                     else
                     {
-                        throw new System.ArgumentException("user ID doesn't exist exist", "Database");
+                        throw new System.ArgumentException("userID doesn't exist");
                     }
                 }
             }

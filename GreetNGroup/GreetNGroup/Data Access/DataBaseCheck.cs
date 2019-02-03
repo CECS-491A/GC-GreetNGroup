@@ -52,55 +52,5 @@ namespace GreetNGroup.Data_Access
          * CheckDeleteClaim and CheckEditClaim will be changed to purely make checks for specific
          * claims needed to do their function, DataBaseDelete will handle the actual function
          */
-        
-        
-
-        
-        /// <summary>
-        /// Checks if the account can be edited
-        /// </summary>
-        /// <param name="UserID">Edited Accounts user id</param>
-        /// <param name="attributeContents">List of attributes that will replace current attributes</param>
-        public static void CheckEditClaim(string userID, List<string> attributeContents)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    //Checks if the account exist/has any claims
-                    var user = ctx.UserTables.Count(s => s.UserId == userID);
-                    if(user != 0)
-                    {
-                        //Retrive user claims
-                        var userClaims = ctx.UserClaims.Count(s => s.UserId == userID);
-                        //Turns claims into a list
-                        var claims = DataBaseQueries.ListUserClaims(userID);
-                        //Check if account can be edited
-                        bool canEdit = ValidationManager.checkAccountEditable(claims);
-                        if (canEdit)
-                        {
-                            
-                            // Will have to edit here
-                            
-                            
-                            //UpdateUser(UserID, attributeContents);
-                        }
-                        else
-                        {
-                            throw new System.ArgumentException("Account cannot be updated", "Claim");
-                        }
-                    }
-                    else
-                    {
-                        throw new System.ArgumentException("Account does not exist", "Database");
-                    }                   
-                }
-            }
-            catch (Exception e)
-            {
-                //Log Exception
-                Console.WriteLine(e);
-            }
-        }    
     }
 }

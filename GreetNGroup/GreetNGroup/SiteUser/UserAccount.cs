@@ -17,8 +17,7 @@ namespace GreetNGroup.SiteUser
         private string City;
         private string State;
         private string Country;
-        private Boolean isEnabled;
-        //internal List<ClaimsPool.Claims> claimsList;
+        private bool isEnabled;
 
         // will need to define how to assign claims to user
         private List<string> Claims { get; set; }
@@ -39,6 +38,7 @@ namespace GreetNGroup.SiteUser
             accountLvl = 1;
             Enable = true;
         }
+        
         /// <summary>
         /// Constructor to set up a user account
         /// </summary>
@@ -129,7 +129,7 @@ namespace GreetNGroup.SiteUser
         public void AddAccount(String userName, String city, String state, String country, DateTime DOB)
         {
             //Check the current user's claim first
-            ValidationManager.checkAddToken(Claims, userName, city, state, country, DOB);
+            ValidationManager.CheckAddToken(Claims, userName, city, state, country, DOB);
 
         }
         /// <summary>
