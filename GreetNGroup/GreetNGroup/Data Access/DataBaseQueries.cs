@@ -5,6 +5,12 @@ namespace GreetNGroup.Data_Access
 {
     public static class DataBaseQueries
     {
+        public static bool IsCurrentUsername(string username)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+            }
+        }
         #region Claim Queries
 
         /// <summary>
