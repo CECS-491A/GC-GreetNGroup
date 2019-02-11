@@ -15,23 +15,14 @@ namespace GreetNGroup.Validation
         /// <param name="state">New State Location</param>
         /// <param name="country">New Country Location</param>
         /// <param name="DOB">New user's Date of birth</param>
-        public static void CheckAddToken(List<string> claims, string userName, string city, string state, string country, DateTime DOB)
+        public static void CheckAddToken(string jwt, string userName, string city, string state, string country, DateTime DOB)
         {
             try
             {
-                //Check the required claims
-                string temp = "test";
-                var requireAdminRights = new List<string> { "AdminRights" };
-                var currentUserToken = new Token(temp);
-                
-                
-                // Don't do this
-                currentUserToken.Claims = claims;
-                
-                
-                
-                //Compare current user's claim
-                var canAdd = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
+
+                //read jwt here and check claims
+
+                var canAdd = true;
                 //If they have the claims they will be able to create a new account but if they don't the function will throw an error
                 if (canAdd == true)
                 {
@@ -60,23 +51,19 @@ namespace GreetNGroup.Validation
             
 
         }
-        
+
+
         /// <summary>
         /// Checks to see if the person who is deleting an account has the right claims
         /// </summary>
         /// <param name="claims">List of claims</param>
         /// <param name="uID">User ID </param>
-        public static void CheckDeleteToken(List<string> claims, string uID)
+        public static void CheckDeleteToken(string jwt, string uID)
         {
             try
             {
-                //Check the required claims
-                Console.WriteLine("hello");
-                string temp = "test";
-                List<string> requireAdminRights = new List<string> {"AdminRights" };
-                var currentUserToken = new Token(temp);
-                currentUserToken.Claims = claims;
-                var canDelete = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
+                //Read jwt here and check claims
+                var canDelete = true;
                 
                 if (canDelete == true)
                 {
@@ -99,16 +86,13 @@ namespace GreetNGroup.Validation
             
         }
         
-        public static void CheckEditToken(List<string> claims, string UserID, List<string> attributeContents) { 
+        public static void CheckEditToken(string jwt, string UserID, List<string> attributeContents) { 
             try
             {
-                //Check current user's claims
+                //Read jwt here and check claims
                 Console.WriteLine("Updating User");
-                var temp = "test";
-                var requireAdminRights = new List<string> { "AdminRights" };
-                var currentUserToken = new Token(temp);
-                currentUserToken.Claims = claims;
-                var canEdit = ClaimsAuthorization.VerifyClaims(currentUserToken, requireAdminRights);
+
+                var canEdit = true;
                 
                 //Check the passed list of attributes
                 if (canEdit && CheckEditAttributes(attributeContents))
