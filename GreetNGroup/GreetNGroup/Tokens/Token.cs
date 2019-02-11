@@ -12,6 +12,8 @@ namespace GreetNGroup.Tokens
     {
         private DateTime revokeDate;
         public string UserId { get; set; }
+        public string userName { get; set; }
+        public string password { get; set; }
         public List<string> Claims{ get; set; }
         public string uniqueKey;
         
@@ -23,6 +25,8 @@ namespace GreetNGroup.Tokens
         public Token(string id)
         {
             UserId = id;
+            userName = DataBaseQueries.CurrentUsername(id);
+            password = DataBaseQueries.CurrentPassword(id);
             Claims = DataBaseQueries.ListUserClaims(id);
             revokeDate = DateTime.Today.AddDays(1);
             /*

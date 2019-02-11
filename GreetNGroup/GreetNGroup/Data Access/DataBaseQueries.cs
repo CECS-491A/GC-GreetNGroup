@@ -5,11 +5,26 @@ namespace GreetNGroup.Data_Access
 {
     public static class DataBaseQueries
     {
-        public static bool IsCurrentUsername(string username)
+        public static string CurrentPassword(string userID)
         {
+            string userPassword = "";
             using (var ctx = new GreetNGroupContext())
             {
+                string passwordInDB = ctx.UserTables.Where(p => userID.Contains(p.Password)).ToString();
+                userPassword = passwordInDB;
             }
+            return userPassword;
+        }
+
+        public static string CurrentUsername(string userID)
+        {
+            string userName = "";
+            using (var ctx = new GreetNGroupContext())
+            {
+                string userNameInDB = ctx.UserTables.Where(u => userID.Contains(u.UserName)).ToString();
+                userName = userNameInDB;
+            }
+            return userName;
         }
         #region Claim Queries
 
