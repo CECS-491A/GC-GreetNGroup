@@ -1,5 +1,7 @@
+
 namespace GreetNGroup
 {
+
     using System.Data.Entity;
     public partial class GreetNGroupContext : DbContext
     {

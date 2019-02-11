@@ -8,8 +8,8 @@ namespace GreetNGroup.UserManage
     /// </summary>
     public interface IUserManager
     {
-        void AddAccount(String userName, String city, String state, String country, DateTime DOB);
-        void DeleteAccount(string UID);
-        void UpdateAccount(string UserID, List<string> changedAttributes);
+        void AddAccount(string jwt, string userName, string city, string state, string country, DateTime DOB);
+        void DeleteAccount(string jwt, string UID);
+        void UpdateAccount(string jwt, string UserID, List<string> changedAttributes);
     }
 }
