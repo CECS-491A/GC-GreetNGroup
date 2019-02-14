@@ -1,6 +1,6 @@
 using System;
 using GreetNGroup.Account_Fields_Random_Generator;
-
+using GreetNGroup.Models;
 namespace GreetNGroup.Data_Access
 {
     public class DataBaseInsert

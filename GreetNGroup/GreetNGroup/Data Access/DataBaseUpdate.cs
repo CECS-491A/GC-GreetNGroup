@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GreetNGroup.Models;
 
 namespace GreetNGroup.Data_Access
 {
@@ -27,7 +28,6 @@ namespace GreetNGroup.Data_Access
                         var claims = DataBaseQueries.ListUserClaims(userID);
                         // Only non admins can be edited by admins
                         var adminRights = DataBaseCheck.FindClaim(userID, "AdminRights");
-                        
                         if (!adminRights)
                         {
                             UpdateUser(userID, attributeContents);
@@ -58,12 +58,11 @@ namespace GreetNGroup.Data_Access
         private static void UpdateUser(string userID, List<string> attributeContents)
         {
             var currentAttributes = new List<string>();
-            var ctx = new GreetNGroupContext();
 
             //Try statement to fill the variables with user's current attributes
             try
             {
-                using (ctx)
+                using (var ctx = new GreetNGroupContext())
                 {
                     var userToUpdate = ctx.UserTables.Single(s => s.UserId == userID);
                     currentAttributes.Add(userToUpdate.FirstName);
@@ -97,7 +96,7 @@ namespace GreetNGroup.Data_Access
             //Try statement update the user in the database
             try
             {
-                using (ctx)
+                using (var ctx = new GreetNGroupContext())
                 {
                     var userToUpdate = ctx.UserTables.Single(s => s.UserId == userID);
                     userToUpdate.FirstName = currentAttributes[0];
@@ -117,6 +116,7 @@ namespace GreetNGroup.Data_Access
             }
             catch(Exception e)
             {
+                Console.WriteLine(e);
                 //log
             }
         } 
