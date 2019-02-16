@@ -193,8 +193,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="CfModels\Claim.cs" />
-    <Compile Include="CfModels\GngContext.cs" />
+    <Compile Include="CfModels\GreetNGroupContext.cs" />
     <Compile Include="CfModels\User.cs" />
+    <Compile Include="CfModels\UserClaim.cs" />
     <Compile Include="Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -209,6 +210,14 @@
     <Compile Include="Migrations\201902140914402_CreateUser.cs" />
     <Compile Include="Migrations\201902140914402_CreateUser.Designer.cs">
       <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160451473_CreateClaim.cs" />
+    <Compile Include="Migrations\201902160451473_CreateClaim.Designer.cs">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160524226_UserClaim.cs" />
+    <Compile Include="Migrations\201902160524226_UserClaim.Designer.cs">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -332,6 +341,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201902140914402_CreateUser.resx">
       <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160451473_CreateClaim.resx">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160524226_UserClaim.resx">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
