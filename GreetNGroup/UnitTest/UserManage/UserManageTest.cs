@@ -12,6 +12,7 @@ public class UserManageTest
     UserAccount Dylan = new UserAccount();
     UserAccount Chris = new UserAccount();
 
+    /*
     #region Adding Account
     [TestMethod]
     public void AddAccount_ValidParameters_Pass()
@@ -458,5 +459,5 @@ public class UserManageTest
         Assert.AreNotEqual(actual, expected);
     }
     #endregion
-
+    */
 }
