@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.CfModels
+namespace GreetNGroup.DataAccess
 {
     [Table("User")]
     public class User
@@ -10,6 +10,23 @@ namespace GreetNGroup.CfModels
         public User()
         {
             IsActivated = true;
+        }
+
+        public User(string uId, string firstName, string lastName, string userName, string password, string city,
+                    string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
+        {
+            UserId = uId;
+            FirstName = firstName;
+            LastName = lastName;
+            UserName = userName;
+            Password = password;
+            City = city;
+            State = state;
+            Country = country;
+            DoB = dob;
+            SecurityQuestion = securityQ;
+            SecurityAnswer = securityA;
+            IsActivated = isActivated;
         }
 
         [Key]

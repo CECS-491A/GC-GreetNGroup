@@ -5,14 +5,14 @@ namespace GreetNGroup.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<GreetNGroup.CfModels.GreetNGroupContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<GreetNGroup.DataAccess.GreetNGroupContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(GreetNGroup.CfModels.GreetNGroupContext context)
+        protected override void Seed(GreetNGroup.DataAccess.GreetNGroupContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Ajax.Utilities;
 
-namespace GreetNGroup.CfModels.Repository.RepoInterfaces
+namespace GreetNGroup.DataAccess.Repository.RepoInterfaces
 {
     /*
      * This will be following the generic Repository Pattern

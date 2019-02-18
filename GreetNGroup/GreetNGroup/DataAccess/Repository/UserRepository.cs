@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using GreetNGroup.CfModels.Repository.RepoInterfaces;
+using GreetNGroup.DataAccess.Repository.RepoInterfaces;
 
-namespace GreetNGroup.CfModels.Repository
+namespace GreetNGroup.DataAccess.Repository
 {
     /// <summary>
     /// This is a application specific repository used for specific data(User) of this context

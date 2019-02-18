@@ -192,17 +192,23 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="CfModels\Claim.cs" />
-    <Compile Include="CfModels\Event.cs" />
-    <Compile Include="CfModels\GreetNGroupContext.cs" />
-    <Compile Include="CfModels\Repository\RepoInterfaces\IRepository.cs" />
-    <Compile Include="CfModels\Repository\RepoInterfaces\IUserClaimRepository.cs" />
-    <Compile Include="CfModels\Repository\RepoInterfaces\IUserRepository.cs" />
-    <Compile Include="CfModels\Repository\Repository.cs" />
-    <Compile Include="CfModels\Repository\UserClaimRepository.cs" />
-    <Compile Include="CfModels\Repository\UserRepository.cs" />
-    <Compile Include="CfModels\User.cs" />
-    <Compile Include="CfModels\UserClaim.cs" />
+    <Compile Include="DataAccess\Claim.cs" />
+    <Compile Include="DataAccess\Event.cs" />
+    <Compile Include="DataAccess\GreetNGroupContext.cs" />
+    <Compile Include="DataAccess\Queries\DbCheck.cs" />
+    <Compile Include="DataAccess\Queries\DbInsert.cs" />
+    <Compile Include="DataAccess\Repository\ClaimRepository.cs" />
+    <Compile Include="DataAccess\Repository\RepoInterfaces\IClaimRepository.cs" />
+    <Compile Include="DataAccess\Repository\RepoInterfaces\IRepository.cs" />
+    <Compile Include="DataAccess\Repository\RepoInterfaces\IUserClaimRepository.cs" />
+    <Compile Include="DataAccess\Repository\RepoInterfaces\IUserRepository.cs" />
+    <Compile Include="DataAccess\Repository\Repository.cs" />
+    <Compile Include="DataAccess\Repository\UserClaimRepository.cs" />
+    <Compile Include="DataAccess\Repository\UserRepository.cs" />
+    <Compile Include="DataAccess\Repository\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="DataAccess\Repository\UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="DataAccess\User.cs" />
+    <Compile Include="DataAccess\UserClaim.cs" />
     <Compile Include="Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -229,6 +235,10 @@
     <Compile Include="Migrations\201902171042088_Event.cs" />
     <Compile Include="Migrations\201902171042088_Event.Designer.cs">
       <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902180118064_CreateClaim.cs" />
+    <Compile Include="Migrations\201902180118064_CreateClaim.Designer.cs">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -361,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902171042088_Event.resx">
       <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902180118064_CreateClaim.resx">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

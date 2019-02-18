@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using GreetNGroup.CfModels.Repository.RepoInterfaces;
+using GreetNGroup.DataAccess.Repository.RepoInterfaces;
 
-namespace GreetNGroup.CfModels.Repository
+namespace GreetNGroup.DataAccess.Repository
 {
     public class UserClaimRepository : Repository<UserClaim>, IUserClaimRepository
     {

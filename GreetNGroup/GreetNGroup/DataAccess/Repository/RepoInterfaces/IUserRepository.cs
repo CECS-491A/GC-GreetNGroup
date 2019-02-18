@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreetNGroup.CfModels.Repository.RepoInterfaces
+namespace GreetNGroup.DataAccess.Repository.RepoInterfaces
 {
-    interface IUserRepository : IRepository<User>
+    public interface IUserRepository : IRepository<User>
     {
         User FindUserByUserId(string id);
     }

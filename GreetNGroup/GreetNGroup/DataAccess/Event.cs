@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.CfModels
+namespace GreetNGroup.DataAccess
 {
     [Table("Event")]
     public class Event

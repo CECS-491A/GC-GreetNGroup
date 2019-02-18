@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.CfModels
+namespace GreetNGroup.DataAccess
 {
     [Table("UserClaim")]
     public class UserClaim
@@ -13,7 +13,7 @@ namespace GreetNGroup.CfModels
         public User User { get; set; }
 
         [Required, ForeignKey("Claim"), Column(Order = 2), Key]
-        public virtual string ClaimId { get; set; }
+        public virtual int ClaimId { get; set; }
         public Claim Claim { get; set; }
     }
 }
