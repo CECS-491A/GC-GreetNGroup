@@ -194,19 +194,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="DataAccess\Claim.cs" />
     <Compile Include="DataAccess\Event.cs" />
+    <Compile Include="DataAccess\EventTag.cs" />
     <Compile Include="DataAccess\GreetNGroupContext.cs" />
     <Compile Include="DataAccess\Queries\DbCheck.cs" />
     <Compile Include="DataAccess\Queries\DbInsert.cs" />
-    <Compile Include="DataAccess\Repository\ClaimRepository.cs" />
-    <Compile Include="DataAccess\Repository\RepoInterfaces\IClaimRepository.cs" />
-    <Compile Include="DataAccess\Repository\RepoInterfaces\IRepository.cs" />
-    <Compile Include="DataAccess\Repository\RepoInterfaces\IUserClaimRepository.cs" />
-    <Compile Include="DataAccess\Repository\RepoInterfaces\IUserRepository.cs" />
-    <Compile Include="DataAccess\Repository\Repository.cs" />
-    <Compile Include="DataAccess\Repository\UserClaimRepository.cs" />
-    <Compile Include="DataAccess\Repository\UserRepository.cs" />
-    <Compile Include="DataAccess\Repository\UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="DataAccess\Repository\UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="DataAccess\Tag.cs" />
     <Compile Include="DataAccess\User.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
     <Compile Include="Data Access\DataBaseCheck.cs" />
@@ -217,6 +209,7 @@
     <Compile Include="Data Access\DataBaseInsert.cs" />
     <Compile Include="Data Access\DataBaseQueries.cs" />
     <Compile Include="Data Access\DataBaseUpdate.cs" />
+    <Compile Include="DataAccess\UserTag.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -239,6 +232,14 @@
     <Compile Include="Migrations\201902180118064_CreateClaim.cs" />
     <Compile Include="Migrations\201902180118064_CreateClaim.Designer.cs">
       <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.cs" />
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.Designer.cs">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190738255_UserTag.cs" />
+    <Compile Include="Migrations\201902190738255_UserTag.Designer.cs">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -312,7 +313,9 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -374,6 +377,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902180118064_CreateClaim.resx">
       <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190730533_eventTagAndTag.resx">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190738255_UserTag.resx">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
