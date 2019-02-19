@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using GreetNGroup.Models;
 namespace GreetNGroup.Data_Access
 {
     public static class DataBaseQueries

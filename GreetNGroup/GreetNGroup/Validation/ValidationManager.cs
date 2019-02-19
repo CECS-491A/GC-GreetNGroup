@@ -164,16 +164,25 @@ namespace GreetNGroup.Validation
         /// <returns>Whether the inputs are valid or not</returns>
         public static bool CheckEditAttributes(List<string> attributeContents)
         {
-            foreach(string i in attributeContents)
+            try
             {
-                if (string.IsNullOrWhiteSpace(i))
+                foreach (string i in attributeContents)
                 {
-                    //Log "User attributes cannot be empty"
-                    return false;
+                    if (string.IsNullOrWhiteSpace(i))
+                    {
+                        //Log "User attributes cannot be empty"
+                        throw new System.ArgumentException("User attributes are not correct empty stringor null", "Attributes");
+                    }
                 }
+                //Validates Input
+                return true;
             }
-            //Validates Input
-            return true;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                //Log error
+                return false;
+            }
         }
     }
 }

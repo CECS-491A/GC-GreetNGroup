@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GreetNGroup.Models;
 using GreetNGroup.Validation;
 
 namespace GreetNGroup.Data_Access
@@ -18,11 +19,11 @@ namespace GreetNGroup.Data_Access
                 using (var ctx = new GreetNGroupContext())
                 {
                     //Retrieve user claims
-                    var Userclaims = ctx.UserClaims.Where(s => s.UserId == userID);
+                    var userClaims = ctx.UserClaims.Where(s => s.UserId == userID);
                     //Retrieves user 
                     var user = ctx.UserTables.Single(s => s.UserId == userID);
                     //Remove claims first because UID is primary key
-                    ctx.UserClaims.RemoveRange(Userclaims);
+                    ctx.UserClaims.RemoveRange(userClaims);
                     //Delete user next
                     ctx.UserTables.Remove(user);
                     ctx.SaveChanges();
