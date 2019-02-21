@@ -16,6 +16,17 @@ namespace GreetNGroup.Data_Access
             return userPassword;
         }
 
+        public static string CheckIfUserExists(string userName)
+        {
+            string userID = "";
+            using (var ctx = new GreetNGroupContext())
+            {
+                string userNameInDB = ctx.UserTables.Where(id => userName.Contains(id.UserId)).ToString();
+                userID = userNameInDB;
+            }
+            return userID;
+        }
+
         public static string CurrentUsername(string userID)
         {
             string userName = "";
