@@ -1,10 +1,9 @@
-﻿using GreetNGroup.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GreetNGroup.Claim_Controls;
 using GreetNGroup.Tokens;
-using GreetNGroup;
+using GreetNGroup.Models;
 
 namespace GreetNGroup.Data_Access
 {

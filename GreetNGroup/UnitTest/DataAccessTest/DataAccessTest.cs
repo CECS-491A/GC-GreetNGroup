@@ -1,16 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using GreetNGroup.Claim_Controls;
-using GreetNGroup.Tokens;
-using GreetNGroup.SiteUser;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GreetNGroup;
-using GreetNGroup.Data_Access;
+using GreetNGroup.DataAccess.Queries;
 
-namespace UnitTest.ClaimsTest
+namespace UnitTest.DataAccessTest
 {
     [TestClass]
-    public class ClaimTest
+    public class DataAccessTest
     {
         #region Testable Required Fields
         private string _userId1 = "19452746";
@@ -19,7 +14,37 @@ namespace UnitTest.ClaimsTest
         #endregion
         
         #region Pass Tests
+
         [TestMethod]
+        public void TestInsertUserPass()
+        {
+            // Arrange
+            const bool expected = true;
+            var actual = false;
+
+            // Act
+            var uId = "p01dj9wjd99u3u";
+            var firstName = "Eric";
+            var lastName = "Lee";
+            var userName = "eric.lee@fakemail.com";
+            var password = "badpassword5!";
+            var city = "Long Beach";
+            var state = "California";
+            var country = "United States";
+            var dob = DateTime.Parse("09/19/1997");
+            var securityQ = "What is your favorite soda?";
+            var securityA = "Dr. Peps";
+            var isActivated = true;
+
+            DbInsert.InsertUser(uId, firstName, lastName, userName, password, city, state, country, dob, securityQ,
+                securityA, isActivated);
+            actual = DbCheck.FindUsername("p01dj9wjd99u3u");
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        /*
         public void RequireViewAndSystemAdminPass()
         {
             // Arrange
@@ -52,9 +77,12 @@ namespace UnitTest.ClaimsTest
             // Assert
             Assert.AreEqual(expected, actual);
         }
+        */
         #endregion
-        
+
         #region Fail Tests
+
+        /*
         [TestMethod]
         public void RequireCreateAndViewClaimsFail()
         {
@@ -88,7 +116,7 @@ namespace UnitTest.ClaimsTest
             // Assert
             Assert.AreEqual(expected, actual);
         }
-        
+        */
         #endregion
     }
 }

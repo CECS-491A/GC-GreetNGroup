@@ -25,7 +25,7 @@ namespace GreetNGroup.SiteUser
             
             if (ClaimsAuthorization.VerifyClaims(editor, systemAdminExclude))
             {
-                userAcc.addClaim(claim);
+                //userAcc.addClaim(claim);
             }
             // add return for false here
         }
