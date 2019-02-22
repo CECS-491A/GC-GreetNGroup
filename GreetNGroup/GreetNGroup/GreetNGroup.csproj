@@ -198,6 +198,7 @@
     <Compile Include="DataAccess\GreetNGroupContext.cs" />
     <Compile Include="DataAccess\Queries\DbCheck.cs" />
     <Compile Include="DataAccess\Queries\DbInsert.cs" />
+    <Compile Include="DataAccess\Queries\DbUpdate.cs" />
     <Compile Include="DataAccess\Tag.cs" />
     <Compile Include="DataAccess\User.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
