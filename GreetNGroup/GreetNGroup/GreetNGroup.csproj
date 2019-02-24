@@ -192,8 +192,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="DataAccess\Attendance.cs" />
     <Compile Include="DataAccess\Claim.cs" />
     <Compile Include="DataAccess\Event.cs" />
+    <Compile Include="DataAccess\EventRole.cs" />
     <Compile Include="DataAccess\EventTag.cs" />
     <Compile Include="DataAccess\GreetNGroupContext.cs" />
     <Compile Include="DataAccess\Queries\DbCheck.cs" />
@@ -202,14 +204,18 @@
     <Compile Include="DataAccess\Tag.cs" />
     <Compile Include="DataAccess\User.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
-    <Compile Include="Data Access\DataBaseCheck.cs" />
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unused\Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Data Access\DataBaseDelete.cs" />
-    <Compile Include="Data Access\DataBaseInsert.cs" />
-    <Compile Include="Data Access\DataBaseQueries.cs" />
-    <Compile Include="Data Access\DataBaseUpdate.cs" />
+    <Compile Include="Unused\Data Access\DataBaseDelete.cs" />
+    <Compile Include="Unused\Data Access\DataBaseInsert.cs" />
+    <Compile Include="Unused\Data Access\DataBaseQueries.cs" />
+    <Compile Include="Unused\Data Access\DataBaseUpdate.cs" />
     <Compile Include="DataAccess\UserTag.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -384,6 +390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902190738255_UserTag.resx">
       <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902240832218_AttendeesAndRoles.resx">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

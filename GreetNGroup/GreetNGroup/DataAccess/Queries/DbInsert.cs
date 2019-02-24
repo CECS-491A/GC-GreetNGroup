@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace GreetNGroup.DataAccess.Queries
 {
@@ -51,6 +48,25 @@ namespace GreetNGroup.DataAccess.Queries
                 var claim = new Claim(claimId, claimName);
 
                 ctx.Claims.Add(claim);
+
+                ctx.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Inserts an event into the database of events
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="eventId"></param>
+        /// <param name="startDate"></param>
+        /// <param name="eventName"></param>
+        public static void InsertEvent(string userId, string eventId, DateTime startDate, string eventName)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var userEvent = new Event(userId, eventId, startDate, eventName);
+
+                ctx.Events.Add(userEvent);
 
                 ctx.SaveChanges();
             }
