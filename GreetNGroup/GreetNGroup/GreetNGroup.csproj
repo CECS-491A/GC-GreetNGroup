@@ -192,17 +192,63 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Data Access\DataBaseCheck.cs" />
+    <Compile Include="DataAccess\Attendance.cs" />
+    <Compile Include="DataAccess\Claim.cs" />
+    <Compile Include="DataAccess\Event.cs" />
+    <Compile Include="DataAccess\EventRole.cs" />
+    <Compile Include="DataAccess\EventTag.cs" />
+    <Compile Include="DataAccess\GreetNGroupContext.cs" />
+    <Compile Include="DataAccess\Queries\DbCheck.cs" />
+    <Compile Include="DataAccess\Queries\DbInsert.cs" />
+    <Compile Include="DataAccess\Queries\DbUpdate.cs" />
+    <Compile Include="DataAccess\Tag.cs" />
+    <Compile Include="DataAccess\User.cs" />
+    <Compile Include="DataAccess\UserClaim.cs" />
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unused\Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Data Access\DataBaseDelete.cs" />
-    <Compile Include="Data Access\DataBaseInsert.cs" />
-    <Compile Include="Data Access\DataBaseQueries.cs" />
-    <Compile Include="Data Access\DataBaseUpdate.cs" />
+    <Compile Include="Unused\Data Access\DataBaseDelete.cs" />
+    <Compile Include="Unused\Data Access\DataBaseInsert.cs" />
+    <Compile Include="Unused\Data Access\DataBaseQueries.cs" />
+    <Compile Include="Unused\Data Access\DataBaseUpdate.cs" />
+    <Compile Include="DataAccess\UserTag.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902140914402_CreateUser.cs" />
+    <Compile Include="Migrations\201902140914402_CreateUser.Designer.cs">
+      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160451473_CreateClaim.cs" />
+    <Compile Include="Migrations\201902160451473_CreateClaim.Designer.cs">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160524226_UserClaim.cs" />
+    <Compile Include="Migrations\201902160524226_UserClaim.Designer.cs">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902171042088_Event.cs" />
+    <Compile Include="Migrations\201902171042088_Event.Designer.cs">
+      <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902180118064_CreateClaim.cs" />
+    <Compile Include="Migrations\201902180118064_CreateClaim.Designer.cs">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.cs" />
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.Designer.cs">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190738255_UserTag.cs" />
+    <Compile Include="Migrations\201902190738255_UserTag.Designer.cs">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
     <Compile Include="Models\BlockTable.cs" />
     <Compile Include="Models\ClaimsTable.cs" />
@@ -274,7 +320,9 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -291,7 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Claims\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -321,6 +368,32 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201902140914402_CreateUser.resx">
+      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160451473_CreateClaim.resx">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160524226_UserClaim.resx">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902171042088_Event.resx">
+      <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902180118064_CreateClaim.resx">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190730533_eventTagAndTag.resx">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190738255_UserTag.resx">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902240832218_AttendeesAndRoles.resx">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

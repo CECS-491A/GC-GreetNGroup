@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="PasswordTest\PasswordCheckerTest.cs" />
     <Compile Include="PasswordTest\UTF8ToSHA1Test.cs" />
-    <Compile Include="ClaimsTest\ClaimTest.cs" />
+    <Compile Include="DataAccessTest\DataAccessTest.cs" />
     <Compile Include="UserManage\UserManageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
