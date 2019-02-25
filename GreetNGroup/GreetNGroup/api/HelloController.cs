@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace GreetNGroup.api
 {
-    [Route("api/hello")]
+    [EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*"), Route("api/hello")]
     public class HelloController : ApiController
     {
         [HttpGet]
