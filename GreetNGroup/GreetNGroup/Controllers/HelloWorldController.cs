@@ -8,7 +8,7 @@ namespace GreetNGroup.Controllers
 {
     public class HelloWorldController : ApiController
     {
-        [HttpGet]
+        [Route("hello")]
         public string HelloWorld()
         {
             return "Hello World";
