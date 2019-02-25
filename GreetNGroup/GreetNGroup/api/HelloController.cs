@@ -8,7 +8,7 @@ using System.Web.Http.Cors;
 
 namespace GreetNGroup.api
 {
-    [EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*"), Route("api/hello")]
+    [Route("api/hello")]
     public class HelloController : ApiController
     {
         [HttpGet]

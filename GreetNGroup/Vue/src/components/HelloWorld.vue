@@ -13,11 +13,11 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      info: ''
+      info: null
     }
   },
   mounted () {
-    axios.get('http://localhost:50884/hello').then(response => (this.info = response.data.results))
+    axios.get('https://greetngroup.com/api/hello').then(response => (this.info = response.data))
   }
 }
 </script>
