@@ -38,7 +38,7 @@ namespace UnitTest.DataAccessTest
 
             DbInsert.InsertUser(uId, firstName, lastName, userName, password, city, state, country, dob, securityQ,
                 securityA, isActivated);
-            actual = DbCheck.FindUsername("p01dj9wjd99u3u");
+            actual = DbCheck.IsUsernameFound("p01dj9wjd99u3u");
 
             // Assert
             Assert.AreEqual(expected, actual);
