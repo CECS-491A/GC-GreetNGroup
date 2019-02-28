@@ -13,7 +13,7 @@ namespace GreetNGroup.DataAccess.Queries
         /// </summary>
         /// <param name="uId"></param>
         /// <returns></returns>
-        public static bool FindUsername(string uId)
+        public static bool IsUsernameFound(string uId)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -23,12 +23,31 @@ namespace GreetNGroup.DataAccess.Queries
             }
         }
 
-        public static bool FindClaimFromUser(string uId, int claimId)
+        /// <summary>
+        /// Checks if a claim exists on current userId
+        /// </summary>
+        /// <param name="uId"></param>
+        /// <param name="claimId"></param>
+        /// <returns></returns>
+        public static bool IsClaimOnUser(string uId, int claimId)
         {
             using (var ctx = new GreetNGroupContext())
             {
                 var userClaims = ctx.UserClaims.Where(u => u.UId.Equals(uId));
                 return userClaims.Any(c => c.ClaimId.Equals(claimId));
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if an event exists by eventId
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public static bool IsEventIdFound(string eventId)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                return ctx.Events.Any(c => c.EventId.Equals(eventId));
             }
         }
     }

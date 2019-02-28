@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,11 +8,10 @@ namespace GreetNGroup.Controllers
 {
     public class HelloWorldController : ApiController
     {
-        [HttpGet]
+        [Route("hello")]
         public string HelloWorld()
         {
             return "Hello World";
         }
-
     }
 }
