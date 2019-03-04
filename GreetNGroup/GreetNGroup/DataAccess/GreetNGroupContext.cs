@@ -16,5 +16,10 @@ namespace GreetNGroup.DataAccess
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<EventRole> EventRoles { get; set; }
         public DbSet<Attendance> Attendees { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+        public DbSet<Blocklist> Blocks { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
+        public DbSet<ActionsTable> Actions { get; set; }
+        public DbSet<UserAction> UserAction { get; set; }
     }
 }
