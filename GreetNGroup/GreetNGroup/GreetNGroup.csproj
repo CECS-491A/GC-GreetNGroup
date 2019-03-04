@@ -224,8 +224,10 @@
     <Compile Include="DataAccess\User.cs" />
     <Compile Include="DataAccess\UserAction.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
+    <Compile Include="Logging\GNGLog.cs" />
     <Compile Include="Logging\GNGLogger.cs" />
     <Compile Include="DataAccess\UserRating.cs" />
+    <Compile Include="Logging\LogIDGenerator.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
       <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
