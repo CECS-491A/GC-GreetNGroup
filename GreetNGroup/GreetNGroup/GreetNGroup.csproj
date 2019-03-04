@@ -199,21 +199,46 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="DataAccess\ActionsTable.cs" />
     <Compile Include="DataAccess\Attendance.cs" />
+    <Compile Include="DataAccess\Blocklist.cs" />
     <Compile Include="DataAccess\Claim.cs" />
     <Compile Include="DataAccess\Event.cs" />
     <Compile Include="DataAccess\EventRole.cs" />
     <Compile Include="DataAccess\EventTag.cs" />
+    <Compile Include="DataAccess\Friend.cs" />
     <Compile Include="DataAccess\GreetNGroupContext.cs" />
     <Compile Include="DataAccess\Queries\DbCheck.cs" />
     <Compile Include="DataAccess\Queries\DbInsert.cs" />
     <Compile Include="DataAccess\Queries\DbUpdate.cs" />
     <Compile Include="DataAccess\Tag.cs" />
     <Compile Include="DataAccess\User.cs" />
+    <Compile Include="DataAccess\UserAction.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
+    <Compile Include="DataAccess\UserRating.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
       <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032336385_friends.cs" />
+    <Compile Include="Migrations\201903032336385_friends.Designer.cs">
+      <DependentUpon>201903032336385_friends.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032343574_blocklist.cs" />
+    <Compile Include="Migrations\201903032343574_blocklist.Designer.cs">
+      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032359071_userRatings.cs" />
+    <Compile Include="Migrations\201903032359071_userRatings.Designer.cs">
+      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903040039170_actionsTable.cs" />
+    <Compile Include="Migrations\201903040039170_actionsTable.Designer.cs">
+      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903040046112_UserAction.cs" />
+    <Compile Include="Migrations\201903040046112_UserAction.Designer.cs">
+      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
     </Compile>
     <Compile Include="Unused\Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
@@ -402,6 +427,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902240832218_AttendeesAndRoles.resx">
       <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032336385_friends.resx">
+      <DependentUpon>201903032336385_friends.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032343574_blocklist.resx">
+      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032359071_userRatings.resx">
+      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903040039170_actionsTable.resx">
+      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903040046112_UserAction.resx">
+      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
