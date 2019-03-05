@@ -12,11 +12,11 @@ namespace GreetNGroup.DataAccess
     {
         public UserRating() { }
 
-        [Key, Required, ForeignKey("RaterId"), Column(Order = 1)]
+        [Key, Required, ForeignKey("RaterId"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int RaterId1 { get; set; }
         public User RaterId { get; set; }
 
-        [Key, Required, ForeignKey("RatedId"), Column(Order = 2)]
+        [Key, Required, ForeignKey("RatedId"), Column(Order = 2), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int RatedId1 { get; set; }
         public User RatedId { get; set; }
 

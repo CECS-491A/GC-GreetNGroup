@@ -20,7 +20,7 @@ namespace GreetNGroup.DataAccess
         public virtual int UserId { get; set; }
         public User User { get; set; }
 
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int EventId { get; set; }
 
         [Required]

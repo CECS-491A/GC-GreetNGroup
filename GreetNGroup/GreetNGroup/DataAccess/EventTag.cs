@@ -8,11 +8,11 @@ namespace GreetNGroup.DataAccess
     {
         public EventTag() {}
 
-        [Required, ForeignKey("Event"), Column(Order = 1), Key]
+        [Required, ForeignKey("Event"), Column(Order = 1), Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int EventId { get; set; }
         public Event Event { get; set; }
 
-        [Required, ForeignKey("Tag"), Column(Order = 2), Key]
+        [Required, ForeignKey("Tag"), Column(Order = 2), Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int TagId { get; set; }
         public Tag Tag { get; set; }
     }

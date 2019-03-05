@@ -15,7 +15,7 @@ namespace GreetNGroup.DataAccess
             ClaimName = claimName;
         }
 
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ClaimId { get; set; }
         public string ClaimName { get; set; }
     }

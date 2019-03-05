@@ -8,8 +8,8 @@ namespace GreetNGroup.DataAccess
     {
         public Friend() { }
 
-        [Key]
-        public string FriendId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int FriendId { get; set; }
 
         [Required, ForeignKey("User1")]
         public virtual int UserId1 { get; set; }

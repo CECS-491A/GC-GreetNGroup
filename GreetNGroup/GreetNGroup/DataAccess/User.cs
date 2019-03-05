@@ -29,7 +29,7 @@ namespace GreetNGroup.DataAccess
             IsActivated = isActivated;
         }
 
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UserId { get; set; }
 
         public string FirstName { get; set; }

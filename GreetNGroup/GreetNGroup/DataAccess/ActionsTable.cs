@@ -14,7 +14,7 @@ namespace GreetNGroup.DataAccess
             ActionName = aName;
         }
 
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ActionId { get; set; }
         public string ActionName { get; set; }
     }

@@ -8,8 +8,8 @@ namespace GreetNGroup.DataAccess
     {
         public Blocklist() { }
 
-        [Key]
-        public string BlockId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int BlockId { get; set; }
 
         [Required, ForeignKey("User1")]
         public virtual int UserId1 { get; set; }

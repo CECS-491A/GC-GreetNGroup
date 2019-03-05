@@ -20,10 +20,10 @@ namespace GreetNGroup.DataAccess
         [Key, Column(Order = 1)]
         public DateTime ActionTime { get; set; }
 
-        [Required, Key, Column(Order = 2)]
+        [Required, Key, Column(Order = 2), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int SessionId { get; set; }
 
-        [Required, Key, Column(Order = 3), ForeignKey("ActionsTable")]
+        [Required, Key, Column(Order = 3), ForeignKey("ActionsTable"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int ActionId { get; set; }
         public ActionsTable ActionsTable { get; set; }
 
