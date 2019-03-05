@@ -9,7 +9,7 @@ namespace GreetNGroup.DataAccess
         public Tag() {}
 
         [Key]
-        public string TagId { get; set; }
+        public int TagId { get; set; }
         public string TagName { get; set; }
     }
 }

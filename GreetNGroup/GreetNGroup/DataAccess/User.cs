@@ -12,7 +12,7 @@ namespace GreetNGroup.DataAccess
             IsActivated = true;
         }
 
-        public User(string uId, string firstName, string lastName, string userName, string password, string city,
+        public User(int uId, string firstName, string lastName, string userName, string password, string city,
                     string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
         {
             UserId = uId;
@@ -30,7 +30,7 @@ namespace GreetNGroup.DataAccess
         }
 
         [Key]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }

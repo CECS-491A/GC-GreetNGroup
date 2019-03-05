@@ -13,7 +13,7 @@ namespace GreetNGroup.DataAccess.Queries
         /// </summary>
         /// <param name="uId"></param>
         /// <returns></returns>
-        public static bool IsUsernameFound(string uId)
+        public static bool IsUsernameFound(int uId)
         {
             using (var ctx = new GreetNGroupContext())
             {

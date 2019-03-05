@@ -13,7 +13,7 @@ namespace GreetNGroup.DataAccess
         public EventRole() { }
         
         [Required, ForeignKey("Event"), Key, Column(Order = 1)]
-        public virtual string EventId { get; set; }
+        public virtual int EventId { get; set; }
         public Event Event { get; set; }
 
         [Key, Column(Order = 2)]

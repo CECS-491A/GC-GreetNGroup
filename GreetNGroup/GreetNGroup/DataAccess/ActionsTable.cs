@@ -8,14 +8,14 @@ namespace GreetNGroup.DataAccess
     {
         public ActionsTable() { }
 
-        public ActionsTable(string aId, string aName)
+        public ActionsTable(int aId, string aName)
         {
             ActionId = aId;
             ActionName = aName;
         }
 
         [Key]
-        public string ActionId { get; set; }
+        public int ActionId { get; set; }
         public string ActionName { get; set; }
     }
 }

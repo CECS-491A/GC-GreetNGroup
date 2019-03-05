@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201903040046112_UserAction.Designer.cs">
       <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903050711282_idsToInts.cs" />
+    <Compile Include="Migrations\201903050711282_idsToInts.Designer.cs">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Unused\Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -442,6 +446,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903040046112_UserAction.resx">
       <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050711282_idsToInts.resx">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
