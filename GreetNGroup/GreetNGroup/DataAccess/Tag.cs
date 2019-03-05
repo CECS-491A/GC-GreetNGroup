@@ -8,8 +8,8 @@ namespace GreetNGroup.DataAccess
     {
         public Tag() {}
 
-        [Key]
-        public string TagId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int TagId { get; set; }
         public string TagName { get; set; }
     }
 }

@@ -96,3 +96,6 @@ C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\Gr
 C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.userRatings.resources
 C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.actionsTable.resources
 C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.UserAction.resources
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.idsToInts.resources
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.removeUserIdentityKey.resources
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\obj\Debug\GreetNGroup.Migrations.removeIdIdentityKeys.resources

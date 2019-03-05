@@ -12,8 +12,8 @@ namespace GreetNGroup.DataAccess
     {
         public EventRole() { }
         
-        [Required, ForeignKey("Event"), Key, Column(Order = 1)]
-        public virtual string EventId { get; set; }
+        [Required, ForeignKey("Event"), Key, Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public virtual int EventId { get; set; }
         public Event Event { get; set; }
 
         [Key, Column(Order = 2)]

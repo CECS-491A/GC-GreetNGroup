@@ -12,12 +12,12 @@ namespace GreetNGroup.DataAccess
     {
         public Attendance() { }
 
-        [Key, ForeignKey("Event"), Column(Order = 1)]
-        public virtual string EventId { get; set; }
+        [Key, ForeignKey("Event"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public virtual int EventId { get; set; }
         public Event Event { get; set; }
 
-        [Key, ForeignKey("User"), Column(Order = 2)]
-        public virtual string UserId { get; set; }
+        [Key, ForeignKey("User"), Column(Order = 2), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public virtual int UserId { get; set; }
         public User User { get; set; }
 
         [Required]
