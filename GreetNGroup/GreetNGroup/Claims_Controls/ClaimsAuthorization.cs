@@ -15,12 +15,12 @@ namespace GreetNGroup.Claim_Controls
         /// <param name="tok"> token </param>
         /// <param name="claimsReq"> required claims </param>
         /// <returns></returns>
-        public static bool VerifyClaims(Token tok, List<string> claimsReq)
+        public static bool VerifyClaims(Token tok, List<int> claimsReq)
         {
             try
             {
                 var pass = false;
-                var currClaims = tok.Claims;
+                var currClaims = tok.ClaimIds;
                 var claimsCheck = claimsReq.Except(currClaims);
                 pass = !claimsCheck.Any();
                 return pass;

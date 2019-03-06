@@ -37,8 +37,6 @@ namespace GreetNGroup.DataAccess.Queries
             }
         }
 
-        userName, city, state, country, DOB
-
         /// <summary>
         /// Inserts a Claim into the database of claims
         /// </summary>
