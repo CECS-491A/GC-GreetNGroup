@@ -9,7 +9,7 @@ namespace GreetNGroup.UserManage
     public interface IUserManager
     {
         void AddAccount(string jwt, string userName, string city, string state, string country, DateTime DOB);
-        void DeleteAccount(string jwt, string UID);
-        void UpdateAccount(string jwt, string UserID, List<string> changedAttributes);
+        void DeleteAccount(string jwt, int uId);
+        void UpdateAccount(string jwt, int uId, List<string> changedAttributes);
     }
 }

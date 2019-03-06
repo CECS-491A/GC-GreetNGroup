@@ -36,7 +36,6 @@ namespace GreetNGroup.Validation
                     {
                         throw new System.ArgumentException("User attributes are not formatted correctly", "Attributes");
                     }
-
                 }
                 else
                 {
@@ -47,8 +46,6 @@ namespace GreetNGroup.Validation
             {
                 //Log
             }
-            
-
         }
 
 
@@ -82,9 +79,18 @@ namespace GreetNGroup.Validation
             {
                 //log
             }
-            
         }
         
+        /*
+         * We might want to look over how updating is done -- Eric
+         * Check the DbUpdate class for what update functions are currently available, add them as needed.
+         *
+         * For some user attributes, we may want to consider not allowing them to be changed.
+         *
+         * Also, we may deal with updates one as a time rather than as a list of changes to add.
+         *
+         * This is only something to consider.
+         */
         public static void CheckEditToken(string jwt, string UserID, List<string> attributeContents) { 
             try
             {
@@ -97,7 +103,7 @@ namespace GreetNGroup.Validation
                 if (canEdit && CheckEditAttributes(attributeContents))
                 {
                     //Check edited account claims
-                    DbUpdate.TryUpdateUser(UserID, attributeContents);
+                    //DbUpdate.TryUpdateUser(UserID, attributeContents);
                 }
             }
             catch (Exception e)

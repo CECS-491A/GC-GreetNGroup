@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GreetNGroup.Claim_Controls;
+using GreetNGroup.Claims_Controls;
 using GreetNGroup.Tokens;
 
 namespace GreetNGroup.SiteUser
@@ -20,7 +20,7 @@ namespace GreetNGroup.SiteUser
         /// Holds the reference to the user that the claim should be added to
         public void AssignClaimToUser(Token editor, int claimId , UserAccount userAcc)
         {
-            List<string> systemAdminExclude = new List<string>() {"SystemAdmin"};
+            List<int> systemAdminExclude = new List<int>() {1};
             
             if (ClaimsAuthorization.VerifyClaims(editor, systemAdminExclude))
             {
