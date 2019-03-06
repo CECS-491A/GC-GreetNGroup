@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GreetNGroup.Tokens;
-using Microsoft.Ajax.Utilities;
 
-namespace GreetNGroup.Claim_Controls
+namespace GreetNGroup.Claims_Controls
 {
     public static class ClaimsAuthorization
     {

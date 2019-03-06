@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using GreetNGroup.DataAccess.Tables;
 
 namespace GreetNGroup.DataAccess.Queries
 {
