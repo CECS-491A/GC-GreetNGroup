@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("Claim")]
     public class Claim

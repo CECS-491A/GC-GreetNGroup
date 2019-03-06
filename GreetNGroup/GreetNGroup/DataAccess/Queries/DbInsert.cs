@@ -1,4 +1,5 @@
 ﻿using System;
+using GreetNGroup.DataAccess.Tables;
 
 namespace GreetNGroup.DataAccess.Queries
 {
@@ -35,7 +36,9 @@ namespace GreetNGroup.DataAccess.Queries
                 ctx.SaveChanges();
             }
         }
-        
+
+        userName, city, state, country, DOB
+
         /// <summary>
         /// Inserts a Claim into the database of claims
         /// </summary>

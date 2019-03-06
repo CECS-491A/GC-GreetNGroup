@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("Tag")]
     public class Tag
