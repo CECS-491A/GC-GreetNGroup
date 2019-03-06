@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
-    [Table("Friend")]
-    public class Friend
+    [Table("Blocklist")]
+    public class Blocklist
     {
-        public Friend() { }
+        public Blocklist() { }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int FriendId { get; set; }
+        public int BlockId { get; set; }
 
         [Required, ForeignKey("User1")]
         public virtual int UserId1 { get; set; }

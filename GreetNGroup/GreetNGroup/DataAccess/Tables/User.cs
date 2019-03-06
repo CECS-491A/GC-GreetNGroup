@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("User")]
     public class User
@@ -27,6 +27,19 @@ namespace GreetNGroup.DataAccess
             SecurityQuestion = securityQ;
             SecurityAnswer = securityA;
             IsActivated = isActivated;
+        }
+
+        public User(int uId, string firstName, string lastName, string userName, string city, string state,
+            string country, DateTime dob)
+        {
+            UserId = uId;
+            FirstName = firstName;
+            LastName = lastName;
+            UserName = userName;
+            City = city;
+            State = state;
+            Country = country;
+            DoB = dob;
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
