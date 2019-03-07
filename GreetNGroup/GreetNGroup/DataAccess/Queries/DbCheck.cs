@@ -13,7 +13,7 @@ namespace GreetNGroup.DataAccess.Queries
         /// </summary>
         /// <param name="uId"></param>
         /// <returns></returns>
-        public static bool IsUsernameFound(int uId)
+        public static bool IsUsernameFound(string uId)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -24,25 +24,12 @@ namespace GreetNGroup.DataAccess.Queries
         }
 
         /// <summary>
-        /// Finds if claim exists within the db using claimId
-        /// </summary>
-        /// <param name="claimId"></param>
-        /// <returns></returns>
-        public static bool IsClaimInTable(int claimId)
-        {
-            using (var ctx = new GreetNGroupContext())
-            {
-                return ctx.Claims.Any(u => u.ClaimId.Equals(claimId));
-            }
-        }
-
-        /// <summary>
         /// Checks if a claim exists on current userId
         /// </summary>
         /// <param name="uId"></param>
         /// <param name="claimId"></param>
         /// <returns></returns>
-        public static bool IsClaimOnUser(int uId, int claimId)
+        public static bool IsClaimOnUser(string uId, int claimId)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -56,13 +43,12 @@ namespace GreetNGroup.DataAccess.Queries
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        public static bool IsEventIdFound(int eventId)
+        public static bool IsEventIdFound(string eventId)
         {
             using (var ctx = new GreetNGroupContext())
             {
                 return ctx.Events.Any(c => c.EventId.Equals(eventId));
             }
         }
-
     }
 }

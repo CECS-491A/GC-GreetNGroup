@@ -9,6 +9,10 @@ namespace GreetNGroup.SiteUser
 {
     public class UserAccount : IUserManager
     {
+
+
+
+
         #region User Management
         /// <summary>
         /// Creats a new USer Account given the attributes and if the Username has not been taken.
@@ -47,5 +51,7 @@ namespace GreetNGroup.SiteUser
         }
 
         #endregion
+
+       
     }
 }

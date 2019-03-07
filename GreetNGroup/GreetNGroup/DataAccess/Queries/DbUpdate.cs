@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GreetNGroup.DataAccess.Tables;
 
 namespace GreetNGroup.DataAccess.Queries
 {
@@ -13,7 +12,7 @@ namespace GreetNGroup.DataAccess.Queries
         /// </summary>
          #region "Update User Info"
 
-        public static void UpdateUserPassword(int uId, string password)
+        public static void UpdateUserPassword(string uId, string password)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -24,7 +23,7 @@ namespace GreetNGroup.DataAccess.Queries
             }
         }
 
-        public static void UpdateUserCity(int uId, string city)
+        public static void UpdateUserCity(string uId, string city)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -35,7 +34,7 @@ namespace GreetNGroup.DataAccess.Queries
             }
         }
         
-        public static void UpdateUserState(int uId, string state)
+        public static void UpdateUserState(string uId, string state)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -46,7 +45,7 @@ namespace GreetNGroup.DataAccess.Queries
             }
         }
 
-        public static void UpdateUserCountry(int uId, string country)
+        public static void UpdateUserCountry(string uId, string country)
         {
             using (var ctx = new GreetNGroupContext())
             {
@@ -65,7 +64,7 @@ namespace GreetNGroup.DataAccess.Queries
         /// <param name="startDate"></param>
         #region "Update Event Information"
 
-        public static void UpdateEventStartDate(int eId, DateTime startDate)
+        public static void UpdateEventStartDate(string eId, DateTime startDate)
         {
             using (var ctx = new GreetNGroupContext())
             {
