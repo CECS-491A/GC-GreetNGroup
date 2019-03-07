@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GreetNGroup.Tokens;
+using Microsoft.Ajax.Utilities;
 
-namespace GreetNGroup.Claims_Controls
+namespace GreetNGroup.Claim_Controls
 {
     public static class ClaimsAuthorization
     {
@@ -14,12 +15,12 @@ namespace GreetNGroup.Claims_Controls
         /// <param name="tok"> token </param>
         /// <param name="claimsReq"> required claims </param>
         /// <returns></returns>
-        public static bool VerifyClaims(Token tok, List<int> claimsReq)
+        public static bool VerifyClaims(Token tok, List<string> claimsReq)
         {
             try
             {
                 var pass = false;
-                var currClaims = tok.ClaimIds;
+                var currClaims = tok.Claims;
                 var claimsCheck = claimsReq.Except(currClaims);
                 pass = !claimsCheck.Any();
                 return pass;

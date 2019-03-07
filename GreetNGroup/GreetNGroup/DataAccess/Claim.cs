@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
-namespace GreetNGroup.DataAccess.Tables
+namespace GreetNGroup.DataAccess
 {
     [Table("Claim")]
     public class Claim
@@ -14,7 +15,7 @@ namespace GreetNGroup.DataAccess.Tables
             ClaimName = claimName;
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int ClaimId { get; set; }
         public string ClaimName { get; set; }
     }

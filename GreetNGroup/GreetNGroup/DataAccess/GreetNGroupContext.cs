@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using GreetNGroup.DataAccess.Tables;
 
 namespace GreetNGroup.DataAccess
 {

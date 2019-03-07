@@ -1,13 +1,14 @@
-﻿using System;
+﻿using GreetNGroup.Claim_Controls;
+using GreetNGroup.Data_Access;
+using GreetNGroup.Tokens;
+using System;
 using System.Collections.Generic;
-using GreetNGroup.DataAccess.Queries;
-
 namespace GreetNGroup.Validation
 {
     public static class ValidationManager
     {
         /// <summary>
-        /// Checks to see if the person who is creating an account is allowed to
+        /// Checks to see if the person who is creating an accout is allowed to
         /// </summary>
         /// <param name="userName">New user Name</param>
         /// <param name="city">New City Location</param>
@@ -18,10 +19,10 @@ namespace GreetNGroup.Validation
         {
             try
             {
+
                 //read jwt here and check claims
+
                 var canAdd = true;
-
-
                 //If they have the claims they will be able to create a new account but if they don't the function will throw an error
                 if (canAdd == true)
                 {
@@ -30,12 +31,13 @@ namespace GreetNGroup.Validation
                     if (attributeCheck == true)
                     {
                         //Insert the user in the database
-                        DbInsert.InsertUser(userName, city, state, country, DOB);
+                        DataBaseInsert.InsertUser(userName, city, state, country, DOB);
                     }
                     else
                     {
                         throw new System.ArgumentException("User attributes are not formatted correctly", "Attributes");
                     }
+
                 }
                 else
                 {
@@ -46,6 +48,8 @@ namespace GreetNGroup.Validation
             {
                 //Log
             }
+            
+
         }
 
 
@@ -54,7 +58,7 @@ namespace GreetNGroup.Validation
         /// </summary>
         /// <param name="claims">List of claims</param>
         /// <param name="uID">User ID </param>
-        public static void CheckDeleteToken(string jwt, int uID)
+        public static void CheckDeleteToken(string jwt, string uID)
         {
             try
             {
@@ -66,7 +70,7 @@ namespace GreetNGroup.Validation
                     //Check the passed userid
                     if(CheckDeletedAttributes(uID) == true)
                     {
-                        DbDelete.DeleteUserById(uID);
+                        DataBaseDelete.DeleteUser(uID);
                     }
                     
                 }
@@ -79,18 +83,9 @@ namespace GreetNGroup.Validation
             {
                 //log
             }
+            
         }
         
-        /*
-         * We might want to look over how updating is done -- Eric
-         * Check the DbUpdate class for what update functions are currently available, add them as needed.
-         *
-         * For some user attributes, we may want to consider not allowing them to be changed.
-         *
-         * Also, we may deal with updates one as a time rather than as a list of changes to add.
-         *
-         * This is only something to consider.
-         */
         public static void CheckEditToken(string jwt, string UserID, List<string> attributeContents) { 
             try
             {
@@ -103,7 +98,7 @@ namespace GreetNGroup.Validation
                 if (canEdit && CheckEditAttributes(attributeContents))
                 {
                     //Check edited account claims
-                    //DbUpdate.TryUpdateUser(UserID, attributeContents);
+                    DataBaseUpdate.TryUpdateUser(UserID, attributeContents);
                 }
             }
             catch (Exception e)
@@ -140,7 +135,7 @@ namespace GreetNGroup.Validation
         /// </summary>
         /// <param name="UID">The passed userid</param>
         /// <returns>If the input is valid or not</returns>
-        public static bool CheckDeletedAttributes(int UID)
+        public static bool CheckDeletedAttributes(string UID)
         {
             try
             {
