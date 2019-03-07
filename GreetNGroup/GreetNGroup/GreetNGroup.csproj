@@ -52,36 +52,15 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.4.0\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.4.0\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.4.0\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\40-System.IO.Compression.1.0.0.2\lib\net40-client\System.IO.Compression.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\40-System.IO.Compression.FileSystem.1.0.0.2\lib\net40-client\System.IO.Compression.FileSystem.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
-    <Reference Include="System.Shim, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Shim.1.0.0.1\lib\net40-client\System.Shim.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -106,6 +85,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -189,7 +171,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Archiving\GNGArchiver.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -234,10 +215,7 @@
     <Compile Include="DataAccess\User.cs" />
     <Compile Include="DataAccess\UserAction.cs" />
     <Compile Include="DataAccess\UserClaim.cs" />
-    <Compile Include="Logging\GNGLog.cs" />
-    <Compile Include="Logging\GNGLogger.cs" />
     <Compile Include="DataAccess\UserRating.cs" />
-    <Compile Include="Logging\LogIDGenerator.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
     <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
       <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
@@ -261,6 +239,18 @@
     <Compile Include="Migrations\201903040046112_UserAction.cs" />
     <Compile Include="Migrations\201903040046112_UserAction.Designer.cs">
       <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050711282_idsToInts.cs" />
+    <Compile Include="Migrations\201903050711282_idsToInts.Designer.cs">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.cs" />
+    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.Designer.cs">
+      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.cs" />
+    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.Designer.cs">
+      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
     </Compile>
     <Compile Include="Unused\Data Access\DataBaseCheck.cs" />
     <Compile Include="Claims_Controls\ClaimsAuthorization.cs" />
@@ -464,6 +454,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903040046112_UserAction.resx">
       <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050711282_idsToInts.resx">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050821464_removeUserIdentityKey.resx">
+      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050835362_removeIdIdentityKeys.resx">
+      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

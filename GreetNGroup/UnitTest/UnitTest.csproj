@@ -60,7 +60,6 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoggerTest\LoggerTests.cs" />
     <Compile Include="PasswordTest\PasswordCheckerTest.cs" />
     <Compile Include="PasswordTest\UTF8ToSHA1Test.cs" />
     <Compile Include="DataAccessTest\DataAccessTest.cs" />
