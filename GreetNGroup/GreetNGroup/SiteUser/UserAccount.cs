@@ -30,7 +30,7 @@ namespace GreetNGroup.SiteUser
         /// <param name="jwt">Jason web token with claims</param>
         /// <param name="userName">New user Name</param>
         /// <param name="UserID">User Account that will be deletd</param>
-        public void DeleteAccount(string jwt, string userID)
+        public void DeleteAccount(string jwt, int userID)
         {
             ValidationManager.CheckDeleteToken(jwt, userID);
         }
@@ -41,7 +41,7 @@ namespace GreetNGroup.SiteUser
         /// <param name="jwt">Jason web token with claims</param>
         /// <param name="UserID">Account that is being updated</param>
         /// <param name="changedAttributes">The attributes the account will change into</param>
-        public void UpdateAccount(string jwt, string userID, List<string> changedAttributes)
+        public void UpdateAccount(string jwt, int userID, List<string> changedAttributes)
         {
             ValidationManager.CheckEditToken(jwt, userID, changedAttributes);
         }

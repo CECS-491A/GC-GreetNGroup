@@ -30,7 +30,7 @@ namespace GreetNGroup.Validation
                     if (attributeCheck == true)
                     {
                         //Insert the user in the database
-                        DbInsert.InsertUser(userName, city, state, country, DOB);
+                        //DbInsert.InsertUser(userName, city, state, country, DOB);
                     }
                     else
                     {
@@ -91,7 +91,7 @@ namespace GreetNGroup.Validation
          *
          * This is only something to consider.
          */
-        public static void CheckEditToken(string jwt, string UserID, List<string> attributeContents) { 
+        public static void CheckEditToken(string jwt, int UserID, List<string> attributeContents) { 
             try
             {
                 //Read jwt here and check claims
