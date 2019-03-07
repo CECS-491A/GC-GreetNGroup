@@ -1,20 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using GreetNGroup.Claim_Controls;
-using GreetNGroup.Data_Access;
-using GreetNGroup.SiteUser;
-
 namespace GreetNGroup.Tokens
 {
     public class Token
     {
         private DateTime revokeDate;
-        public string UserId { get; set; }
-        public string userName { get; set; }
-        public string password { get; set; }
-        public List<string> Claims{ get; set; }
+        public int UserId { get; set; }
+        public List<int> ClaimIds{ get; set; }
         public string uniqueKey;
         
         /// <summary>
@@ -22,12 +14,10 @@ namespace GreetNGroup.Tokens
         /// unique to the token like its revoke date
         /// </summary>
         /// <param name="id"> user ID to reference the user with </param>
-        public Token(string id)
+        public Token(int id)
         {
             UserId = id;
-            userName = DataBaseQueries.CurrentUsername(id);
-            password = DataBaseQueries.CurrentPassword(id);
-            Claims = DataBaseQueries.ListUserClaims(id);
+            //ClaimIds = DataBaseQueries.ListUserClaims(id);
             revokeDate = DateTime.Today.AddDays(1);
             /*
              * The unique key here is temporary -- will later be used for
