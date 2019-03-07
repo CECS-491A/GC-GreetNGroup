@@ -9,10 +9,10 @@ namespace GreetNGroup.Logging
     {
 
         /// <summary>
-        /// Method IDGenerator creates a HashSet of int values with randomly generated
-        /// values to create an ID for each event to log.
+        /// Method IDGenerator creates a Dictionary of int values representing the specific
+        /// event that is being logged and string keys associated with that ID
         /// </summary>
-        /// <returns>HashSet<int> listOfIDs which holds the randomly generated int IDs</returns>
+        /// <returns>Dictionary<string, int> which holds the mapped ids</returns>
         public Dictionary<string, int> GetLogIDs()
         {
             Dictionary<string, int> logIDMap = new Dictionary<string, int>();

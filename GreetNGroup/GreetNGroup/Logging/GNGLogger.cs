@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -12,15 +9,17 @@ namespace GreetNGroup.Logging
     public class GNGLogger
     {
         private const string LOGS_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\Logs\\";
+        private const string LOG_IDENTIFIER = "_gnglog.json";
         private static LogIDGenerator logIDGenerator = new LogIDGenerator();
         private Dictionary<string, int> listOfIDs = logIDGenerator.GetLogIDs();
         private string currentLogPath;
+
         public GNGLogger()
         {
             CreateNewLog();
         }
 
-        public void CreateNewLog()
+        private void CreateNewLog()
         {
             bool logExists = CheckForExistingLog();
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
@@ -29,8 +28,8 @@ namespace GreetNGroup.Logging
                 
                 try
                 {
-                    var newLog = File.Create(LOGS_FOLDERPATH + currentDate + "_gnglog.json");
-                    currentLogPath = LOGS_FOLDERPATH + currentDate + "_gnglog.json";
+                    var newLog = File.Create(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
+                    currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
                     newLog.Close();
                 }
                 catch (IOException e)
@@ -41,14 +40,14 @@ namespace GreetNGroup.Logging
             }
             else
             {
-                currentLogPath = LOGS_FOLDERPATH + currentDate + "_gnglog.json";
+                currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
             }
         }
 
-        public bool CheckForExistingLog()
+        private bool CheckForExistingLog()
         {
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-            bool logExists = File.Exists(LOGS_FOLDERPATH + currentDate + "_gnglog.json");
+            bool logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
 
             return logExists;
         }
@@ -86,7 +85,7 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr)
+        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
@@ -96,7 +95,7 @@ namespace GreetNGroup.Logging
                 logID = clickLogIDString,
                 userID = usersID,
                 dateTime = DateTime.Now.ToString(),
-                description = errorCode + " encountered at " + urlOfErr
+                description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
 
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);

@@ -53,9 +53,10 @@ namespace UnitTest.LoggerTest
             string userID = "10055";
             string errorCode = "404";
             string urlOfErr = "http://www.404.com";
+            string errDesc = "akjddfhdksfh";
 
             bool expected = true;
-            bool actual = logger.LogErrorsEncountered(userID, errorCode, urlOfErr);
+            bool actual = logger.LogErrorsEncountered(userID, errorCode, urlOfErr, errDesc);
 
             Assert.AreEqual(expected, actual);
         }
