@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using GreetNGroup.Claim_Controls;
+using GreetNGroup.Claims_Controls;
 using GreetNGroup.Tokens;
 
 namespace GreetNGroup.SiteUser
@@ -14,14 +13,14 @@ namespace GreetNGroup.SiteUser
         /// <param name="editor"></param>
         /// Holds reference to user information of the user trying to edit
         /// 
-        /// <param name="claim"></param>
+        /// <param name="claimId"></param>
         /// Holds the claim that the user wants to add
         /// 
         /// <param name="userAcc"></param>
         /// Holds the reference to the user that the claim should be added to
-        public void AssignClaimToUser(Token editor, string claim , UserAccount userAcc)
+        public void AssignClaimToUser(Token editor, int claimId , UserAccount userAcc)
         {
-            List<string> systemAdminExclude = new List<string>() {"SystemAdmin"};
+            List<int> systemAdminExclude = new List<int>() {1};
             
             if (ClaimsAuthorization.VerifyClaims(editor, systemAdminExclude))
             {

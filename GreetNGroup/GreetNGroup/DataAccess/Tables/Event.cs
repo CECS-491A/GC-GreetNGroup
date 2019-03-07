@@ -2,13 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("Event")]
     public class Event
     {
         public Event() {}
-        public Event(string userId, string eventId, DateTime startDate, string eventName)
+        public Event(int userId, int eventId, DateTime startDate, string eventName)
         {
             UserId = userId;
             EventId = eventId;
@@ -17,11 +17,11 @@ namespace GreetNGroup.DataAccess
         }
 
         [Required, ForeignKey("User")]
-        public virtual string UserId { get; set; }
+        public virtual int UserId { get; set; }
         public User User { get; set; }
 
-        [Key]
-        public string EventId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int EventId { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

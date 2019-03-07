@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("User")]
     public class User
@@ -12,7 +12,7 @@ namespace GreetNGroup.DataAccess
             IsActivated = true;
         }
 
-        public User(string uId, string firstName, string lastName, string userName, string password, string city,
+        public User(int uId, string firstName, string lastName, string userName, string password, string city,
                     string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
         {
             UserId = uId;
@@ -29,8 +29,21 @@ namespace GreetNGroup.DataAccess
             IsActivated = isActivated;
         }
 
-        [Key]
-        public string UserId { get; set; }
+        public User(int uId, string firstName, string lastName, string userName, string city, string state,
+            string country, DateTime dob)
+        {
+            UserId = uId;
+            FirstName = firstName;
+            LastName = lastName;
+            UserName = userName;
+            City = city;
+            State = state;
+            Country = country;
+            DoB = dob;
+        }
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int UserId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }

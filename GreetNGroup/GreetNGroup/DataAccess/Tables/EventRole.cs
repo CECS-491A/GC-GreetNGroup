@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
-namespace GreetNGroup.DataAccess
+namespace GreetNGroup.DataAccess.Tables
 {
     [Table("EventRole")]
     public class EventRole
     {
         public EventRole() { }
         
-        [Required, ForeignKey("Event"), Key, Column(Order = 1)]
-        public virtual string EventId { get; set; }
+        [Required, ForeignKey("Event"), Key, Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public virtual int EventId { get; set; }
         public Event Event { get; set; }
 
         [Key, Column(Order = 2)]
