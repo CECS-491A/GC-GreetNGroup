@@ -1,0 +1,61 @@
+﻿using GreetNGroup.DataAccess.Tables;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace GreetNGroup.DataAccess.Queries
+{
+    public class DbRetrieve
+    {
+
+        /// <summary>
+        /// Gets the list of greetngroup claims a user has
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static List<Claim> GetUsersClaims(string username)
+        {
+            List<Claim> claimsList = new List<Claim>();
+            using (var ctx = new GreetNGroupContext())
+            {
+                var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
+                foreach (UserClaim claim in usersClaims)
+                {
+                    claimsList.Add(claim.Claim);
+                }
+            }
+            return claimsList;
+        }
+
+        /// <summary>
+        /// Finds the user's id and hashes it using the SHA256CryptoServiceProvider methods.
+        /// The hashed id is then returned to the caller
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static string GetUsersHashedUID(string username)
+        {
+            var hashedUID = "";
+            using (var ctx = new GreetNGroupContext())
+            {
+                var user = ctx.Users.Where(u => u.UserName.Equals(username));
+                using(var sha256 = new SHA256CryptoServiceProvider())
+                {
+                    //First converts the uID into UTF8 byte encoding before hashing
+                    var hashedUIDBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(user.Select(id => id.UserId).ToString()));
+                    var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
+                    foreach (byte b in hashedUIDBytes)
+                    {
+                        hashToString.Append(b.ToString("X2"));
+                    }
+                    sha256.Dispose();
+                    hashedUID = hashToString.ToString();
+                }
+            }
+            return hashedUID;
+        }
+    }
+}

@@ -22,6 +22,36 @@ namespace GreetNGroup.DataAccess.Queries
                  return user != false;
             }
         }
+        /// <summary>
+        /// Override method that finds a username based on username parameter and 
+        /// returns a bool based on whether it exists in the database or not
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static bool IsUsernameFound(string username)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                return ctx.Users.Any(u => u.UserName.Equals(username));
+            }
+        }
+
+        /// <summary>
+        /// Checks if the password user has input matches the password that was
+        /// registered with that username and returns a bool based on if it matches
+        /// or not
+        /// </summary>
+        /// <param name="username">Username input provided by user</param>
+        /// <param name="password">Hashed password input</param>
+        /// <returns></returns>
+        public static bool DoesPasswordMatch(string username, string password)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var user = ctx.Users.Where(u => u.UserName.Equals(username));
+                return user.Any(p => p.Password.Equals(password));
+            }
+        }
 
         /// <summary>
         /// Finds if claim exists within the db using claimId
@@ -48,6 +78,21 @@ namespace GreetNGroup.DataAccess.Queries
             {
                 var userClaims = ctx.UserClaims.Where(u => u.UId.Equals(uId));
                 return userClaims.Any(c => c.ClaimId.Equals(claimId));
+            }
+        }
+
+        /// <summary>
+        /// Override method that takes a username instead of uID and claimID
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="claimName"></param>
+        /// <returns></returns>
+        public static bool IsClaimOnUser(string username, string claimName)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var userClaims = ctx.UserClaims.Where(u => u.User.UserName.Equals(username));
+                return userClaims.Any(c => c.Claim.ClaimName.Equals(claimName));
             }
         }
 

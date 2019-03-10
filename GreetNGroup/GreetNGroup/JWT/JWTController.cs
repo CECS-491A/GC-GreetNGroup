@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Web.Http;
 using AllowAnonymousAttribute = System.Web.Http.AllowAnonymousAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
@@ -8,31 +7,14 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
-using GreetNGroup.Data_Access;
+using System.Security.Claims;
+using System.Linq;
+using GreetNGroup.DataAccess.Queries;
 
 namespace GreetNGroup.JWT
 {
     public class JWTController
     {
-
-        public string FetchUserID(string userInputUsername)
-        {
-            string userID = DataBaseQueries.CheckIfUserExists(userInputUsername);
-            return userID;
-        }
-
-        public string FetchUserPassword(string userID)
-        {
-            string userPassword = DataBaseQueries.CurrentPassword(userID);
-            return userPassword;
-        }
-
-        public List<string> FetchUsersClaims(string userID)
-        {
-            List<string> userClaims = DataBaseQueries.ListUserClaims(userID);
-            return userClaims;
-        }
-
 
         /// <summary>
         /// This is where a user requests a JWT based on the login information they put
@@ -44,55 +26,80 @@ namespace GreetNGroup.JWT
         /// <returns>True for successful JWT generation, false otherwise</returns>
         [AllowAnonymous]
         [HttpPost]
-        public bool RequestToken(string userInputUsername, string userInputPassword)
+        public JwtSecurityToken RequestToken(string userInputUsername, string userInputPassword)
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            string userID = FetchUserID(userInputUsername);
-            string userPassword = "";
 
-            if(userID != null)
+            if(DbCheck.IsUsernameFound(userInputUsername) == true &&
+                DbCheck.DoesPasswordMatch(userInputUsername, userInputPassword) 
+                == true)
             {
-                userPassword = FetchUserPassword(userID);
-                if (userInputPassword.Equals(userPassword))
+                var usersClaims = DbRetrieve.GetUsersClaims(userInputUsername);
+                var hashedUID = DbRetrieve.GetUsersHashedUID(userInputUsername);
+                var claimsList = new List<System.Security.Claims.Claim>();
+                //Takes the claims the user has and puts it in a list of Claims objects
+                foreach (GreetNGroup.DataAccess.Tables.Claim c in usersClaims)
                 {
-                    var usersClaims = FetchUsersClaims(userID);
-                    var claimsList = new List<Claim>();
-                    //Takes the claims the user has and puts it in a list of Claims objects
-                    foreach(string c in usersClaims)
-                    {
-                        claimsList.Add(new Claim(c, userInputUsername));
-                    }
-
-                    //Generate the symmetric key which will be used for the signature portion of the JWT
-                    byte[] symmetricKey = new byte[256 / 8];
-                    rng.GetBytes(symmetricKey);
-                    var charKey = Encoding.UTF8.GetString(symmetricKey);
-
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
-                    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                    var jwt = new JwtSecurityToken(
-                        issuer: "greetngroup.com",
-                        audience: "greetngroup.com",
-                        claims: claimsList,
-                        expires: DateTime.Now.AddMinutes(30),
-                        signingCredentials: credentials);
-
-                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-                    tokenHandler.WriteToken(jwt);
-                    return true;
+                    claimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
                 }
-                //Password does not match so cannot grant a token
-                else
-                {
-                    return false;
-                }
+
+                //Generate the symmetric key which will be used for the signature portion of the JWT
+                byte[] symmetricKey = new byte[256];
+                rng.GetBytes(symmetricKey);
+                var charKey = Encoding.UTF8.GetString(symmetricKey);
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
+                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                var jwt = new JwtSecurityToken(
+                    issuer: "greetngroup.com",
+                    audience: "greetngroup.com",
+                    claims: claimsList,
+                    expires: DateTime.Now.AddMinutes(30),
+                    signingCredentials: credentials);
+
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.WriteToken(jwt);
+                return jwt;
+
             }
-            //User does not exist therefore cannot grant token
+            //User does not exist or user input wrong login information
             else
             {
-                return false;
+                return null;
             }
+        }
+
+        /// <summary>
+        /// Method to check if a user has the appropriate claims to access/perform an
+        /// action on the app. If they have the claim, return true, otherwise, return
+        /// false.
+        /// </summary>
+        /// <param name="jwt">JWT of the user</param>
+        /// <param name="claimToCheck">Required claim needed to perform/access</param>
+        /// <returns>True or false depending on if the user has the claim</returns>
+        public bool CheckClaimsInToken(JwtSecurityToken jwt, List<GreetNGroup.DataAccess.Tables.Claim> claimsToCheck)
+        {
+            var usersCurrClaims = jwt.Claims;
+            bool pass = false;
+
+            var claimNamesToCheck = new List<string>();
+            foreach (GreetNGroup.DataAccess.Tables.Claim claim in claimsToCheck)
+            {
+                claimNamesToCheck.Add(claim.ClaimName);
+            }
+
+            var usersCurrClaimsNames = new List<string>();
+            foreach (System.Security.Claims.Claim claim in usersCurrClaims)
+            {
+                usersCurrClaimsNames.Add(claim.Type);
+            }
+
+            var claimsCheck = claimNamesToCheck.Except(usersCurrClaimsNames);
+            pass = !claimsCheck.Any();
+
+            return pass;
+            
         }
     }
 }
