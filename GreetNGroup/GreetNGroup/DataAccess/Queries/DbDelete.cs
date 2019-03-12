@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace GreetNGroup.DataAccess.Queries
 {
@@ -6,13 +7,20 @@ namespace GreetNGroup.DataAccess.Queries
     {
         public static void DeleteUserById(int userId)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userId));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userId));
 
-                if(user != null) ctx.Users.Remove(user);
+                    if (user != null) ctx.Users.Remove(user);
 
-                ctx.SaveChanges();
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
     }

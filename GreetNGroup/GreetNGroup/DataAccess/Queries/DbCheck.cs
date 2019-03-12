@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace GreetNGroup.DataAccess.Queries
 {
@@ -15,11 +13,19 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsUsernameFound(int uId)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                 // Finds any username matching the parameter
-                 var user = ctx.Users.Any(s => s.UserId == uId);
-                 return user != false;
+                using (var ctx = new GreetNGroupContext())
+                {
+                    // Finds any username matching the parameter
+                    var user = ctx.Users.Any(s => s.UserId == uId);
+                    return user != false;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
         /// <summary>
@@ -30,9 +36,17 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsUsernameFound(string username)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                return ctx.Users.Any(u => u.UserName.Equals(username));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    return ctx.Users.Any(u => u.UserName.Equals(username));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
@@ -46,10 +60,18 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool DoesPasswordMatch(string username, string password)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                return user.Any(p => p.Password.Equals(password));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.Where(u => u.UserName.Equals(username));
+                    return user.Any(p => p.Password.Equals(password));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
@@ -60,9 +82,17 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsClaimInTable(int claimId)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                return ctx.Claims.Any(u => u.ClaimId.Equals(claimId));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    return ctx.Claims.Any(u => u.ClaimId.Equals(claimId));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
@@ -74,10 +104,18 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsClaimOnUser(int uId, int claimId)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var userClaims = ctx.UserClaims.Where(u => u.UId.Equals(uId));
-                return userClaims.Any(c => c.ClaimId.Equals(claimId));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var userClaims = ctx.UserClaims.Where(u => u.UId.Equals(uId));
+                    return userClaims.Any(c => c.ClaimId.Equals(claimId));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
@@ -89,10 +127,18 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsClaimOnUser(string username, string claimName)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var userClaims = ctx.UserClaims.Where(u => u.User.UserName.Equals(username));
-                return userClaims.Any(c => c.Claim.ClaimName.Equals(claimName));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var userClaims = ctx.UserClaims.Where(u => u.User.UserName.Equals(username));
+                    return userClaims.Any(c => c.Claim.ClaimName.Equals(claimName));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
@@ -103,9 +149,17 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static bool IsEventIdFound(int eventId)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                return ctx.Events.Any(c => c.EventId.Equals(eventId));
+                using (var ctx = new GreetNGroupContext())
+                {
+                    return ctx.Events.Any(c => c.EventId.Equals(eventId));
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 
