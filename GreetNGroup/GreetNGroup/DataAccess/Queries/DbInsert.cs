@@ -27,13 +27,21 @@ namespace GreetNGroup.DataAccess.Queries
         public static void InsertUser(int uId, string firstName, string lastName, string userName, string password, string city,
             string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var user = new User(uId, firstName, lastName, userName, password, city, state, country, dob, securityQ, securityA, isActivated);
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = new User(uId, firstName, lastName, userName, password, city, state, country, dob,
+                        securityQ, securityA, isActivated);
 
-                ctx.Users.Add(user);
+                    ctx.Users.Add(user);
 
-                ctx.SaveChanges();
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
 
@@ -44,13 +52,20 @@ namespace GreetNGroup.DataAccess.Queries
         /// <param name="claimName"></param>
         public static void InsertClaim(int claimId, string claimName)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var claim = new Claim(claimId, claimName);
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var claim = new Claim(claimId, claimName);
 
-                ctx.Claims.Add(claim);
+                    ctx.Claims.Add(claim);
 
-                ctx.SaveChanges();
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
 
@@ -63,13 +78,20 @@ namespace GreetNGroup.DataAccess.Queries
         /// <param name="eventName"></param>
         public static void InsertEvent(int userId, int eventId, DateTime startDate, string eventName)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                var userEvent = new Event(userId, eventId, startDate, eventName);
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var userEvent = new Event(userId, eventId, startDate, eventName);
 
-                ctx.Events.Add(userEvent);
+                    ctx.Events.Add(userEvent);
 
-                ctx.SaveChanges();
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
     }
