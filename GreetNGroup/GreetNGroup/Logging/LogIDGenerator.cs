@@ -22,6 +22,8 @@ namespace GreetNGroup.Logging
             logIDMap.Add("EntryToWebsite", 1004);
             logIDMap.Add("ExitFromWebsite", 1005);
             logIDMap.Add("AccountDeletion", 1006);
+            logIDMap.Add("InternalErrors", 1007);
+            logIDMap.Add("MaliciousAttacks", 1008);
 
             return logIDMap;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -8,11 +9,14 @@ namespace GreetNGroup.Logging
 {
     public class GNGLogger
     {
-        private const string LOGS_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\Logs\\";
+        private string LOGS_FOLDERPATH = Path.Combine(
+            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, 
+            @"GreetNGroup\GreetNGroup\Logs\");
         private const string LOG_IDENTIFIER = "_gnglog.json";
         private static LogIDGenerator logIDGenerator = new LogIDGenerator();
         private Dictionary<string, int> listOfIDs = logIDGenerator.GetLogIDs();
         private string currentLogPath;
+        private int errorCounter = 0;
 
         public GNGLogger()
         {
@@ -34,7 +38,7 @@ namespace GreetNGroup.Logging
                 }
                 catch (IOException e)
                 {
-                    
+                    errorCounter++;   
                 }
                 
             }
@@ -53,7 +57,7 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogClicksMade(string startPoint, string endPoint, string usersID)
+        public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("ClickEvent", out int clickLogID);
@@ -62,6 +66,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = startPoint + " to " + endPoint
             };
@@ -79,13 +84,14 @@ namespace GreetNGroup.Logging
             }catch(FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
 
         }
 
         [HttpPost]
-        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc)
+        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
@@ -94,6 +100,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
@@ -112,12 +119,13 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
         }
 
         [HttpPost]
-        public bool LogGNGEventsCreated(string usersID, string eventID)
+        public bool LogGNGEventsCreated(string usersID, string eventID, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int clickLogID);
@@ -126,6 +134,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = "Event " + eventID + " created"
             };
@@ -144,12 +153,13 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
         }
 
         [HttpPost]
-        public bool LogEntryToWebsite(string usersID, string urlEntered)
+        public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("EntryToWebsite", out int clickLogID);
@@ -158,6 +168,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " entered at " + urlEntered
             };
@@ -176,12 +187,13 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
         }
 
         [HttpPost]
-        public bool LogExitFromWebsite(string usersID, string urlOfExit)
+        public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("ExitFromWebsite", out int clickLogID);
@@ -190,6 +202,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " exited website from " + urlOfExit
             };
@@ -208,12 +221,13 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
         }
 
         [HttpPost]
-        public bool LogAccountDeletion(string usersID)
+        public bool LogAccountDeletion(string usersID, string ip)
         {
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
@@ -222,6 +236,7 @@ namespace GreetNGroup.Logging
             {
                 logID = clickLogIDString,
                 userID = usersID,
+                ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " deleted account"
             };
@@ -240,6 +255,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
+                errorCounter++;
             }
             return logMade;
         }
