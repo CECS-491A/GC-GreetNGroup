@@ -15,45 +15,73 @@ namespace GreetNGroup.DataAccess.Queries
 
         public static void UpdateUserPassword(int uId, string password)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                if (curUser != null)
-                    curUser.Password = password;
-                ctx.SaveChanges();
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                        curUser.Password = password;
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
 
         public static void UpdateUserCity(int uId, string city)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                if (curUser != null)
-                    curUser.City = city;
-                ctx.SaveChanges();
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                        curUser.City = city;
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
         
         public static void UpdateUserState(int uId, string state)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                if (curUser != null)
-                    curUser.State = state;
-                ctx.SaveChanges();
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                        curUser.State = state;
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
 
         public static void UpdateUserCountry(int uId, string country)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                if (curUser != null)
-                    curUser.Country = country;
-                ctx.SaveChanges();
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                        curUser.Country = country;
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
         #endregion
@@ -67,12 +95,19 @@ namespace GreetNGroup.DataAccess.Queries
 
         public static void UpdateEventStartDate(int eId, DateTime startDate)
         {
-            using (var ctx = new GreetNGroupContext())
+            try
             {
-                Event curEvent = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
-                if (curEvent != null)
-                    curEvent.StartDate = startDate;
-                ctx.SaveChanges();
+                using (var ctx = new GreetNGroupContext())
+                {
+                    Event curEvent = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
+                    if (curEvent != null)
+                        curEvent.StartDate = startDate;
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
             }
         }
 
