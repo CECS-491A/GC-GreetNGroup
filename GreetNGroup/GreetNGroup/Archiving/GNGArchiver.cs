@@ -7,8 +7,12 @@ namespace GreetNGroup.Archiving
 {
     public class GNGArchiver
     {
-        private const string LOGS_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\Logs\\";
-        private const string ARCHIVES_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\Archives\\";
+        private string LOGS_FOLDERPATH = Path.Combine(
+            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
+            @"GreetNGroup\GreetNGroup\Logs\");
+        private string ARCHIVES_FOLDERPATH = Path.Combine(
+            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
+            @"GreetNGroup\GreetNGroup\Archives\");
         private const int MAX_LOG_LIFETIME = 30;
 
         private string[] GetLogsFilename()
