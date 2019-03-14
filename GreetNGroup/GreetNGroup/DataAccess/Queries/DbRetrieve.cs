@@ -19,15 +19,25 @@ namespace GreetNGroup.DataAccess.Queries
         public static List<Claim> GetUsersClaims(string username)
         {
             List<Claim> claimsList = new List<Claim>();
-            using (var ctx = new GreetNGroupContext())
+
+            try
             {
-                var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
-                foreach (UserClaim claim in usersClaims)
+                using (var ctx = new GreetNGroupContext())
                 {
-                    claimsList.Add(claim.Claim);
+                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
+                    foreach (UserClaim claim in usersClaims)
+                    {
+                        claimsList.Add(claim.Claim);
+                    }
+
+                    return claimsList;
                 }
             }
-            return claimsList;
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return claimsList;
+            }
         }
 
         /// <summary>
@@ -38,24 +48,36 @@ namespace GreetNGroup.DataAccess.Queries
         /// <returns></returns>
         public static string GetUsersHashedUID(string username)
         {
-            var hashedUID = "";
-            using (var ctx = new GreetNGroupContext())
+            var hashedUid = "";
+
+            try
             {
-                var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                using(var sha256 = new SHA256CryptoServiceProvider())
+                using (var ctx = new GreetNGroupContext())
                 {
-                    //First converts the uID into UTF8 byte encoding before hashing
-                    var hashedUIDBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(user.Select(id => id.UserId).ToString()));
-                    var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
-                    foreach (byte b in hashedUIDBytes)
+                    var user = ctx.Users.Where(u => u.UserName.Equals(username));
+                    using (var sha256 = new SHA256CryptoServiceProvider())
                     {
-                        hashToString.Append(b.ToString("X2"));
+                        //First converts the uID into UTF8 byte encoding before hashing
+                        var hashedUIDBytes =
+                            sha256.ComputeHash(Encoding.UTF8.GetBytes(user.Select(id => id.UserId).ToString()));
+                        var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
+                        foreach (byte b in hashedUIDBytes)
+                        {
+                            hashToString.Append(b.ToString("X2"));
+                        }
+
+                        sha256.Dispose();
+                        hashedUid = hashToString.ToString();
                     }
-                    sha256.Dispose();
-                    hashedUID = hashToString.ToString();
                 }
+
+                return hashedUid;
             }
-            return hashedUID;
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return hashedUid;
+            }
         }
     }
 }
