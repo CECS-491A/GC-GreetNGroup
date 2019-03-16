@@ -13,7 +13,7 @@ namespace GreetNGroup.Logging
         /// event that is being logged and string keys associated with that ID
         /// </summary>
         /// <returns>Dictionary<string, int> which holds the mapped ids</returns>
-        public Dictionary<string, int> GetLogIDs()
+        public static Dictionary<string, int> GetLogIDs()
         {
             Dictionary<string, int> logIDMap = new Dictionary<string, int>();
             logIDMap.Add("ClickEvent", 1001);

@@ -65,9 +65,7 @@ C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Newton
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.Net.Http.Formatting.dll
-C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IO.Compression.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.Web.Http.WebHost.dll
-C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IO.Compression.FileSystem.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.Web.Infrastructure.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.Web.WebPages.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.Web.WebPages.Razor.dll

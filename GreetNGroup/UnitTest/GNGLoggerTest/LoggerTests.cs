@@ -12,7 +12,6 @@ namespace UnitTest.GNGLoggerTest
     [TestClass]
     public class LoggerTests
     {
-        GNGLogger logger = new GNGLogger();
         [TestMethod]
         public void LogClickEvent_Pass()
         {
@@ -21,7 +20,7 @@ namespace UnitTest.GNGLoggerTest
             string endPoint = "https://www.endpoint.com";
             string ipAddress = "1.103.23.102";
 
-            bool actual = logger.LogClicksMade(startPoint, endPoint, userID, ipAddress);
+            bool actual = GNGLogger.LogClicksMade(startPoint, endPoint, userID, ipAddress);
 
             Assert.AreEqual(actual, true);
         }
