@@ -2,33 +2,40 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
+using System.Globalization;
 
 namespace GreetNGroup.Archiving
 {
     public class GNGArchiver
     {
-        private string LOGS_FOLDERPATH = Path.Combine(
-            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-            @"GreetNGroup\GreetNGroup\Logs\");
-        private string ARCHIVES_FOLDERPATH = Path.Combine(
-            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-            @"GreetNGroup\GreetNGroup\Archives\");
+        private static string LOGS_FOLDERPATH = Path.Combine(
+             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
+             @"GreetNGroup\GreetNGroup\Logs\");
+        private static string ARCHIVES_FOLDERPATH = Path.Combine(
+             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
+             @"GreetNGroup\GreetNGroup\Archives\");
         private const int MAX_LOG_LIFETIME = 30;
+        private static int errorCounter = 0;
 
-        private string[] GetLogsFilename()
+        private static List<string> GetLogsFilename()
         {
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
             string[] filepathsOfLogs = Directory.GetFiles(LOGS_FOLDERPATH);
-
-            return filepathsOfLogs;
+            List<string> listOfLogs = new List<string>();
+            foreach (string filepath in filepathsOfLogs)
+            {
+                listOfLogs.Add(Path.GetFileName(filepath));
+            }
+            return listOfLogs;
         }
 
-        private bool isLogOlderThan30Days(string fileName)
+        private static bool isLogOlderThan30Days(string fileName)
         {
             bool isOld = false;
             string[] splitDate = fileName.Split('_');
             string logDate = splitDate[0];
-            DateTime dateOfLog = DateTime.Parse(logDate);
+            DateTime.TryParseExact(logDate, "dd-MM-yyyy", new CultureInfo("en-US"), 
+                DateTimeStyles.None, out DateTime dateOfLog);
             if ((DateTime.Now - dateOfLog).TotalDays > MAX_LOG_LIFETIME)
             {
                 isOld = true;
@@ -36,9 +43,9 @@ namespace GreetNGroup.Archiving
             return isOld;
         }
 
-        private List<string> GetOldLogs()
+        private static List<string> GetOldLogs()
         {
-            string[] listOfLogs = GetLogsFilename();
+            List<string> listOfLogs = GetLogsFilename();
             List<string> listOfOldLogs = new List<string>();
             foreach(string logFilename in listOfLogs)
             {
@@ -51,7 +58,7 @@ namespace GreetNGroup.Archiving
             return listOfOldLogs;
         }
 
-        public bool ArchiveOldLogs()
+        public static bool ArchiveOldLogs()
         {
             bool isSuccessfulArchive = false;
             bool isSuccessfulDeletion = false;
@@ -59,31 +66,36 @@ namespace GreetNGroup.Archiving
             string archiveFileName = DateTime.Now.ToString("dd-MM-yyyy") + "_gngarchive.zip";
             try
             {
-                using (ZipArchive archiver = ZipFile.Open(archiveFileName, ZipArchiveMode.Create))
+                using (FileStream fstream = new FileStream((ARCHIVES_FOLDERPATH + archiveFileName), FileMode.OpenOrCreate))
                 {
-                    foreach (string logDate in logsToArchive)
+                    using (ZipArchive archiver = new ZipArchive(fstream, ZipArchiveMode.Update))
                     {
-                        string logPath = LOGS_FOLDERPATH + logDate + "_gnglog.json";
-                        archiver.CreateEntryFromFile(logPath, logDate + "_gnglog.json");
-                        isSuccessfulDeletion = RemoveLog(logPath);
+                        foreach (string logDate in logsToArchive)
+                        {
+                            string logPath = LOGS_FOLDERPATH + logDate;
+                            ZipArchiveEntry logEntry = archiver.CreateEntryFromFile(logPath, logDate);
+                            
+                            isSuccessfulDeletion = RemoveLog(logPath);
+                        }
+                        if (isSuccessfulDeletion == true)
+                        {
+                            archiver.Dispose();
+                            isSuccessfulArchive = true;
+                        }
+
                     }
-                    if (isSuccessfulDeletion == true)
-                    {
-                        archiver.Dispose();
-                        isSuccessfulArchive = true;
-                    }
-                    
                 }
- 
+
             }catch(FileNotFoundException e)
             {
                 isSuccessfulArchive = false;
+                errorCounter++;
             }
 
             return isSuccessfulArchive;
         }
 
-        private bool RemoveLog(string logPath)
+        private static bool RemoveLog(string logPath)
         {
             bool isSuccessfulRemoval = false;
             try
@@ -93,10 +105,20 @@ namespace GreetNGroup.Archiving
             }catch(FileNotFoundException e)
             {
                 isSuccessfulRemoval = false;
+                errorCounter++;
             }
 
             return isSuccessfulRemoval;
         }
-            
+
+        public static void errorHandler()
+        {
+            if (errorCounter >= 100)
+            {
+                //Contact system admin
+                errorCounter = 0;
+            }
+        }
+
     }
 }
