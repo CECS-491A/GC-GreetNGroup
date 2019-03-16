@@ -154,8 +154,6 @@ C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\Microsoft
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\Microsoft.IdentityModel.Logging.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\System.IO.Compression.dll
-C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\System.IO.Compression.FileSystem.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\System.Shim.dll
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\EntityFramework.xml
 C:\Users\Yuki\Documents\GitHub\GreetNGroup\GreetNGroup\GreetNGroup\bin\EntityFramework.SqlServer.xml

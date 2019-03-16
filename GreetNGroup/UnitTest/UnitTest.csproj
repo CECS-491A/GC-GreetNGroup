@@ -57,9 +57,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiverTest\ArchiverTest.cs" />
     <Compile Include="GNGLoggerTest\LoggerTests.cs" />
     <Compile Include="PasswordTest\PasswordCheckerTest.cs" />
     <Compile Include="PasswordTest\UTF8ToSHA1Test.cs" />

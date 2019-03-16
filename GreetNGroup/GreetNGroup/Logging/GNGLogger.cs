@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -9,21 +8,20 @@ namespace GreetNGroup.Logging
 {
     public class GNGLogger
     {
-        private string LOGS_FOLDERPATH = Path.Combine(
+        private static string LOGS_FOLDERPATH = Path.Combine(
             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, 
             @"GreetNGroup\GreetNGroup\Logs\");
-        private const string LOG_IDENTIFIER = "_gnglog.json";
-        private static LogIDGenerator logIDGenerator = new LogIDGenerator();
-        private Dictionary<string, int> listOfIDs = logIDGenerator.GetLogIDs();
-        private string currentLogPath;
-        private int errorCounter = 0;
+        private static string LOG_IDENTIFIER = "_gnglog.json";
+        private static Dictionary<string, int> listOfIDs = LogIDGenerator.GetLogIDs();
+        private static string currentLogPath;
+        private static int errorCounter = 0;
 
         public GNGLogger()
         {
-            CreateNewLog();
+
         }
 
-        private void CreateNewLog()
+        private static void CreateNewLog()
         {
             bool logExists = CheckForExistingLog();
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
@@ -48,17 +46,26 @@ namespace GreetNGroup.Logging
             }
         }
 
-        private bool CheckForExistingLog()
+        private static bool CheckForExistingLog()
         {
-            string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-            bool logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
+            bool logExists = false;
+            try
+            {
+                string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+                logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
+            }
+            catch(FileNotFoundException e)
+            {
+                errorCounter++;
+            }
 
             return logExists;
         }
 
         [HttpPost]
-        public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
+        public static bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ClickEvent", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -91,8 +98,9 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
+        public static bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -125,8 +133,9 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogGNGEventsCreated(string usersID, string eventID, string ip)
+        public static bool LogGNGEventsCreated(string usersID, string eventID, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -159,8 +168,9 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
+        public static bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("EntryToWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -193,8 +203,9 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
+        public static bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ExitFromWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -227,8 +238,9 @@ namespace GreetNGroup.Logging
         }
 
         [HttpPost]
-        public bool LogAccountDeletion(string usersID, string ip)
+        public static bool LogAccountDeletion(string usersID, string ip)
         {
+            CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -258,6 +270,15 @@ namespace GreetNGroup.Logging
                 errorCounter++;
             }
             return logMade;
+        }
+
+        public static void errorHandler()
+        {
+            if(errorCounter >= 100)
+            {
+                //Contact system admin
+                errorCounter = 0;
+            }
         }
 
     }

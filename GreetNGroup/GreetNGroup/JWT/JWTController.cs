@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Http;
 using AllowAnonymousAttribute = System.Web.Http.AllowAnonymousAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +6,6 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Linq;
 using GreetNGroup.DataAccess.Queries;
 
