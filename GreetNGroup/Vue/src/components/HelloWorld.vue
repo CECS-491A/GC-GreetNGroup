@@ -17,7 +17,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('https://greetngroup.com/api/hello').then(response => (this.info = response.data))
+    axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
   }
 }
 </script>

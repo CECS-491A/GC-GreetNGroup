@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -22,22 +23,19 @@ namespace GreetNGroup
          Function still in consideration for adding -- application specific but useful for generic missed
          exception catch
 
+            Will currently use this function as a last resort error catch, it is non-descriptive an wide catching
+         */
         void Application_Error(object s, EventArgs e)
         {
-            try
-            {
-                Exception lastErr = Server.GetLastError();
+            var httpEx = Server.GetLastError() as HttpException;
 
-                if (lastErr != null)
+            if (httpEx != null)
+            {
+                if (httpEx.GetHttpCode() == 404)
                 {
-                    // Create Error log in here
+                    Response.StatusCode = 404;
                 }
             }
-            catch (Exception e)
-            {
-
-            }
         }
-        */
     }
 }

@@ -1,8 +1,15 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
-  </div>
+  <v-app>
+    <v-toolbar app dark>
+      <v-toolbar-title class = "TestToolBar">
+        <span class="font-weight-light">GreetNGroup</span>
+      </v-toolbar-title>
+    </v-toolbar>
+    <div id="app">
+      <img src="./assets/logo.png">
+      <router-view/>
+    </div>
+  </v-app>
 </template>
 
 <script>
