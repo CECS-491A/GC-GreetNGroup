@@ -2,22 +2,24 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>{{ info }}</h2>
+    <input type="text" v-model="search" placeholder="search for events" />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      info: null
+      msg: 'GreetNGroup',
+      info: null,
+      search: ''
     }
   },
   mounted () {
-    axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
+    // axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
   }
 }
 </script>
