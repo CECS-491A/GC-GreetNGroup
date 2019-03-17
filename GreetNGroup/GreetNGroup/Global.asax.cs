@@ -24,7 +24,6 @@ namespace GreetNGroup
          exception catch
 
             Will currently use this function as a last resort error catch, it is non-descriptive an wide catching
-         */
         void Application_Error(object s, EventArgs e)
         {
             var httpEx = Server.GetLastError() as HttpException;
@@ -37,5 +36,6 @@ namespace GreetNGroup
                 }
             }
         }
+        */
     }
 }

@@ -6,7 +6,6 @@
       </v-toolbar-title>
     </v-toolbar>
     <div id="app">
-      <img src="./assets/logo.png">
       <router-view/>
     </div>
   </v-app>
