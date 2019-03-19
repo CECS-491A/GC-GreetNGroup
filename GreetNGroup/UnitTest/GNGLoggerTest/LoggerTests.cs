@@ -24,5 +24,18 @@ namespace UnitTest.GNGLoggerTest
 
             Assert.AreEqual(actual, true);
         }
+
+        [TestMethod]
+        public void LogClickEvent2_Pass()
+        {
+            string userID = "56FDIGH4920";
+            string startPoint = "https://www.startpoint.com";
+            string endPoint = "https://www.endpoint.com";
+            string ipAddress = "1.103.23.102";
+
+            bool actual = GNGLogger.LogEntryToWebsite(userID, startPoint, ipAddress);
+
+            Assert.AreEqual(actual, true);
+        }
     }
 }

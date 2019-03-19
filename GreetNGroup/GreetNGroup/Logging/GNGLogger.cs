@@ -32,6 +32,13 @@ namespace GreetNGroup.Logging
                 {
                     var newLog = File.Create(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
                     currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
+                    List<GNGLog> listOfLogsInit = new List<GNGLog>();
+                    using(StreamWriter writer = File.AppendText(currentLogPath))
+                    {
+                        JsonSerializer jsonSerializer = new JsonSerializer();
+                        jsonSerializer.Serialize(writer, listOfLogsInit);
+                        writer.Close();
+                    }
                     newLog.Close();
                 }
                 catch (IOException e)
@@ -85,6 +92,7 @@ namespace GreetNGroup.Logging
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
+
                     logMade = true;
                     file.Close();
                 }
