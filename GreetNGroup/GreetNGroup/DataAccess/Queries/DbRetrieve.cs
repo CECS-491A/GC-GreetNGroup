@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +9,28 @@ namespace GreetNGroup.DataAccess.Queries
 {
     public class DbRetrieve
     {
+        /// <summary>
+        /// Retrieves Event through Id reference
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public static Event GetEventById(int eventId)
+        {
+            Event e = null;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eventId));
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return e;
+            }
+        }
 
         /// <summary>
         /// Gets the list of greetngroup claims a user has
