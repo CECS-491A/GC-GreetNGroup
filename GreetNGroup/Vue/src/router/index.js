@@ -19,7 +19,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/EventHome',
       name: 'EventHome',
       component: EventHome
     },
@@ -29,7 +29,7 @@ const router = new Router({
       component: TestLogin
     },
     {
-      path: '/',
+      path: '/HelloWorld',
       name: 'HelloWorld',
       component: HelloWorld
     },
