@@ -461,6 +461,7 @@
     <Content Include="Logs\16-03-2019_gnglog.json" />
     <Content Include="Logs\18-03-2019_gnglog.json" />
     <Content Include="Logs\19-03-2019_gnglog.json" />
+    <Content Include="Logs\20-03-2019_gnglog.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\Settings.settings">

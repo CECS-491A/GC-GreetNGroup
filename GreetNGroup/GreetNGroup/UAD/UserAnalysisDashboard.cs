@@ -9,16 +9,9 @@ namespace GreetNGroup.UAD
 
     public class UserAnalysisDashboard
     {
-        private static string LOGS_FOLDERPATH = Path.Combine(
-            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-            @"GreetNGroup\GreetNGroup\Logs\");
-        private static DirectoryInfo di = new DirectoryInfo(LOGS_FOLDERPATH);
-        private static string[] dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
-        private static Dictionary<string, int> listOfIDs = LogIDGenerator.GetLogIDs();
-
+        
         public UserAnalysisDashboard()
         {
-
         }
         /// <summary>
         /// Reads all json files in directory and deserializes into GNGlog and puts them all into a Arraylist
@@ -26,7 +19,10 @@ namespace GreetNGroup.UAD
         /// <returns></returns>
         private static void ReadLogs(List<GNGLog> loglist)
         {
-           
+            string LOGS_FOLDERPATH = "C:\\Users\\Midnightdrop\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\Logs\\";
+            DirectoryInfo di = new DirectoryInfo(LOGS_FOLDERPATH);
+            string[] dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
+            
             foreach (string dir in dirs)
             {
                 using (StreamReader r = new StreamReader(dir))
@@ -49,17 +45,16 @@ namespace GreetNGroup.UAD
         /// <returns></returns>
         public static string LoginVSRegistered(string month)
         {
-            int loginCount = 0;
-            int registered = 0;
+
             List<GNGLog> loglist = new List<GNGLog>();
             UserAnalysisDashboard.ReadLogs(loglist);
             UADHelperFunctions.LogsFortheMonth(loglist, month);
-            loginCount = UADHelperFunctions.NumberofLogs(loglist, "1004");
+            int loginCount = UADHelperFunctions.NumberofLogs(loglist, "1004");
 
-            registered = DbRetrieve.GetUsersRegistered();
+            int registered = DbRetrieve.GetUsersRegistered();
 
             string failedVsSuccess = "Logins: " + loginCount +
-                                    "\nRegistered Accounst: " + registered;
+                                    "\nRegistered Accounts: " + registered;
 
             Console.WriteLine(failedVsSuccess);
             return failedVsSuccess;
@@ -115,25 +110,82 @@ namespace GreetNGroup.UAD
             double average = UADHelperFunctions.FindAverage(sessions);
             string sAverage = String.Format("{0:0.00}", average);
 
-            string averageSession = "Average Session Time: " + sAverage + " minutes";
+            string averageSession = "Average Session Time for " + month + ": " + sAverage + " minutes";
 
             Console.WriteLine(averageSession);
-
-            
-
             return averageSession;
-
 
         }
         /// <summary>
         /// 
         /// </summary>
-        public static void Top5AveragePageSession(string month)
+        public static string Top5AveragePageSession(string month)
         {
+            List<String> urlPages = new List<String>() { "https://www.greetngroup.com/create", "https://www.greetngroup.com/join", "https://www.greetngroup.com/searchUser", "https://www.greetngroup.com/searchEvent", "https://www.greetngroup.com/help", "https://www.greetngroup.com/faq" };
+            double[] averageTimeSpent = { 0, 0, 0, 0, 0, 0 };
+            for (int i = 0; i < urlPages.Count; i++)
+            {
+                //List<string> logID = new List<string>() { "1001", "1005"};
+                List<GNGLog> entryToPage = new List<GNGLog>();
+                List<GNGLog> exitFromPage = new List<GNGLog>();
+                List<GNGLog> sessions = new List<GNGLog>();
 
+                for (int j = 0; j < 2; j++)
+                {
+
+                    if (j == 0)
+                    {
+                        UserAnalysisDashboard.ReadLogs(entryToPage);
+                        UADHelperFunctions.LogsFortheMonth(entryToPage, month);
+                        UADHelperFunctions.EntryLogswithURL(entryToPage, urlPages[i]);
+                    }
+                    else
+                    {
+                        UserAnalysisDashboard.ReadLogs(exitFromPage);
+                        UADHelperFunctions.LogsFortheMonth(exitFromPage, month);
+                        UADHelperFunctions.ExitLogswithURL(exitFromPage, urlPages[i]);
+                    }
+
+                }
+                for (int k = 0; k < exitFromPage.Count; k++)
+                {
+                    
+                    bool notFound = true;
+                    int pos = 0;
+
+                    sessions.Add(exitFromPage[k]);
+                    while (notFound == true)
+                    {
+
+                        if (string.Compare(entryToPage[pos].userID, exitFromPage[k].userID) == 0)
+                        {
+                            sessions.Add(entryToPage[pos]);
+                            entryToPage.Remove(entryToPage[pos]);
+                            notFound = false;
+                        }
+                        else
+                        {
+                            pos++;
+                        }
+                    }
+                }
+                double average = UADHelperFunctions.FindAverage(sessions);
+                averageTimeSpent[i] = average;
+            }
+            UADHelperFunctions.Quick_SortD(averageTimeSpent, urlPages, 0, urlPages.Count - 1);
+
+            string pageUsed = "Top 5 average page sessions (in minutes)" +
+                              "\n" + urlPages[5] + " average time spent: " + averageTimeSpent[5] +
+                              "\n" + urlPages[4] + " average time spent: " + averageTimeSpent[4] +
+                              "\n" + urlPages[3] + " average time spent: " + averageTimeSpent[3] +
+                              "\n" + urlPages[2] + " average time spent: " + averageTimeSpent[2] +
+                              "\n" + urlPages[1] + " average time spent: " + averageTimeSpent[1];
+            Console.WriteLine(pageUsed);
+            return pageUsed;
         }
+
         /// <summary>
-        /// 
+        /// Calculates the 5 most used features of the website
         /// </summary>
         public static string Top5MostUsedFeature(string month)
         {
@@ -142,8 +194,8 @@ namespace GreetNGroup.UAD
             UADHelperFunctions.LogsFortheMonth(loglist, month);
             List<String> features = new List<String>() { "EventCreated", "EventJoined", "SearchForUser", "FindEventForMe", "UserRatings", "ViewHistory" };
             List<int> timesFeaturedUsed = new List<int>() {0, 0, 0, 0, 0, 0};
-            
-            for (int i = 0; i < loglist.Count; i++ )
+            Dictionary<string, int> listOfIDs = LogIDGenerator.GetLogIDs();
+            for (int i = 0; i < features.Count; i++ )
             {
                 listOfIDs.TryGetValue(features[i], out int clickLogID);
                 string logID = clickLogID.ToString();
@@ -151,17 +203,20 @@ namespace GreetNGroup.UAD
                 timesFeaturedUsed[i] = timesUsed;
             }
             UADHelperFunctions.Quick_Sort(timesFeaturedUsed, features, 0, features.Count - 1);
-            string mostUsed = "1." + features[5] + " times used: " + timesFeaturedUsed[5] +
-                              "\n2." + features[5] + " times used: " + timesFeaturedUsed[4] +
-                              "\n3." + features[5] + " times used: " + timesFeaturedUsed[3] +
-                              "\n4." + features[5] + " times used: " + timesFeaturedUsed[2] +
-                              "\n5." + features[5] + " times used: " + timesFeaturedUsed[1];
+
+            string mostUsed;
+            mostUsed = "Top 5 most used features" +
+                              "\n" + features[5] + " times used: " + timesFeaturedUsed[5] +
+                              "\n" + features[4] + " times used: " + timesFeaturedUsed[4] +
+                              "\n" + features[3] + " times used: " + timesFeaturedUsed[3] +
+                              "\n" + features[2] + " times used: " + timesFeaturedUsed[2] +
+                              "\n" + features[1] + " times used: " + timesFeaturedUsed[1];
             Console.WriteLine(mostUsed);
             return mostUsed;
 
         }
         /// <summary>
-        /// 
+        /// Calcualtes the average user session per month for six months
         /// </summary>
         public static string AverageSessionMonthly(string month)
         {
@@ -216,7 +271,8 @@ namespace GreetNGroup.UAD
                 averages.Add(sAverage);
 
             }
-            string monthlyAverages = "March: " + averages[0] +
+            string monthlyAverages = "Average session duration per month (in minutes)" +
+                                  "\nMarch: " + averages[0] +
                                   "\nApril: " + averages[1] +
                                   "\nMay: " + averages[2] +
                                   "\nJune: " + averages[3] +
@@ -228,12 +284,12 @@ namespace GreetNGroup.UAD
             return monthlyAverages;
         }
         /// <summary>
-        /// 
+        /// Calculates the number of times a user logged in for six months
         /// </summary>
         public static string LoggedInMonthly()
         {
             List<string> months = new List<string>() { "March", "April", "May", "June", "July", "August" };
-            List<int> logins = new List<int>() { 0, 0, 0, 0, 0, 0};
+            List<int> logins = new List<int>() {};
             for(int index = 0; index < months.Count; index++)
             {
                 List<GNGLog> loglist = new List<GNGLog>();
@@ -242,7 +298,8 @@ namespace GreetNGroup.UAD
                 int loginCount = UADHelperFunctions.NumberofLogs(loglist, "1004");
                 logins.Add(loginCount);
             }
-            string monthlyLogin = "March: " + logins[0] +
+            string monthlyLogin = "Total amount of users per month" +
+                                  "\nMarch: " + logins[0] +
                                   "\nApril: " + logins[1] +
                                   "\nMay: " + logins[2] +
                                   "\nJune: " + logins[3] +

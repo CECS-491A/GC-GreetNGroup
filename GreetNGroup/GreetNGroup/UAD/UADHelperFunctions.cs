@@ -122,11 +122,8 @@ namespace GreetNGroup.UAD
                 {
                     right--;
                 }
-
                 if (left < right)
                 {
-                    if (usedCounts[left] == usedCounts[right]) return right;
-
                     int temp = usedCounts[left];
                     usedCounts[left] = usedCounts[right];
                     usedCounts[right] = temp;
@@ -135,12 +132,53 @@ namespace GreetNGroup.UAD
                     logID[left] = logID[right];
                     logID[right] = tempID;
 
+                   
+
+                    if (usedCounts[left] == usedCounts[right])
+                    {
+                        left++;
+                    }
+                        
                 }
                 else
                 {
                     return right;
                 }
             }
+        }
+
+        public static void QuickSortD<T>(T[] data, List<string> urls) where T : IComparable<T>
+        {
+            Quick_SortD(data, urls, 0, data.Length - 1);
+        }
+
+        public static void Quick_SortD<T>(T[] data, List<string> urls, int left, int right) where T : IComparable<T>
+        {
+            int i, j;
+            T pivot, temp;
+            i = left;
+            j = right;
+            pivot = data[(left + right) / 2];
+
+            do
+            {
+                while ((data[i].CompareTo(pivot) < 0) && (i < right)) i++;
+                while ((pivot.CompareTo(data[j]) < 0) && (j > left)) j--;
+                if (i <= j)
+                {
+                    temp = data[i];
+                    string tempUrl = urls[i];
+                    data[i] = data[j];
+                    urls[i] = urls[j];
+                    data[j] = temp;
+                    urls[j] = tempUrl;
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (left < j) Quick_SortD(data, urls, left, j);
+            if (i < right) Quick_SortD(data, urls,  i, right);
         }
         /// <summary>
         /// 
@@ -163,6 +201,48 @@ namespace GreetNGroup.UAD
             average = totalTime / totalSessions;
             
             return average;
+        }
+
+        public static void EntryLogswithURL(List<GNGLog> logs, string url)
+        {
+            for (int i = logs.Count - 1; i >= 0; i--)
+            {
+                string[] words = logs[i].description.Split(' ');
+                if (string.Compare(words[2], url) != 0)
+                {
+                    
+                    logs.Remove(logs[i]);
+                }
+            }
+        }
+
+        public static void ExitLogswithURL(List<GNGLog> logs, string url)
+        {
+            for (int i = logs.Count - 1; i >= 0; i--)
+            {
+                string logID = logs[i].logID;
+                if(string.Compare(logID, "1001") != 0 && string.Compare(logID, "1005") != 0)
+                {
+                        logs.Remove(logs[i]);
+                }
+                if (string.Compare(logID, "1001") == 0)
+                {
+                    string[] word1001 = logs[i].description.Split(' ');
+                    if (string.Compare(word1001[0], url) != 0)
+                    {
+                        logs.Remove(logs[i]);
+                    }
+                }
+                if (string.Compare(logID, "1005") == 0)
+                {
+                    string[] word1005 = logs[i].description.Split(' ');
+                    if (string.Compare(word1005[4], url) != 0)
+                    {
+                        logs.Remove(logs[i]);
+                    }
+                }
+            }
+
         }
     }
 }

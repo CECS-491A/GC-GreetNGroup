@@ -7,6 +7,7 @@
           <router-link to="/EventHome">Events</router-link>
           <router-link to="/HelloWorld">HelloPage</router-link>
           <router-link to="/testlogin">Login</router-link>
+          <router-link to="/analysisdashboard">User Analysis</router-link>
         </div>
       </v-toolbar-title>
     </v-toolbar>

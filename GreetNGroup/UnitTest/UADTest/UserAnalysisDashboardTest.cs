@@ -25,7 +25,8 @@ namespace UnitTest.UADTest
         [TestMethod]
         public void Top5MostUsedFeature()
         {
-            UserAnalysisDashboard.Top5MostUsedFeature("March");
+            string a = UserAnalysisDashboard.Top5MostUsedFeature("March");
+            Console.WriteLine(a);
             Assert.AreEqual(true, true);
 
         }
@@ -42,6 +43,14 @@ namespace UnitTest.UADTest
         public void AverageSessionMonthly()
         {
             UserAnalysisDashboard.AverageSessionMonthly("March");
+            Assert.AreEqual(true, true);
+
+        }
+
+        [TestMethod]
+        public void Top5AveragePageSession()
+        {
+            UserAnalysisDashboard.Top5AveragePageSession("March");
             Assert.AreEqual(true, true);
 
         }
