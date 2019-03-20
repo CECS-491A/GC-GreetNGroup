@@ -7,9 +7,6 @@
     <div>
         <input type="text" v-model="search" placeholder="search for events by id" />
         <button v-on:click="lookupEventById(search)">Search</button>
-        <ul v-if="eventName && eventName.length">
-            <p> {{eventNames.EventName}} </p>
-        </ul>
     </div>
   </div>
 </template>
@@ -24,7 +21,7 @@ export default {
       title: 'GreetNGroup',
       info: null,
       search: '',
-      eventName: []
+      eventName: ''
     }
   },
   methods: {
