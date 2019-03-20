@@ -100,5 +100,28 @@ namespace GreetNGroup.DataAccess.Queries
                 return hashedUid;
             }
         }
+
+        /// <summary>
+        /// Finds the amount of users registered to the website
+        /// </summary>
+        /// <returns>The amount of users from the user table</returns>
+        public static int GetUsersRegistered()
+        {
+            int count = 0;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    count = ctx.Users.Count();
+                }
+
+                return count;
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return count;
+            }
+        }
     }
 }
