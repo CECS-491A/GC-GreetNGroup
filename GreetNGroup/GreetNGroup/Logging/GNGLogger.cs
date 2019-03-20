@@ -190,7 +190,6 @@ namespace GreetNGroup.Logging
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " entered at " + urlEntered
             };
-
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
@@ -280,6 +279,180 @@ namespace GreetNGroup.Logging
             return logMade;
         }
 
+        [HttpPost]
+        public static bool LogGNGSessionStart(string usersID, string ip)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("SessionStarted", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Session Started"
+            };
+
+            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            try
+            {
+                using (StreamWriter file = File.AppendText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, log);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                errorCounter++;
+            }
+            return logMade;
+        }
+
+        [HttpPost]
+        public static bool LogGNGSearchForUser(string usersID, string searchedUser, string ip)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("SearchForUser", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "User searched for " + searchedUser
+            };
+
+            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            try
+            {
+                using (StreamWriter file = File.AppendText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, log);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                errorCounter++;
+            }
+            return logMade;
+        }
+
+        [HttpPost]
+        public static bool LogGNGJoinEvent(string usersID, string eventID, string ip)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("EventJoined", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Event " + eventID + " joined"
+            };
+
+            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            try
+            {
+                using (StreamWriter file = File.AppendText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, log);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                errorCounter++;
+            }
+            return logMade;
+        }
+
+        [HttpPost]
+        public static bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("UserRatings", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Rated " + ratedUserID
+            };
+
+            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            try
+            {
+                using (StreamWriter file = File.AppendText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, log);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                errorCounter++;
+            }
+            return logMade;
+        }
+
+        [HttpPost]
+        public static bool LogGNGFindEventForMe(string usersID, string ip)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("FindEventForMe", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Event Searched for"
+            };
+
+            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            try
+            {
+                using (StreamWriter file = File.AppendText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, log);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                errorCounter++;
+            }
+            return logMade;
+        }
         public static void errorHandler()
         {
             if(errorCounter >= 100)

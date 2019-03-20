@@ -24,6 +24,12 @@ namespace GreetNGroup.Logging
             logIDMap.Add("AccountDeletion", 1006);
             logIDMap.Add("InternalErrors", 1007);
             logIDMap.Add("MaliciousAttacks", 1008);
+            logIDMap.Add("SessionStarted", 1009);
+            logIDMap.Add("SearchForUser", 1010);
+            logIDMap.Add("FindEventForMe", 1011);
+            logIDMap.Add("UserRatings", 1012);
+            logIDMap.Add("EventJoined", 1013);
+            logIDMap.Add("ViewHistory", 1014);
 
             return logIDMap;
         }

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import EventHome from '@/components/Event'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
@@ -18,8 +18,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'EventHome',
+      component: EventHome
     },
     {
       path: '/testlogin',
