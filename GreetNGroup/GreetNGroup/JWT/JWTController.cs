@@ -8,10 +8,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
 using System.Linq;
 using GreetNGroup.DataAccess.Queries;
+using System.Web.Http;
 
 namespace GreetNGroup.JWT
 {
-    public class JWTController
+    [Route("api/JWT")]
+    public class JWTController : ApiController
     {
 
         /// <summary>
@@ -24,6 +26,7 @@ namespace GreetNGroup.JWT
         /// <returns>True for successful JWT generation, false otherwise</returns>
         [AllowAnonymous]
         [HttpPost]
+        [Route("api/JWT/grant")]
         public JwtSecurityToken RequestToken(string userInputUsername, string userInputPassword)
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
@@ -76,16 +79,12 @@ namespace GreetNGroup.JWT
         /// <param name="jwt">JWT of the user</param>
         /// <param name="claimToCheck">Required claim needed to perform/access</param>
         /// <returns>True or false depending on if the user has the claim</returns>
-        public bool CheckClaimsInToken(JwtSecurityToken jwt, List<GreetNGroup.DataAccess.Tables.Claim> claimsToCheck)
+        [HttpPost]
+        [Route("api/JWT/check")]
+        public bool CheckClaimsInToken(JwtSecurityToken jwt, List<string> claimsToCheck)
         {
             var usersCurrClaims = jwt.Claims;
             bool pass = false;
-
-            var claimNamesToCheck = new List<string>();
-            foreach (GreetNGroup.DataAccess.Tables.Claim claim in claimsToCheck)
-            {
-                claimNamesToCheck.Add(claim.ClaimName);
-            }
 
             var usersCurrClaimsNames = new List<string>();
             foreach (System.Security.Claims.Claim claim in usersCurrClaims)
@@ -93,7 +92,7 @@ namespace GreetNGroup.JWT
                 usersCurrClaimsNames.Add(claim.Type);
             }
 
-            var claimsCheck = claimNamesToCheck.Except(usersCurrClaimsNames);
+            var claimsCheck = claimsToCheck.Except(usersCurrClaimsNames);
             pass = !claimsCheck.Any();
 
             return pass;

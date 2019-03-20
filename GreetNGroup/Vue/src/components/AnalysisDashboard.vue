@@ -5,6 +5,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import axios from 'axios'
 
 export default {
@@ -15,7 +16,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('https://api.greetngroup.com/api/UAD/').then(response => (this.info = response.data))
+    axios.get('http://localhost:50884/api/UAD/').then(response => (this.info = response.data))
   }
 }
 </script>

@@ -2,25 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
-import store from './store.js'
+import TestLogin from '@/components/TestLogin'
+import AnalysisDashboard from '@/components/AnalysisDashboard'
+// import Axios from 'axios'
 
+/* eslint-disable */
 Vue.use(Router)
-
-const isAuthenticated = (to, from, next) => {
-  if(store.getters.isAuthenticated == 'success') {
-    next()
-    return
-  }
-  next('/')
-}
-
-const isUnauthenticated = (to, from, next) => {
-  if(store.getters.isAuthenticated == 'unsuccessful') {
-    next()
-    return
-  }
-  next('/')
-}
 
 /*
   The path '*' is to create a catch all(default) for
@@ -35,38 +22,53 @@ const router = new Router({
       component: HelloWorld
     },
     {
+      path: '/testlogin',
+      name: 'TestLogin',
+      component: TestLogin
+    },
+    {
       path: '*',
       component: PageNotFound
     },
     {
-      path: '/AnalysisDashboard',
+      path: '/analysisdashboard',
       name: 'UserAnalysisDashboard',
       component: AnalysisDashboard,
       meta: {
-        claims: {
-          isLoggedIn: true,
-          isAdmin: true
-        }
-        
+        isLoggedIn: true,
+        isAdmin: true
       }
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(value => value.meta.isLoggedIn)) {
-    if(localStorage.getItem('JWT') == null){
-      next({
-        path: '/login',
-        param: {nextUrl: to.fullPath}
-      })
+  if (to.matched.some(value => value.meta.isLoggedIn)) {
+    if (localStorage.getItem('JWT') == null){
+      next('/testlogin')
     }
     else{
-      let userToken = JSON.parse(localStorage.getItem('JWT'));
-      if(to.method.some(value => value.meta.isAdmin)) {
-        if(userToken)
+      if (to.method.some(value => value.meta.isAdmin)) {
+        var canView = async() => {
+          Axios.post('http://localhost:50884/api/JWT/check', {
+            jwt: localStorage.getItem('JWT'),
+            claimsToCheck: ['isAdmin']
+          })
+        }
+        if(canView == true) {
+          next()
+        }
+        else{
+          next('/')
+        }
+      }
+      else{
+        next()
       }
     }
+  }
+  else{
+    next()
   }
 })
 
