@@ -63,10 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiverTest\ArchiverTest.cs" />
-    <Compile Include="GNGLoggerTest\LoggerTests.cs" />
+    <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="PasswordTest\PasswordCheckerTest.cs" />
     <Compile Include="PasswordTest\UTF8ToSHA1Test.cs" />
     <Compile Include="DataAccessTest\DataAccessTest.cs" />
+    <Compile Include="UADTest\UserAnalysisDashboardTest.cs" />
     <Compile Include="UserManage\UserManageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
