@@ -7,7 +7,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   name: 'HelloWorld',
@@ -19,7 +19,7 @@ export default {
     }
   },
   mounted () {
-    // axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
+    axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
   }
 }
 </script>
