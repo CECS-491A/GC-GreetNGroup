@@ -5,7 +5,8 @@
         <span class="font-weight-light">GreetNGroup</span>
         <div>
           <router-link to="/EventHome">Events</router-link>
-          <router-link to="/hello">HelloPage</router-link>
+          <router-link to="/HelloWorld">HelloPage</router-link>
+          <router-link to="/testlogin">Login</router-link>
         </div>
       </v-toolbar-title>
     </v-toolbar>
