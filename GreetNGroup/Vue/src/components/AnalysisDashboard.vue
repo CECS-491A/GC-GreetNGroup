@@ -22,22 +22,22 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://localhost:50884/api/UAD/' + 6)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 6)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
-    axios.get('http://localhost:50884/api/UAD/' + 5)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 5)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
-    axios.get('http://localhost:50884/api/UAD/' + 4)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 4)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
-    axios.get('http://localhost:50884/api/UAD/' + 3)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 3)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
-    axios.get('http://localhost:50884/api/UAD/' + 2)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 2)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
-    axios.get('http://localhost:50884/api/UAD/' + 1)
+    axios.get('https://api.greetngroup.com/api/UAD/' + 1)
         .then((response) => { this.data.push(response.data) })
         .catch(error => console.log(error))
                 
