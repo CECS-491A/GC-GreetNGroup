@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     lookupEventById: function (i) {
-      axios.get('http://localhost:50884/api/Event/' + i)
+      axios.get('https://api.greetngroup.com/api/Event/' + i)
         .then((response) => { this.eventInfo = response.data })
         .catch(error => console.log(error))
     }
