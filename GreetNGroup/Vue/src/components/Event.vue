@@ -7,6 +7,9 @@
     <div>
         <input type="text" v-model="search" placeholder="search for events by id" />
         <button v-on:click="lookupEventById(search)">Search</button>
+        <p>
+          {{ eventName = eventInfo.EventName }}
+        </p>
     </div>
   </div>
 </template>
@@ -18,6 +21,13 @@ export default {
   name: 'EventHome',
   data () {
     return {
+      eventInfo: {
+        UserId: null,
+        User: null,
+        EventId: null,
+        StartDate: null,
+        EventName: null
+      },
       title: 'GreetNGroup',
       info: null,
       search: '',
@@ -27,7 +37,7 @@ export default {
   methods: {
     lookupEventById: function (i) {
       axios.get('http://localhost:50884/api/Event/' + i)
-        .then((response) => { this.eventName = response })
+        .then((response) => { this.eventInfo = response.data })
         .catch(error => console.log(error))
     }
   }
