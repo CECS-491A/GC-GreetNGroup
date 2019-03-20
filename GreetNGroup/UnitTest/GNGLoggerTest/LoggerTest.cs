@@ -15,9 +15,9 @@ namespace UnitTest.GNGLoggerTest
         [TestMethod]
         public void LogClickEvent_Pass()
         {
-            string userID = "56FDIGH4920";
-            string startPoint = "https://www.startpoint.com";
-            string endPoint = "https://www.endpoint.com";
+            string userID = "1";
+            string startPoint = "https://www.greetngroup.com/join";
+            string endPoint = "https://www.greetngroup.com/create";
             string ipAddress = "1.103.23.102";
 
             bool actual = GNGLogger.LogClicksMade(startPoint, endPoint, userID, ipAddress);
@@ -55,10 +55,14 @@ namespace UnitTest.GNGLoggerTest
             string userID = "1";
             string eventID = "1";
             string ipAddress = "1.1.1.1";
-
-            bool actual = GNGLogger.LogGNGEventsCreated(userID, eventID, ipAddress);
+            bool actual = true;
+            for(int i = 0; i < 2; i++)
+            {
+                actual = GNGLogger.LogGNGEventsCreated(userID, eventID, ipAddress);
+            }
 
             Assert.AreEqual(actual, true);
         }
+
     }
 }

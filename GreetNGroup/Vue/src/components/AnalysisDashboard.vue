@@ -1,40 +1,60 @@
 <template>
-  <div class="Dashboard">
-    <h2>{{ info }}</h2>
+  <div class="UserAnalytics">
+    <h1>User Analytics </h1>
+      <p v-if="data.length">
+          <ul>
+            <li v-for="(item, index) in data" :key="index">
+              {{ item }}
+            </li>
+          </ul>
+      </p>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
 import axios from 'axios'
 
 export default {
-  name: 'UserAnalysisDashboard',
+  name: 'UserAnalytics',
   data () {
     return {
-      info: null
+      data: []
     }
   },
   mounted () {
-    axios.get('http://localhost:50884/api/UAD/').then(response => (this.info = response.data))
+    axios.get('http://localhost:50884/api/UAD/' + 6)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+    axios.get('http://localhost:50884/api/UAD/' + 5)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+    axios.get('http://localhost:50884/api/UAD/' + 4)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+    axios.get('http://localhost:50884/api/UAD/' + 3)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+    axios.get('http://localhost:50884/api/UAD/' + 2)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+    axios.get('http://localhost:50884/api/UAD/' + 1)
+        .then((response) => { this.data.push(response.data) })
+        .catch(error => console.log(error))
+                
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h2 {
-  font-weight: normal;
+<style>
+.UserAnalytics{
+  padding: 70px 0;
+  text-align: center;
 }
+
 ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
+  padding:0;
+  margin:0;
   display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+  text-align:left;
 }
 </style>

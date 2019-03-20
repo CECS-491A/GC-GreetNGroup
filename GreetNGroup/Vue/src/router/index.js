@@ -48,7 +48,7 @@ const router = new Router({
     }
   ]
 })
-
+/*
 router.beforeEach((to, from, next) => {
   if (to.matched.some(value => value.meta.isLoggedIn)) {
     if (localStorage.getItem('JWT') == null){
@@ -78,5 +78,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
+*/
 export default router
