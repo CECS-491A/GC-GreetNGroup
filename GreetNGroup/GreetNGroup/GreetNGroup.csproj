@@ -184,6 +184,7 @@
   <ItemGroup>
     <Compile Include="Account Fields Random Generator\RandomGenerator.cs" />
     <Compile Include="api\HelloController.cs" />
+    <Compile Include="api\UADController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
