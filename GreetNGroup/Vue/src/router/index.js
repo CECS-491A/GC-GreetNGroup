@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import EventHome from '@/components/Event'
+import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
@@ -15,6 +16,7 @@ Vue.use(Router)
   to lead to our 404 page
 */
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -25,6 +27,11 @@ const router = new Router({
       path: '/testlogin',
       name: 'TestLogin',
       component: TestLogin
+    },
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
     },
     {
       path: '*',

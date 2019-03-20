@@ -1,8 +1,12 @@
 <template>
   <v-app>
     <v-toolbar app dark>
-      <v-toolbar-title class = "TestToolBar">
+      <v-toolbar-title class = "NavigationToolBar">
         <span class="font-weight-light">GreetNGroup</span>
+        <div>
+          <router-link to="/EventHome">Events</router-link>
+          <router-link to="/hello">HelloPage</router-link>
+        </div>
       </v-toolbar-title>
     </v-toolbar>
     <div id="app">
