@@ -26,17 +26,17 @@ namespace UnitTest.DataAccessTest
             var actual = false;
 
             // Act
-            var uId = 1;
-            var firstName = "Eric";
-            var lastName = "Lee";
-            var userName = "eric.lee@fakemail.com";
-            var password = "badpassword5!";
+            var uId = 5;
+            var firstName = "Example";
+            var lastName = "Set";
+            var userName = "e.e@fakemail.com";
+            var password = "badpass9!";
             var city = "Long Beach";
             var state = "California";
             var country = "United States";
-            var dob = DateTime.Parse("09/19/1997");
+            var dob = DateTime.Parse("09/19/1999");
             var securityQ = "What is your favorite soda?";
-            var securityA = "Dr. Peps";
+            var securityA = "Coke";
             var isActivated = true;
 
             DbInsert.InsertUser(uId, firstName, lastName, userName, password, city, state, country, dob, securityQ,
@@ -58,7 +58,7 @@ namespace UnitTest.DataAccessTest
             var actual = false;
 
             // Act
-            var cId = 1;
+            var cId = 5;
             var cName = "AdminRights";
 
             DbInsert.InsertClaim(cId, cName);
