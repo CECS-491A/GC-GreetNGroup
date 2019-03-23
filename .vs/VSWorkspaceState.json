@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\Backend"
+    "\\Backend\\DataAccessLayer",
+    "\\Backend\\ManagerLayer",
+    "\\GreetNGroup",
+    "\\GreetNGroup\\GreetNGroup"
   ],
-  "SelectedNode": "\\Backend\\Backend.sln",
+  "SelectedNode": "\\GreetNGroup\\GreetNGroup\\DataAccess",
   "PreviewInSolutionExplorer": false
 }
