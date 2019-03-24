@@ -83,5 +83,30 @@ namespace ManagerLayer.EventManager
         }
 
         #endregion
+
+        /// <summary>
+        /// The following region retrieves event information from the database
+        /// </summary>
+        #region Event Information Retrieval
+
+        public static Event GetEventById(int eventId)
+        {
+            Event e = null;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eventId));
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return e;
+            }
+        }
+
+        #endregion
     }
 }
