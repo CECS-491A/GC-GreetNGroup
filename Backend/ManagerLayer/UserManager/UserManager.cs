@@ -15,7 +15,7 @@ namespace ManagerLayer.UserManager
         /// </summary>
         #region Insert User Information
 
-        public static void InsertUser(int uId, string firstName, string lastName, string userName, string password, string city,
+        public void InsertUser(int uId, string firstName, string lastName, string userName, string password, string city,
             string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
         {
             try
@@ -43,7 +43,7 @@ namespace ManagerLayer.UserManager
         /// </summary>
         #region Update User Information
 
-        public static void UpdateUserPassword(int uId, string password)
+        public void UpdateUserPassword(int uId, string password)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static void UpdateUserCity(int uId, string city)
+        public void UpdateUserCity(int uId, string city)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static void UpdateUserState(int uId, string state)
+        public void UpdateUserState(int uId, string state)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static void UpdateUserCountry(int uId, string country)
+        public void UpdateUserCountry(int uId, string country)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace ManagerLayer.UserManager
         /// </summary>
         #region Delete User Information
 
-        public static void DeleteUserById(int userId)
+        public void DeleteUserById(int userId)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace ManagerLayer.UserManager
         /// </summary>
         #region User Information Check
 
-        public static bool IsUsernameFound(string username)
+        public bool IsUsernameFound(string username)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static bool IsUsernameFoundById(int uId)
+        public bool IsUsernameFoundById(int uId)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace ManagerLayer.UserManager
         /// </summary>
         #region User Information Retrieval
 
-        public static List<Claim> GetUsersClaims(string username)
+        public List<Claim> GetUsersClaims(string username)
         {
             List<Claim> claimsList = new List<Claim>();
 
@@ -213,7 +213,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static string GetUsersHashedUID(string username)
+        public string GetUsersHashedUID(string username)
         {
             var hashedUid = "";
 
@@ -247,7 +247,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static int GetUsersRegistered()
+        public int GetUsersRegistered()
         {
             int count = 0;
             try
@@ -266,7 +266,7 @@ namespace ManagerLayer.UserManager
             }
         }
 
-        public static bool IsClaimOnUser(int uId, int claimId)
+        public bool IsClaimOnUser(int uId, int claimId)
         {
             try
             {

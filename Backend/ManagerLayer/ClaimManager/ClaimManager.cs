@@ -5,14 +5,14 @@ using DataAccessLayer.Tables;
 
 namespace ManagerLayer.ClaimManager
 {
-    public class Class1
+    public class ClaimManager
     {
         /// <summary>
         /// This region handles inserting claim information into the database
         /// </summary>
         #region Insert Claim Information
 
-        public static void InsertClaim(int claimId, string claimName)
+        public void InsertClaim(int claimId, string claimName)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace ManagerLayer.ClaimManager
         /// </summary>
         #region Claim Information Check
 
-        public static bool IsClaimInTable(int claimId)
+        public bool IsClaimInTable(int claimId)
         {
             try
             {
