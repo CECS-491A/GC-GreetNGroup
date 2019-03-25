@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using DataAccessLayer.Context;
+using DataAccessLayer.Tables;
 
 namespace ManagerLayer.UserManager
 {

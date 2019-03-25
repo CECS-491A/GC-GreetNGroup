@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using DataAccessLayer.Context;
+using DataAccessLayer.Tables;
 
 namespace ManagerLayer.ClaimManager
 {
