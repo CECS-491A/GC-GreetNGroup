@@ -3,10 +3,9 @@
     "",
     "\\Backend",
     "\\Backend\\DataAccessLayer",
-    "\\Backend\\ManagerLayer",
     "\\GreetNGroup",
     "\\GreetNGroup\\GreetNGroup"
   ],
-  "SelectedNode": "\\GreetNGroup\\GreetNGroup\\DataAccess",
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }

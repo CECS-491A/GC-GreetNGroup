@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F492345-F79F-4123-8880-C2499FCDC67C}</ProjectGuid>
+    <ProjectGuid>{A4094764-0DED-4C04-A3AE-93FC682261CF}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ManagerLayer</RootNamespace>
-    <AssemblyName>ManagerLayer</AssemblyName>
+    <RootNamespace>ServiceLayer</RootNamespace>
+    <AssemblyName>ServiceLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

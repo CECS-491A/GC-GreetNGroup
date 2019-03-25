@@ -1,6 +1,5 @@
-namespace GreetNGroup.Migrations
+namespace DataAccessLayer.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class friends : DbMigration

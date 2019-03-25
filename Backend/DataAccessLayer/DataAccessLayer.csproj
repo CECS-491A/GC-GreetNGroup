@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9EFA3452-6A02-44A1-843D-92CCFB029063}</ProjectGuid>
+    <ProjectGuid>{07DDD14E-6CE5-48BB-882F-7E5AE3C931F7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Backend</RootNamespace>
-    <AssemblyName>Backend</AssemblyName>
+    <RootNamespace>DataAccessLayer</RootNamespace>
+    <AssemblyName>DataAccessLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,7 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,11 +50,155 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\GreetNGroupContext.cs" />
+    <Compile Include="Migrations\201902140914402_CreateUser.cs" />
+    <Compile Include="Migrations\201902140914402_CreateUser.Designer.cs">
+      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160451473_CreateClaim.cs" />
+    <Compile Include="Migrations\201902160451473_CreateClaim.Designer.cs">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902160524226_UserClaim.cs" />
+    <Compile Include="Migrations\201902160524226_UserClaim.Designer.cs">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902171042088_Event.cs" />
+    <Compile Include="Migrations\201902171042088_Event.Designer.cs">
+      <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902180118064_CreateClaim.cs" />
+    <Compile Include="Migrations\201902180118064_CreateClaim.Designer.cs">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.cs" />
+    <Compile Include="Migrations\201902190730533_eventTagAndTag.Designer.cs">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190738255_UserTag.cs" />
+    <Compile Include="Migrations\201902190738255_UserTag.Designer.cs">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
+    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032336385_friends.cs" />
+    <Compile Include="Migrations\201903032336385_friends.Designer.cs">
+      <DependentUpon>201903032336385_friends.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032343574_blocklist.cs" />
+    <Compile Include="Migrations\201903032343574_blocklist.Designer.cs">
+      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903032359071_userRatings.cs" />
+    <Compile Include="Migrations\201903032359071_userRatings.Designer.cs">
+      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903040039170_actionsTable.cs" />
+    <Compile Include="Migrations\201903040039170_actionsTable.Designer.cs">
+      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903040046112_UserAction.cs" />
+    <Compile Include="Migrations\201903040046112_UserAction.Designer.cs">
+      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050711282_idsToInts.cs" />
+    <Compile Include="Migrations\201903050711282_idsToInts.Designer.cs">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.cs" />
+    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.Designer.cs">
+      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.cs" />
+    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.Designer.cs">
+      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tables\ActionsTable.cs" />
+    <Compile Include="Tables\Attendance.cs" />
+    <Compile Include="Tables\Blocklist.cs" />
+    <Compile Include="Tables\Claim.cs" />
+    <Compile Include="Tables\Event.cs" />
+    <Compile Include="Tables\EventRole.cs" />
+    <Compile Include="Tables\EventTag.cs" />
+    <Compile Include="Tables\Friend.cs" />
+    <Compile Include="Tables\Tag.cs" />
+    <Compile Include="Tables\User.cs" />
+    <Compile Include="Tables\UserAction.cs" />
+    <Compile Include="Tables\UserClaim.cs" />
+    <Compile Include="Tables\UserRating.cs" />
+    <Compile Include="Tables\UserTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\DataAccessLayer.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Release\DataAccessLayer.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\DataAccessLayer.csprojAssemblyReference.cache" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201902140914402_CreateUser.resx">
+      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160451473_CreateClaim.resx">
+      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902160524226_UserClaim.resx">
+      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902171042088_Event.resx">
+      <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902180118064_CreateClaim.resx">
+      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190730533_eventTagAndTag.resx">
+      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190738255_UserTag.resx">
+      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902240832218_AttendeesAndRoles.resx">
+      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032336385_friends.resx">
+      <DependentUpon>201903032336385_friends.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032343574_blocklist.resx">
+      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903032359071_userRatings.resx">
+      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903040039170_actionsTable.resx">
+      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903040046112_UserAction.resx">
+      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050711282_idsToInts.resx">
+      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050821464_removeUserIdentityKey.resx">
+      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903050835362_removeIdIdentityKeys.resx">
+      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

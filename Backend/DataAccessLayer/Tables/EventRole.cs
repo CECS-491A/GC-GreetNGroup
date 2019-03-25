@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GreetNGroup.DataAccess.Tables
+namespace DataAccessLayer.Tables
 {
     [Table("EventRole")]
     public class EventRole
