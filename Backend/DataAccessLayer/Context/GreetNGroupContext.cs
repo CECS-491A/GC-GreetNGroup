@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
-using GreetNGroup.DataAccess.Tables;
+using DataAccessLayer.Tables;
 
-namespace GreetNGroup.DataAccess
+namespace DataAccessLayer.Context
 {
     public class GreetNGroupContext : DbContext
     {
