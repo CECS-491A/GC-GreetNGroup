@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using DataAccessLayer.Context;
+using DataAccessLayer.Tables;
 
 namespace ManagerLayer.EventManager
 {
@@ -9,7 +12,7 @@ namespace ManagerLayer.EventManager
         /// </summary>
         #region Insert Event Information
 
-        public static void InsertEvent(int userId, int eventId, DateTime startDate, string eventName)
+        public void InsertEvent(int userId, int eventId, DateTime startDate, string eventName)
         {
             try
             {
@@ -35,7 +38,7 @@ namespace ManagerLayer.EventManager
         /// </summary>
         #region Update Event Information
 
-        public static void UpdateEventStartDate(int eId, DateTime startDate)
+        public void UpdateEventStartDate(int eId, DateTime startDate)
         {
             try
             {
@@ -66,7 +69,7 @@ namespace ManagerLayer.EventManager
         /// </summary>
         #region Event Information Check
 
-        public static bool IsEventIdFound(int eventId)
+        public bool IsEventIdFound(int eventId)
         {
             try
             {
@@ -89,7 +92,7 @@ namespace ManagerLayer.EventManager
         /// </summary>
         #region Event Information Retrieval
 
-        public static Event GetEventById(int eventId)
+        public Event GetEventById(int eventId)
         {
             Event e = null;
             try

@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using GreetNGroup.DataAccess.Queries;
+using ManagerLayer.EventManager;
 
-namespace GreetNGroup.Controllers
+namespace GNG_WebApi.Controllers
 {
     public class EventController : ApiController
     {
@@ -17,7 +17,8 @@ namespace GreetNGroup.Controllers
         {
             try
             {
-                var e = DbRetrieve.GetEventById(id);
+                EventManager eventManager = new EventManager();
+                var e = eventManager.GetEventById(id);
                 return Ok(e);
             }
             catch (HttpRequestException e)
