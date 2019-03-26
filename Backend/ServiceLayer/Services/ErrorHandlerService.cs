@@ -26,6 +26,13 @@ namespace ServiceLayer.Services
             return errorCount;
         }
 
+        /// <summary>
+        /// Method IncrementErrorOccurrenceCount increments the error counter when
+        /// it is called. Should the error counter reach 100 or more, the error message
+        /// is passed to ContactSystemAdmin to let them know an error is occurring at 
+        /// this area of the code.
+        /// </summary>
+        /// <param name="errorMessage">The exception caught as a string</param>
         public void IncrementErrorOccurrenceCount(string errorMessage)
         {
             errorCount++;
@@ -35,6 +42,11 @@ namespace ServiceLayer.Services
             }
         }
 
+        /// <summary>
+        /// Method IsErrorCounterAtMax checks if the error counter has reached a 
+        /// value of 100 or more.
+        /// </summary>
+        /// <returns>Returns true or false if the error counter has reached 100 or more</returns>
         public bool IsErrorCounterAtMax()
         {
             bool isAtMax = false;
