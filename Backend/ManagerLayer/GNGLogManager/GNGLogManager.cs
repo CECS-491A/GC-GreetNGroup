@@ -1,77 +1,24 @@
-﻿using System;
+﻿using DataAccessLayer.Models;
+using Newtonsoft.Json;
+using ServiceLayer.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web.Mvc;
-using Newtonsoft.Json;
 
-namespace GreetNGroup.Logging
+namespace ManagerLayer.GNGLogManager
 {
-    public class GNGLogger
+    class GNGLogManager
     {
-        private static string LOGS_FOLDERPATH = Path.Combine(
-            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, 
-            @"GreetNGroup\GreetNGroup\Logs\");
-        private static string LOG_IDENTIFIER = "_gnglog.json";
-        private static Dictionary<string, int> listOfIDs = LogIDGenerator.GetLogIDs();
-        private static string currentLogPath;
-        private static int errorCounter = 0;
+        IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
+        IGNGLoggerService _gngLoggerService = new GNGLoggerService();
 
-        /// <summary>
-        /// Method CreateNewLog creates a new log if a log does 
-        /// not exist for the current date
-        /// </summary>
-        private static void CreateNewLog()
+        private Dictionary<string, int> listOfIDs;
+        private string currentLogpath;
+
+        public GNGLogManager()
         {
-            bool logExists = CheckForExistingLog();
-            string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-            if (logExists == false)
-            {
-                
-                try
-                {
-                    var newLog = File.Create(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
-                    currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
-                    List<GNGLog> listOfLogsInit = new List<GNGLog>();
-                    using(StreamWriter writer = File.AppendText(currentLogPath))
-                    {
-                        JsonSerializer jsonSerializer = new JsonSerializer();
-                        jsonSerializer.Serialize(writer, listOfLogsInit);
-                        writer.Close();
-                    }
-                    newLog.Close();
-                }
-                catch (IOException e)
-                {
-                    errorCounter++;   
-                }
-                
-            }
-            else
-            {
-                currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
-            }
-        }
-
-        /// <summary>
-        /// Method CheckForExistingLog checks if a log for today already exists. If
-        /// a log already exists for the current date, it will set the existing log as
-        /// the current log
-        /// </summary>
-        /// <returns>Returns true or false if log exists or not</returns>
-        private static bool CheckForExistingLog()
-        {
-            bool logExists = false;
-            try
-            {
-                string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-                logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
-            }
-            catch(FileNotFoundException e)
-            {
-                errorCounter++;
-            }
-
-            return logExists;
+            listOfIDs = _gngLoggerService.GetLogIDs();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
         }
 
         /// <summary>
@@ -84,10 +31,9 @@ namespace GreetNGroup.Logging
         /// <param name="usersID">Hashed user ID (empty if user does not exist)</param>
         /// <param name="ip">IP address of the user/guest</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        [HttpPost]
-        public static bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
+        public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ClickEvent", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -103,7 +49,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -111,10 +57,11 @@ namespace GreetNGroup.Logging
                     logMade = true;
                     file.Close();
                 }
-            }catch(FileNotFoundException e)
+            }
+            catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
 
@@ -130,10 +77,9 @@ namespace GreetNGroup.Logging
         /// <param name="urlOfErr">URL of error encountered</param>
         /// <param name="ip">IP address of the user/guest</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        [HttpPost]
-        public static bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
+        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -149,7 +95,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -160,7 +106,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -174,10 +120,9 @@ namespace GreetNGroup.Logging
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address of user</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        [HttpPost]
-        public static bool LogGNGEventsCreated(string usersID, string eventID, string ip)
+        public bool LogGNGEventsCreated(string usersID, string eventID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -193,7 +138,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -204,7 +149,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -218,10 +163,9 @@ namespace GreetNGroup.Logging
         /// <param name="urlEntered">URL entry point</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if log was successfully made</returns>
-        [HttpPost]
-        public static bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
+        public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("EntryToWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -236,7 +180,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -247,7 +191,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -261,10 +205,9 @@ namespace GreetNGroup.Logging
         /// <param name="urlOfExit">Last URL the user visited inside GreetNGroup</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        [HttpPost]
-        public static bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
+        public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ExitFromWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -280,7 +223,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -291,7 +234,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -302,10 +245,9 @@ namespace GreetNGroup.Logging
         /// <param name="usersID">Hashed user ID</param>
         /// <param name="ip">IP address</param>
         /// <returns>Returns true or false if log was successfully made</returns>
-        [HttpPost]
-        public static bool LogAccountDeletion(string usersID, string ip)
+        public bool LogAccountDeletion(string usersID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -321,7 +263,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -332,48 +274,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
-            }
-            return logMade;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="usersID"></param>
-        /// <param name="ip"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public static bool LogGNGSessionStart(string usersID, string ip)
-        {
-            CreateNewLog();
-            bool logMade = false;
-            listOfIDs.TryGetValue("SessionStarted", out int clickLogID);
-            string clickLogIDString = clickLogID.ToString();
-            GNGLog log = new GNGLog
-            {
-                logID = clickLogIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Session Started"
-            };
-
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
-            try
-            {
-                using (StreamWriter file = File.AppendText(currentLogPath))
-                {
-                    JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
-                    logMade = true;
-                    file.Close();
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -387,10 +288,9 @@ namespace GreetNGroup.Logging
         /// <param name="searchedUser">Search entry</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        [HttpPost]
-        public static bool LogGNGSearchForUser(string usersID, string searchedUser, string ip)
+        public bool LogGNGSearchForUser(string usersID, string searchedUser, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("SearchForUser", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -406,7 +306,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -417,7 +317,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -431,10 +331,9 @@ namespace GreetNGroup.Logging
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        [HttpPost]
-        public static bool LogGNGJoinEvent(string usersID, string eventID, string ip)
+        public bool LogGNGJoinEvent(string usersID, string eventID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("EventJoined", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -450,7 +349,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -461,7 +360,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -475,10 +374,9 @@ namespace GreetNGroup.Logging
         /// <param name="ratedUserID">Hashed user ID of the ratee</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the logwas successfully made or not</returns>
-        [HttpPost]
-        public static bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
+        public bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("UserRatings", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -494,7 +392,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -505,7 +403,7 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
@@ -518,10 +416,9 @@ namespace GreetNGroup.Logging
         /// <param name="usersID">Hahsed user ID</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        [HttpPost]
-        public static bool LogGNGFindEventForMe(string usersID, string ip)
+        public bool LogGNGFindEventForMe(string usersID, string ip)
         {
-            CreateNewLog();
+            _gngLoggerService.CreateNewLog();
             bool logMade = false;
             listOfIDs.TryGetValue("FindEventForMe", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -537,7 +434,7 @@ namespace GreetNGroup.Logging
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.AppendText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(file, log);
@@ -548,23 +445,9 @@ namespace GreetNGroup.Logging
             catch (FileNotFoundException e)
             {
                 logMade = false;
-                errorCounter++;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
         }
-
-        /// <summary>
-        /// Method errorHandler checks if the error counter has reached 100 or more. If
-        /// it does, then the error handler will call the function to contact the system admin.
-        /// </summary>
-        public static void errorHandler()
-        {
-            if(errorCounter >= 100)
-            {
-                //Contact system admin
-                errorCounter = 0;
-            }
-        }
-
     }
 }
