@@ -11,6 +11,8 @@ namespace GreetNGroup.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+
+        [Route("Event")]
         public IHttpActionResult GetEventById(int id)
         {
             try

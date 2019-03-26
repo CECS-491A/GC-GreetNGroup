@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    "\\GreetNGroup\\Docs",
+    "",
+    "\\Backend",
+    "\\Backend\\DataAccessLayer",
+    "\\GreetNGroup",
     "\\GreetNGroup\\GreetNGroup"
   ],
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }
