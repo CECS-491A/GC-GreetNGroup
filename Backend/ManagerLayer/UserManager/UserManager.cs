@@ -8,7 +8,7 @@ using DataAccessLayer.Tables;
 
 namespace ManagerLayer.UserManager
 {
-    public class Class1
+    public class UserManager
     {
         /// <summary>
         /// The following region handles inserts into the user table of the database
