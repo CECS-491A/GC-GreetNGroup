@@ -34,8 +34,6 @@ namespace GreetNGroup.UAD
                         loglist.Add(logs[index]);
                     }
                 }
-                
-               
             }
         }
         /// <summary>
