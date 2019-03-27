@@ -15,6 +15,7 @@ namespace GreetNGroup.Logging
         private static Dictionary<string, int> listOfIDs = LogIDGenerator.GetLogIDs();
         private static string currentLogPath;
         private static int errorCounter = 0;
+        private static List<GNGLog> logList = new List<GNGLog>();
 
         /// <summary>
         /// Method CreateNewLog creates a new log if a log does 
@@ -51,7 +52,22 @@ namespace GreetNGroup.Logging
                 currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
             }
         }
-
+        /// <summary>
+        /// Read the current logs for the day
+        /// </summary>
+        private static void ReadLogs()
+        {
+            //Check to see if file is empty
+            if (new FileInfo(currentLogPath).Length != 0)
+            {
+                using (StreamReader r = new StreamReader(currentLogPath))
+                {
+                    string jsonFile = r.ReadToEnd();
+                    //Retrieve Current Logs
+                    logList = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                }
+            }
+        }
         /// <summary>
         /// Method CheckForExistingLog checks if a log for today already exists. If
         /// a log already exists for the current date, it will set the existing log as
@@ -100,13 +116,16 @@ namespace GreetNGroup.Logging
                 description = startPoint + " to " + endPoint
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
 
                     logMade = true;
                     file.Close();
@@ -146,13 +165,18 @@ namespace GreetNGroup.Logging
                 description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
 
+            ReadLogs();
+
+            //Add new log to list
+            logList.Add(log);
+
             string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -178,6 +202,7 @@ namespace GreetNGroup.Logging
         public static bool LogGNGEventsCreated(string usersID, string eventID, string ip)
         {
             CreateNewLog();
+            List<GNGLog> logList = new List<GNGLog>();
             bool logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -190,13 +215,16 @@ namespace GreetNGroup.Logging
                 description = "Event " + eventID + " created"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -233,13 +261,17 @@ namespace GreetNGroup.Logging
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " entered at " + urlEntered
             };
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -277,13 +309,16 @@ namespace GreetNGroup.Logging
                 description = usersID + " exited website from " + urlOfExit
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -318,13 +353,16 @@ namespace GreetNGroup.Logging
                 description = usersID + " deleted account"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -359,13 +397,16 @@ namespace GreetNGroup.Logging
                 description = "Session Started"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -403,13 +444,16 @@ namespace GreetNGroup.Logging
                 description = "User searched for " + searchedUser
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -447,13 +491,16 @@ namespace GreetNGroup.Logging
                 description = "User " + usersID + " joined Event " + eventID
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -491,13 +538,16 @@ namespace GreetNGroup.Logging
                 description = "Rated " + ratedUserID
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -534,13 +584,16 @@ namespace GreetNGroup.Logging
                 description = "Event Searched for"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            ReadLogs();
+            //Add new log to list
+            logList.Add(log);
+
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogPath))
+                using (StreamWriter file = File.CreateText(currentLogPath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
