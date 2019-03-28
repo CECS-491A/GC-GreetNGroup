@@ -56,10 +56,7 @@ namespace UnitTest.GNGLoggerTest
             string eventID = "1";
             string ipAddress = "1.1.1.1";
             bool actual = true;
-            for(int i = 0; i < 2; i++)
-            {
-                actual = GNGLogger.LogGNGEventsCreated(userID, eventID, ipAddress);
-            }
+            actual = GNGLogger.LogGNGEventsCreated(userID, eventID, ipAddress);
 
             Assert.AreEqual(actual, true);
         }

@@ -163,3 +163,15 @@ C:\Users\Midnightdrop\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\obj\Debu
 C:\Users\Midnightdrop\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\obj\Debug\UnitTest.csproj.CopyComplete
 C:\Users\Midnightdrop\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\obj\Debug\UnitTest.dll
 C:\Users\Midnightdrop\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\obj\Debug\UnitTest.pdb
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Logging.dll
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IdentityModel.Tokens.Jwt.pdb
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Tokens.pdb
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Tokens.xml
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Logging.pdb
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.Logging.xml
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.pdb
+C:\Users\ericl\Documents\GitHub\GreetNGroup\GreetNGroup\UnitTest\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.xml
