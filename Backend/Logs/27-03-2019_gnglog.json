@@ -1,0 +1,45 @@
+[
+  {
+    "logID": "1001",
+    "userID": "1",
+    "ipAddress": "1.103.23.102"
+      ,
+    "dateTime": "3/27/2019 3:47:34 PM",
+    "description": "https://www.greetngroup.com/join to https://www.greetngroup.com/create"
+  },
+  {
+    "logID": "1001",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "3/27/2019 3:49:28 PM",
+    "description": "https://www.greetngroup.com/join to https://www.greetngroup.com/create"
+  },
+  {
+    "logID": "1003",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "3/27/2019 3:52:10 PM",
+    "description": "Event 1 created"
+  },
+  {
+    "logID": "1003",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "3/27/2019 3:52:10 PM",
+    "description": "Event 1 created"
+  },
+  {
+    "logID": "1003",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "3/27/2019 3:52:40 PM",
+    "description": "Event 1 created"
+  },
+  {
+    "logID": "1001",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "3/27/2019 3:56:44 PM",
+    "description": "https://www.greetngroup.com/join to https://www.greetngroup.com/create"
+  }
+]

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Newtonsoft.Json;
+using DataAccessLayer.Models;
 namespace ServiceLayer.Services
 {
     public class GNGLoggerService : IGNGLoggerService
@@ -13,7 +11,7 @@ namespace ServiceLayer.Services
 
         private readonly string LOGS_FOLDERPATH = Path.Combine(
             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-            @"GreetNGroup\GreetNGroup\Logs\");
+            @"Backend\Logs\");
         private readonly string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
@@ -44,7 +42,7 @@ namespace ServiceLayer.Services
         /// Method CreateNewLog creates a new log if a log does 
         /// not exist for the current date
         /// </summary>
-        public void CreateNewLog()
+        public string CreateNewLog()
         {
             bool logExists = CheckForExistingLog();
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
@@ -66,6 +64,8 @@ namespace ServiceLayer.Services
             {
                 currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
             }
+
+            return currentLogPath;
         }
 
         /// <summary>
@@ -125,6 +125,25 @@ namespace ServiceLayer.Services
         public string GetCurrentLogPath()
         {
             return currentLogPath;
+        }
+
+        /// <summary>
+        /// Read the current logs for the day
+        /// </summary>
+        public List<GNGLog> FillCurrentLogsList()
+        {
+            List<GNGLog> logList = new List<GNGLog> ();
+            //Check to see if file is empty
+            if (new FileInfo(currentLogPath).Length != 0)
+            {
+                using (StreamReader r = new StreamReader(currentLogPath))
+                {
+                    string jsonFile = r.ReadToEnd();
+                    //Retrieve Current Logs
+                    logList = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                }
+            }
+            return logList;
         }
     }
 }

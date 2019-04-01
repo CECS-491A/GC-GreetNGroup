@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using DataAccessLayer.Models;
+using System.Collections.Generic;
 
 namespace ServiceLayer.Services
 {
     public interface IGNGLoggerService
     {
-        void CreateNewLog();
+        string CreateNewLog();
+        List<GNGLog> FillCurrentLogsList();
         bool CheckForExistingLog();
         string GetLogsFolderpath();
         string GetLogsExtentionName();
