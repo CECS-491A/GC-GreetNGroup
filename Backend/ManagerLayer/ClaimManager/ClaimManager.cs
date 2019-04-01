@@ -55,5 +55,28 @@ namespace ManagerLayer.ClaimManager
         }
 
         #endregion
+
+        #region Delete Claim Information
+
+        public void DeleteClaimById(int claimId)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var claim = ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(claimId));
+
+                    if (claim != null) ctx.Claims.Remove(claim);
+
+                    ctx.SaveChanges();
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+            }
+        }
+
+        #endregion
     }
 }

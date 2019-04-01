@@ -7,14 +7,13 @@ using System.IO;
 
 namespace ManagerLayer.GNGLogManager
 {
-    class GNGLogManager
+    public class GNGLogManager
     {
         IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
         IGNGLoggerService _gngLoggerService = new GNGLoggerService();
-
         private Dictionary<string, int> listOfIDs;
         private string currentLogpath;
-
+        private static List<GNGLog> logList = new List<GNGLog>();
         public GNGLogManager()
         {
             listOfIDs = _gngLoggerService.GetLogIDs();
@@ -34,6 +33,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("ClickEvent", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -45,14 +45,14 @@ namespace ManagerLayer.GNGLogManager
                 dateTime = DateTime.Now.ToString(),
                 description = startPoint + " to " + endPoint
             };
-
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
 
                     logMade = true;
                     file.Close();
@@ -80,6 +80,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -91,14 +92,15 @@ namespace ManagerLayer.GNGLogManager
                 dateTime = DateTime.Now.ToString(),
                 description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
-
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            //string json = JsonConvert.SerializeObject(log, Formatting.Indented);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -123,6 +125,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogGNGEventsCreated(string usersID, string eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -135,13 +138,14 @@ namespace ManagerLayer.GNGLogManager
                 description = "Event " + eventID + " created"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -166,6 +170,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("EntryToWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -177,13 +182,14 @@ namespace ManagerLayer.GNGLogManager
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " entered at " + urlEntered
             };
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -208,6 +214,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("ExitFromWebsite", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -219,14 +226,14 @@ namespace ManagerLayer.GNGLogManager
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " exited website from " + urlOfExit
             };
-
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -248,6 +255,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogAccountDeletion(string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -259,14 +267,14 @@ namespace ManagerLayer.GNGLogManager
                 dateTime = DateTime.Now.ToString(),
                 description = usersID + " deleted account"
             };
-
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -291,6 +299,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogGNGSearchForUser(string usersID, string searchedUser, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("SearchForUser", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -303,13 +312,14 @@ namespace ManagerLayer.GNGLogManager
                 description = "User searched for " + searchedUser
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -334,6 +344,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogGNGJoinEvent(string usersID, string eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("EventJoined", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -346,13 +357,14 @@ namespace ManagerLayer.GNGLogManager
                 description = "User " + usersID + " joined Event " + eventID
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -377,6 +389,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("UserRatings", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -389,13 +402,14 @@ namespace ManagerLayer.GNGLogManager
                 description = "Rated " + ratedUserID
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
@@ -419,6 +433,7 @@ namespace ManagerLayer.GNGLogManager
         public bool LogGNGFindEventForMe(string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
             listOfIDs.TryGetValue("FindEventForMe", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
@@ -431,13 +446,14 @@ namespace ManagerLayer.GNGLogManager
                 description = "Event Searched for"
             };
 
-            string json = JsonConvert.SerializeObject(log, Formatting.Indented);
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
             try
             {
-                using (StreamWriter file = File.AppendText(currentLogpath))
+                using (StreamWriter file = File.CreateText(currentLogpath))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, log);
+                    jsonSerializer.Serialize(file, logList);
                     logMade = true;
                     file.Close();
                 }
