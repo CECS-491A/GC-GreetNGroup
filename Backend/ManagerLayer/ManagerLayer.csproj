@@ -59,6 +59,7 @@
     <Compile Include="ClaimManager\ClaimManager.cs" />
     <Compile Include="EventManager\EventManager.cs" />
     <Compile Include="GNGLogManager\GNGLogManager.cs" />
+    <Compile Include="LoginManager\LoginManager.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
       <Name>DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GNG_WebApi\GNG_WebApi.csproj">
+      <Project>{dbc35d43-5a93-480e-86e9-8b581864ddb0}</Project>
+      <Name>GNG_WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
       <Project>{19c796fe-0ab3-43d6-ae5e-c2d6dc5e0fa3}</Project>
