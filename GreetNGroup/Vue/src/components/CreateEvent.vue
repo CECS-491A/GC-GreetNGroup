@@ -220,7 +220,7 @@
             endAllowedStep: m => m % 10 === 0 || m % 10 === 5,
             nameCheck () {
             this.errorMessages = this.address && !this.name
-                ? 'Hey! I\'m required'
+                ? 'You must enter an event name'
                 : ''
 
             return true
