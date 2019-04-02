@@ -71,6 +71,7 @@
     <Compile Include="Services\IGNGArchiverService.cs" />
     <Compile Include="Services\IGNGLoggerService.cs" />
     <Compile Include="Services\IJWTService.cs" />
+    <Compile Include="Services\JWTService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -80,6 +81,12 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
