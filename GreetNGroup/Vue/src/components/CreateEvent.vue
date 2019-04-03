@@ -92,22 +92,12 @@
                                 </v-menu>
                                 <v-layout row wrap>
                             <v-flex md12 lg6>
-                                <v-time-picker id="start-time-picker"
+                                <v-time-picker id="timepicker"
                                 v-model="time"
                                 :allowed-hours="startAllowedHours"
                                 :allowed-minutes="startAllowedStep"
                                 scrollable
                                 class="mt-3"             
-                                min=""
-                                ></v-time-picker>
-                            </v-flex>
-                            <v-flex md12 lg6>
-                                <v-time-picker id="end-time-picker"
-                                v-model="time"
-                                :allowed-hours="endAllowedHours"
-                                :allowed-minutes="endAllowedStep"
-                                scrollable
-                                class="mt-3"
                                 min=""
                                 ></v-time-picker>
                             </v-flex>
@@ -150,8 +140,8 @@
     var dd = todaysDate.getDate();
     var mm = todaysDate.getMonth() + 1;
     var yyyy = todaysDate.getFullYear();
-    var hh = todaysTime.getHours();
-    var mm = todaysTime.getMinutes();
+    var hh = todaysDate.getHours();
+    var mm = todaysDate.getMinutes();
 
     if (dd < 10) {
     dd = "0" + dd;
@@ -163,10 +153,10 @@
     var stringDate = yyyy + "-" + mm + "-" + dd;
     var timeString = hh + ":" + mm;
     document.getElementById("datepicker").setAttribute("min", stringDate);
-    document.getElementById("start-time-picker").setAttribute("min", timeString);
-
+    document.getElementById("timepicker").setAttribute("min", timeString);
+    
     new Vue({
-        el: '#create-event',
+        el: 'create-event',
         data: () => ({
             errorMessages: '',
             name: null,
@@ -179,8 +169,6 @@
             menu: false,
             startTime: null,
             startTimeStep: null,
-            endTime: null,
-            endTimeStep: null,
             formHasErrors: false
         }),
 
@@ -196,12 +184,8 @@
                     date: new Date().toISOString().substr(0, 10),
                     startTime: this.startTime,
                     startTimeStep: this.startTimeStep,
-                    endTime: this.endTime,
-                    endTimeStep: this.endTimeStep,
                     startDateTime: new Date(date.getFullYear() + "-" + date.getMonth() + "-" + 
-                    date.getDate() + " " + startTime + ":" + startTimeStep),
-                    endDateTime: new Date(date.getFullYear() + "-" + date.getMonth() + "-" + 
-                    date.getDate() + " " + endTime + ":" + endTimeStep)
+                    date.getDate() + " " + startTime + ":" + startTimeStep)
                 }
             }
         },
@@ -216,10 +200,8 @@
             allowedDates: val => parseInt(val.split("-")) >= 0,
             startAllowedHours: v => v % 1 === 0,
             startAllowedStep: m => m % 10 === 0 || m % 10 === 5,
-            endAllowedHours: h => h >= 0,
-            endAllowedStep: m => m % 10 === 0 || m % 10 === 5,
             nameCheck () {
-            this.errorMessages = this.address && !this.name
+                this.errorMessages = this.address && !this.name
                 ? 'You must enter an event name'
                 : ''
 
