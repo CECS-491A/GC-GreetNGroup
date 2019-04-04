@@ -30,7 +30,7 @@ namespace ManagerLayer.JWTManagement
         /// </summary>
         /// <param name="username">Username of user</param>
         /// <returns>Return JWT object</returns>
-        public JwtSecurityToken GrantToken(string username)
+        public string GrantToken(string username)
         {
             if (_userService.IsExistingGNGUser(username))
             {
@@ -44,7 +44,7 @@ namespace ManagerLayer.JWTManagement
                     securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
                 }
 
-                return _JWTService.CreateToken(securityClaimsList);
+                return _JWTService.CreateToken(username, securityClaimsList);
             }
             else
             {

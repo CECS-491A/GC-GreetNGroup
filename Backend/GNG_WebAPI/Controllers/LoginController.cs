@@ -8,7 +8,6 @@ namespace GNG_WebApi.Controllers
 {
     public class LoginController : ApiController
     {
-        
         [HttpPost]
         [Route("api/login")]
         public IHttpActionResult Login([FromBody] LoginRequest request)
@@ -16,17 +15,14 @@ namespace GNG_WebApi.Controllers
             try
             {
                 LoginManager lm = new LoginManager();
-                int response = lm.Login(request);
-                if(response == 1)
+                string response = lm.Login(request);
+                if(response.Equals("-1"))
                 {
-
-                }else if(response == -1)
-                {
-
+                    return Content(HttpStatusCode.BadRequest, "Invalid session");
                 }
                 else
                 {
-                    return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                    return Content(HttpStatusCode.OK, response);
                 }
             }
             catch (Exception ex)

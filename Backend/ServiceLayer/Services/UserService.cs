@@ -8,8 +8,26 @@ using DataAccessLayer.Tables;
 
 namespace ServiceLayer.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
+        public bool CreateUser(User user)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    ctx.Users.Add(user);
+                    ctx.SaveChanges();
+                    return true;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
+            }
+        }
+
         /// <summary>
         /// Method IsExistingGNGUser checks to see if the user has done the GreetNGroup specific
         /// registration that makes them a valid user of GreetNGroup
@@ -36,6 +54,24 @@ namespace ServiceLayer.Services
                 return userExists;
             }
 
+        }
+
+        //Winn
+        public int GetNextUserID()
+        {
+            try
+            {
+                using(var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.OrderByDescending(p => p.UserId).FirstOrDefault();
+                    return user.UserId + 1;
+                }
+            }
+            catch
+            {
+                //log
+                return -1;
+            }
         }
     }
 }

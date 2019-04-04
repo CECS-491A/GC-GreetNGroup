@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.Designer.cs">
       <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904042303027_UpdateUserTable.cs" />
+    <Compile Include="Migrations\201904042303027_UpdateUserTable.Designer.cs">
+      <DependentUpon>201904042303027_UpdateUserTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
@@ -194,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903050835362_removeIdIdentityKeys.resx">
       <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904042303027_UpdateUserTable.resx">
+      <DependentUpon>201904042303027_UpdateUserTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

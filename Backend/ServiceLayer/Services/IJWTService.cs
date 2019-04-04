@@ -6,7 +6,7 @@ namespace ServiceLayer.Services
 {
     public interface IJWTService
     {
-        bool CheckUserClaims(JwtSecurityToken jwt, List<string> claimsToCheck);
-        JwtSecurityToken CreateToken(List<Claim> securityClaimsList);
+        string CreateToken(string username, List<Claim> securityClaimsList);
+        bool CheckUserClaims(string jwtToken, List<string> claimsToCheck);
     }
 }

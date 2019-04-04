@@ -12,7 +12,7 @@ namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        public JwtSecurityToken CreateToken(List<Claim> securityClaimsList)
+        public string CreateToken(string username, List<Claim> securityClaimsList)
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             //Generate the symmetric key which will be used for the signature portion of the JWT
@@ -31,9 +31,16 @@ namespace ServiceLayer.Services
                 signingCredentials: credentials);
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            tokenHandler.WriteToken(jwt);
-            return jwt;
+            return tokenHandler.WriteToken(jwt);
         }
+
+        //public string UpdateToken(string jwtToken)
+        //{
+
+        //}
+
+
+        //TODO: modify CheckUserClaims to check signature before getting claims
 
         /// <summary>
         /// Method to check if a user has the appropriate claims to access/perform an
@@ -43,13 +50,16 @@ namespace ServiceLayer.Services
         /// <param name="jwt">JWT of the user</param>
         /// <param name="claimToCheck">Required claim needed to perform/access</param>
         /// <returns>True or false depending on if the user has the claim</returns>
-        public bool CheckUserClaims(JwtSecurityToken jwt, List<string> claimsToCheck)
+        public bool CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
         {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
+            
             var usersCurrClaims = jwt.Claims;
             bool pass = false;
 
             var usersCurrClaimsNames = new List<string>();
-            foreach (System.Security.Claims.Claim claim in usersCurrClaims)
+            foreach (Claim claim in usersCurrClaims)
             {
                 usersCurrClaimsNames.Add(claim.Type);
             }
