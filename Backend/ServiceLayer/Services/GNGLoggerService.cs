@@ -145,5 +145,33 @@ namespace ServiceLayer.Services
             }
             return logList;
         }
+
+        /// <summary>
+        /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
+        /// </summary>
+        /// <returns></returns>
+        public List<GNGLog> ReadLogs()
+        {
+            List<GNGLog> logList = new List<GNGLog>();
+            DirectoryInfo di = new DirectoryInfo(LOGS_FOLDERPATH);
+            string[] dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
+            foreach (string dir in dirs)
+            {
+                if (new FileInfo(dir).Length != 0)
+                {
+                    using (StreamReader r = new StreamReader(dir))
+                    {
+                        string jsonFile = r.ReadToEnd();
+                        //Retrieve Current Logs
+                        List<GNGLog> logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                        for (int index = 0; index < logs.Count; index++)
+                        {
+                            logList.Add(logs[index]);
+                        }
+                    }
+                }
+            }
+            return logList;
+        }
     }
 }
