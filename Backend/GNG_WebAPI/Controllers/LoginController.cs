@@ -1,6 +1,6 @@
-﻿using GNG_WebApi.Requests;
+﻿using ManagerLayer.LoginManagement;
+using ServiceLayer.Requests;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Web.Http;
 
@@ -15,7 +15,19 @@ namespace GNG_WebApi.Controllers
         {
             try
             {
+                LoginManager lm = new LoginManager();
+                int response = lm.Login(request);
+                if(response == 1)
+                {
 
+                }else if(response == -1)
+                {
+
+                }
+                else
+                {
+                    return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                }
             }
             catch (Exception ex)
             {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
-    class CryptoService: ICryptoService
+    public class CryptoService: ICryptoService
     {
         public string HashHMAC(byte[] key, string message)
         {

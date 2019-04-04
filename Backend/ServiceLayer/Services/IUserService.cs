@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
-    public interface ICryptoService
+    public interface IUserService
     {
-        //Winn Created
-        string HashHMAC(byte[] key, string message);
-        string GenerateToken();
+        //Jonalyn
+        bool IsExistingGNGUser(string username);
     }
 }

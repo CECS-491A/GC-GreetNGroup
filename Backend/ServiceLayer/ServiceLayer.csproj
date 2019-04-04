@@ -46,6 +46,7 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.4.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
@@ -64,6 +65,7 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\GNGArchiverService.cs" />
@@ -73,7 +75,9 @@
     <Compile Include="Services\IGNGArchiverService.cs" />
     <Compile Include="Services\IGNGLoggerService.cs" />
     <Compile Include="Services\IJWTService.cs" />
+    <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\JWTService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

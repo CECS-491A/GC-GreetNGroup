@@ -7,11 +7,19 @@ using System.Text;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 using Microsoft.IdentityModel.Tokens;
+using ServiceLayer.Services;
 
 namespace ManagerLayer.JWTManager
 {
     public class JWTManager
     {
+        private IJWTService _JWTService;
+        private IUserService _userService;
+        public JWTManager()
+        {
+            _JWTService = new JWTService();
+            _userService = new UserService();
+        }
 
         /// <summary>
         /// Method GrantToken grants a user a JWT that will be used for authorization
@@ -24,9 +32,7 @@ namespace ManagerLayer.JWTManager
         /// <returns>Return JWT object</returns>
         public JwtSecurityToken GrantToken(string username)
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-
-            if(IsExistingGNGUser(username) == true)
+            if (_userService.IsExistingGNGUser(username))
             {
                 var usersClaims = RetrieveClaims(username);
                 var hashedUID = RetrieveHashedUID(username);
@@ -38,61 +44,14 @@ namespace ManagerLayer.JWTManager
                     securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
                 }
 
-                //Generate the symmetric key which will be used for the signature portion of the JWT
-                byte[] symmetricKey = new byte[256];
-                rng.GetBytes(symmetricKey);
-                var charKey = Encoding.UTF8.GetString(symmetricKey);
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
-                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var jwt = new JwtSecurityToken(
-                    issuer: "greetngroup.com",
-                    audience: "greetngroup.com",
-                    claims: securityClaimsList,
-                    expires: DateTime.Now.AddMinutes(30),
-                    signingCredentials: credentials);
-
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.WriteToken(jwt);
-                return jwt;
+                return _JWTService.CreateToken(securityClaimsList);
             }
             else
             {
                 return null;
             }
-
-            
         }
-
-        /// <summary>
-        /// Method IsExistingGNGUser checks to see if the user has done the GreetNGroup specific
-        /// registration that makes them a valid user of GreetNGroup
-        /// </summary>
-        /// <param name="username">Username registered in the SSO</param>
-        /// <returns>Returns true or false depending if the user exists in the GNG context</returns>
-        public bool IsExistingGNGUser(string username)
-        {
-            bool userExists = false;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    if (ctx.Users.Any(u => u.UserName.Equals(username)) == true)
-                    {
-                        userExists = true;
-                    }
-                }
-                return userExists;
-            }
-            catch(ObjectDisposedException e)
-            {
-                //log
-                return userExists;
-            }
-            
-        }
-
+        
         /// <summary>
         /// Method RetrieveClaims gets the claims a user has and returns them in list form
         /// </summary>

@@ -6,7 +6,7 @@ using System.Text;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 
-namespace ManagerLayer.UserManager
+namespace ManagerLayer.UserManagement
 {
     public class UserManager
     {

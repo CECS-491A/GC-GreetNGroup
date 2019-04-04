@@ -67,11 +67,20 @@
     <Compile Include="Controllers\HelloWorldController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\LoginRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
+      <Project>{2f492345-f79f-4123-8880-c2499fcdc67c}</Project>
+      <Name>ManagerLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+      <Project>{19c796fe-0ab3-43d6-ae5e-c2d6dc5e0fa3}</Project>
+      <Name>ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
