@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ManagerLayer.GNGLogManager
+namespace ManagerLayer.GNGLogManagement
 {
     public class GNGLogManager
     {

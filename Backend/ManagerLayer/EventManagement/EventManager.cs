@@ -5,7 +5,7 @@ using DataAccessLayer.Tables;
 
 namespace ManagerLayer.EventManager
 {
-    public class EventManager
+    public class EventManagement
     {
         /// <summary>
         /// The following region inserts an event/event details into the event database

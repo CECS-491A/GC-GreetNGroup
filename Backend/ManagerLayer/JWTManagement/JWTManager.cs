@@ -9,7 +9,7 @@ using DataAccessLayer.Tables;
 using Microsoft.IdentityModel.Tokens;
 using ServiceLayer.Services;
 
-namespace ManagerLayer.JWTManager
+namespace ManagerLayer.JWTManagement
 {
     public class JWTManager
     {

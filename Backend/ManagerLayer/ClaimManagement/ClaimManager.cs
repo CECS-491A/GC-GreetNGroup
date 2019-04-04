@@ -3,7 +3,7 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 
-namespace ManagerLayer.ClaimManager
+namespace ManagerLayer.ClaimManagement
 {
     public class ClaimManager
     {
