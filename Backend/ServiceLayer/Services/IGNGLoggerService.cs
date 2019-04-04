@@ -7,6 +7,7 @@ namespace ServiceLayer.Services
     {
         string CreateNewLog();
         List<GNGLog> FillCurrentLogsList();
+        List<GNGLog> ReadLogs();
         bool CheckForExistingLog();
         string GetLogsFolderpath();
         string GetLogsExtentionName();
