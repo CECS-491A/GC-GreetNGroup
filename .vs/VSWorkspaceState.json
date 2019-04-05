@@ -3,8 +3,8 @@
     "",
     "\\Backend",
     "\\Backend\\ServiceLayer",
+    "\\Backend\\ServiceLayer\\Interface",
     "\\Backend\\ServiceLayer\\Services"
   ],
-  "SelectedNode": "\\Backend\\ServiceLayer\\Interface",
   "PreviewInSolutionExplorer": false
 }
