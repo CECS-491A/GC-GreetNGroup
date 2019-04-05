@@ -13,6 +13,8 @@ namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
+
         public string CreateToken(string username, string hashedUID)
         {
             var usersClaims = RetrieveClaims(username);
