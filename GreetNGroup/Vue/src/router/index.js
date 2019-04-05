@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
+import CreateEvent from '@/components/CreateEvent'
 // import Axios from 'axios'
 
 /* eslint-disable */
@@ -22,6 +23,11 @@ const router = new Router({
       path: '/EventHome',
       name: 'EventHome',
       component: EventHome
+    },
+    {
+      path: '/CreateEvent',
+      name: CreateEvent,
+      component: CreateEvent
     },
     {
       path: '/testlogin',

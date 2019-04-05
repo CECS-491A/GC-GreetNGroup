@@ -14,6 +14,16 @@ namespace ServiceLayer.Services
     public class JWTService : IJWTService
     {
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
+        private SigningCredentials credentials;
+        private ICryptoService _cryptoService;
+        private JwtSecurityTokenHandler tokenHandler;
+
+        public JWTService()
+        {
+            _cryptoService = new CryptoService();
+            credentials = _cryptoService.GenerateJWTSignature();
+            tokenHandler = new JwtSecurityTokenHandler();
+        }
 
         public string CreateToken(string username, string hashedUID)
         {
@@ -25,15 +35,6 @@ namespace ServiceLayer.Services
             {
                 securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
             }
-            
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            //Generate the symmetric key which will be used for the signature portion of the JWT
-            byte[] symmetricKey = new byte[256];
-            rng.GetBytes(symmetricKey);
-            var charKey = Encoding.UTF8.GetString(symmetricKey);
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var jwt = new JwtSecurityToken(
                 issuer: "greetngroup.com",
@@ -42,7 +43,6 @@ namespace ServiceLayer.Services
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials);
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(jwt);
         }
 
@@ -65,22 +65,49 @@ namespace ServiceLayer.Services
         /// <returns>True or false depending on if the user has the claim</returns>
         public bool CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
-            
-            var usersCurrClaims = jwt.Claims;
-            bool pass = false;
-
-            var usersCurrClaimsNames = new List<string>();
-            foreach (System.Security.Claims.Claim claim in usersCurrClaims)
+            if(IsJWTSignatureTampered(userJwtToken) == false)
             {
-                usersCurrClaimsNames.Add(claim.Type);
+                var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
+
+                var usersCurrClaims = jwt.Claims;
+                bool pass = false;
+
+                var usersCurrClaimsNames = new List<string>();
+                foreach (System.Security.Claims.Claim claim in usersCurrClaims)
+                {
+                    usersCurrClaimsNames.Add(claim.Type);
+                }
+
+                var claimsCheck = claimsToCheck.Except(usersCurrClaimsNames);
+                pass = !claimsCheck.Any();
+
+                return pass;
             }
+            else
+            {
+                return false;
+            }
+        }
 
-            var claimsCheck = claimsToCheck.Except(usersCurrClaimsNames);
-            pass = !claimsCheck.Any();
-
-            return pass;
+        /// <summary>
+        /// Method IsJWTSignatureTampered checks if the user has altered the signature
+        /// of their JWT in attempt to access more than the user should. If the user's
+        /// signature of their JWT does not match the signature that is in GreetNGroup
+        /// then the method returns true.
+        /// </summary>
+        /// <param name="userJwtToken">users JWT in string format</param>
+        /// <returns>Returns bool value based on if the user has tampered with their
+        /// JWT</returns>
+        public bool IsJWTSignatureTampered(string userJwtToken)
+        {
+            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
+            bool isTampered = false;
+            SigningCredentials signature = jwt.SigningCredentials;
+            if (!credentials.ToString().Equals(signature.ToString()))
+            {
+                isTampered = true;
+            }
+            return isTampered;
         }
 
         /// <summary>

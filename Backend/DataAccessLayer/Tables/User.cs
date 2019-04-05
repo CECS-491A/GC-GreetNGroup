@@ -24,6 +24,7 @@ namespace DataAccessLayer.Tables
             Country = country;
             DoB = dob;
             IsActivated = isActivated;
+            EventCreationCount = 0;
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -42,5 +43,7 @@ namespace DataAccessLayer.Tables
         public DateTime DoB { get; set; }
 
         public bool IsActivated { get; set; }
+
+        public int EventCreationCount { get; set; }
     }
 }

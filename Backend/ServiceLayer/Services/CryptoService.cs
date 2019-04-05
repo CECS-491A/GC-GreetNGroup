@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
     public class CryptoService: ICryptoService
     {
+        RNGCryptoServiceProvider rng;
+
+        public CryptoService()
+        {
+            rng = new RNGCryptoServiceProvider();
+        }
+
         public string HashHMAC(byte[] key, string message)
         {
             var encoding = new ASCIIEncoding();
@@ -22,9 +30,8 @@ namespace ServiceLayer.Services
 
         public string GenerateToken()
         {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
             Byte[] b = new byte[64 / 2];
-            provider.GetBytes(b);
+            rng.GetBytes(b);
             string hex = BitConverter.ToString(b).Replace("-", "");
             return hex;
         }
@@ -45,6 +52,18 @@ namespace ServiceLayer.Services
                 sha256.Dispose();
                 return hashToString.ToString();
             }
+        }
+
+        public SigningCredentials GenerateJWTSignature()
+        {
+            byte[] symmetricKey = new byte[256 / 8];
+            rng.GetBytes(symmetricKey);
+            var charKey = Encoding.UTF8.GetString(symmetricKey);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            
+            return credentials;
         }
     }
 }
