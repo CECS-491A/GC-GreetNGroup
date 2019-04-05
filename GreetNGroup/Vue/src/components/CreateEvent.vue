@@ -17,7 +17,7 @@
                             counter="50"
                             required
                             ></v-text-field>
-                            <p>{{ radios || 'null' }}</p>
+                            <p>{{ radios || '' }}</p>
                             <v-radio-group v-model="radios" :mandatory="true">
                                 <v-radio label="Online Event" value="isOnline"></v-radio>
                                 <v-radio label="Physical Event" value="isPhysical"></v-radio>
@@ -57,8 +57,8 @@
                             placeholder="79938"
                             ></v-text-field>
                             <v-menu
-                                ref="menu"
-                                v-model="menu"
+                                ref="dateMenu"
+                                v-model="dateMenu"
                                 :close-on-content-click="false"
                                 :nudge-right="40"
                                 :return-value.sync="date"
@@ -86,32 +86,43 @@
                                 min=""
                             >
                                 <v-spacer></v-spacer>
-                                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                                <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                                <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
+                                <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
                                 </v-date-picker>
                                 </v-menu>
-                                <v-layout row wrap>
-                            <v-flex md12 lg6>
-                                <v-time-picker id="start-time-picker"
-                                v-model="time"
+                          <v-menu
+                                ref="timeMenu"
+                                v-model="timeMenu"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                :return-value.sync="startTime"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                max-width="290px"
+                                min-width="290px"
+                                >
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field
+                                    v-model="startTime"
+                                    label="Event Start Time"
+                                    prepend-icon="access_time"
+                                    readonly
+                                    v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-time-picker id="timepicker"
+                                v-model="startTime"
+                                v-if="timeMenu"
                                 :allowed-hours="startAllowedHours"
                                 :allowed-minutes="startAllowedStep"
                                 scrollable
                                 class="mt-3"             
                                 min=""
+                                full-width                                                                   @click:minute="$refs.timeMenu.save(startTime)"
                                 ></v-time-picker>
-                            </v-flex>
-                            <v-flex md12 lg6>
-                                <v-time-picker id="end-time-picker"
-                                v-model="time"
-                                :allowed-hours="endAllowedHours"
-                                :allowed-minutes="endAllowedStep"
-                                scrollable
-                                class="mt-3"
-                                min=""
-                                ></v-time-picker>
-                            </v-flex>
-                            </v-layout>
+                            </v-menu>
                         </v-card-text>
                         <v-divider class="mt-5"></v-divider>
                         <v-card-actions>
@@ -150,8 +161,8 @@
     var dd = todaysDate.getDate();
     var mm = todaysDate.getMonth() + 1;
     var yyyy = todaysDate.getFullYear();
-    var hh = todaysTime.getHours();
-    var mm = todaysTime.getMinutes();
+    var hh = todaysDate.getHours();
+    var mm = todaysDate.getMinutes();
 
     if (dd < 10) {
     dd = "0" + dd;
@@ -163,25 +174,24 @@
     var stringDate = yyyy + "-" + mm + "-" + dd;
     var timeString = hh + ":" + mm;
     document.getElementById("datepicker").setAttribute("min", stringDate);
-    document.getElementById("start-time-picker").setAttribute("min", timeString);
-
-    new Vue({
+    document.getElementById("timepicker").setAttribute("min", timeString);
+    
+    export default {
+        name: 'CreateEvent',
         el: '#create-event',
         data: () => ({
-            errorMessages: '',
-            name: null,
-            radios: null,
-            address: null,
-            city: null,
-            state: null,
-            zip: null,
-            date: null,
-            menu: false,
-            startTime: null,
-            startTimeStep: null,
-            endTime: null,
-            endTimeStep: null,
-            formHasErrors: false
+          errorMessages: '',
+          name: null,
+          radios: null,
+          address: null,
+          city: null,
+          state: null,
+          zip: null,
+          date: null,
+          dateMenu: false,
+          timeMenu: false,
+          startTime: null,
+          formHasErrors: false
         }),
 
         computed: {
@@ -195,13 +205,6 @@
                     zip: this.zip,
                     date: new Date().toISOString().substr(0, 10),
                     startTime: this.startTime,
-                    startTimeStep: this.startTimeStep,
-                    endTime: this.endTime,
-                    endTimeStep: this.endTimeStep,
-                    startDateTime: new Date(date.getFullYear() + "-" + date.getMonth() + "-" + 
-                    date.getDate() + " " + startTime + ":" + startTimeStep),
-                    endDateTime: new Date(date.getFullYear() + "-" + date.getMonth() + "-" + 
-                    date.getDate() + " " + endTime + ":" + endTimeStep)
                 }
             }
         },
@@ -216,10 +219,8 @@
             allowedDates: val => parseInt(val.split("-")) >= 0,
             startAllowedHours: v => v % 1 === 0,
             startAllowedStep: m => m % 10 === 0 || m % 10 === 5,
-            endAllowedHours: h => h >= 0,
-            endAllowedStep: m => m % 10 === 0 || m % 10 === 5,
             nameCheck () {
-            this.errorMessages = this.address && !this.name
+                this.errorMessages = this.address && !this.name
                 ? 'You must enter an event name'
                 : ''
 
@@ -243,5 +244,6 @@
             })
             }
         }
-    })
+    }
+    
 </script>

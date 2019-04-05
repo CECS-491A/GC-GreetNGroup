@@ -24,6 +24,7 @@ namespace DataAccessLayer.Tables
             Country = country;
             DoB = dob;
             IsActivated = isActivated;
+            EventCreationCount = 0;
         }
 
         public User(int uId, string firstName, string lastName, string userName, string city, string state,
@@ -55,5 +56,7 @@ namespace DataAccessLayer.Tables
         public DateTime DoB { get; set; }
 
         public bool IsActivated { get; set; }
+
+        public int EventCreationCount { get; set; }
     }
 }

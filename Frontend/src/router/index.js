@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 import EventHome from '@/components/Event'
@@ -5,9 +6,10 @@ import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
+import CreateEvent from '@/components/CreateEvent'
 // import Axios from 'axios'
 
-/* eslint-disable */
+
 Vue.use(Router)
 
 /*
@@ -22,6 +24,11 @@ const router = new Router({
       path: '/EventHome',
       name: 'EventHome',
       component: EventHome
+    },
+    {
+      path: '/CreateEvent',
+      name: 'CreateEvent',
+      component: CreateEvent
     },
     {
       path: '/testlogin',

@@ -1,4 +1,6 @@
-﻿namespace ServiceLayer.Interface
+﻿using Microsoft.IdentityModel.Tokens;
+
+namespace ServiceLayer.Interface
 {
     public interface ICryptoService
     {
@@ -7,5 +9,6 @@
         string GenerateToken();
         //Jonalyn
         string HashSha256(string message);
+        SigningCredentials GenerateJWTSignature();
     }
 }
