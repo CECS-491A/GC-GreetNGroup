@@ -6,5 +6,6 @@ namespace ServiceLayer.Services
     public interface IJWTService
     {
         bool CheckUserClaims(JwtSecurityToken jwt, List<string> claimsToCheck);
+        bool IsJWTSignatureTampered(JwtSecurityToken jwt);
     }
 }

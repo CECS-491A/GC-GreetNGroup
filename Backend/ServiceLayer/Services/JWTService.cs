@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
+        SigningCredentials currSignature;
         /// <summary>
         /// Method to check if a user has the appropriate claims to access/perform an
         /// action on the app. If they have the claim, return true, otherwise, return
@@ -32,6 +35,30 @@ namespace ServiceLayer.Services
             pass = !claimsCheck.Any();
 
             return pass;
+        }
+
+        public SigningCredentials GenerateJWTSignature()
+        {
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] symmetricKey = new byte[256];
+            rng.GetBytes(symmetricKey);
+            var charKey = Encoding.UTF8.GetString(symmetricKey);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            currSignature = credentials;
+            return credentials;
+        }
+
+        public bool IsJWTSignatureTampered(JwtSecurityToken jwt)
+        {
+            bool isTampered = false;
+            SigningCredentials signature = jwt.SigningCredentials;
+            if (currSignature.ToString().Equals(signature.ToString()))
+            {
+                isTampered = true;
+            }
+            return isTampered;
         }
     }
 }
