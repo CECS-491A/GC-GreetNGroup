@@ -4,9 +4,8 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 using ServiceLayer.Interface;
-using ServiceLayer.Services;
 
-namespace ManagerLayer.UserManagement
+namespace ServiceLayer.Services
 {
     public class UserManager
     {
