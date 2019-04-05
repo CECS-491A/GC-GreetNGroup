@@ -36,7 +36,7 @@ namespace ManagerLayer.LoginManagement
             if (hashedMessage == request.signature)
             {
                 //Check if user exists
-                if (_userService.IsExistingGNGUser(request.email))
+                if (_userService.IsUsernameFound(request.email))
                 {
                     return _JWTManager.GrantToken(request.email).ToString();
                 }

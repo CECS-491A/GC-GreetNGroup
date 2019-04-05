@@ -5,8 +5,8 @@ namespace ServiceLayer.Interface
     public interface IUserService
     {
         bool CreateUser(User user);
-        //Jonalyn
-        bool IsExistingGNGUser(string username);
+
+        bool IsUsernameFound(string username);
         //Winn
         int GetNextUserID();
     }
