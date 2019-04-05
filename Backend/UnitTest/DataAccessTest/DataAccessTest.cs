@@ -1,7 +1,6 @@
 using System;
-using ManagerLayer.ClaimManagement;
+using ServiceLayer.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.UserManagement;
 
 namespace UnitTest.DataAccessTest
 {
@@ -27,7 +26,7 @@ namespace UnitTest.DataAccessTest
             // Arrange
             const bool expected = true;
             var actual = false;
-            UserManager userManager = new UserManager();
+            UserService userManager = new UserService();
 
             // Act
             var firstName = "Example";
@@ -56,14 +55,14 @@ namespace UnitTest.DataAccessTest
             // Arrange
             const bool expected = true;
             var actual = false;
-            ClaimManager claimManager = new ClaimManager();
+            ClaimService claimService = new ClaimService();
 
             // Act
             var cName = "TestClaim";
 
-            claimManager.InsertClaim(_cId, cName);
-            actual = claimManager.IsClaimInTable(_cId);
-            claimManager.DeleteClaimById(_cId);
+            claimService.InsertClaim(_cId, cName);
+            actual = claimService.IsClaimInTable(_cId);
+            claimService.DeleteClaimById(_cId);
 
             // Assert
             Assert.AreEqual(expected, actual);
