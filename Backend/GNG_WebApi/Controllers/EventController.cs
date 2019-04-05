@@ -1,6 +1,6 @@
-﻿using ManagerLayer.EventManagement;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Web.Http;
+using ServiceLayer.Services;
 
 namespace GNG_WebApi.Controllers
 {
@@ -17,7 +17,7 @@ namespace GNG_WebApi.Controllers
         {
             try
             {
-                EventManager eventManager = new EventManager();
+                EventService eventManager = new EventService();
                 var e = eventManager.GetEventById(id);
                 return Ok(e);
             }
