@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
-namespace ServiceLayer.Services
+namespace ServiceLayer.Interface
 {
     public interface IJWTService
     {
