@@ -88,13 +88,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GreetNGroup\GreetNGroup.csproj">
-      <Project>{1f2878a6-8928-4b7f-8c67-83b7349ce1f7}</Project>
-      <Name>GreetNGroup</Name>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{07DDD14E-6CE5-48BB-882F-7E5AE3C931F7}</Project>
+      <Name>DataAccessLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
       <Project>{2f492345-f79f-4123-8880-c2499fcdc67c}</Project>
       <Name>ManagerLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+      <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
+      <Name>ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

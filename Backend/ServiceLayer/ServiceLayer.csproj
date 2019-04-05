@@ -87,6 +87,7 @@
     <Compile Include="Services\IUADService.cs" />
     <Compile Include="Services\JWTService.cs" />
     <Compile Include="Services\UADService.cs" />
+    <Compile Include="Services\UserClaimsService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

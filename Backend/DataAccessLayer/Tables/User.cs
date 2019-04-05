@@ -26,19 +26,6 @@ namespace DataAccessLayer.Tables
             IsActivated = isActivated;
         }
 
-        public User(int uId, string firstName, string lastName, string userName, string city, string state,
-            string country, DateTime dob)
-        {
-            UserId = uId;
-            FirstName = firstName;
-            LastName = lastName;
-            UserName = userName;
-            City = city;
-            State = state;
-            Country = country;
-            DoB = dob;
-        }
-
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UserId { get; set; }
 
