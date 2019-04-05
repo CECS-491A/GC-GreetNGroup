@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
@@ -12,13 +13,16 @@ namespace ManagerLayer.EventManager
         /// </summary>
         #region Insert Event Information
 
-        public void InsertEvent(int userId, int eventId, DateTime startDate, string eventName)
+        public void InsertEvent(int userId, int eventId, DateTime startDate, string eventName, 
+            string address, string city, string state, string zip, List<string> eventTags, string eventType)
         {
             try
             {
+                string eventLocation = address + " " + city + ", " + state + " " + zip;
+
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var userEvent = new Event(userId, eventId, startDate, eventName);
+                    var userEvent = new Event(userId, eventId, startDate, eventName, eventLocation);
 
                     ctx.Events.Add(userEvent);
 
