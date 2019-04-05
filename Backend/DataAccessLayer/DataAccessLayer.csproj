@@ -51,73 +51,61 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\GreetNGroupContext.cs" />
-    <Compile Include="Migrations\201902140914402_CreateUser.cs" />
-    <Compile Include="Migrations\201902140914402_CreateUser.Designer.cs">
-      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
+    <Compile Include="Migrations\201904050144001_AddUsers.cs" />
+    <Compile Include="Migrations\201904050144001_AddUsers.Designer.cs">
+      <DependentUpon>201904050144001_AddUsers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902160451473_CreateClaim.cs" />
-    <Compile Include="Migrations\201902160451473_CreateClaim.Designer.cs">
-      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
+    <Compile Include="Migrations\201904050145208_AddClaims.cs" />
+    <Compile Include="Migrations\201904050145208_AddClaims.Designer.cs">
+      <DependentUpon>201904050145208_AddClaims.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902160524226_UserClaim.cs" />
-    <Compile Include="Migrations\201902160524226_UserClaim.Designer.cs">
-      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
+    <Compile Include="Migrations\201904050146226_AddUserClaims.cs" />
+    <Compile Include="Migrations\201904050146226_AddUserClaims.Designer.cs">
+      <DependentUpon>201904050146226_AddUserClaims.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902171042088_Event.cs" />
-    <Compile Include="Migrations\201902171042088_Event.Designer.cs">
-      <DependentUpon>201902171042088_Event.cs</DependentUpon>
+    <Compile Include="Migrations\201904050147002_AddEvents.cs" />
+    <Compile Include="Migrations\201904050147002_AddEvents.Designer.cs">
+      <DependentUpon>201904050147002_AddEvents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902180118064_CreateClaim.cs" />
-    <Compile Include="Migrations\201902180118064_CreateClaim.Designer.cs">
-      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
+    <Compile Include="Migrations\201904050147342_AddTags.cs" />
+    <Compile Include="Migrations\201904050147342_AddTags.Designer.cs">
+      <DependentUpon>201904050147342_AddTags.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902190730533_eventTagAndTag.cs" />
-    <Compile Include="Migrations\201902190730533_eventTagAndTag.Designer.cs">
-      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
+    <Compile Include="Migrations\201904050148037_AddEventTags.cs" />
+    <Compile Include="Migrations\201904050148037_AddEventTags.Designer.cs">
+      <DependentUpon>201904050148037_AddEventTags.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902190738255_UserTag.cs" />
-    <Compile Include="Migrations\201902190738255_UserTag.Designer.cs">
-      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
+    <Compile Include="Migrations\201904050149144_AddUserTags.cs" />
+    <Compile Include="Migrations\201904050149144_AddUserTags.Designer.cs">
+      <DependentUpon>201904050149144_AddUserTags.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.cs" />
-    <Compile Include="Migrations\201902240832218_AttendeesAndRoles.Designer.cs">
-      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
+    <Compile Include="Migrations\201904050149430_AddEventRoles.cs" />
+    <Compile Include="Migrations\201904050149430_AddEventRoles.Designer.cs">
+      <DependentUpon>201904050149430_AddEventRoles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903032336385_friends.cs" />
-    <Compile Include="Migrations\201903032336385_friends.Designer.cs">
-      <DependentUpon>201903032336385_friends.cs</DependentUpon>
+    <Compile Include="Migrations\201904050150067_AddAttendees.cs" />
+    <Compile Include="Migrations\201904050150067_AddAttendees.Designer.cs">
+      <DependentUpon>201904050150067_AddAttendees.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903032343574_blocklist.cs" />
-    <Compile Include="Migrations\201903032343574_blocklist.Designer.cs">
-      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
+    <Compile Include="Migrations\201904050151169_AddFriends.cs" />
+    <Compile Include="Migrations\201904050151169_AddFriends.Designer.cs">
+      <DependentUpon>201904050151169_AddFriends.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903032359071_userRatings.cs" />
-    <Compile Include="Migrations\201903032359071_userRatings.Designer.cs">
-      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
+    <Compile Include="Migrations\201904050152218_AddBlocks.cs" />
+    <Compile Include="Migrations\201904050152218_AddBlocks.Designer.cs">
+      <DependentUpon>201904050152218_AddBlocks.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903040039170_actionsTable.cs" />
-    <Compile Include="Migrations\201903040039170_actionsTable.Designer.cs">
-      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
+    <Compile Include="Migrations\201904050152589_AddUserRatings.cs" />
+    <Compile Include="Migrations\201904050152589_AddUserRatings.Designer.cs">
+      <DependentUpon>201904050152589_AddUserRatings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903040046112_UserAction.cs" />
-    <Compile Include="Migrations\201903040046112_UserAction.Designer.cs">
-      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
+    <Compile Include="Migrations\201904050154021_AddActions.cs" />
+    <Compile Include="Migrations\201904050154021_AddActions.Designer.cs">
+      <DependentUpon>201904050154021_AddActions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903050711282_idsToInts.cs" />
-    <Compile Include="Migrations\201903050711282_idsToInts.Designer.cs">
-      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.cs" />
-    <Compile Include="Migrations\201903050821464_removeUserIdentityKey.Designer.cs">
-      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.cs" />
-    <Compile Include="Migrations\201903050835362_removeIdIdentityKeys.Designer.cs">
-      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904042303027_UpdateUserTable.cs" />
-    <Compile Include="Migrations\201904042303027_UpdateUserTable.Designer.cs">
-      <DependentUpon>201904042303027_UpdateUserTable.cs</DependentUpon>
+    <Compile Include="Migrations\201904050154311_AddUserAction.cs" />
+    <Compile Include="Migrations\201904050154311_AddUserAction.Designer.cs">
+      <DependentUpon>201904050154311_AddUserAction.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
@@ -151,62 +139,53 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201902140914402_CreateUser.resx">
-      <DependentUpon>201902140914402_CreateUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902160451473_CreateClaim.resx">
-      <DependentUpon>201902160451473_CreateClaim.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902160524226_UserClaim.resx">
-      <DependentUpon>201902160524226_UserClaim.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902171042088_Event.resx">
-      <DependentUpon>201902171042088_Event.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902180118064_CreateClaim.resx">
-      <DependentUpon>201902180118064_CreateClaim.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902190730533_eventTagAndTag.resx">
-      <DependentUpon>201902190730533_eventTagAndTag.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902190738255_UserTag.resx">
-      <DependentUpon>201902190738255_UserTag.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902240832218_AttendeesAndRoles.resx">
-      <DependentUpon>201902240832218_AttendeesAndRoles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903032336385_friends.resx">
-      <DependentUpon>201903032336385_friends.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903032343574_blocklist.resx">
-      <DependentUpon>201903032343574_blocklist.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903032359071_userRatings.resx">
-      <DependentUpon>201903032359071_userRatings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903040039170_actionsTable.resx">
-      <DependentUpon>201903040039170_actionsTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903040046112_UserAction.resx">
-      <DependentUpon>201903040046112_UserAction.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903050711282_idsToInts.resx">
-      <DependentUpon>201903050711282_idsToInts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903050821464_removeUserIdentityKey.resx">
-      <DependentUpon>201903050821464_removeUserIdentityKey.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903050835362_removeIdIdentityKeys.resx">
-      <DependentUpon>201903050835362_removeIdIdentityKeys.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904042303027_UpdateUserTable.resx">
-      <DependentUpon>201904042303027_UpdateUserTable.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="bin\Release\" />
     <Folder Include="obj\Debug\TempPE\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904050144001_AddUsers.resx">
+      <DependentUpon>201904050144001_AddUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050145208_AddClaims.resx">
+      <DependentUpon>201904050145208_AddClaims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050146226_AddUserClaims.resx">
+      <DependentUpon>201904050146226_AddUserClaims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050147002_AddEvents.resx">
+      <DependentUpon>201904050147002_AddEvents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050147342_AddTags.resx">
+      <DependentUpon>201904050147342_AddTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050148037_AddEventTags.resx">
+      <DependentUpon>201904050148037_AddEventTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050149144_AddUserTags.resx">
+      <DependentUpon>201904050149144_AddUserTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050149430_AddEventRoles.resx">
+      <DependentUpon>201904050149430_AddEventRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050150067_AddAttendees.resx">
+      <DependentUpon>201904050150067_AddAttendees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050151169_AddFriends.resx">
+      <DependentUpon>201904050151169_AddFriends.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050152218_AddBlocks.resx">
+      <DependentUpon>201904050152218_AddBlocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050152589_AddUserRatings.resx">
+      <DependentUpon>201904050152589_AddUserRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050154021_AddActions.resx">
+      <DependentUpon>201904050154021_AddActions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050154311_AddUserAction.resx">
+      <DependentUpon>201904050154311_AddUserAction.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
