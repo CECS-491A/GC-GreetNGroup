@@ -9,23 +9,20 @@ namespace DataAccessLayer.Tables
     {
         public User()
         {
-            IsActivated = true;
+            IsActivated = false;
         }
 
-        public User(int uId, string firstName, string lastName, string userName, string password, string city,
-                    string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
+        public User(int uId, string firstName, string lastName, string userName, string city,
+                    string state, string country, DateTime dob, bool isActivated)
         {
             UserId = uId;
             FirstName = firstName;
             LastName = lastName;
             UserName = userName;
-            Password = password;
             City = city;
             State = state;
             Country = country;
             DoB = dob;
-            SecurityQuestion = securityQ;
-            SecurityAnswer = securityA;
             IsActivated = isActivated;
         }
 
@@ -50,19 +47,12 @@ namespace DataAccessLayer.Tables
 
         [Required]
         public string UserName { get; set; }
-        [Required]
-        public string Password { get; set; }
 
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
 
         public DateTime DoB { get; set; }
-
-        [Required]
-        public string SecurityQuestion { get; set; }
-        [Required]
-        public string SecurityAnswer { get; set; }
 
         public bool IsActivated { get; set; }
     }

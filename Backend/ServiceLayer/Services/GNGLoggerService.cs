@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using DataAccessLayer.Models;
+using ServiceLayer.Interface;
+
 namespace ServiceLayer.Services
 {
     public class GNGLoggerService : IGNGLoggerService
