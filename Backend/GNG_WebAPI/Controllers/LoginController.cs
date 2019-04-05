@@ -16,13 +16,13 @@ namespace GNG_WebApi.Controllers
             {
                 LoginManager lm = new LoginManager();
                 string response = lm.Login(request);
-                if(response.Equals("-1"))
+                if (response.Equals("-1"))
                 {
                     return Content(HttpStatusCode.BadRequest, "Invalid session");
                 }
                 else
                 {
-                    return Content(HttpStatusCode.OK, response);
+                    return Content(HttpStatusCode.Redirect, response);
                 }
             }
             catch (Exception ex)

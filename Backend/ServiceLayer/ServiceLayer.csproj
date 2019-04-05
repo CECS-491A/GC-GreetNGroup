@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interface\ICryptoService.cs" />
+    <Compile Include="Interface\IErrorHandlerService.cs" />
+    <Compile Include="Interface\IGNGArchiverService.cs" />
+    <Compile Include="Interface\IGNGLoggerService.cs" />
+    <Compile Include="Interface\IJWTService.cs" />
+    <Compile Include="Interface\IUserService.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
@@ -76,12 +82,6 @@
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\GNGArchiverService.cs" />
     <Compile Include="Services\GNGLoggerService.cs" />
-    <Compile Include="Services\ICryptoService.cs" />
-    <Compile Include="Services\IErrorHandlerService.cs" />
-    <Compile Include="Services\IGNGArchiverService.cs" />
-    <Compile Include="Services\IGNGLoggerService.cs" />
-    <Compile Include="Services\IJWTService.cs" />
-    <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\JWTService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
