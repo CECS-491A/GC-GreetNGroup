@@ -37,7 +37,7 @@ namespace ServiceLayer.Services
             {
                 //First converts the uID into UTF8 byte encoding before hashing
                 var hashedUIDBytes =
-                    sha256.ComputeHash(Encoding.UTF8.GetBytes(message);
+                    sha256.ComputeHash(Encoding.UTF8.GetBytes(message));
                 var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
                 foreach (byte b in hashedUIDBytes)
                 {

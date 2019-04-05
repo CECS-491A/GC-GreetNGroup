@@ -1,6 +1,6 @@
-﻿using System.Net.Http;
+﻿using ManagerLayer.EventManagement;
+using System.Net.Http;
 using System.Web.Http;
-using ManagerLayer.EventManager;
 
 namespace GNG_WebApi.Controllers
 {

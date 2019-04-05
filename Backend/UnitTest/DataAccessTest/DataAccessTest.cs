@@ -1,7 +1,7 @@
 using System;
-using ManagerLayer.ClaimManager;
+using ManagerLayer.ClaimManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.UserManager;
+using ManagerLayer.UserManagement;
 
 namespace UnitTest.DataAccessTest
 {
@@ -33,17 +33,13 @@ namespace UnitTest.DataAccessTest
             var firstName = "Example";
             var lastName = "Set";
             var userName = "e.e@fakemail.com";
-            var password = "badpass9!";
             var city = "Long Beach";
             var state = "California";
             var country = "United States";
             var dob = DateTime.Parse("09/19/1999");
-            var securityQ = "What is your favorite soda?";
-            var securityA = "Coke";
             var isActivated = true;
 
-            userManager.InsertUser(_userId1, firstName, lastName, userName, password, city, state, country, dob, securityQ,
-                securityA, isActivated);
+            userManager.InsertUser(_userId1, firstName, lastName, userName, city, state, country, dob, isActivated);
             actual = userManager.IsUsernameFoundById(_userId1);
             userManager.DeleteUserById(_userId1);
 

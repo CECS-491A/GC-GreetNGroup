@@ -73,6 +73,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{07DDD14E-6CE5-48BB-882F-7E5AE3C931F7}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
       <Project>{2f492345-f79f-4123-8880-c2499fcdc67c}</Project>
       <Name>ManagerLayer</Name>
@@ -81,6 +85,9 @@
       <Project>{19c796fe-0ab3-43d6-ae5e-c2d6dc5e0fa3}</Project>
       <Name>ServiceLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
