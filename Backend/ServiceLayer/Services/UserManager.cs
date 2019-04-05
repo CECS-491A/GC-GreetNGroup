@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using ServiceLayer.Interface;
 using ServiceLayer.Services;
 
 namespace ManagerLayer.UserManagement
