@@ -3,9 +3,9 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 
-namespace ManagerLayer.ClaimManagement
+namespace ServiceLayer.Services
 {
-    public class ClaimManager
+    public class ClaimService
     {
         /// <summary>
         /// This region handles inserting claim information into the database

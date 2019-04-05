@@ -2,9 +2,9 @@
 using System.Text;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
-using ManagerLayer.UserManagement;
 using ManagerLayer.JWTManagement;
 using DataAccessLayer.Tables;
+using ServiceLayer.Interface;
 
 namespace ManagerLayer.LoginManagement
 {

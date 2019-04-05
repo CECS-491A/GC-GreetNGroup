@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DataAccessLayer.Context;
+using ServiceLayer.Interface;
 using ServiceLayer.Services;
 
 namespace ManagerLayer.JWTManagement

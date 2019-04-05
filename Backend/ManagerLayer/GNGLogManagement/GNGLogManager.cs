@@ -4,6 +4,7 @@ using ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ServiceLayer.Interface;
 
 namespace ManagerLayer.GNGLogManagement
 {

@@ -3,9 +3,9 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 
-namespace ManagerLayer.EventManagement
+namespace ServiceLayer.Services
 {
-    public class EventManager
+    public class EventService
     {
         /// <summary>
         /// The following region inserts an event/event details into the event database
