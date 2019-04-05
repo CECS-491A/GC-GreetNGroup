@@ -6,7 +6,7 @@ namespace ServiceLayer.Services
 {
     public interface IJWTService
     {
-        string CreateToken(string username, List<Claim> securityClaimsList);
+        string CreateToken(string username, string hashedUID);
         bool CheckUserClaims(string jwtToken, List<string> claimsToCheck);
     }
 }

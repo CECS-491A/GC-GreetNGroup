@@ -17,7 +17,7 @@ namespace ServiceLayer.Services
 
             var hasher = new HMACSHA256(key);
             byte[] hash = hasher.ComputeHash(convertedMessage);
-            string hashString = System.Text.Encoding.UTF8.GetString(hash, 0, hash.Length);
+            string hashString = Encoding.UTF8.GetString(hash, 0, hash.Length);
 
             return hashString;
         }
@@ -29,6 +29,24 @@ namespace ServiceLayer.Services
             provider.GetBytes(b);
             string hex = BitConverter.ToString(b).Replace("-", "");
             return hex;
+        }
+
+        public string HashSha256(string message)
+        {
+            using (var sha256 = new SHA256CryptoServiceProvider())
+            {
+                //First converts the uID into UTF8 byte encoding before hashing
+                var hashedUIDBytes =
+                    sha256.ComputeHash(Encoding.UTF8.GetBytes(message);
+                var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
+                foreach (byte b in hashedUIDBytes)
+                {
+                    hashToString.Append(b.ToString("X2"));
+                }
+
+                sha256.Dispose();
+                return hashToString.ToString();
+            }
         }
     }
 }

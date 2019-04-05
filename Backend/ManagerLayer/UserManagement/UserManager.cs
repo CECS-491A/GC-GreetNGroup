@@ -5,25 +5,33 @@ using System.Security.Cryptography;
 using System.Text;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using ServiceLayer.Services;
 
 namespace ManagerLayer.UserManagement
 {
     public class UserManager
     {
+        private ICryptoService _cryptoService;
+
+        public UserManager()
+        {
+            _cryptoService = new CryptoService();
+        }
+        
         /// <summary>
         /// The following region handles inserts into the user table of the database
         /// </summary>
         #region Insert User Information
 
-        public void InsertUser(int uId, string firstName, string lastName, string userName, string password, string city,
-            string state, string country, DateTime dob, string securityQ, string securityA, bool isActivated)
+        public void InsertUser(int uId, string firstName, string lastName, string userName, string city,
+            string state, string country, DateTime dob, bool isActivated)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var user = new User(uId, firstName, lastName, userName, password, city, state, country, dob,
-                        securityQ, securityA, isActivated);
+                    var user = new User(uId, firstName, lastName, userName, city, state, country, dob,
+                        isActivated);
 
                     ctx.Users.Add(user);
 
@@ -42,24 +50,6 @@ namespace ManagerLayer.UserManagement
         /// The following region handles updating user information within the database
         /// </summary>
         #region Update User Information
-
-        public void UpdateUserPassword(int uId, string password)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                    if (curUser != null)
-                        curUser.Password = password;
-                    ctx.SaveChanges();
-                }
-            }
-            catch (ObjectDisposedException od)
-            {
-                // log
-            }
-        }
 
         public void UpdateUserCity(int uId, string city)
         {
@@ -222,20 +212,8 @@ namespace ManagerLayer.UserManagement
                 using (var ctx = new GreetNGroupContext())
                 {
                     var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                    using (var sha256 = new SHA256CryptoServiceProvider())
-                    {
-                        //First converts the uID into UTF8 byte encoding before hashing
-                        var hashedUIDBytes =
-                            sha256.ComputeHash(Encoding.UTF8.GetBytes(user.Select(id => id.UserId).ToString()));
-                        var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
-                        foreach (byte b in hashedUIDBytes)
-                        {
-                            hashToString.Append(b.ToString("X2"));
-                        }
-
-                        sha256.Dispose();
-                        hashedUid = hashToString.ToString();
-                    }
+                    string userID = user.Select(id => id.UserId).ToString();
+                    hashedUid = _cryptoService.HashSha256(userID);
                 }
 
                 return hashedUid;

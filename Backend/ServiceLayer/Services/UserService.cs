@@ -28,6 +28,8 @@ namespace ServiceLayer.Services
             }
         }
 
+        //TODO: Add method to get the user from db using the username, return user object
+
         /// <summary>
         /// Method IsExistingGNGUser checks to see if the user has done the GreetNGroup specific
         /// registration that makes them a valid user of GreetNGroup

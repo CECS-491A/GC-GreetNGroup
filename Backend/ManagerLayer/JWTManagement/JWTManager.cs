@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
-using Microsoft.IdentityModel.Tokens;
 using ServiceLayer.Services;
 
 namespace ManagerLayer.JWTManagement
@@ -15,10 +9,13 @@ namespace ManagerLayer.JWTManagement
     {
         private IJWTService _JWTService;
         private IUserService _userService;
+        private ICryptoService _cryptoService;
+
         public JWTManager()
         {
             _JWTService = new JWTService();
             _userService = new UserService();
+            _cryptoService = new CryptoService();
         }
 
         /// <summary>
@@ -34,52 +31,12 @@ namespace ManagerLayer.JWTManagement
         {
             if (_userService.IsExistingGNGUser(username))
             {
-                var usersClaims = RetrieveClaims(username);
-                var hashedUID = RetrieveHashedUID(username);
-                var securityClaimsList = new List<System.Security.Claims.Claim>();
-
-                //Takes the claims the user has and puts it in a list of Security Claims objects
-                foreach (DataAccessLayer.Tables.Claim c in usersClaims)
-                {
-                    securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
-                }
-
-                return _JWTService.CreateToken(username, securityClaimsList);
+                return _JWTService.CreateToken(username, RetrieveHashedUID(username));
             }
             else
             {
                 return null;
             }
-        }
-        
-        /// <summary>
-        /// Method RetrieveClaims gets the claims a user has and returns them in list form
-        /// </summary>
-        /// <param name="username">Username of the user</param>
-        /// <returns>Returns that user's list of claims</returns>
-        public List<Claim> RetrieveClaims(string username)
-        {
-            var claimsList = new List<Claim>();
-
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
-                    foreach (UserClaim claim in usersClaims)
-                    {
-                        claimsList.Add(claim.Claim);
-                    }
-
-                    return claimsList;
-                }
-            }
-            catch (ObjectDisposedException e)
-            {
-                // log
-                return claimsList;
-            }
-
         }
 
         /// <summary>
@@ -97,20 +54,8 @@ namespace ManagerLayer.JWTManagement
                 using (var ctx = new GreetNGroupContext())
                 {
                     var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                    using (var sha256 = new SHA256CryptoServiceProvider())
-                    {
-                        //First converts the uID into UTF8 byte encoding before hashing
-                        var hashedUIDBytes =
-                            sha256.ComputeHash(Encoding.UTF8.GetBytes(user.Select(id => id.UserId).ToString()));
-                        var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
-                        foreach (byte b in hashedUIDBytes)
-                        {
-                            hashToString.Append(b.ToString("X2"));
-                        }
-
-                        sha256.Dispose();
-                        hashedUID = hashToString.ToString();
-                    }
+                    string userID = user.Select(id => id.UserId).ToString();
+                    hashedUID = _cryptoService.HashSha256(userID);
                 }
                 return hashedUID;
             }

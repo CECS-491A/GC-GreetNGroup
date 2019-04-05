@@ -10,7 +10,7 @@ namespace ManagerLayer.LoginManagement
 {
     public class LoginManager
     {
-        private string sharedSecretKey = Environment.GetEnvironmentVariable("sharedSecretKey", EnvironmentVariableTarget.User);
+        private readonly string sharedSecretKey = Environment.GetEnvironmentVariable("sharedSecretKey", EnvironmentVariableTarget.User);
 
         private ICryptoService _cryptoService;
         private IUserService _userService;
@@ -27,14 +27,13 @@ namespace ManagerLayer.LoginManagement
         {
             //TODO: Make the concatenation more extensible
             //foreach property in request
-
+            
             string message = request.ssoUserId + ";" +
                              request.email + ";" +
                              request.timestamp + ";";
-
-
             var hashedMessage = _cryptoService.HashHMAC(Encoding.ASCII.GetBytes(sharedSecretKey), message);
-            if(hashedMessage == request.signature)
+            //Check if signature is valid
+            if (hashedMessage == request.signature)
             {
                 //Check if user exists
                 if (_userService.IsExistingGNGUser(request.email))
@@ -43,24 +42,18 @@ namespace ManagerLayer.LoginManagement
                 }
                 else
                 {
-                    //If user doesn't exist, create a placeholder user that is not activated
-                    //Check for user acivation on home page
-
-                    User createdUser = new User(
+                    User createdUser = new User(  //If user doesn't exist, create a placeholder user that is not activated
                         _userService.GetNextUserID(), //UserID
                         null, //First name
                         null, //Last name
                         request.email, //Username
-                        null, //Password
                         null, //City
                         null, //State
                         null, //Country
                         DateTime.MinValue, //Minimum datetime for DOB
-                        null, //SecQ
-                        null, //SecA
                         false //IsActivated
                         );
-                    _userService.CreateUser(createdUser);
+                    _userService.CreateUser(createdUser); //Check for user acivation on home page
                     return _JWTManager.GrantToken(request.email).ToString();
                 }
             }

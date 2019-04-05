@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DataAccessLayer.Tables;
+using DataAccessLayer.Context;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -6,14 +8,22 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        public string CreateToken(string username, List<Claim> securityClaimsList)
+        public string CreateToken(string username, string hashedUID)
         {
+            var usersClaims = RetrieveClaims(username);
+            var securityClaimsList = new List<System.Security.Claims.Claim>();
+
+            //Takes the claims the user has and puts it in a list of Security Claims objects
+            foreach (DataAccessLayer.Tables.Claim c in usersClaims)
+            {
+                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
+            }
+            
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             //Generate the symmetric key which will be used for the signature portion of the JWT
             byte[] symmetricKey = new byte[256];
@@ -41,6 +51,7 @@ namespace ServiceLayer.Services
 
 
         //TODO: modify CheckUserClaims to check signature before getting claims
+        //TODO: make the symmetric key an env variable
 
         /// <summary>
         /// Method to check if a user has the appropriate claims to access/perform an
@@ -59,7 +70,7 @@ namespace ServiceLayer.Services
             bool pass = false;
 
             var usersCurrClaimsNames = new List<string>();
-            foreach (Claim claim in usersCurrClaims)
+            foreach (System.Security.Claims.Claim claim in usersCurrClaims)
             {
                 usersCurrClaimsNames.Add(claim.Type);
             }
@@ -70,6 +81,35 @@ namespace ServiceLayer.Services
             return pass;
         }
 
+        /// <summary>
+        /// Method RetrieveClaims gets the claims a user has and returns them in list form
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <returns>Returns that user's list of claims</returns>
+        public List<DataAccessLayer.Tables.Claim> RetrieveClaims(string username)
+        {
+            var claimsList = new List<DataAccessLayer.Tables.Claim>();
+
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
+                    foreach (UserClaim claim in usersClaims)
+                    {
+                        claimsList.Add(claim.Claim);
+                    }
+
+                    return claimsList;
+                }
+            }
+            catch (ObjectDisposedException e)
+            {
+                // log
+                return claimsList;
+            }
+
+        }
 
     }
 }

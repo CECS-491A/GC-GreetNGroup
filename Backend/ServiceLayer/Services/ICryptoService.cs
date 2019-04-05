@@ -11,5 +11,7 @@ namespace ServiceLayer.Services
         //Winn Created
         string HashHMAC(byte[] key, string message);
         string GenerateToken();
+        //Jonalyn
+        string HashSha256(string message);
     }
 }
