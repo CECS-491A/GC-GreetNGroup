@@ -14,7 +14,8 @@ namespace GNG_WebApi.Controllers
         {
             try
             {
-                
+                //TODO update in sprint 5 to get user profile information
+                return Content(HttpStatusCode.OK, "user");
             }
             catch (Exception ex)
             {
