@@ -1,4 +1,4 @@
-﻿namespace ServiceLayer.Services
+﻿namespace ServiceLayer.Interface
 {
     public interface IErrorHandlerService
     {

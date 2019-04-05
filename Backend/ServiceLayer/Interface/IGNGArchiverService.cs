@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ServiceLayer.Services
+namespace ServiceLayer.Interface
 {
     public interface IGNGArchiverService
     {

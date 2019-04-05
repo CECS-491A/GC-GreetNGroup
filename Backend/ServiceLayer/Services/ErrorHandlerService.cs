@@ -1,4 +1,5 @@
-﻿
+﻿using ServiceLayer.Interface;
+
 namespace ServiceLayer.Services
 {
     public class ErrorHandlerService : IErrorHandlerService

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
