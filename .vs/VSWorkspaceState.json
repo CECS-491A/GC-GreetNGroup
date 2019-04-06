@@ -2,9 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\UnitTest",
-    "\\GreetNGroup",
-    "\\GreetNGroup\\GreetNGroup"
+    "\\Backend\\UnitTest"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
