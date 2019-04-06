@@ -3,7 +3,6 @@
     "",
     "\\Backend",
     "\\Backend\\UnitTest",
-    "\\Backend\\UnitTest\\DataAccessTest",
     "\\GreetNGroup",
     "\\GreetNGroup\\GreetNGroup"
   ],
