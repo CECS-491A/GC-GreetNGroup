@@ -147,6 +147,10 @@
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
                             <v-checkbox v-model="selected" label="Arts and Crafts" value="Art"></v-checkbox>
                             <v-checkbox v-model="selected" label="Sports" value="Sports"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Miscellaneous" value="Miscellaneous"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Educational" value="Educational"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Food" value="Food"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Discussion" value="Discussion"></v-checkbox>
                             </v-container>
                         </v-card-text>
                         <v-divider></v-divider>
