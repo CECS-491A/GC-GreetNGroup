@@ -22,7 +22,6 @@
                     v-model="address"
                     :rules="[
                             () => !!address || 'This field is required',
-                            () => !!address && address.length <= 0 || 'This field is required',
                             addressCheck
                             ]"
                     :error-messages="errorMessages"
@@ -41,7 +40,7 @@
                 <v-text-field
                     ref="state"
                     v-model="state"
-                    :rules="[() => !!state || 'This field is required']"
+                    :rules="[() => !!state || 'This field is required', addressCheck]"
                     label="State/Province/Region"
                     required
                     placeholder="TX"
@@ -49,7 +48,7 @@
                 <v-text-field
                     ref="zip"
                     v-model="zip"
-                    :rules="[() => !!zip || 'This field is required']"
+                    :rules="[() => !!zip || 'This field is required', addressCheck]"
                     label="ZIP / Postal Code"
                     required
                     placeholder="79938"
@@ -264,6 +263,12 @@
             },
             zip () {
                 this.errorMessages = ''
+            },
+            date () {
+                this.errorMessages = ''
+            },
+            time () {
+                this.errorMessages = ''
             }
         },
 
@@ -277,7 +282,8 @@
                 return true
             },
             addressCheck () {
-                this.errorMessages = this.name && !this.address ? 'You must enter an address' : ''
+                this.errorMessages = this.name && !(this.address || this.city || this.state || this.zip)
+                 ? 'You must enter an address' : ''
                 return true
             },
             resetForm () {
