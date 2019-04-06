@@ -190,6 +190,7 @@
 
 <script>
 /* eslint-disable */
+/*
     var todaysDate = new Date();
 
     var dd = todaysDate.getDate();
@@ -296,4 +297,5 @@
             }
         }
     }
+*/
 </script>
