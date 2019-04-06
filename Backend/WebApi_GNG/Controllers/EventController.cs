@@ -17,8 +17,8 @@ namespace GNG_WebApi.Controllers
         {
             try
             {
-                EventService eventManager = new EventService();
-                var e = eventManager.GetEventById(id);
+                EventService eventService = new EventService();
+                var e = eventService.GetEventById(id);
                 return Ok(e);
             }
             catch (HttpRequestException e)
