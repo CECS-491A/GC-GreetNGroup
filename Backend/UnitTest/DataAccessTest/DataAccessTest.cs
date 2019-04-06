@@ -1,6 +1,5 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.UserManagement;
 using ServiceLayer.Services;
 
 namespace UnitTest.DataAccessTest

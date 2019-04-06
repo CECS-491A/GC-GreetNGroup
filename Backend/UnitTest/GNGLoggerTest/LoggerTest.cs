@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.GNGLogManager;
+using ManagerLayer.GNGLogManagement;
 
 namespace UnitTest.GNGLoggerTest
 {
