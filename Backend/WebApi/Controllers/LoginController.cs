@@ -4,7 +4,7 @@ using System;
 using System.Net;
 using System.Web.Http;
 
-namespace GNG_WebApi.Controllers
+namespace WebApi.Controllers
 {
     public class LoginController : ApiController
     {

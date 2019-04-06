@@ -2,7 +2,7 @@
 using System.Web.Http;
 using ServiceLayer.Services;
 
-namespace GNG_WebApi.Controllers
+namespace WebApi.Controllers
 {
     public class EventController : ApiController
     {

@@ -1,10 +1,11 @@
 using System.Web.Http;
 
-namespace GNG_WebApi.Controllers
+namespace WebApi.Controllers
 {
     public class HelloWorldController : ApiController
     {
-        [Route("hello")]
+        [HttpGet]
+        [Route("api/helloworld/hello")]
         public string HelloWorld()
         {
             return "Hello World";

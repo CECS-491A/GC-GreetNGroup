@@ -4,13 +4,13 @@ using System;
 using System.Net;
 using System.Web.Http;
 
-namespace GNG_WebApi.Controllers
+namespace WebApi.Controllers
 {
-    public class ProfileController : ApiController
+    public class HomeController : ApiController
     {
         [HttpGet]
-        [Route("api/profile/{userID}")]
-        public IHttpActionResult Get(string userID)
+        [Route("api/profile")]
+        public IHttpActionResult Get([FromBody]string jwtToken)
         {
             try
             {
