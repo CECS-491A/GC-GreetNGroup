@@ -2,9 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\ServiceLayer",
-    "\\Backend\\ServiceLayer\\Interface",
-    "\\Backend\\ServiceLayer\\Services"
+    "\\Backend\\UnitTest",
+    "\\Backend\\UnitTest\\DataAccessTest",
+    "\\GreetNGroup",
+    "\\GreetNGroup\\GreetNGroup"
   ],
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }

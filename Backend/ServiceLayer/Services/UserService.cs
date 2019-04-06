@@ -7,7 +7,7 @@ using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private ICryptoService _cryptoService;
 
@@ -39,6 +39,25 @@ namespace ServiceLayer.Services
             catch (ObjectDisposedException od)
             {
                 // log
+            }
+        }
+
+        // For existing user object passed in to add into individual app
+        public bool CreateUser(User user)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    ctx.Users.Add(user);
+                    ctx.SaveChanges();
+                    return true;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
             }
         }
 

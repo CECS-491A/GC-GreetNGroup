@@ -30,7 +30,7 @@ namespace ManagerLayer.JWTManagement
         /// <returns>Return JWT object</returns>
         public string GrantToken(string username)
         {
-            if (_userService.IsExistingGNGUser(username))
+            if (_userService.IsUsernameFound(username))
             {
                 return _JWTService.CreateToken(username, RetrieveHashedUID(username));
             }
