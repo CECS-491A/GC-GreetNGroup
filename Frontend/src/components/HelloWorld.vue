@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>{{ info }}</h2>
-    <input type="text" v-model="search" placeholder="search for events" />
+    <input type="text" v-model="search" placeholder="" />
   </div>
 </template>
 
