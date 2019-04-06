@@ -5,7 +5,7 @@
         <v-flex xs12 sm10 md8 lg6>
             <v-card ref="form">
             <v-card-text>
-                <v-text-field 
+                <v-text-field
                     ref="name"
                     v-model="name"
                     :rules="[() => !!name || 'This field is required',
@@ -17,17 +17,11 @@
                     counter="50"
                     required
                 ></v-text-field>
-                <p>{{ radios || '' }}</p>
-                <v-radio-group v-model="radios" :mandatory="true">
-                    <v-radio label="Online Event" value="isOnline"></v-radio>
-                    <v-radio label="Physical Event" value="isPhysical"></v-radio>
-                </v-radio-group>
                 <v-text-field
                     ref="address"
                     v-model="address"
                     :rules="[
                             () => !!address || 'This field is required',
-                            () => !!address && address.length <= 0 || 'This field is required',
                             addressCheck
                             ]"
                     :error-messages="errorMessages"
@@ -46,7 +40,7 @@
                 <v-text-field
                     ref="state"
                     v-model="state"
-                    :rules="[() => !!state || 'This field is required']"
+                    :rules="[() => !!state || 'This field is required', addressCheck]"
                     label="State/Province/Region"
                     required
                     placeholder="TX"
@@ -54,7 +48,7 @@
                 <v-text-field
                     ref="zip"
                     v-model="zip"
-                    :rules="[() => !!zip || 'This field is required']"
+                    :rules="[() => !!zip || 'This field is required', addressCheck]"
                     label="ZIP / Postal Code"
                     required
                     placeholder="79938"
@@ -79,16 +73,16 @@
                             :rules="[() => !!date || 'This field is required']"
                             readonly
                             required
-                            v-validate="'required'"
                             v-on="on"
                         ></v-text-field>
                     </template>
                     <v-date-picker id="datepicker"
+                        ref="datepicker"
                         v-model="date"
                         no-title scrollable
                         :allowed-dates="allowedDates"
                         class="mt-3"
-                        min=""
+                        :min="minDate"
                         >
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
@@ -109,27 +103,31 @@
                     min-width="290px"
                     >
                     <template v-slot:activator="{ on }">
-                        <v-text-field
-                            v-model="startTime"
-                            label="Event Start Time"
+                        <v-text-field v-model="startTime"
+                            ref="startTime"
+                            label="Time of Event"
                             prepend-icon="access_time"
                             :rules="[() => !!startTime || 'This field is required']"
-                            required
                             readonly
+                            required
                             v-on="on"
                         ></v-text-field>
                     </template>
                     <v-time-picker id="timepicker"
+                        ref="timepicker"
                         v-model="startTime"
                         v-if="timeMenu"
                         :allowed-hours="startAllowedHours"
                         :allowed-minutes="startAllowedStep"
                         scrollable
                         class="mt-3"
-                        min=""
+                        :min="minTime"
                         full-width
-                        @click:minute="$refs.timeMenu.save(startTime)"
-                        ></v-time-picker>
+                        >
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="timeMenu = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="$refs.timeMenu.save(startTime)">OK</v-btn>
+                        </v-time-picker>
                 </v-menu>
                 <v-dialog v-model="dialog" persistent scrollable max-width="300px">
                     <template v-slot:activator="{ on }">
@@ -148,6 +146,10 @@
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
                             <v-checkbox v-model="selected" label="Arts and Crafts" value="Art"></v-checkbox>
                             <v-checkbox v-model="selected" label="Sports" value="Sports"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Miscellaneous" value="Miscellaneous"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Educational" value="Educational"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Food" value="Food"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Discussion" value="Discussion"></v-checkbox>
                             </v-container>
                         </v-card-text>
                         <v-divider></v-divider>
@@ -179,7 +181,7 @@
                     <span>Refresh form</span>
                 </v-tooltip>
                 </v-slide-x-reverse-transition>
-                <v-btn color="primary" flat @click="submit">Submit</v-btn>
+                <v-btn color="primary" flat @click="submit">Create Event</v-btn>
             </v-card-actions>
             </v-card>
         </v-flex>
@@ -190,34 +192,13 @@
 
 <script>
 /* eslint-disable */
-/*
     var todaysDate = new Date();
 
-    var dd = todaysDate.getDate();
-    var mm = todaysDate.getMonth() + 1;
-    var yyyy = todaysDate.getFullYear();
-    var hh = todaysDate.getHours();
-    var mm = todaysDate.getMinutes();
-
-    if (dd < 10) {
-    dd = "0" + dd;
-    }
-    if (mm < 10) {
-    mm = "0" + mm;
-    }
-
-    var stringDate = yyyy + "-" + mm + "-" + dd;
-    var timeString = hh + ":" + mm;
-
-    document.getElementById("datepicker").setAttribute("min", stringDate);
-    document.getElementById("timepicker").setAttribute("min", timeString);
-
     export default {
-        el: '#app',
+        name: 'create-event',
         data: () => ({
         errorMessages: '',
         name: null,
-        radios: null,
         address: null,
         city: null,
         state: null,
@@ -230,7 +211,6 @@
         formHasErrors: false,
         selected: []
         }),
-
         computed: {
             form () {
                 return {
@@ -239,11 +219,32 @@
                     city: this.city,
                     state: this.state,
                     zip: this.zip,
-                    radios: this.radios,
                     date: new Date().toISOString().substr(0, 10),
                     startTime: new Date().toISOString(),
                     selected: []
                 }
+            },
+            minDate () {
+                var dd = todaysDate.getDate();
+                var mm = todaysDate.getMonth() + 1;
+                var yyyy = todaysDate.getFullYear();
+
+                if (dd < 10) {
+                dd = "0" + dd;
+                }
+                if (mm < 10) {
+                mm = "0" + mm;
+                }
+
+                var stringDate = yyyy + "-" + mm + "-" + dd;
+                return stringDate;
+            },
+            minTime () {
+                var hh = todaysDate.getHours();
+                var mm = todaysDate.getMinutes();
+
+                var timeString = hh + ":" + mm;
+                return timeString;
             }
         },
 
@@ -262,6 +263,12 @@
             },
             zip () {
                 this.errorMessages = ''
+            },
+            date () {
+                this.errorMessages = ''
+            },
+            time () {
+                this.errorMessages = ''
             }
         },
 
@@ -270,12 +277,13 @@
             startAllowedHours: v => v % 1 === 0,
             startAllowedStep: m => m % 10 === 0 || m % 10 === 5,
             titleCheck () {
-                this.errorMessages = !this.address && this.name
+                this.errorMessages = this.address && !this.name
                 ? 'You must enter an event name' : ''
                 return true
             },
             addressCheck () {
-                this.errorMessages = !this.name && this.address ? 'You must enter an address' : ''
+                this.errorMessages = this.name && !(this.address || this.city || this.state || this.zip)
+                 ? 'You must enter an address' : ''
                 return true
             },
             resetForm () {
@@ -297,5 +305,5 @@
             }
         }
     }
-*/
+    
 </script>
