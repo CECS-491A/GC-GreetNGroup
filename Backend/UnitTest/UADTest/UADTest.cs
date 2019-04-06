@@ -1,4 +1,4 @@
-﻿using ManagerLayer.UADManager;
+﻿using ManagerLayer.UADManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -11,7 +11,7 @@ namespace UnitTest.UADTest
         public void TestMonthlyLoginvsRegistered()
         {
             UADManager uadManager = new UADManager();
-            string a = uadManager.LoginVSRegistered("March");
+            uadManager.LoginVSRegistered("March");
             Assert.AreEqual(true, true);
 
         }

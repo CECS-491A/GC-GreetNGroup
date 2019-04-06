@@ -9,11 +9,9 @@ namespace ServiceLayer.Services
 {
     public class GNGLoggerService : IGNGLoggerService
     {
-        IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
+        private IErrorHandlerService _errorHandlerService;
 
-        private readonly string LOGS_FOLDERPATH = Path.Combine(
-            Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-            @"Backend\Logs\");
+        private readonly string LOGS_FOLDERPATH = "C:\\Users\\Midnightdrop\\Documents\\GitHub\\GreetNGroup\\Backend\\Logs";
         private readonly string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
