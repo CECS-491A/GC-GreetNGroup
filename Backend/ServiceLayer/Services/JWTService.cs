@@ -13,6 +13,7 @@ namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
         private SigningCredentials credentials;
         private ICryptoService _cryptoService;
         private JwtSecurityTokenHandler tokenHandler;

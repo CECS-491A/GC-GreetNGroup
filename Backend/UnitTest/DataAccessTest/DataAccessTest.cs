@@ -1,6 +1,7 @@
 using System;
-using ServiceLayer.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ManagerLayer.UserManagement;
+using ServiceLayer.Services;
 
 namespace UnitTest.DataAccessTest
 {
@@ -8,7 +9,6 @@ namespace UnitTest.DataAccessTest
     public class DataAccessTest
     {
         #region Testable Required Fields
-        private int _userId1 = 50;
         private int _userId2 = 2;
         private int _userId3 = 3;
         private int _cId = 30;
@@ -36,11 +36,10 @@ namespace UnitTest.DataAccessTest
             var state = "California";
             var country = "United States";
             var dob = DateTime.Parse("09/19/1999");
-            var isActivated = true;
 
-            userManager.InsertUser(_userId1, firstName, lastName, userName, city, state, country, dob, isActivated);
-            actual = userManager.IsUsernameFoundById(_userId1);
-            userManager.DeleteUserById(_userId1);
+            var user = userManager.CreateUser(firstName, lastName, userName, city, state, country, dob);
+            actual = userManager.UserExist(user.UserId);
+            userManager.DeleteUserByID(user.UserId);
 
             // Assert
             Assert.AreEqual(expected, actual);

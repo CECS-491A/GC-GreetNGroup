@@ -15,32 +15,11 @@ namespace ServiceLayer.Services
         {
             _cryptoService = new CryptoService();
         }
-        
+
         /// <summary>
         /// The following region handles inserts into the user table of the database
         /// </summary>
         #region Insert User Information
-
-        public void InsertUser(int uId, string firstName, string lastName, string userName, string city,
-            string state, string country, DateTime dob, bool isActivated)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var user = new User(uId, firstName, lastName, userName, city, state, country, dob,
-                        isActivated);
-
-                    ctx.Users.Add(user);
-
-                    ctx.SaveChanges();
-                }
-            }
-            catch (ObjectDisposedException od)
-            {
-                // log
-            }
-        }
 
         // For existing user object passed in to add into individual app
         public bool CreateUser(User user)
@@ -67,58 +46,27 @@ namespace ServiceLayer.Services
         /// The following region handles updating user information within the database
         /// </summary>
         #region Update User Information
-
-        public void UpdateUserCity(int uId, string city)
+        
+        public bool UpdateUser(User updatedUser)
         {
             try
             {
-                using (var ctx = new GreetNGroupContext())
+                using(var ctx = new GreetNGroupContext())
                 {
-                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                    if (curUser != null)
-                        curUser.City = city;
-                    ctx.SaveChanges();
+                    User retrievedUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(updatedUser.UserId));
+                    if(retrievedUser != null)
+                    {
+                        retrievedUser = updatedUser;
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch (ObjectDisposedException od)
             {
                 // log
-            }
-        }
-
-        public void UpdateUserState(int uId, string state)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                    if (curUser != null)
-                        curUser.State = state;
-                    ctx.SaveChanges();
-                }
-            }
-            catch (ObjectDisposedException od)
-            {
-                // log
-            }
-        }
-
-        public void UpdateUserCountry(int uId, string country)
-        {
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
-                    if (curUser != null)
-                        curUser.Country = country;
-                    ctx.SaveChanges();
-                }
-            }
-            catch (ObjectDisposedException od)
-            {
-                // log
+                return false;
             }
         }
 
@@ -129,22 +77,27 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Delete User Information
 
-        public void DeleteUserById(int userId)
+        public bool DeleteUser(User userToDelete)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userId));
+                    var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userToDelete.UserId));
 
-                    if (user != null) ctx.Users.Remove(user);
-
-                    ctx.SaveChanges();
+                    if (user != null)
+                    {
+                        ctx.Users.Remove(user);
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch (ObjectDisposedException od)
             {
                 // log
+                return false;
             }
         }
 
@@ -196,30 +149,6 @@ namespace ServiceLayer.Services
         /// </summary>
         #region User Information Retrieval
 
-        public List<Claim> GetUsersClaims(string username)
-        {
-            List<Claim> claimsList = new List<Claim>();
-
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
-                    foreach (UserClaim claim in usersClaims)
-                    {
-                        claimsList.Add(claim.Claim);
-                    }
-
-                    return claimsList;
-                }
-            }
-            catch (ObjectDisposedException od)
-            {
-                // log
-                return claimsList;
-            }
-        }
-
         public string GetUsersHashedUID(string username)
         {
             var hashedUid = "";
@@ -261,24 +190,32 @@ namespace ServiceLayer.Services
             }
         }
 
-        public bool IsClaimOnUser(int uId, int claimId)
+        public User GetUser(int userID)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var userClaims = ctx.UserClaims.Where(u => u.UId.Equals(uId));
-                    return userClaims.Any(c => c.ClaimId.Equals(claimId));
+                    var retrievedUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userID));
+
+                    if (retrievedUser != null)
+                    {
+                        return retrievedUser;
+                    }
+                    return null;
                 }
             }
             catch (ObjectDisposedException od)
             {
                 // log
-                return false;
+                return null;
             }
         }
+        
+        //TODO: Add method to get the user from db using the username, return user object
 
-        //Winn
+        #endregion
+
         public int GetNextUserID()
         {
             try
@@ -292,12 +229,9 @@ namespace ServiceLayer.Services
             catch
             {
                 //log
-                return -1;
+                return 1;
             }
         }
 
-        //TODO: Add method to get the user from db using the username, return user object
-
-        #endregion
     }
 }
