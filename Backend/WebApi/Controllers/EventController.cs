@@ -13,18 +13,18 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/event/{id}")]
-        public string GetEventById(int id)//IHttpActionResult GetEventById(int id)
+        public IHttpActionResult GetEventById(int id)
         {
             try
             {
                 EventService eventService = new EventService();
                 var e = eventService.GetEventById(id);
-                return e.EventName; //Ok(e);
+                return Ok(e);
             }
             catch (HttpRequestException e)
             {
                 // Add logging
-                return "";BadRequest();
+                return BadRequest();
             }
         }
     }
