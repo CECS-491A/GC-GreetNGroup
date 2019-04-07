@@ -27,7 +27,7 @@ namespace ManagerLayer.UADManagement
             string registerID = "1004";
             loglist = _uadService.LogsFortheMonth(loglist, month);
             int loginCount = _uadService.NumberofLogs(loglist, registerID);
-            int registered = userManager.GetUsersRegistered();
+            int registered = userManager.GetRegisteredUserCount();
             string loginVSregistered = "Logins: " + loginCount +
                                     "\nRegistered Accounts: " + registered;
             Console.WriteLine(loginVSregistered);

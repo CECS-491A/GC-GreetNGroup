@@ -4,12 +4,14 @@ namespace ServiceLayer.Interface
 {
     public interface IUserService
     {
-        bool CreateUser(User user);
-        //Winn
-        int GetNextUserID();
+        bool InsertUser(User user);
+
         bool IsUsernameFound(string username);
-        User GetUser(int userID);
-        bool DeleteUser(User userToDelete);
         bool IsUsernameFoundById(int uId);
+
+        bool DeleteUser(User userToDelete);
+
+        int GetNextUserID();
+        User GetUserById(int userID);
     }
 }
