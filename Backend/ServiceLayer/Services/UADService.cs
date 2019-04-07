@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
+using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
@@ -12,7 +13,7 @@ namespace ServiceLayer.Services
         /// <param name="logs">list of logs</param>
         /// <param name="logID">log id that wants to be counted</param>
         /// <returns>returns an integer with the number of logs found</returns>
-        public int NumberofLogs(List<GNGLog> logs, string logID)
+        public int GetNumberofLogs(List<GNGLog> logs, string logID)
         {
             int logcount = 0;
             for (int index = 0; index < logs.Count; index++)
@@ -26,12 +27,12 @@ namespace ServiceLayer.Services
         }
 
         /// <summary>
-        /// Takes a list of longs and spearates the logs not related to the specific month
+        /// Function that takes a list of logs and removes the logs not related to the specific month
         /// </summary>
         /// <param name="logs">List of logs</param>
         /// <param name="month">specified month</param>
         /// <returns>returns logs with the specified month</returns>
-        public List<GNGLog> LogsFortheMonth(List<GNGLog> logs, string month)
+        public List<GNGLog> GetLogsFortheMonth(List<GNGLog> logs, string month)
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
@@ -50,7 +51,7 @@ namespace ServiceLayer.Services
         /// </summary>
         /// <param name="logs">List of Logs</param>
         /// <param name="ID">Specified ID</param>
-        public List<GNGLog> LogswithID(List<GNGLog> logs, string ID)
+        public List<GNGLog> GetLogswithID(List<GNGLog> logs, string ID)
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
@@ -69,19 +70,19 @@ namespace ServiceLayer.Services
         /// <param name="logID">List of function ids</param>
         /// <param name="left">Left position</param>
         /// <param name="right">Right position</param>
-        public void Quick_Sort(List<int> usedCounts, List<string> logID, int left, int right)
+        public void QuickSortInteger(List<int> usedCounts, List<string> logID, int left, int right)
         {
             if (left < right)
             {
-                int pivot = Partition(usedCounts, logID, left, right);
+                int pivot = PartitionInteger(usedCounts, logID, left, right);
 
                 if (pivot > 1)
                 {
-                    Quick_Sort(usedCounts, logID, left, pivot - 1);
+                    QuickSortInteger(usedCounts, logID, left, pivot - 1);
                 }
                 if (pivot + 1 < right)
                 {
-                    Quick_Sort(usedCounts, logID, pivot + 1, right);
+                    QuickSortInteger(usedCounts, logID, pivot + 1, right);
                 }
             }
         }
@@ -89,12 +90,12 @@ namespace ServiceLayer.Services
         /// <summary>
         /// Functions that partitions the list for quicksort and orders the list correctly
         /// </summary>
-        /// <param name="usedCounts"></param>
-        /// <param name="logID"></param>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public int Partition(List<int> usedCounts, List<string> logID, int left, int right)
+        /// <param name="usedCounts">List of integers representing the number of times a function was used</param>
+        /// <param name="logID">List of log ids</param>
+        /// <param name="left">Left index</param>
+        /// <param name="right">right index</param>
+        /// <returns>Next index to be used</returns>
+        public int PartitionInteger(List<int> usedCounts, List<string> logID, int left, int right)
         {
             int pivot = usedCounts[left];
             while (true)
@@ -136,55 +137,60 @@ namespace ServiceLayer.Services
         /// <summary>
         /// Quicksort functions that sorts the average sessions times per page
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="urls"></param>
-        public void QuickSortD<T>(T[] data, List<string> urls) where T : IComparable<T>
+        /// <param name="sessiontimes">array of session times</param>
+        /// <param name="urls">list of urls</param>
+        public void QuickSortDouble<T>(T[] sessiontimes, List<string> urls) where T : IComparable<T>
         {
-            Quick_SortD(data, urls, 0, data.Length - 1);
+            PartitionDouble(sessiontimes, urls, 0, sessiontimes.Length - 1);
         }
         /// <summary>
         /// Function that partitions the list and orders it correctly
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="urls"></param>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        public void Quick_SortD<T>(T[] data, List<string> urls, int left, int right) where T : IComparable<T>
+        /// <param name="sessiontimes">array of session times</param>
+        /// <param name="urls">list of urls</param>
+        /// <param name="left">left index of array</param>
+        /// <param name="right">right index of array</param>
+        public void PartitionDouble<T>(T[] sessiontimes, List<string> urls, int left, int right) where T : IComparable<T>
         {
             int i, j;
             T pivot, temp;
             i = left;
             j = right;
-            pivot = data[(left + right) / 2];
+            pivot = sessiontimes[(left + right) / 2];
 
             do
             {
-                while ((data[i].CompareTo(pivot) < 0) && (i < right)) i++;
-                while ((pivot.CompareTo(data[j]) < 0) && (j > left)) j--;
+                while ((sessiontimes[i].CompareTo(pivot) < 0) && (i < right)) i++;
+                while ((pivot.CompareTo(sessiontimes[j]) < 0) && (j > left)) j--;
                 if (i <= j)
                 {
-                    temp = data[i];
+                    temp = sessiontimes[i];
                     string tempUrl = urls[i];
-                    data[i] = data[j];
+                    sessiontimes[i] = sessiontimes[j];
                     urls[i] = urls[j];
-                    data[j] = temp;
+                    sessiontimes[j] = temp;
                     urls[j] = tempUrl;
                     i++;
                     j--;
                 }
             } while (i <= j);
 
-            if (left < j) Quick_SortD(data, urls, left, j);
-            if (i < right) Quick_SortD(data, urls,  i, right);
+            if (left < j)
+            {
+                PartitionDouble(sessiontimes, urls, left, j);
+            }
+            if (i < right)
+            {
+                PartitionDouble(sessiontimes, urls, i, right);
+            }
         }
         /// <summary>
-        /// Finds the average session time over the number of sessios
+        /// Function the calcualtes the average session time over the number of sessions
         /// </summary>
         /// <param name="session">List of session times</param>
         /// <returns>the average session time</returns>
-        public double FindAverage(List<GNGLog> session)
+        public double CalculateAverageSessionTime(List<GNGLog> session)
         {
             double average = 0;
             double totalSessions = (session.Count) / 2;
@@ -202,11 +208,11 @@ namespace ServiceLayer.Services
             return average;
         }
         /// <summary>
-        /// Functions that removes logs without the specified string and keeps onlt entrence logs
+        /// Functions that removes logs without the specified string and keeps only entrence logs
         /// </summary>
-        /// <param name="logs"></param>
-        /// <param name="url"></param>
-        public void FindEntryLogswithURL(List<GNGLog> logs, string url)
+        /// <param name="logs">list of logs</param>
+        /// <param name="url">specific url</param>
+        public void GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
@@ -220,9 +226,9 @@ namespace ServiceLayer.Services
         /// <summary>
         /// Functions that removes logs without the specified string and keeps only the exit logs
         /// </summary>
-        /// <param name="logs"></param>
-        /// <param name="url"></param>
-        public void FindExitLogswithURL(List<GNGLog> logs, string url)
+        /// <param name="logs">List of logs</param>
+        /// <param name="url">specific url</param>
+        public void GetExitLogswithURL(List<GNGLog> logs, string url)
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
