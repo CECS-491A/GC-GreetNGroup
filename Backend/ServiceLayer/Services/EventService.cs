@@ -20,7 +20,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Insert Event Information
 
-        public bool InsertEvent(string userId, string eventId, DateTime startDate, string eventName, 
+        public bool InsertEvent(string userId, int eventId, DateTime startDate, string eventName, 
             string address, string city, string state, string zip, List<string> eventTags, string eventType)
         {
             bool isSuccessfulAdd = false;

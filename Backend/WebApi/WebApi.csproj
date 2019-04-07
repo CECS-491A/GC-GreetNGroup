@@ -180,7 +180,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libman.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>

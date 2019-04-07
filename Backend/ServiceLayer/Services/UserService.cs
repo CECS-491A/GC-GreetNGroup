@@ -21,8 +21,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Insert User Information
 
-        // For existing user object passed in to add into individual app
-        public bool CreateUser(User user)
+        public bool InsertUser(User user)
         {
             try
             {
@@ -57,6 +56,52 @@ namespace ServiceLayer.Services
                     if(retrievedUser != null)
                     {
                         retrievedUser = updatedUser;
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
+            }
+        }
+
+        public bool UpdateUserCity(int uId, string city)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                    {
+                        curUser.City = city;
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
+            }
+        }
+
+        public bool UpdateUserState(int uId, string state)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    User curUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(uId));
+                    if (curUser != null)
+                    {
+                        curUser.State = state;
                         ctx.SaveChanges();
                         return true;
                     }
@@ -132,7 +177,7 @@ namespace ServiceLayer.Services
                 {
                     // Finds any username matching the parameter
                     var user = ctx.Users.Any(s => s.UserId == uId);
-                    return user != false;
+                    return user;
                 }
             }
             catch (ObjectDisposedException od)
@@ -158,8 +203,9 @@ namespace ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                    string userID = user.Select(id => id.UserId).ToString();
-                    hashedUid = _cryptoService.HashSha256(userID);
+                    var userId = user.Select(id => id.UserId).ToString();
+
+                    hashedUid = _cryptoService.HashSha256(userId);
                 }
 
                 return hashedUid;
@@ -171,7 +217,30 @@ namespace ServiceLayer.Services
             }
         }
 
-        public int GetUsersRegistered()
+        public List<Claim> GetUsersClaims(string username)
+        {
+            List<Claim> claimsList = new List<Claim>();
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
+                    foreach (UserClaim claim in usersClaims)
+                    {
+                        claimsList.Add(claim.Claim);
+                    }
+
+                    return claimsList;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return claimsList;
+            }
+        }
+
+        public int GetRegisteredUserCount()
         {
             int count = 0;
             try
@@ -190,17 +259,17 @@ namespace ServiceLayer.Services
             }
         }
 
-        public User GetUser(int userID)
+        public User GetUserById(int userID)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var retrievedUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userID));
+                    var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userID));
 
-                    if (retrievedUser != null)
+                    if (user != null)
                     {
-                        return retrievedUser;
+                        return user;
                     }
                     return null;
                 }
@@ -211,10 +280,6 @@ namespace ServiceLayer.Services
                 return null;
             }
         }
-        
-        //TODO: Add method to get the user from db using the username, return user object
-
-        #endregion
 
         public int GetNextUserID()
         {
@@ -233,5 +298,8 @@ namespace ServiceLayer.Services
             }
         }
 
+        //TODO: Add method to get the user from db using the username, return user object
+
+        #endregion
     }
 }

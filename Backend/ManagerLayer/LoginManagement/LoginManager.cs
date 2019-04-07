@@ -53,7 +53,7 @@ namespace ManagerLayer.LoginManagement
                         DateTime.MinValue, //Minimum datetime for DOB
                         false //IsActivated
                         );
-                    _userService.CreateUser(createdUser); //Check for user acivation on home page
+                    _userService.InsertUser(createdUser); //Check for user acivation on home page
                     return _JWTManager.GrantToken(request.email).ToString();
                 }
             }
