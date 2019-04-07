@@ -11,20 +11,20 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-
-        [Route("Event")]
-        public IHttpActionResult GetEventById(int id)
+        [HttpGet]
+        [Route("api/event/{id}")]
+        public string GetEventById(int id)//IHttpActionResult GetEventById(int id)
         {
             try
             {
-                EventService eventManager = new EventService();
-                var e = eventManager.GetEventById(id);
-                return Ok(e);
+                EventService eventService = new EventService();
+                var e = eventService.GetEventById(id);
+                return e.EventName; //Ok(e);
             }
             catch (HttpRequestException e)
             {
                 // Add logging
-                return BadRequest();
+                return "";BadRequest();
             }
         }
     }

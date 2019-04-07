@@ -15,10 +15,30 @@ namespace ServiceLayer.Services
         {
             _cryptoService = new CryptoService();
         }
+
         /// <summary>
         /// The following region inserts an event/event details into the event database
         /// </summary>
+
         #region Insert Event Information
+
+        public bool InsertMadeEvent(Event e)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    ctx.Events.Add(e);
+                    ctx.SaveChanges();
+                    return true;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return false;
+            }
+        }
 
         public bool InsertEvent(string userId, int eventId, DateTime startDate, string eventName, 
             string address, string city, string state, string zip, List<string> eventTags, string eventType)
