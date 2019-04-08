@@ -22,7 +22,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Search',
+      name: 'Home',
       component: SearchPage
     },
     {
