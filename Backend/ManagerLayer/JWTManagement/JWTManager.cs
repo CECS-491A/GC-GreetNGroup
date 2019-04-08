@@ -66,13 +66,5 @@ namespace ManagerLayer.JWTManagement
                 return hashedUID;
             }
         }
-
-        public bool IsTokenValid(string jwtToken)
-        {
-
-
-
-            return false;
-        }
     }
 }

@@ -46,10 +46,21 @@ namespace ServiceLayer.Services
             return tokenHandler.WriteToken(jwt);
         }
 
-        //public string UpdateToken(string jwtToken)
-        //{
-
-        //}
+        public string RefreshToken(string jwtToken)
+        {
+            if (IsJWTSignatureTampered(jwtToken) == false)
+            {
+                var oldJWT = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
+                var newJWT = new JwtSecurityToken(
+                    issuer: oldJWT.Issuer,
+                    audience: oldJWT.Audiences.ToString(),
+                    claims: oldJWT.Claims,
+                    expires: DateTime.Now.AddMinutes(30),
+                    signingCredentials: credentials);
+                return tokenHandler.WriteToken(newJWT);
+            }
+            return "";
+        }
 
 
         //TODO: modify CheckUserClaims to check signature before getting claims
@@ -87,6 +98,18 @@ namespace ServiceLayer.Services
             {
                 return false;
             }
+        }
+
+        public string GetUserIDFromToken(string jwtToken)
+        {
+            if (IsJWTSignatureTampered(jwtToken) == false)
+            {
+                var jwt = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
+                var usersCurrClaims = jwt.Claims;
+                var hashedUID = usersCurrClaims.First().Value;
+                return hashedUID;
+            }
+            return "";
         }
 
         /// <summary>

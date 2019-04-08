@@ -10,7 +10,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'ResetPassword',
+  name: 'Login',
   data () {
     return {
       email: this.$route.params.email,
@@ -35,13 +35,13 @@ export default {
       }
     })
       .then(response => (localStorage.setItem('JWTToken', response.data)), this.$router.push('/home'))
-      .catch(e => { this.errorMessage = e.response.data })
+      .catch(e => (localStorage.setItem('JWTToken', response.data)), this.$router.push('/home'))
   }
 }
 </script>
 
 <style>
-.sendLink{
+.login{
   width: 70%;
   margin: 1px auto;
 }

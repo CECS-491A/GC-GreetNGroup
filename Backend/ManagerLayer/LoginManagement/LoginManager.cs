@@ -10,8 +10,6 @@ namespace ManagerLayer.LoginManagement
 {
     public class LoginManager
     {
-        private readonly string sharedSecretKey = Environment.GetEnvironmentVariable("sharedSecretKey", EnvironmentVariableTarget.User);
-
         private ICryptoService _cryptoService;
         private IUserService _userService;
         private JWTManager _JWTManager;
@@ -31,7 +29,7 @@ namespace ManagerLayer.LoginManagement
             string message = request.ssoUserId + ";" +
                              request.email + ";" +
                              request.timestamp + ";";
-            var hashedMessage = _cryptoService.HashHMAC(Encoding.ASCII.GetBytes(sharedSecretKey), message);
+            var hashedMessage = _cryptoService.HashHMAC(message);
             //Check if signature is valid
             if (hashedMessage == request.signature)
             {
