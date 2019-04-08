@@ -1,13 +1,59 @@
 <template>
   <div class="UserAnalytics">
-    <h1>User Analytics </h1>
-      <p v-if="data.length">
-          <ul>
-            <li v-for="(item, index) in data" :key="index">
-              {{ item }}
-            </li>
-          </ul>
-      </p>
+    <h1 class='display-2'>User Analytics </h1>
+
+    <div>
+    <input v-model='input' type="text" placeholder="Search for month">
+    </div>
+    <div>
+    <button @click="searchInput()">Search</button>
+
+    <v-container fluid grid-list-md>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login VS Registered Users</v-card-title>
+          <v-card-text>{{logvsreg}}</v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Average Session Time (minutes)</v-card-title>
+          <v-card-text>{{avgsession}}</v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Features</v-card-title>
+          <v-card-text>{{top5feature}}</v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+
+   <v-container fluid grid-list-md>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Pages</v-card-title>
+          <v-card-text>{{top5pages}}</v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Logins Monthly</v-card-title>
+          <v-card-text>{{loginmonth}}</v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session per Month (minutes)</v-card-title>
+          <v-card-text>{{sessionmonthly}}</v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+    </div>
   </div>
 </template>
 
@@ -18,23 +64,36 @@ export default {
   name: 'UserAnalytics',
   data () {
     return {
-      data: []
+      input: '',
+      logvsreg: '',
+      avgsession: '',
+      top5feature: '',
+      top5pages: '',
+      loginmonth: '',
+      sessionmonthly: ''
     }
   },
-  mounted () {
-    axios.get('https://api.greetngroup.com/api/UAD/' + 6).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-    axios.get('https://api.greetngroup.com/api/UAD/' + 5).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-    axios.get('https://api.greetngroup.com/api/UAD/' + 4).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-    axios.get('https://api.greetngroup.com/api/UAD/' + 3).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-    axios.get('https://api.greetngroup.com/api/UAD/' + 2).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-    axios.get('https://api.greetngroup.com/api/UAD/' + 1).then((response) => { this.data.push(response.data) }).catch(error => console.log(error))
-  }
+
+  methods: {
+    searchInput: function () {
+      axios.get('http://localhost:62008/api/UAD/LoginVSRegistered/' + this.input).then((response) => { this.logvsreg = response.data }).catch(error => console.log(error))
+      axios.get('http://localhost:62008/api/UAD/AverageSessionDuration/' + this.input).then((response) => { this.avgsession = response.data }).catch(error => console.log(error))
+      axios.get('http://localhost:62008/api/UAD/GetTop5MostUsedFeature/' + this.input).then((response) => { this.top5feature = response.data }).catch(error => console.log(error))
+      axios.get('http://localhost:62008/api/UAD/Top5AveragePageSession/' + this.input).then((response) => { this.top5pages = response.data }).catch(error => console.log(error))
+      axios.get('http://localhost:62008/api/UAD/LoggedInMonthly/' + this.input).then((response) => { this.loginmonth = response.data }).catch(error => console.log(error))
+      axios.get('http://localhost:62008/api/UAD/AverageSessionMonthly/' + this.input).then((response) => { this.sessionmonthly = response.data }).catch(error => console.log(error))
+    }
+  } 
+    
 }
 </script>
 
 <style>
-.UserAnalytics{
-  padding: 70px 0;
+h1{
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
   text-align: center;
 }
 

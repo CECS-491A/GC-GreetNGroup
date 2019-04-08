@@ -11,7 +11,7 @@ namespace UnitTest.UADTest
         public void TestMonthlyLoginvsRegistered()
         {
             UADManager uadManager = new UADManager();
-            uadManager.LoginVSRegistered("March");
+            uadManager.GetLoginVSRegistered("March");
             Assert.AreEqual(true, true);
 
         }
@@ -20,7 +20,7 @@ namespace UnitTest.UADTest
         public void TestMonthlyLoginOverSixMonths()
         {
             UADManager uadManager = new UADManager();
-            uadManager.LoggedInMonthly();
+            uadManager.GetLoggedInMonthly("March");
             Assert.AreEqual(true, true);
 
         }
@@ -29,7 +29,7 @@ namespace UnitTest.UADTest
         public void Top5MostUsedFeature()
         {
             UADManager uadManager = new UADManager();
-            uadManager.Top5MostUsedFeature("March");
+            uadManager.GetTop5MostUsedFeature("March");
             Assert.AreEqual(true, true);
 
         }
@@ -38,7 +38,7 @@ namespace UnitTest.UADTest
         public void AverageSessionDuration()
         {
             UADManager uadManager = new UADManager();
-            uadManager.AverageSessionDuration("March");
+            uadManager.GetAverageSessionDuration("March");
             Assert.AreEqual(true, true);
 
         }
@@ -47,7 +47,7 @@ namespace UnitTest.UADTest
         public void AverageSessionMonthly()
         {
             UADManager uadManager = new UADManager();
-            uadManager.AverageSessionMonthly("March");
+            uadManager.GetAverageSessionMonthly("March");
             Assert.AreEqual(true, true);
 
         }
@@ -56,7 +56,7 @@ namespace UnitTest.UADTest
         public void Top5AveragePageSession()
         {
             UADManager uadManager = new UADManager();
-            uadManager.Top5AveragePageSession("March");
+            uadManager.GetTop5AveragePageSession("March");
             Assert.AreEqual(true, true);
 
         }

@@ -20,13 +20,13 @@ namespace ManagerLayer.UADManagement
         /// <summary>
         /// Function that returns the number of registered accounts vs the number of logins for a month
         /// </summary>
-        /// <param name="month"></param>
-        /// <returns></returns>
-        public string LoginVSRegistered(string month)
+        /// <param name="month">specific month</param>
+        /// <returns>the number of logins vs registered users for a month</returns>
+        public string GetLoginVSRegistered(string month)
         {
             string registerID = "1004";
-            loglist = _uadService.LogsFortheMonth(loglist, month);
-            int loginCount = _uadService.NumberofLogs(loglist, registerID);
+            loglist = _uadService.GetLogsFortheMonth(loglist, month);
+            int loginCount = _uadService.GetNumberofLogs(loglist, registerID);
             int registered = userManager.GetRegisteredUserCount();
             string loginVSregistered = "Logins: " + loginCount +
                                     "\nRegistered Accounts: " + registered;
@@ -37,8 +37,8 @@ namespace ManagerLayer.UADManagement
         /// <summary>
         /// Function that returns the average session duration for a month
         /// </summary>
-        /// <returns></returns>
-        public string AverageSessionDuration(string month)
+        /// <returns>the average session duration for a month</returns>
+        public string GetAverageSessionDuration(string month)
         {
             List<string> logID = new List<string>() { "1004", "1005" };
             List<GNGLog> entryToWebsite = new List<GNGLog>();
@@ -51,14 +51,14 @@ namespace ManagerLayer.UADManagement
                 if (i == 0)
                 {
                     entryToWebsite = _gngLoggerService.ReadLogs();
-                    entryToWebsite = _uadService.LogsFortheMonth(entryToWebsite, month);
-                    entryToWebsite = _uadService.LogswithID(entryToWebsite, logID[i]);
+                    entryToWebsite = _uadService.GetLogsFortheMonth(entryToWebsite, month);
+                    entryToWebsite = _uadService.GetLogswithID(entryToWebsite, logID[i]);
                 }
                 else
                 {
                     exitFromWebsite = _gngLoggerService.ReadLogs();
-                    exitFromWebsite = _uadService.LogsFortheMonth(exitFromWebsite, month);
-                    exitFromWebsite = _uadService.LogswithID(exitFromWebsite, logID[i]);
+                    exitFromWebsite = _uadService.GetLogsFortheMonth(exitFromWebsite, month);
+                    exitFromWebsite = _uadService.GetLogswithID(exitFromWebsite, logID[i]);
                 }
             }
             //Pair session begginging and ending logs
@@ -81,7 +81,7 @@ namespace ManagerLayer.UADManagement
                     }
                 }
             }
-            double average = _uadService.FindAverage(sessions);
+            double average = _uadService.CalculateAverageSessionTime(sessions);
             string sAverage = String.Format("{0:0.00}", average);
             string averageSession = "Average Session Time for " + month + ": " + sAverage + " minutes";
             Console.WriteLine(averageSession);
@@ -89,9 +89,11 @@ namespace ManagerLayer.UADManagement
         }
 
         /// <summary>
-        /// Returns the top 5 pages with the most time spen on them
+        /// Function that returns the top 5 page used for a month
         /// </summary>
-        public string Top5AveragePageSession(string month)
+        /// <param name="month">specific month</param>
+        /// <returns>top 5 page used for a month</returns>
+        public string GetTop5AveragePageSession(string month)
         {
             List<String> urlPages = new List<String>() { "https://www.greetngroup.com/create", "https://www.greetngroup.com/join", "https://www.greetngroup.com/searchUser", "https://www.greetngroup.com/searchEvent", "https://www.greetngroup.com/help", "https://www.greetngroup.com/faq" };
             double[] averageTimeSpent = { 0, 0, 0, 0, 0, 0 };
@@ -107,14 +109,15 @@ namespace ManagerLayer.UADManagement
                     if (j == 0)
                     {
                         entryToPage = _gngLoggerService.ReadLogs();
-                        entryToPage = _uadService.LogsFortheMonth(entryToPage, month);
-                        _uadService.FindEntryLogswithURL(entryToPage, urlPages[i]);
+                        entryToPage = _uadService.GetLogsFortheMonth(entryToPage, month);
+                        entryToPage = _uadService.GetLogswithID(entryToPage, "1001");
+                        _uadService.GetEntryLogswithURL(entryToPage, urlPages[i]);
                     }
                     else
                     {
                         exitFromPage = _gngLoggerService.ReadLogs();
-                        exitFromPage = _uadService.LogsFortheMonth(exitFromPage, month);
-                        _uadService.FindExitLogswithURL(exitFromPage, urlPages[i]);
+                        exitFromPage = _uadService.GetLogsFortheMonth(exitFromPage, month);
+                        _uadService.GetExitLogswithURL(exitFromPage, urlPages[i]);
                     }
 
                 }
@@ -139,13 +142,12 @@ namespace ManagerLayer.UADManagement
                     }
                 }
                 //Calculate the average time spent on the page
-                double average = _uadService.FindAverage(sessions);
-                Console.WriteLine(average);
+                double average = _uadService.CalculateAverageSessionTime(sessions);
                 averageTimeSpent[i] = average;
             }
-            _uadService.Quick_SortD(averageTimeSpent, urlPages, 0, urlPages.Count - 1);
+            _uadService.QuickSortDouble(averageTimeSpent, urlPages);
 
-            string pageUsed = "Top 5 average page sessions (in minutes)" +
+            string pageUsed = 
                               "\n" + urlPages[5] + " average time spent: " + averageTimeSpent[5] +
                               "\n" + urlPages[4] + " average time spent: " + averageTimeSpent[4] +
                               "\n" + urlPages[3] + " average time spent: " + averageTimeSpent[3] +
@@ -156,11 +158,13 @@ namespace ManagerLayer.UADManagement
         }
 
         /// <summary>
-        /// Calculates the 5 most used features of the website
+        /// Function that returns the top 5 most used features of the website
         /// </summary>
-        public string Top5MostUsedFeature(string month)
+        /// <param name="month">specific month</param>
+        /// <returns>the top 5 most used features</returns>
+        public string GetTop5MostUsedFeature(string month)
         {
-            loglist = _uadService.LogsFortheMonth(loglist, month);
+            loglist = _uadService.GetLogsFortheMonth(loglist, month);
             List<String> features = new List<String>() { "EventCreated", "EventJoined", "SearchForUser", "FindEventForMe", "UserRatings", "ViewHistory" };
             List<int> timesFeaturedUsed = new List<int>() { 0, 0, 0, 0, 0, 0 };
             Dictionary<string, int> listOfIDs = _gngLoggerService.GetLogIDs();
@@ -168,13 +172,11 @@ namespace ManagerLayer.UADManagement
             {
                 listOfIDs.TryGetValue(features[i], out int clickLogID);
                 string logID = clickLogID.ToString();
-                int timesUsed = _uadService.NumberofLogs(loglist, logID);
+                int timesUsed = _uadService.GetNumberofLogs(loglist, logID);
                 timesFeaturedUsed[i] = timesUsed;
             }
-            _uadService.Quick_Sort(timesFeaturedUsed, features, 0, features.Count - 1);
-
-            string mostUsed;
-            mostUsed = "Top 5 most used features" +
+            _uadService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
+            string mostUsed =
                               "\n" + features[5] + " times used: " + timesFeaturedUsed[5] +
                               "\n" + features[4] + " times used: " + timesFeaturedUsed[4] +
                               "\n" + features[3] + " times used: " + timesFeaturedUsed[3] +
@@ -186,9 +188,11 @@ namespace ManagerLayer.UADManagement
         }
 
         /// <summary>
-        /// Calcualtes the average user session per month for six months
+        /// Funcion that gets the average session duration over six months
         /// </summary>
-        public string AverageSessionMonthly(string month)
+        /// <param name="month">specific month to start from</param>
+        /// <returns>the average session duration over six months</returns>
+        public string GetAverageSessionMonthly(string month)
         {
             List<string> months = new List<string>() { "March", "April", "May", "June", "July", "August" };
             List<string> logID = new List<string>() { "1004", "1005" };
@@ -203,14 +207,14 @@ namespace ManagerLayer.UADManagement
                     if (id == 0)
                     {
                         entryToWebsite = _gngLoggerService.ReadLogs();
-                        entryToWebsite = _uadService.LogsFortheMonth(entryToWebsite, months[index]);
-                        entryToWebsite = _uadService.LogswithID(entryToWebsite, logID[id]);
+                        entryToWebsite = _uadService.GetLogsFortheMonth(entryToWebsite, months[index]);
+                        entryToWebsite = _uadService.GetLogswithID(entryToWebsite, logID[id]);
                     }
                     else
                     {
                         exitFromWebsite = _gngLoggerService.ReadLogs();
-                        exitFromWebsite = _uadService.LogsFortheMonth(exitFromWebsite, months[index]);
-                        exitFromWebsite = _uadService.LogswithID(exitFromWebsite, logID[id]);
+                        exitFromWebsite = _uadService.GetLogsFortheMonth(exitFromWebsite, months[index]);
+                        exitFromWebsite = _uadService.GetLogswithID(exitFromWebsite, logID[id]);
                     }
                 }
                 for (int k = 0; k < exitFromWebsite.Count; k++)
@@ -232,12 +236,12 @@ namespace ManagerLayer.UADManagement
                         }
                     }
                 }
-                double average = _uadService.FindAverage(sessions);
+                double average = _uadService.CalculateAverageSessionTime(sessions);
                 string sAverage = String.Format("{0:0.00}", average);
                 averages.Add(sAverage);
 
             }
-            string monthlyAverages = "Average session duration per month (in minutes)" +
+            string monthlyAverages =
                                   "\nMarch: " + averages[0] +
                                   "\nApril: " + averages[1] +
                                   "\nMay: " + averages[2] +
@@ -251,20 +255,21 @@ namespace ManagerLayer.UADManagement
         }
 
         /// <summary>
-        /// Calculates the number of times a user logged in for six months
+        /// Function that returns the number of logins over six months
         /// </summary>
-        public string LoggedInMonthly()
+        /// <returns>number of logins over six months</returns>
+        public string GetLoggedInMonthly(string month)
         {
             List<string> months = new List<string>() { "March", "April", "May", "June", "July", "August" };
             List<int> logins = new List<int>() { };
             for (int index = 0; index < months.Count; index++)
             {
                 loglist = _gngLoggerService.ReadLogs();
-                loglist = _uadService.LogsFortheMonth(loglist, months[index]);
-                int loginCount = _uadService.NumberofLogs(loglist, "1004");
+                loglist = _uadService.GetLogsFortheMonth(loglist, months[index]);
+                int loginCount = _uadService.GetNumberofLogs(loglist, "1004");
                 logins.Add(loginCount);
             }
-            string monthlyLogin = "Total amount of users per month" +
+            string monthlyLogin =
                                   "\nMarch: " + logins[0] +
                                   "\nApril: " + logins[1] +
                                   "\nMay: " + logins[2] +
