@@ -10,7 +10,7 @@ namespace WebApi.Controllers
     {
         [HttpPost]
         [Route("api/login")]
-        public IHttpActionResult Login([FromBody] LoginRequest request)
+        public IHttpActionResult Login([FromBody] SSOUserRequest request)
         {
             try
             {

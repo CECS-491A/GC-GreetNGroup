@@ -6,10 +6,10 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
-    public class ProfileController : ApiController
+    public class UserController : ApiController
     {
         [HttpGet]
-        [Route("api/profile/{userID}")]
+        [Route("api/user/{userID}")]
         public IHttpActionResult Get(string userID)
         {
             try

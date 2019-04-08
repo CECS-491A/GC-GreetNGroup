@@ -21,7 +21,7 @@ namespace ManagerLayer.LoginManagement
             _userService = new UserService();
         }
 
-        public string Login(LoginRequest request)
+        public string Login(SSOUserRequest request)
         {
             //TODO: Make the concatenation more extensible
             //foreach property in request

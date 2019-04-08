@@ -17,7 +17,7 @@ namespace UnitTest
         {
             //Arrange
             LoginManager lm = new LoginManager();
-            LoginRequest request = new LoginRequest();
+            SSOUserRequest request = new SSOUserRequest();
 
             request.email = "julianpoyo+22@gmail.com";
             request.signature = "4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=";
@@ -36,7 +36,7 @@ namespace UnitTest
         {
             //Arrange
             LoginManager lm = new LoginManager();
-            LoginRequest request = new LoginRequest();
+            SSOUserRequest request = new SSOUserRequest();
 
             request.email = "julianpoyo+22@gmail.com";
             request.signature = "4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfoa";

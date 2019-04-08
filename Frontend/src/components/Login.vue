@@ -35,7 +35,7 @@ export default {
       }
     })
       .then(response => (localStorage.setItem('JWTToken', response.data)), this.$router.push('/home'))
-      .catch(e => (localStorage.setItem('JWTToken', response.data)), this.$router.push('/home'))
+      .catch(e => { this.errorMessage = e.response.data })
   }
 }
 </script>

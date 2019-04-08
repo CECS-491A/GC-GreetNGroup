@@ -13,5 +13,6 @@ namespace ServiceLayer.Interface
 
         int GetNextUserID();
         User GetUserById(int userID);
+        User GetUserByUsername(string username);
     }
 }
