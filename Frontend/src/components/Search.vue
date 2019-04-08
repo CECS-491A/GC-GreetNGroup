@@ -5,7 +5,7 @@
         </div>
         <div>
             <input type="text" v-model="search" placeholder="search for events" />
-        <button v-on:click="findEventsByName(search)">Search</button>
+        <button v-on:click="checkInput(search) ? findEventsByName(search): 'Nothing could be found'">Search</button>
         <div id="events-list">
             <div v-if="events !== null">
                 <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in events" :key="index">
@@ -32,10 +32,14 @@ export default {
     }
   },
   methods: {
+    checkInput: function (i) {
+      if (i !== '') return true
+      return false
+    },
     findEventsByName: function (i) {
       axios.get('http://localhost:62008/api/search/' + i)// build version -> 'https://api.greetngroup.com/api/search/' + i)
         .then((response) => { 
-          const isDataAvailable = response.data && response.data.length; this.events = isDataAvailable ? response.data : []
+          const isDataAvailable = response.data && response.data.length > 0; this.events = isDataAvailable ? response.data : []
         })
         .catch(error => console.log(error))
     }
