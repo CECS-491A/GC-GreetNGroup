@@ -13,10 +13,11 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/search/{name}")]
-        public IHttpActionResult GetEventById(string name)
+        public IHttpActionResult GetEventByName(string name)
         {
             try
             {
+                if (name.Length < 0) Ok();
                 var eventService = new EventService();
                 var e = eventService.GetEventListByName(name);
                 return Ok(e);
