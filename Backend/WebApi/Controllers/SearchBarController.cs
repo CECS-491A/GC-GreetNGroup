@@ -4,21 +4,21 @@ using ServiceLayer.Services;
 
 namespace WebApi.Controllers
 {
-    public class EventController : ApiController
+    public class SearchBarController : ApiController
     {
         /// <summary>
-        /// Returns value that has been requested for retrieval in Ok response
+        /// Returns a list of events based on partial matching of the user input
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/event/{id}")]
-        public IHttpActionResult GetEventById(int id)
+        [Route("api/search/{name}")]
+        public IHttpActionResult GetEventById(string name)
         {
             try
             {
                 var eventService = new EventService();
-                var e = eventService.GetEventById(id);
+                var e = eventService.GetEventListByName(name);
                 return Ok(e);
             }
             catch (HttpRequestException e)

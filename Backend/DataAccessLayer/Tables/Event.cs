@@ -15,7 +15,6 @@ namespace DataAccessLayer.Tables
             StartDate = startDate;
             EventName = eventName;
             EventLocation = eventLocation;
-
         }
 
         [Required, ForeignKey("User")]

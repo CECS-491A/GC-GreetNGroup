@@ -227,6 +227,24 @@ namespace ServiceLayer.Services
             }
         }
 
+        public List<Event> GetEventListByName(string searchInput)
+        {
+            List<Event> e = null;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.Where(name => name.EventName.Contains(searchInput)).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return e;
+            }
+        }
+
         /// <summary>
         /// Method IsUserAtMaxEventCreation queries the database to check the creation
         /// count of the user attempting to create an event. If the user has reached 5
