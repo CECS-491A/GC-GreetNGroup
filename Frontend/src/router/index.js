@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
-import EventHome from '@/components/Event'
+import SearchPage from '@/components/Search'
 import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
@@ -21,9 +21,14 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/EventHome',
-      name: 'EventHome',
-      component: EventHome
+      path: '/',
+      name: 'Search',
+      component: SearchPage
+    },
+    {
+      path: '/Search',
+      name: 'Search',
+      component: SearchPage
     },
     {
       path: '/CreateEvent',
