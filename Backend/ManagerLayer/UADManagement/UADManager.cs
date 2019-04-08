@@ -147,7 +147,7 @@ namespace ManagerLayer.UADManagement
             }
             _uadService.QuickSortDouble(averageTimeSpent, urlPages);
 
-            string pageUsed = "Top 5 average page sessions (in minutes)" +
+            string pageUsed = 
                               "\n" + urlPages[5] + " average time spent: " + averageTimeSpent[5] +
                               "\n" + urlPages[4] + " average time spent: " + averageTimeSpent[4] +
                               "\n" + urlPages[3] + " average time spent: " + averageTimeSpent[3] +
@@ -176,7 +176,7 @@ namespace ManagerLayer.UADManagement
                 timesFeaturedUsed[i] = timesUsed;
             }
             _uadService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
-            string mostUsed = "Top 5 most used features" +
+            string mostUsed =
                               "\n" + features[5] + " times used: " + timesFeaturedUsed[5] +
                               "\n" + features[4] + " times used: " + timesFeaturedUsed[4] +
                               "\n" + features[3] + " times used: " + timesFeaturedUsed[3] +
@@ -241,7 +241,7 @@ namespace ManagerLayer.UADManagement
                 averages.Add(sAverage);
 
             }
-            string monthlyAverages = "Average session duration per month (in minutes)" +
+            string monthlyAverages =
                                   "\nMarch: " + averages[0] +
                                   "\nApril: " + averages[1] +
                                   "\nMay: " + averages[2] +
@@ -269,7 +269,7 @@ namespace ManagerLayer.UADManagement
                 int loginCount = _uadService.GetNumberofLogs(loglist, "1004");
                 logins.Add(loginCount);
             }
-            string monthlyLogin = "Total amount of users per month" +
+            string monthlyLogin =
                                   "\nMarch: " + logins[0] +
                                   "\nApril: " + logins[1] +
                                   "\nMay: " + logins[2] +
