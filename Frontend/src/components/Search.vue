@@ -1,16 +1,28 @@
 <template>
-    <div>
-        <div class="Search">
-            <h1>{{ title }}</h1>
-        </div>
-        <div>
-          <div>
-            <input type="text" v-model="search" placeholder= 'search' />
-            <input type="checkbox" id="userSearch" v-model="checked" v-on:click="userSearchFilter(checked)">
-            <label for="checkbox">{{ 'User Search' }}</label>
-          </div>
-          <button v-on:click="checkUserSearchFilter() ? findUserByUsername(search) : findEventsByName(search)">Search</button>
-          <div v-if="!checked">
+  <v-app>
+    <div class="Search">
+      <h1>{{ title }}</h1>
+    </div>
+    <v-container fluid>
+      <v-layout align-start justify-center row wrap>
+        <v-flex xs5>
+          <input id="searchbar" type="text" v-model="search" placeholder= 'search' />
+          <button v-on:click="checkSearchFilter(filter) ? findUserByUsername(search) : findEventsByName(search)">Search</button>
+        </v-flex>
+      </v-layout>
+      <v-layout align-start justify-center row wrap>
+        <v-flex xs2>
+            <v-select
+              v-model="filter"
+              :items="searchFilter"
+              :menu-props="{ maxHeight: '200' }"
+              label="Select a filter"
+            ></v-select>
+      </v-flex>
+      </v-layout>
+      <v-layout align-start justify-center row wrap>
+        <v-flex xs3>
+          <div v-if="!checkSearchFilter(filter)">
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
@@ -27,14 +39,16 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="user !== null">
                 <div id="user-d">
-                   <button id="user-b"> {{user.UserName}} </button>
+                  <button id="user-b"> {{user.UserName}} </button>
                 </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
             </div>
           </div>
-        </div>
-    </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -62,16 +76,14 @@ export default {
       search: '',
       eventName: '',
       errorInSearch: '',
-      checked: false
+      searchFilter: ['Users', 'Events'],
+      filter: ''
     }
   },
   methods: {
-    checkUserSearchFilter: function () {
-      return this.checked
-    },
-    userSearchFilter: function (i) {
-      if (i) this.searchForUser = true
-      this.searchForUser = false
+    checkSearchFilter: function (i) {
+      if (i === 'Users') return true
+      return false
     },
     checkInput: function (i) {
       if (i !== '') return true
@@ -99,16 +111,20 @@ export default {
 
 <style scoped>
 h1 {
-    font-weight: normal;
+  font-weight: normal;
 }
 #event-b, #user-b {
-    font-weight: bold;
-    font-size: 20px;
+  font-weight: bold;
+  font-size: 20px;
 }
 #events-list, h2 {
-    margin: 25px;
+  margin: 25px;
 }
 #events {
-    min-height: 100px;
+  min-height: 100px;
+}
+#searchbar {
+  width: 200px;
+  height: 25px
 }
 </style>
