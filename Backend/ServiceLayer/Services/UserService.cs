@@ -259,6 +259,24 @@ namespace ServiceLayer.Services
             }
         }
 
+        public User GetUserByUsername(string username)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.FirstOrDefault(c => c.UserName.Equals(username));
+
+                    return user;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                // log
+                return null;
+            }
+        }
+
         public User GetUserById(int userID)
         {
             try

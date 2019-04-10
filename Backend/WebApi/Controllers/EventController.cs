@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                EventService eventService = new EventService();
+                var eventService = new EventService();
                 var e = eventService.GetEventById(id);
                 return Ok(e);
             }
