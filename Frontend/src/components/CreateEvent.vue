@@ -53,6 +53,15 @@
                     required
                     placeholder="79938"
                 ></v-text-field>
+                <v-text-field
+                    ref="description"
+                    v-model="description"
+                    :rules="[() => !!description || 'This field is required']"
+                    :error-messages="errorMessages"
+                    label="Event Description"
+                    required
+                    placeholder="Bring your own beverages!"
+                ></v-text-field>
                 <v-menu
                     ref="menu"
                     v-model="menu"
@@ -203,6 +212,7 @@
         city: null,
         state: null,
         zip: null,
+        description: null,
         date: null,
         menu: false,
         timeMenu: false,
@@ -219,6 +229,7 @@
                     city: this.city,
                     state: this.state,
                     zip: this.zip,
+                    description: this.description,
                     date: new Date().toISOString().substr(0, 10),
                     startTime: new Date().toISOString(),
                     selected: []
@@ -269,6 +280,9 @@
             },
             time () {
                 this.errorMessages = ''
+            },
+            description () {
+                this.description = ''
             }
         },
 
