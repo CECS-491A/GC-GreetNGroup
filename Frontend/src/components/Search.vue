@@ -26,7 +26,7 @@
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
-                  <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in events" :key="index">
+                  <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
                     <button id="event-b"> {{EventName}} </button>
                     <article> {{'Start Date: ' + StartDate}} </article>
                   </div>
@@ -44,6 +44,14 @@
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
             </div>
+          </div>
+          <div>
+            <v-btn small color="primary" dark 
+            v-if="events.length > 5"
+            v-on:click.native="limitSearchResultsPrevious(events)">Previous</v-btn>
+            <v-btn small color="primary" dark 
+              v-if="events.length > 5"
+              v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -77,7 +85,11 @@ export default {
       eventName: '',
       errorInSearch: '',
       searchFilter: ['Users', 'Events'],
-      filter: ''
+      filter: 'Events',
+      pageturner: false,
+      pageStart: 0,
+      pageEnd: 5,
+      pageLimit: 5
     }
   },
   methods: {
@@ -104,6 +116,32 @@ export default {
           this.events = []; const isDataAvailable = response.data; this.user = isDataAvailable ? response.data : ''; this.errorInSearch = isDataAvailable ? '' : 'Sorry! could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
+    },
+    limitSearchResultsNext: function (i) {
+      if (i.length >= this.pageStart + this.pageLimit) {
+        // if over the max
+        if (i.length < this.pageStart + this.pageLimit) {
+          this.pageStart += this.pageLimit
+          this.pageEnd = i.length
+        } else if (i.length === this.pageStart + this.pageLimit) {
+        } else {
+          this.pageStart += this.pageLimit
+          this.pageEnd += this.pageLimit
+        }
+      }
+    },
+    limitSearchResultsPrevious: function (i) {
+      if (this.pageStart > 0) {
+        if (this.pageStart - this.pageLimit >= 0) {
+          this.pageEnd = this.pageStart
+          this.pageStart -= this.pageLimit
+        }
+      }
+    }
+  },
+  computed: {
+    limitSearchResults () {
+      return this.events.slice(this.pageStart, this.pageEnd)
     }
   }
 }
