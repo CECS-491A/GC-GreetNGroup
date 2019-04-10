@@ -91,7 +91,7 @@ namespace ServiceLayer.Services
             logIDMap.Add("FindEventForMe", 1011);
             logIDMap.Add("UserRatings", 1012);
             logIDMap.Add("EventJoined", 1013);
-            logIDMap.Add("ViewHistory", 1014);
+            logIDMap.Add("BadRequest", 1014);
             logIDMap.Add("EventDeleted", 1015);
             logIDMap.Add("EventExpired", 1016);
 
@@ -172,6 +172,41 @@ namespace ServiceLayer.Services
                 }
             }
             return logList;
+        }
+
+        public bool LogGNGInternalErrors(string exception)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = "",
+                ipAddress = "",
+                dateTime = DateTime.Now.ToString(),
+                description = "Internal errors occurred: " + exception
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
         }
     }
 }

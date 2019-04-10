@@ -5,6 +5,7 @@ namespace ServiceLayer.Services
     public class ErrorHandlerService : IErrorHandlerService
     {
         private int errorCount;
+        private string errorMsg;
 
         public ErrorHandlerService()
         {
@@ -12,14 +13,23 @@ namespace ServiceLayer.Services
         }
 
         /// <summary>
-        /// Method ContactSystemAdmin informs the system admin that there is an issue
-        /// in the backend that must be taken care of. The error counter is reset to 0
-        /// once the system admin has been notified of the issue.
+        /// Method ResetErrorCount resets the error counter to 0 and stores the error
+        /// message which will be sent to the System Admin to fix.
         /// </summary>
-        public void ContactSystemAdmin(string errorMessage)
+        /// <param name="errorMessage">error message in string format</param>
+        public void ResetErrorCount(string errorMessage)
         {
-            //TODO: Contact system admin
+            errorMsg = errorMessage;
             errorCount = 0;
+        }
+
+        /// <summary>
+        /// Method ContactSystemAdmin informs the system admin that there is an issue
+        /// in the backend that must be taken care of.
+        /// </summary>
+        public string ContactSystemAdmin()
+        {
+            return errorMsg;
         }
 
         public int GetErrorOcurrenceCount()
@@ -39,7 +49,7 @@ namespace ServiceLayer.Services
             errorCount++;
             if(IsErrorCounterAtMax() == true)
             {
-                ContactSystemAdmin(errorMessage);
+                ResetErrorCount(errorMessage);
             }
         }
 

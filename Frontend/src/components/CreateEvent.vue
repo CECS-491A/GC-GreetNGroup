@@ -142,9 +142,9 @@
                             <v-checkbox v-model="selected" label="Outdoors" value="Outdoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Indoors" value="Indoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Music" value="Music"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Video Games" value="Games"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Games" value="Games"></v-checkbox>
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Arts and Crafts" value="Art"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Art" value="Art"></v-checkbox>
                             <v-checkbox v-model="selected" label="Sports" value="Sports"></v-checkbox>
                             <v-checkbox v-model="selected" label="Miscellaneous" value="Miscellaneous"></v-checkbox>
                             <v-checkbox v-model="selected" label="Educational" value="Educational"></v-checkbox>
@@ -302,6 +302,7 @@
 
                 this.$refs[f].validate(true)
             })
+
             }
         }
     }

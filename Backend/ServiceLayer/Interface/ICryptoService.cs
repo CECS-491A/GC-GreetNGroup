@@ -10,5 +10,6 @@ namespace ServiceLayer.Interface
         //Jonalyn
         string HashSha256(string message);
         SigningCredentials GenerateJWTSignature();
+        int RetrieveUsersSequentialId(string hashedId);
     }
 }
