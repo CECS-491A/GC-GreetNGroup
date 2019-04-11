@@ -29,8 +29,14 @@ namespace ManagerLayer.UserManagement
                 //Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    _userService.DeleteUser(_userService.GetUserByUsername(request.email));
-                    return true;
+                    try
+                    {
+                        return _userService.DeleteUser(_userService.GetUserByUsername(request.email));
+                    }
+                    catch
+                    {
+                        //log
+                    }
                 }
                 return false;
             }

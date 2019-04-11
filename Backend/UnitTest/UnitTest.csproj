@@ -65,6 +65,7 @@
     <Compile Include="LoginUT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UADTest\UADTest.cs" />
+    <Compile Include="UserManagementUT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
