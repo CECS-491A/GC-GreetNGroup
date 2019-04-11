@@ -32,5 +32,7 @@ namespace DataAccessLayer.Tables
 
         [Required]
         public string EventLocation { get; set; }
+
+        public string EventDescription { get; set; }
     }
 }
