@@ -7,7 +7,9 @@ namespace DataAccessLayer.Tables
     [Table("UserRating")]
     public class UserRating
     {
-        public UserRating() { }
+        public UserRating() {
+            Date = DateTime.Now;
+        }
 
         [Key, Required, ForeignKey("RaterId"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int RaterId1 { get; set; }

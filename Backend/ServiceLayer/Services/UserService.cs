@@ -316,8 +316,6 @@ namespace ServiceLayer.Services
             }
         }
 
-        //TODO: Add method to get the user from db using the username, return user object
-
         #endregion
     }
 }

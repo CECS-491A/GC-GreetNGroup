@@ -2,7 +2,7 @@
 
 namespace ServiceLayer.Requests
 {
-    public class LoginRequest
+    public class SSOUserRequest
     {
         [Required]
         public string email { get; set; }

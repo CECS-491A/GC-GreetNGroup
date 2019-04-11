@@ -8,6 +8,8 @@ namespace ServiceLayer.Services
 {
     public class CryptoService: ICryptoService
     {
+        private readonly string sharedSecretKey = Environment.GetEnvironmentVariable("sharedSecretKey", EnvironmentVariableTarget.User);
+
         RNGCryptoServiceProvider rng;
 
         public CryptoService()
@@ -15,8 +17,9 @@ namespace ServiceLayer.Services
             rng = new RNGCryptoServiceProvider();
         }
 
-        public string HashHMAC(byte[] key, string message)
+        public string HashHMAC(string message)
         {
+            byte[] key = Encoding.ASCII.GetBytes(sharedSecretKey);
             var encoding = new ASCIIEncoding();
             byte[] convertedMessage = encoding.GetBytes(message);
 

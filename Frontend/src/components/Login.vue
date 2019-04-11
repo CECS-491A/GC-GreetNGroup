@@ -10,7 +10,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'ResetPassword',
+  name: 'Login',
   data () {
     return {
       email: this.$route.params.email,
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style>
-.sendLink{
+.login{
   width: 70%;
   margin: 1px auto;
 }

@@ -6,5 +6,6 @@ namespace ServiceLayer.Interface
     {
         string CreateToken(string username, string hashedUID);
         bool CheckUserClaims(string jwtToken, List<string> claimsToCheck);
+        string GetUserIDFromToken(string jwtToken);
     }
 }
