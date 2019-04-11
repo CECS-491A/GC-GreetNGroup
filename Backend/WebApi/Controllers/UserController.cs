@@ -49,17 +49,24 @@ namespace WebApi.Controllers
             {
                 ProfileManager pm = new ProfileManager();
                 int result = pm.RateUser(request, userID);
-                if(result == 1)
+                if (result == 1)
                 {
                     return Content(HttpStatusCode.OK, "Rating successful");
-                }else if(result == -1)
+                }
+                else if (result == -1)
                 {
                     return Content(HttpStatusCode.BadRequest, "Service Unavailable");
-                }else if(result == -2)
+                }
+                else if (result == -2)
                 {
                     return Content(HttpStatusCode.BadRequest, "Cannot rate user agian");
                 }
-            catch //Catch all errors
+                else
+                {
+                    return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                }
+            }
+            catch (Exception) //Catch all errors
             {
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
