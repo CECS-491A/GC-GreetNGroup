@@ -20,9 +20,8 @@ namespace DataAccessLayer.Tables
         public User RatedId { get; set; }
 
         [Required]
-        public float Rating { get; set; }
+        public int Rating { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        public string Comment { get; set; }
     }
 }
