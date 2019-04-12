@@ -23,6 +23,22 @@ namespace WebApi
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "LoginRoute",
+                routeTemplate: "login",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new LoginHandler()
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DeleteUserRoute",
+                routeTemplate: "deleteuser",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new DeleteHandler()
+            );
         }
     }
 }

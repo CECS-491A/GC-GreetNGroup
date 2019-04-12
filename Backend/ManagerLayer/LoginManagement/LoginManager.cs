@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
 using ManagerLayer.JWTManagement;
@@ -25,7 +24,7 @@ namespace ManagerLayer.LoginManagement
         {
             //TODO: Make the concatenation more extensible
             //foreach property in request
-            
+
             string message = request.ssoUserId + ";" +
                              request.email + ";" +
                              request.timestamp + ";";
@@ -36,7 +35,7 @@ namespace ManagerLayer.LoginManagement
                 //Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return _JWTManager.GrantToken(request.email).ToString();
+                    return "https://greetngroup.com/home/" + _JWTManager.GrantToken(request.email).ToString();
                 }
                 else
                 {
