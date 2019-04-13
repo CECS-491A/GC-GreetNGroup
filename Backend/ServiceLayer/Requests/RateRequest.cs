@@ -10,7 +10,7 @@ namespace ServiceLayer.Requests
     public class RateRequest
     {
         [Required]
-        public string RaterID { get; set; }
+        public string jwtToken { get; set; }
         [Required]
         public string rating { get; set; }
     }

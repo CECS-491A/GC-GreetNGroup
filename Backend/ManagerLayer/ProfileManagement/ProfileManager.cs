@@ -20,6 +20,8 @@ namespace ManagerLayer.ProfileManagement
         [Required]
         public string UserName { get; set; }
         [Required]
+        public DateTime DoB { get; set; }
+        [Required]
         public string City { get; set; }
         [Required]
         public string State { get; set; }
@@ -81,6 +83,7 @@ namespace ManagerLayer.ProfileManagement
                     up.FirstName = retrievedUser.FirstName;
                     up.LastName = retrievedUser.LastName;
                     up.UserName = retrievedUser.UserName;
+                    up.DoB = retrievedUser.DoB;
                     up.City = retrievedUser.City;
                     up.State = retrievedUser.State;
                     up.Country = retrievedUser.Country;
@@ -98,6 +101,57 @@ namespace ManagerLayer.ProfileManagement
             }
         }
 
+        public int GetUserToUpdateController(string jwtToken)
+        {
+            if (!_jwtServce.IsJWTSignatureTampered(jwtToken))
+            {
+                if (_userService.GetUserById(_jwtServce.GetUserIDFromToken(jwtToken)) != null)
+                {
+                    return 1; //OK
+                }
+                return -1; //BadRequest, invalid user
+            }
+            return -2; //Unauthorized, invalid token
+        }
+
+        public UpdateProfileRequest GetUserToUpdate(string jwtToken)
+        {
+            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
+            if(userID != -1)
+            {
+                User retrievedUser = _userService.GetUserById(userID);
+                UpdateProfileRequest request = new UpdateProfileRequest();
+                request.FirstName = retrievedUser.FirstName;
+                request.LastName = retrievedUser.LastName;
+                request.DoB = retrievedUser.DoB;
+                request.City = retrievedUser.City;
+                request.State = retrievedUser.State;
+                request.Country = retrievedUser.Country;
+                return request;
+            }
+            return null;
+        }
+
+        public int UpdateUserProfile(UpdateProfileRequest request)
+        {
+            if (!_jwtServce.IsJWTSignatureTampered(request.JwtToken)){
+                int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
+                User retrievedUser = _userService.GetUserById(userID);
+                retrievedUser.FirstName = request.FirstName;
+                retrievedUser.LastName = request.LastName;
+                retrievedUser.DoB = request.DoB;
+                retrievedUser.City = request.City;
+                retrievedUser.State = request.State;
+                retrievedUser.Country = request.Country;
+                if (_userService.UpdateUser(retrievedUser))
+                {
+                    return 1; //OK. succesful update
+                }
+                return -2; //Service unavailable
+            }
+            return -1; //Unauthorized, invalid token
+        }
+
         public string GetUserRating(int userID)
         {
             return _ratingService.GetRating(userID).ToString();
@@ -105,9 +159,7 @@ namespace ManagerLayer.ProfileManagement
 
         public bool CheckProfileActivated(string jwtToken)
         {
-            string hashedUID = _jwtServce.GetUserIDFromToken(jwtToken);
-            //need a function to undero hashedUID to regular uid
-            int userID = 0;
+            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
             if (_userService.IsUsernameFoundById(userID))
             {
                 User retrievedUser = _userService.GetUserById(userID);
@@ -120,9 +172,10 @@ namespace ManagerLayer.ProfileManagement
         {
             try
             {
+                int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);
                 UserRating ur = new UserRating();
                 ur.RatedId1 = Convert.ToInt32(rateeID);
-                ur.RaterId1 = Convert.ToInt32(request.RaterID);
+                ur.RaterId1 = Convert.ToInt32(raterID);
                 ur.Rating = Convert.ToInt32(request.rating);
                 _ratingService.CreateRating(ur);
                 return 1;
@@ -133,5 +186,7 @@ namespace ManagerLayer.ProfileManagement
                 return -1;
             }
         }
+
+
     }
 }

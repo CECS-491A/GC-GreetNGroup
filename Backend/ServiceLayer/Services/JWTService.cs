@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
@@ -100,16 +98,24 @@ namespace ServiceLayer.Services
             }
         }
 
-        public string GetUserIDFromToken(string jwtToken)
+        public int GetUserIDFromToken(string jwtToken)
         {
-            if (IsJWTSignatureTampered(jwtToken) == false)
+            if (!IsJWTSignatureTampered(jwtToken))
             {
                 var jwt = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
                 var usersCurrClaims = jwt.Claims;
-                var hashedUID = usersCurrClaims.First().Value;
-                return hashedUID;
+                var userID = usersCurrClaims.First().Value;
+                try
+                {
+                    return Convert.ToInt32(userID);
+                }
+                catch (FormatException)
+                {
+                    //log
+                    return -1;
+                }
             }
-            return "";
+            return -1;
         }
 
         /// <summary>

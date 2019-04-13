@@ -71,5 +71,48 @@ namespace WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
+
+        [HttpGet]
+        [Route("api/user/update/getuser")]
+        public IHttpActionResult GetUserToUpdate(string jwtToken)
+        {
+            ProfileManager pm = new ProfileManager();
+            int response = pm.GetUserToUpdateController(jwtToken);
+            if(response == 1)
+            {
+                return Content(HttpStatusCode.OK, pm.GetUserToUpdate(jwtToken));
+            }else if(response == -1)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Session is invalid");
+            }
+            else if(response == -2)
+            {
+                return Content(HttpStatusCode.BadRequest, "Unable to update user");
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+            }
+        }
+
+        [HttpPost]
+        [Route("api/user/update")]
+        public IHttpActionResult Update([FromBody] UpdateProfileRequest request)
+        {
+            ProfileManager pm = new ProfileManager();
+            int response = pm.UpdateUserProfile(request);
+            if (response == 1)
+            {
+                return Content(HttpStatusCode.OK, "Profile has been updated");
+            }
+            else if (response == -1)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Session is invalid");
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+            }
+        }
     }
 }
