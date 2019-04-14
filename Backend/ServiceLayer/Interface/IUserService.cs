@@ -16,5 +16,6 @@ namespace ServiceLayer.Interface
         User GetUserByUsername(string username);
 
         bool UpdateUser(User updatedUser);
+        int GetUserUid(string username);
     }
 }
