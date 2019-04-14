@@ -9,7 +9,7 @@
                     ref="name"
                     v-model="name"
                     :rules="[() => !!name || 'This field is required',
-                            () => !!name && name.length <= 50 || 'Title must be less than 50 characters', titleCheck
+                            () => !!name && name.length < 50 || 'Title must be less than 50 characters', titleCheck
                             ]"
                     :error-messages="errorMessages"
                     label="Event Title"
@@ -53,15 +53,15 @@
                     required
                     placeholder="79938"
                 ></v-text-field>
-                <v-text-field
+                <v-textarea
                     ref="description"
                     v-model="description"
-                    :rules="[() => !!description || 'This field is required']"
+                    :rules="[() => !!description && description.length < 250 || 'Description must be less than 250 characters']"
                     :error-messages="errorMessages"
-                    label="Event Description"
-                    required
+                    label="Event Description (Optional)"
                     placeholder="Bring your own beverages!"
-                ></v-text-field>
+                    counter="250"
+                ></v-textarea>
                 <v-menu
                     ref="menu"
                     v-model="menu"
@@ -202,24 +202,27 @@
 <script>
 /* eslint-disable */
     var todaysDate = new Date();
+    import axios from 'axios'
+import { error } from 'util';
 
     export default {
         name: 'create-event',
         data: () => ({
         errorMessages: '',
-        name: null,
-        address: null,
-        city: null,
-        state: null,
-        zip: null,
-        description: null,
+        name: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        description: '',
         date: null,
         menu: false,
         timeMenu: false,
         dialog: false,
         startTime: null,
         formHasErrors: false,
-        selected: []
+        selected: [''],
+        ip: ''
         }),
         computed: {
             form () {
@@ -256,9 +259,20 @@
 
                 var timeString = hh + ":" + mm;
                 return timeString;
+            },
+            eventStartDate () {
+                var eventStartDateTime = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), 
+                this.startDate.getDate(), this.startTime.getHours(), this.startTime.getMinutes());
+                return eventStartDateTime;
             }
         },
-
+        mounted () {
+            axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
+                this.ip = result.data.origin;
+            }, error => {
+                console.error(error);
+            });
+        },
         watch: {
             name () {
                 this.errorMessages = ''
@@ -309,14 +323,39 @@
             })
             },
             submit () {
-            this.formHasErrors = false
-
-            Object.keys(this.form).forEach(f => {
-                if (!this.form[f]) this.formHasErrors = true
-
-                this.$refs[f].validate(true)
-            })
-
+                var eventStartDateTime = eventStartDate();
+                this.formHasErrors = false
+                Object.keys(this.form).forEach(f => {
+                    if (!this.form[f]) {
+                        this.formHasErrors = true
+                        alert("Please check that you have properly filled the form and try again");
+                    }
+                    this.$refs[f].validate(true)
+                })
+                params = {
+                    userId: 1,
+                    startDate: eventStartDateTime,
+                    eventName: this.name,
+                    address: this.address,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
+                    eventTags: this.selected,
+                    eventDescription: this.description,
+                    ip: this.ip
+                }
+                if(this.formHasErrors == false) {
+                    axios.post("http://localhost:62008/api/event/createevent", params).then((response) => {
+                        if(response != null) {
+                            alert("Your event has been created! Redirecting.");
+                            this.$router.push('Home');
+                        }
+                        else {
+                            alert("There was a problem creating your event. Redirecting.");
+                            this.$router.push('Home');
+                        }
+                    }).catch(error => console.log(error));
+                }
             }
         }
     }

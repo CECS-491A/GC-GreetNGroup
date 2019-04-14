@@ -16,16 +16,18 @@ namespace ServiceLayer.Services
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
         private SigningCredentials credentials;
         private ICryptoService _cryptoService;
+        private IGNGLoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
 
         public JWTService()
         {
             _cryptoService = new CryptoService();
+            _gngLoggerService = new GNGLoggerService();
             credentials = _cryptoService.GenerateJWTSignature();
             tokenHandler = new JwtSecurityTokenHandler();
         }
 
-        public string CreateToken(string username, string hashedUID)
+        public string CreateToken(string username, string uId)
         {
             var usersClaims = RetrieveClaims(username);
             var securityClaimsList = new List<System.Security.Claims.Claim>();
@@ -33,7 +35,7 @@ namespace ServiceLayer.Services
             //Takes the claims the user has and puts it in a list of Security Claims objects
             foreach (DataAccessLayer.Tables.Claim c in usersClaims)
             {
-                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
+                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, uId));
             }
 
             var jwt = new JwtSecurityToken(
@@ -132,12 +134,32 @@ namespace ServiceLayer.Services
                     return claimsList;
                 }
             }
-            catch (ObjectDisposedException e)
+            // Exception caught specifically as it is used in the event that the context 
+            // doesnt exist or is broken or fails to dispose
+            catch (ObjectDisposedException od) 
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;
             }
 
+        }
+
+        /// <summary>
+        /// Method GetUsersID finds the users id inside the jwt and returns it so that it
+        /// can be used for any operations that require the user id
+        /// </summary>
+        /// <param name="userJwtToken">Users jwt token as a string</param>
+        /// <returns>Return the sequential user id or null if the id cannot be found</returns>
+        public int GetUsersID(string userJwtToken)
+        {
+            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
+            //Take users claims since it holds the user id as a Value property
+            var usersClaims = jwt.Claims;
+            var uId = usersClaims.Select(u => u.Value).ToString();
+            //Attempts to parse the int from the string, return null if it cannot parse the string
+            Int32.TryParse(uId, out int uIdAsInt); 
+
+            return uIdAsInt;
         }
 
     }

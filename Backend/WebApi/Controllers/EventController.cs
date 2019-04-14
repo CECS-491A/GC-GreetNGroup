@@ -35,7 +35,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/event/createevent")]
-        public IHttpActionResult CreateNewEvent(string userId, DateTime startDate, string eventName,
+        public IHttpActionResult CreateNewEvent(int userId, DateTime startDate, string eventName,
             string address, string city, string state, string zip, List<string> eventTags, string eventDescription,
             string ip, string url)
         {
@@ -44,12 +44,12 @@ namespace WebApi.Controllers
                 EventService eventService = new EventService();
                 var newEvent = eventService.InsertEvent(userId, startDate, eventName, address, city, state, zip, eventTags, eventDescription);
                 var eventId = newEvent.EventId;
-                gngLogManager.LogGNGEventsCreated(userId, eventId, ip);
+                gngLogManager.LogGNGEventsCreated(userId.ToString(), eventId, ip);
                 return Ok(newEvent);
             }
             catch(HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
+                gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
 

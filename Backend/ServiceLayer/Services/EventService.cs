@@ -46,13 +46,12 @@ namespace ServiceLayer.Services
             }
         }
 
-        public Event InsertEvent(string userId, DateTime startDate, string eventName, 
+        public Event InsertEvent(int userId, DateTime startDate, string eventName, 
             string address, string city, string state, string zip, List<string> eventTags, string eventDescription)
         {
             eventId++;
             Event userEvent = null;
-            int sequentialId = _cryptoService.RetrieveUsersSequentialId(userId);
-            if (IsUserAtMaxEventCreation(sequentialId) == false && sequentialId != -1)
+            if (IsUserAtMaxEventCreation(userId) == false)
             {
                 try
                 {
@@ -60,7 +59,7 @@ namespace ServiceLayer.Services
 
                     using (var ctx = new GreetNGroupContext())
                     {
-                        userEvent = new Event(sequentialId, eventId, startDate, eventName, eventLocation, eventDescription);
+                        userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
 
                         ctx.Events.Add(userEvent);
                         if(InsertEventTags(eventTags, eventId) == true)
@@ -283,7 +282,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return e;
             }
         }

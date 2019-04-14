@@ -174,6 +174,13 @@ namespace ServiceLayer.Services
             return logList;
         }
 
+        /// <summary>
+        /// Method LogGNGInternalErrors logs errors that occur on the backend of GNG. Any errors 
+        /// in logging will increment the error counter in the error handler. Should this continue to
+        /// cause errors, the system admin will be contacted with the error message.
+        /// </summary>
+        /// <param name="exception">The exception that was caught in string form</param>
+        /// <returns>Returns true or false if the log was successfully made or not</returns>
         public bool LogGNGInternalErrors(string exception)
         {
             CreateNewLog();
@@ -201,7 +208,7 @@ namespace ServiceLayer.Services
                     file.Close();
                 }
             }
-            catch (FileNotFoundException e)
+            catch (Exception e) //Catch any exceptions caused
             {
                 logMade = false;
                 _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
