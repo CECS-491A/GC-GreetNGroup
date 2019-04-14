@@ -6,7 +6,7 @@ namespace ServiceLayer.Services
 {
     public interface IUADService
     {
-        int GetNumberofLogs(List<GNGLog> logs, string logID);
+        int GetNumberofLogsID(List<GNGLog> logs, string logID);
         List<GNGLog> GetLogsFortheMonth(List<GNGLog> logs, string month);
         List<GNGLog> GetLogswithID(List<GNGLog> logs, string ID);
         void QuickSortInteger(List<int> usedCounts, List<string> logID, int left, int right);

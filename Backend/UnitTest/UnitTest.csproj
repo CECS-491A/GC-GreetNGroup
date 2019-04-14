@@ -70,6 +70,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="UADTest\TestLogs\FailedLogs\SessionTimes1.json" />
+    <None Include="UADTest\TestLogs\PassLogs\NumberofLogsIDTest1.json" />
+    <None Include="UADTest\TestLogs\PassLogs\NumberofLogsIDTest2.json" />
+    <None Include="UADTest\TestLogs\PassLogs_SessionTimes\SessionTimes1.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
