@@ -214,26 +214,20 @@ namespace ServiceLayer.Services
         /// </summary>
         #region User Information Retrieval
 
-        public string GetUsersHashedUID(string username)
+        public int GetUserUid(string username)
         {
-            var hashedUid = "";
-
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var user = ctx.Users.Where(u => u.UserName.Equals(username));
-                    var userId = user.Select(id => id.UserId).ToString();
-
-                    hashedUid = _cryptoService.HashSha256(userId);
+                    var user = ctx.Users.FirstOrDefault(u => u.UserName.Equals(username));
+                    return user.UserId;
                 }
-
-                return hashedUid;
             }
             catch (ObjectDisposedException od)
             {
                 // log
-                return hashedUid;
+                return -1;
             }
         }
 

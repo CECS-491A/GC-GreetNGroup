@@ -214,6 +214,8 @@ namespace ServiceLayer.Services
                 _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
             }
             return logMade;
+        }
+
         /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
         /// </summary>
         /// <returns></returns>

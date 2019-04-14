@@ -25,7 +25,7 @@ namespace ServiceLayer.Services
             tokenHandler = new JwtSecurityTokenHandler();
         }
 
-        public string CreateToken(string username, string uId)
+        public string CreateToken(string username, int uId)
         {
             var usersClaims = RetrieveClaims(username);
             var securityClaimsList = new List<System.Security.Claims.Claim>();
@@ -33,7 +33,7 @@ namespace ServiceLayer.Services
             //Takes the claims the user has and puts it in a list of Security Claims objects
             foreach (DataAccessLayer.Tables.Claim c in usersClaims)
             {
-                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, uId));
+                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, uId.ToString()));
             }
 
             var jwt = new JwtSecurityToken(
