@@ -47,7 +47,7 @@ namespace UnitTest.DataAccessTest
             var eventTime = DateTime.Parse("10/20/2020");
             var eventName = "Pizza Party";
             var place = "CSULB";
-            var newEvent = new Event(UserId1, EventId1, eventTime, expected, place);
+            var newEvent = new Event(UserId1, EventId1, eventTime, expected, place, "");
 
             eventService.InsertMadeEvent(newEvent);
             var foundEvent = eventService.GetEventById(EventId1);
