@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
 using ManagerLayer.JWTManagement;
@@ -10,8 +9,6 @@ namespace ManagerLayer.LoginManagement
 {
     public class LoginManager
     {
-        private readonly string sharedSecretKey = Environment.GetEnvironmentVariable("sharedSecretKey", EnvironmentVariableTarget.User);
-
         private ICryptoService _cryptoService;
         private IUserService _userService;
         private JWTManager _JWTManager;
@@ -23,22 +20,22 @@ namespace ManagerLayer.LoginManagement
             _userService = new UserService();
         }
 
-        public string Login(LoginRequest request)
+        public string Login(SSOUserRequest request)
         {
             //TODO: Make the concatenation more extensible
             //foreach property in request
-            
+
             string message = request.ssoUserId + ";" +
                              request.email + ";" +
                              request.timestamp + ";";
-            var hashedMessage = _cryptoService.HashHMAC(Encoding.ASCII.GetBytes(sharedSecretKey), message);
+            var hashedMessage = _cryptoService.HashHMAC(message);
             //Check if signature is valid
             if (hashedMessage == request.signature)
             {
                 //Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return _JWTManager.GrantToken(request.email).ToString();
+                    return "https://greetngroup.com/home/" + _JWTManager.GrantToken(request.email).ToString();
                 }
                 else
                 {

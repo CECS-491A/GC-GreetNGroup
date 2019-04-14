@@ -1,4 +1,5 @@
 ﻿using ManagerLayer.LoginManagement;
+using ManagerLayer.ProfileManagement;
 using ServiceLayer.Requests;
 using System;
 using System.Net;
@@ -14,8 +15,13 @@ namespace WebApi.Controllers
         {
             try
             {
+                ProfileManager pm = new ProfileManager();
                 //TODO update in sprint 5 to get user profile information
-                return Content(HttpStatusCode.OK, "user");
+                if (pm.CheckProfileActivated(jwtToken))
+                {
+                    return Content(HttpStatusCode.OK, true);
+                }
+                return Content(HttpStatusCode.Redirect, "User profile needs to be completed");
             }
             catch (Exception ex)
             {

@@ -7,7 +7,9 @@ namespace DataAccessLayer.Tables
     [Table("UserRating")]
     public class UserRating
     {
-        public UserRating() { }
+        public UserRating() {
+            Date = DateTime.Now;
+        }
 
         [Key, Required, ForeignKey("RaterId"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int RaterId1 { get; set; }
@@ -18,9 +20,8 @@ namespace DataAccessLayer.Tables
         public User RatedId { get; set; }
 
         [Required]
-        public float Rating { get; set; }
+        public int Rating { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        public string Comment { get; set; }
     }
 }

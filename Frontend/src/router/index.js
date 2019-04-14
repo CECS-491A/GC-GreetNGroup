@@ -7,8 +7,11 @@ import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
 import CreateEvent from '@/components/CreateEvent'
+import Profile from '@/components/Profile'
+import UpdateProfile from '@/components/UpdateProfile'
+import Home from '@/components/Home'
+import Welcome from '@/components/Welcome'
 // import Axios from 'axios'
-
 
 Vue.use(Router)
 
@@ -22,8 +25,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: SearchPage
+      name: 'Welcome',
+      component: Welcome
     },
     {
       path: '/Search',
@@ -57,6 +60,21 @@ const router = new Router({
         isLoggedIn: true,
         isAdmin: true
       }
+    },
+    {
+      path: '/profile/:id',
+      name: 'Profile',
+      component: Profile
+    },
+    {
+      path: '/Home/:token',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/updateprofile',
+      name: 'UpdateProfile',
+      component: UpdateProfile
     }
   ]
 })

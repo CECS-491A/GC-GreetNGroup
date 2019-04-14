@@ -11,6 +11,8 @@ namespace ServiceLayer.Services
 {
     public class CryptoService: ICryptoService
     {
+        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
+
         RNGCryptoServiceProvider rng;
         IGNGLoggerService _gngLoggerService;
 
@@ -20,8 +22,9 @@ namespace ServiceLayer.Services
             _gngLoggerService = new GNGLoggerService();
         }
 
-        public string HashHMAC(byte[] key, string message)
+        public string HashHMAC(string message)
         {
+            byte[] key = Encoding.ASCII.GetBytes(AppLaunchSecretKey);
             var encoding = new ASCIIEncoding();
             byte[] convertedMessage = encoding.GetBytes(message);
 

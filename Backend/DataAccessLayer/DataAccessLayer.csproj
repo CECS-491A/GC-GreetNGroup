@@ -111,6 +111,14 @@
     <Compile Include="Migrations\201904060924013_EditEvent.Designer.cs">
       <DependentUpon>201904060924013_EditEvent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904110218437_EditRatings.cs" />
+    <Compile Include="Migrations\201904110218437_EditRatings.Designer.cs">
+      <DependentUpon>201904110218437_EditRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904110241033_EditEvent_02.cs" />
+    <Compile Include="Migrations\201904110241033_EditEvent_02.Designer.cs">
+      <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
@@ -192,6 +200,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904060924013_EditEvent.resx">
       <DependentUpon>201904060924013_EditEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110218437_EditRatings.resx">
+      <DependentUpon>201904110218437_EditRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110241033_EditEvent_02.resx">
+      <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

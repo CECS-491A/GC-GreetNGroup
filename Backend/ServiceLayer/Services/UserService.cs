@@ -16,17 +16,37 @@ namespace ServiceLayer.Services
             _cryptoService = new CryptoService();
         }
 
+        /*
+         * The functions within this service make use of the database context
+         * and similarly attempt to catch
+         *      ObjectDisposedException
+         * to ensure the context is still valid and we want to catch the error
+         * where it has been made
+         *
+         */
+
         /// <summary>
         /// The following region handles inserts into the user table of the database
         /// </summary>
         #region Insert User Information
 
+        // Inserts given user object into database
         public bool InsertUser(User user)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    // Catch existing users
+                    if (user.UserName != null)
+                    {
+                        if (ctx.Users.Any(c => c.UserName.Equals(user.UserName)))
+                        {
+                            return false;
+                        }
+                    }
+
+                    // Adds user
                     ctx.Users.Add(user);
                     ctx.SaveChanges();
                     return true;
@@ -68,7 +88,7 @@ namespace ServiceLayer.Services
                 return false;
             }
         }
-
+        
         public bool UpdateUserCity(int uId, string city)
         {
             try
@@ -315,8 +335,6 @@ namespace ServiceLayer.Services
                 return 1;
             }
         }
-
-        //TODO: Add method to get the user from db using the username, return user object
 
         #endregion
     }
