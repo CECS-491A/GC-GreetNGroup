@@ -1,6 +1,8 @@
 ﻿using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using Newtonsoft.Json;
 using ServiceLayer.Interface;
+using ServiceLayer.Model;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
 using System;
@@ -11,27 +13,6 @@ using System.Web.Script.Serialization;
 
 namespace ManagerLayer.ProfileManagement
 {
-    class UserProfile
-    {
-        [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        [Required]
-        public string UserName { get; set; }
-        [Required]
-        public DateTime DoB { get; set; }
-        [Required]
-        public string City { get; set; }
-        [Required]
-        public string State { get; set; }
-        [Required]
-        public string Country { get; set; }
-        [Required]
-        public int EventCreationCount { get; set; }
-        [Required]
-        public string Rating { get; set; }
-    }
 
     public class ProfileManager
     {
@@ -71,7 +52,7 @@ namespace ManagerLayer.ProfileManagement
             return _userService.IsUsernameFoundById(userID);
         }
 
-        public string GetUserProfile(string userID)
+        public UserProfile GetUserProfile(string userID)
         {
             try
             {
@@ -89,15 +70,14 @@ namespace ManagerLayer.ProfileManagement
                     up.Country = retrievedUser.Country;
                     up.EventCreationCount = retrievedUser.EventCreationCount;
                     up.Rating = GetUserRating(convertedUserID);
-                    JavaScriptSerializer js = new JavaScriptSerializer();
-                    return js.Serialize(up);
+                    return up;
                 }
-                return "";
+                return null;
             }
             catch (FormatException)
             {
                 //log
-                return "Unable to get user";
+                return null;
             }
         }
 

@@ -25,9 +25,9 @@ namespace ManagerLayer.LoginManagement
             //TODO: Make the concatenation more extensible
             //foreach property in request
 
-            string message = request.ssoUserId + ";" +
-                             request.email + ";" +
-                             request.timestamp + ";";
+            string message = "ssoUserId=" + request.ssoUserId + ";" +
+                             "email=" + request.email + ";" +
+                             "timestamp=" + request.timestamp + ";";
             var hashedMessage = _cryptoService.HashHMAC(message);
             //Check if signature is valid
             if (hashedMessage == request.signature)
@@ -47,11 +47,11 @@ namespace ManagerLayer.LoginManagement
                         null, //City
                         null, //State
                         null, //Country
-                        DateTime.MinValue, //Minimum datetime for DOB
+                        DateTime.Now, //Minimum datetime for DOB
                         false //IsActivated
                         );
                     _userService.InsertUser(createdUser); //Check for user acivation on home page
-                    return _JWTManager.GrantToken(request.email).ToString();
+                    return "https://greetngroup.com/home/" + _JWTManager.GrantToken(request.email).ToString();
                 }
             }
             return "-1";
