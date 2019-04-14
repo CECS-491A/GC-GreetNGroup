@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'UpdateProfile',
@@ -80,7 +80,7 @@ export default {
       },
       message: null
     }
-      },
+  },
   created () {
     axios({
       method: 'GET',
@@ -90,33 +90,33 @@ export default {
         'Access-Control-Allow-Credentials': true
       },
       data: {
-        jwtToken = localStorage.getItem(jwtToken)
+        jwtToken: localStorage.getItem('Token')
       }
     })
       .then(response => (this.profile = response.data))
       .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
-    UpdateProfile: function (){
-        axios({
-      method: 'GET',
-      url: 'https://api.greetngroup.com/api/user/update/getuser',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      data: {
-        FirstName = this.profile.FirstName,
-        LastName = this.profile.LastName,
-        DoB = this.profile.DoB,
-        City = this.profile.City,
-        State = this.profile.State,
-        Country = this.profile.Country,
-        JwtToken = null
-      }
-    })
-      .then(response => (this.message = response.data))
-      .catch(e => { this.errorMessage = e.response.data })
+    UpdateProfile: function () {
+      axios({
+        method: 'GET',
+        url: 'https://api.greetngroup.com/api/user/update/getuser',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          FirstName: this.profile.FirstName,
+          LastName: this.profile.LastName,
+          DoB: this.profile.DoB,
+          City: this.profile.City,
+          State: this.profile.State,
+          Country: this.profile.Country,
+          JwtToken: null
+        }
+      })
+        .then(response => (this.message = response.data))
+        .catch(e => { this.errorMessage = e.response.data })
     }
   }
 }

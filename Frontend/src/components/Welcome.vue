@@ -1,6 +1,6 @@
 <template>
-  <div class="Home">
-    <h1>Home Page</h1>
+  <div class="Welcome">
+    <h1>Welcome</h1>
     <br />
     <br />
   </div>
@@ -8,20 +8,17 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Welcome',
   data () {
     return {
       
     }
-  },
-  created () {
-    localStorage.setItem('Token', this.$route.param.token)
   }
 }
 </script>
 
 <style>
-.Home{
+.Welcome{
   width: 70%;
   margin: 1px auto;
 }

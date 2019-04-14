@@ -103,7 +103,7 @@ namespace ManagerLayer.ProfileManagement
 
         public int GetUserToUpdateController(string jwtToken)
         {
-            if (!_jwtServce.IsJWTSignatureTampered(jwtToken))
+            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
             {
                 if (_userService.GetUserById(_jwtServce.GetUserIDFromToken(jwtToken)) != null)
                 {

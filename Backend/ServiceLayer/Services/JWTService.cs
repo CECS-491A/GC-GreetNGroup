@@ -44,25 +44,26 @@ namespace ServiceLayer.Services
             return tokenHandler.WriteToken(jwt);
         }
 
-        public string RefreshToken(string jwtToken)
+        public string ValidateAndUpdateToken(string jwtToken)
         {
-            if (IsJWTSignatureTampered(jwtToken) == false)
+            if (!IsJWTSignatureTampered(jwtToken))
             {
-                var oldJWT = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
-                var newJWT = new JwtSecurityToken(
-                    issuer: oldJWT.Issuer,
-                    audience: oldJWT.Audiences.ToString(),
-                    claims: oldJWT.Claims,
-                    expires: DateTime.Now.AddMinutes(30),
-                    signingCredentials: credentials);
-                return tokenHandler.WriteToken(newJWT);
+                return RefreshToken(jwtToken);
             }
             return "";
         }
 
-
-        //TODO: modify CheckUserClaims to check signature before getting claims
-        //TODO: make the symmetric key an env variable
+        public string RefreshToken(string jwtToken)
+        {
+            var oldJWT = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
+            var newJWT = new JwtSecurityToken(
+                issuer: oldJWT.Issuer,
+                audience: oldJWT.Audiences.ToString(),
+                claims: oldJWT.Claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials);
+            return tokenHandler.WriteToken(newJWT);
+        }
 
         /// <summary>
         /// Method to check if a user has the appropriate claims to access/perform an
@@ -74,7 +75,7 @@ namespace ServiceLayer.Services
         /// <returns>True or false depending on if the user has the claim</returns>
         public bool CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
         {
-            if(IsJWTSignatureTampered(userJwtToken) == false)
+            if (IsJWTSignatureTampered(userJwtToken) == false)
             {
                 var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
 
@@ -100,22 +101,18 @@ namespace ServiceLayer.Services
 
         public int GetUserIDFromToken(string jwtToken)
         {
-            if (!IsJWTSignatureTampered(jwtToken))
+            var jwt = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
+            var usersCurrClaims = jwt.Claims;
+            var userID = usersCurrClaims.First().Value;
+            try
             {
-                var jwt = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
-                var usersCurrClaims = jwt.Claims;
-                var userID = usersCurrClaims.First().Value;
-                try
-                {
-                    return Convert.ToInt32(userID);
-                }
-                catch (FormatException)
-                {
-                    //log
-                    return -1;
-                }
+                return Convert.ToInt32(userID);
             }
-            return -1;
+            catch (FormatException)
+            {
+                //log
+                return -1;
+            }
         }
 
         /// <summary>
@@ -166,8 +163,6 @@ namespace ServiceLayer.Services
                 // log
                 return claimsList;
             }
-
         }
-
     }
 }

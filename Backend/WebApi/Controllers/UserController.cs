@@ -20,7 +20,7 @@ namespace WebApi.Controllers
                 int result = pm.GetUserController(userID);
                 if (result == 1)
                 {
-                    return Content(HttpStatusCode.OK, pm.GetUserController(userID));
+                    return Content(HttpStatusCode.OK, pm.GetUserProfile(userID));
                 }
                 else if (result == -1)
                 {
