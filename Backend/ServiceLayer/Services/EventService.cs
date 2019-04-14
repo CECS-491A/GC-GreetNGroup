@@ -16,10 +16,18 @@ namespace ServiceLayer.Services
             _cryptoService = new CryptoService();
         }
 
+        /*
+         * The functions within this service make use of the database context
+         * and similarly attempt to catch
+         *      ObjectDisposedException
+         * to ensure the context is still valid and we want to catch the error
+         * where it has been made
+         *
+         */
+
         /// <summary>
         /// The following region inserts an event/event details into the event database
         /// </summary>
-
         #region Insert Event Information
 
         public bool InsertMadeEvent(Event e)
