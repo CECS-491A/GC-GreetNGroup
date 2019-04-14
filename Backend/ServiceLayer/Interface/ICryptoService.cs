@@ -8,7 +8,6 @@ namespace ServiceLayer.Interface
         string HashHMAC(string message);
         string GenerateToken();
         //Jonalyn
-        string HashSha256(string message);
         SigningCredentials GenerateJWTSignature();
     }
 }

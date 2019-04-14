@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using ServiceLayer.Interface;
+using DataAccessLayer.Context;
+using DataAccessLayer.Tables;
+using System.Collections.Generic;
 
 namespace ServiceLayer.Services
 {
@@ -11,10 +14,12 @@ namespace ServiceLayer.Services
         private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         RNGCryptoServiceProvider rng;
+        IGNGLoggerService _gngLoggerService;
 
         public CryptoService()
         {
             rng = new RNGCryptoServiceProvider();
+            _gngLoggerService = new GNGLoggerService();
         }
 
         public string HashHMAC(string message)
@@ -37,24 +42,6 @@ namespace ServiceLayer.Services
             rng.GetBytes(b);
             string hex = BitConverter.ToString(b).Replace("-", "");
             return hex;
-        }
-
-        public string HashSha256(string message)
-        {
-            using (var sha256 = new SHA256CryptoServiceProvider())
-            {
-                //First converts the uID into UTF8 byte encoding before hashing
-                var hashedUIDBytes =
-                    sha256.ComputeHash(Encoding.UTF8.GetBytes(message));
-                var hashToString = new StringBuilder(hashedUIDBytes.Length * 2);
-                foreach (byte b in hashedUIDBytes)
-                {
-                    hashToString.Append(b.ToString("X2"));
-                }
-
-                sha256.Dispose();
-                return hashToString.ToString();
-            }
         }
 
         public SigningCredentials GenerateJWTSignature()

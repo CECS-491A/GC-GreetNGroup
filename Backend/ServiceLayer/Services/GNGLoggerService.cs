@@ -91,7 +91,7 @@ namespace ServiceLayer.Services
             logIDMap.Add("FindEventForMe", 1011);
             logIDMap.Add("UserRatings", 1012);
             logIDMap.Add("EventJoined", 1013);
-            logIDMap.Add("ViewHistory", 1014);
+            logIDMap.Add("BadRequest", 1014);
             logIDMap.Add("EventDeleted", 1015);
             logIDMap.Add("EventExpired", 1016);
 
@@ -175,6 +175,45 @@ namespace ServiceLayer.Services
         }
 
         /// <summary>
+        /// Method LogGNGInternalErrors logs errors that occur on the backend of GNG. Any errors 
+        /// in logging will increment the error counter in the error handler. Should this continue to
+        /// cause errors, the system admin will be contacted with the error message.
+        /// </summary>
+        /// <param name="exception">The exception that was caught in string form</param>
+        /// <returns>Returns true or false if the log was successfully made or not</returns>
+        public bool LogGNGInternalErrors(string exception)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = "",
+                ipAddress = "",
+                dateTime = DateTime.Now.ToString(),
+                description = "Internal errors occurred: " + exception
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (Exception e) //Catch any exceptions caused
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
         /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
         /// </summary>
         /// <returns></returns>

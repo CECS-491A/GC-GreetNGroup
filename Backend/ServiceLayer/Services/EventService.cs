@@ -9,11 +9,17 @@ namespace ServiceLayer.Services
 {
     public class EventService
     {
-        ICryptoService _cryptoService;
+        private ICryptoService _cryptoService;
+        private IGNGLoggerService _gngLoggerService;
+        private int eventId;
+        private Dictionary<string, int> tagIds;
 
         public EventService()
         {
             _cryptoService = new CryptoService();
+            _gngLoggerService = new GNGLoggerService();
+            eventId = -1;
+            tagIds = GenerateEventTagIds();
         }
 
         /*
@@ -43,17 +49,17 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
 
-        public bool InsertEvent(string userId, int eventId, DateTime startDate, string eventName, 
-            string address, string city, string state, string zip, List<string> eventTags, string eventType)
+        public Event InsertEvent(int userId, DateTime startDate, string eventName, 
+            string address, string city, string state, string zip, List<string> eventTags, string eventDescription)
         {
-            bool isSuccessfulAdd = false;
-            int sequentialId = RetrieveUsersSequentialId(userId);
-            if (IsUserAtMaxEventCreation(sequentialId) == false && sequentialId != -1)
+            eventId++;
+            Event userEvent = null;
+            if (IsUserAtMaxEventCreation(userId) == false)
             {
                 try
                 {
@@ -61,23 +67,59 @@ namespace ServiceLayer.Services
 
                     using (var ctx = new GreetNGroupContext())
                     {
-                        var userEvent = new Event(sequentialId, eventId, startDate, eventName, eventLocation);
+                        userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
 
                         ctx.Events.Add(userEvent);
-
-                        ctx.SaveChanges();
-                        isSuccessfulAdd = true;
+                        if(InsertEventTags(eventTags, eventId) == true)
+                        {
+                            ctx.SaveChanges();
+                        }
+                        else
+                        {
+                            userEvent = null;
+                        }
                     }
-                    return isSuccessfulAdd;
+                    return userEvent;
                 }
                 catch (ObjectDisposedException od)
                 {
-                    // log
-                    return isSuccessfulAdd;
+                    _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                    return userEvent;
                 }
             }
             else
             {
+                return userEvent;
+            }
+            
+        }
+
+        public bool InsertEventTags(List<string> eventTags, int eventId)
+        {
+            bool isSuccessfulAdd = false;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var gngEvent = ctx.Events.Where(e => e.EventId.Equals(eventId)) as Event;
+                    foreach (string tag in eventTags)
+                    {
+                        if (tagIds.ContainsKey(tag))
+                        {
+                            var tagToAdd = ctx.Tags.Where(t => t.TagName.Equals(tag)) as Tag;
+                            var tagIdNum = tagToAdd.TagId;
+                            var eventTag = new EventTag(eventId, gngEvent, tagIdNum, tagToAdd);
+                            ctx.EventTags.Add(eventTag);
+                        }
+                    }
+                    ctx.SaveChanges();
+                    isSuccessfulAdd = true;
+                }
+                return isSuccessfulAdd;
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfulAdd;
             }
             
@@ -107,7 +149,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfullyUpdated;
             }
         }
@@ -129,7 +171,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfullyUpdated;
             }
         }
@@ -152,7 +194,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfullyUpdated;
             }
         }
@@ -182,7 +224,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfullyDeleted;
             }
 
@@ -205,7 +247,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -230,7 +272,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return e;
             }
         }
@@ -248,7 +290,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return e;
             }
         }
@@ -282,7 +324,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                //log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isAtMax;
             }
         }
@@ -294,72 +336,7 @@ namespace ServiceLayer.Services
         /// perform the CRUD functions for events
         /// </summary>
         #region Event Information Calculations
-        /// <summary>
-        /// Method RetrieveUsersSequentialId finds the users sequential id based on their
-        /// hashed id. Since SHA256 is a one-way encryption algorithm as of 2019.4.5, it is currently
-        /// not possible to decrypt such a hash and the only way to find the sequential id is to
-        /// compare hashes, which will take a hit in terms of runtime.
-        /// </summary>
-        /// <param name="hashedId">User's hashed id</param>
-        /// <returns>Returns integer value which is the user's sequential id</returns>
-        public int RetrieveUsersSequentialId(string hashedId)
-        {
-            int usersId = -1;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var userList = new List<User>();
-                    var usersInDB = ctx.Users;
-
-                    foreach (User u in usersInDB)
-                    {
-                        var uId = u.UserId.ToString();
-                        var hashedUId = _cryptoService.HashSha256(uId);
-                        if (hashedId.Equals(hashedUId))
-                        {
-                            usersId = u.UserId;
-                        }
-                    }
-
-                }
-                return usersId;
-            }
-            catch (ObjectDisposedException od)
-            {
-                //log
-                return usersId;
-            }
-
-        }
-
-        /// <summary>
-        /// Method EventIDGenerator references the answer given in
-        /// <https://stackoverflow.com/questions/15009423/way-to-generate-a-unique-number-that-does-not-repeat-in-a-reasonable-time>
-        /// We are using the answer provided by Patrick & Aaron Anodide because it will generate a unique ID
-        /// every time the method is called so long as it is not called multiple times at the exact same
-        /// tick. The answer provided allows the use of 26 alphabet characters and numbers 0-9 in the ID generator.
-        /// Since ticks are represented 64-bit number, the bytes must be converted to a Base 64 string
-        /// as not doing so will result in a lengthy ID. Since the original answer resulted in IDs with
-        /// some unique characters, the answer is slightly modified in this implementation to remove those
-        /// characters from the ID.
-        /// </summary>
-        /// <returns>Event id in string form</returns>
-        public string EventIDGenerator()
-        {
-            //Characters that appear in the byte sequence
-            char[] replace = new char[] { '+', '-', '/', '=' };
-            long ticks = DateTime.Now.Ticks;
-            byte[] bytes = BitConverter.GetBytes(ticks);
-            string id = Convert.ToBase64String(bytes);
-
-            foreach (char c in replace)
-            {
-                id = id.Replace(c.ToString(), String.Empty);
-            }
-            return id;
-        }
-
+        
         /// <summary>
         /// Method ParseAddress takes the separate address components of the event form and
         /// concatenates the components into one address to store in the database
@@ -373,6 +350,25 @@ namespace ServiceLayer.Services
         {
             return address + " " + city + ", " + state + " " + zip;
         }
+
+        public Dictionary<string, int> GenerateEventTagIds()
+        {
+            Dictionary<string, int> eventTagIds = new Dictionary<string, int>();
+            eventTagIds.Add("Outdoors", 1);
+            eventTagIds.Add("Indoors", 2);
+            eventTagIds.Add("Music", 3);
+            eventTagIds.Add("Games", 4);
+            eventTagIds.Add("Fitness", 5);
+            eventTagIds.Add("Art", 6);
+            eventTagIds.Add("Sports", 7);
+            eventTagIds.Add("Miscellaneous", 8);
+            eventTagIds.Add("Educational", 9);
+            eventTagIds.Add("Food", 10);
+            eventTagIds.Add("Discussion", 11);
+
+            return eventTagIds;
+        }
+
         #endregion
     }
 

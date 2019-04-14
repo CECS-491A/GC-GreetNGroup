@@ -123,7 +123,7 @@ namespace ManagerLayer.GNGLogManagement
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address of user</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogGNGEventsCreated(string usersID, string eventID, string ip)
+        public bool LogGNGEventsCreated(string usersID, int eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -342,7 +342,7 @@ namespace ManagerLayer.GNGLogManagement
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogGNGJoinEvent(string usersID, string eventID, string ip)
+        public bool LogGNGJoinEvent(string usersID, int eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -445,6 +445,222 @@ namespace ManagerLayer.GNGLogManagement
                 ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
                 description = "Event Searched for"
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogMaliciousAttack(string url, string ip, string usersID)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("MaliciousAttacks", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Malicious attack attempted at " + url
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogGNGEventUpdate(int eventId, string userHostId, string ip)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("EventUpdated", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = userHostId,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Event " + eventId + " updated"
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogGNGEventJoined(string joinedUserId, int eventId, string ip)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("EventJoined", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = joinedUserId,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "User " + joinedUserId + " joined event " + eventId
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogBadRequest(string usersID, string ip, string url, string exception)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("BadRequest", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = usersID,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Bad request at " + url + ": " + exception
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogGNGEventDeleted(string hostId, int eventId, string ip)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("EventDeleted", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = hostId,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Event " + eventId + " deleted"
+            };
+
+            logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogpath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+
+        public bool LogGNGEventExpiration(string hostId, int eventId, string ip)
+        {
+            _gngLoggerService.CreateNewLog();
+            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            bool logMade = false;
+            listOfIDs.TryGetValue("EventExpired", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = hostId,
+                ipAddress = ip,
+                dateTime = DateTime.Now.ToString(),
+                description = "Event " + eventId + " expired"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();

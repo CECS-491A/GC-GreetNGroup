@@ -8,13 +8,15 @@ namespace DataAccessLayer.Tables
     public class Event
     {
         public Event() {}
-        public Event(int userId, int eventId, DateTime startDate, string eventName, string eventLocation)
+        public Event(int userId, int eventId, DateTime startDate, string eventName, string eventLocation, string eventDescription)
         {
             UserId = userId;
             EventId = eventId;
             StartDate = startDate;
             EventName = eventName;
             EventLocation = eventLocation;
+            EventDescription = eventDescription;
+
         }
 
         [Required, ForeignKey("User")]
