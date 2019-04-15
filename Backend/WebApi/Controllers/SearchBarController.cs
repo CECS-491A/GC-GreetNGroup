@@ -1,11 +1,14 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using ServiceLayer.Services;
+using ManagerLayer.GNGLogManagement;
 
 namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
+        GNGLogManager gngLogManager = new GNGLogManager();
+
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
         /// </summary>
@@ -13,18 +16,19 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/searchEvent/{name}")]
-        public IHttpActionResult GetEventByName(string name)
+        public IHttpActionResult GetEventByName(string name, int userId, string ip, string url)
         {
             try
             {
                 if (name.Length < 0) Ok();
                 var eventService = new EventService();
                 var e = eventService.GetEventListByName(name);
+                gngLogManager.LogGNGSearchAction(userId.ToString(), name, ip);
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                // Add logging
+                gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
         }
@@ -36,18 +40,19 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/searchUser/{username}")]
-        public IHttpActionResult GetUserByEmail(string username)
+        public IHttpActionResult GetUserByEmail(string username, int userId, string ip, string url)
         {
             try
             {
                 if (username.Length < 0) Ok();
                 var userService = new UserService();
                 var e = userService.GetUserByUsername(username);
+                gngLogManager.LogGNGSearchAction(userId.ToString(), username, ip);
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                // Add logging
+                gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
         }

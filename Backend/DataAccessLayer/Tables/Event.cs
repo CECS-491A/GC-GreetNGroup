@@ -8,10 +8,9 @@ namespace DataAccessLayer.Tables
     public class Event
     {
         public Event() {}
-        public Event(int userId, int eventId, DateTime startDate, string eventName, string eventLocation, string eventDescription)
+        public Event(int userId, DateTime startDate, string eventName, string eventLocation, string eventDescription)
         {
             UserId = userId;
-            EventId = eventId;
             StartDate = startDate;
             EventName = eventName;
             EventLocation = eventLocation;
@@ -23,7 +22,7 @@ namespace DataAccessLayer.Tables
         public virtual int UserId { get; set; }
         public User User { get; set; }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EventId { get; set; }
 
         [Required]

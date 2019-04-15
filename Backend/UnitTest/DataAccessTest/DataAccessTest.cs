@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DataAccessLayer.Tables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer.Services;
@@ -109,6 +110,32 @@ namespace UnitTest.DataAccessTest
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestInsertNewEvent_Pass()
+        {
+            //Arrange
+            var userId = 1;
+            var eventName = "Testing Party";
+            var todaysDate = DateTime.Now;
+            var address = "123 Park Dr";
+            var city = "El Paso";
+            var state = "Texas";
+            var zip = "99999";
+            var description = "Hi";
+            EventService es = new EventService();
+            List<string> eventTags = new List<string>();
+            eventTags.Add("Indoors");
+            eventTags.Add("Music");
+            
+            //Act
+            Event actual = es.InsertEvent(userId, todaysDate, eventName, address, city, state, zip
+                , eventTags, description);
+
+            //Assert
+            Assert.IsNotNull(actual);
+
         }
 
         #endregion
