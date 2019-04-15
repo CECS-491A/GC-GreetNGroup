@@ -18,17 +18,18 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/event/{id}")]
-        public IHttpActionResult GetEventById(int id, string userId, string ip, string url)
+        public IHttpActionResult GetEventById(int id, int userId, string ip, string url)
         {
             try
             {
                 var eventService = new EventService();
                 var e = eventService.GetEventById(id);
+                gngLogManager.LogGNGSearchAction(userId.ToString(), id.ToString(), ip);
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
+                gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
         }

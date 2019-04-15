@@ -16,6 +16,11 @@ namespace ServiceLayer.Services
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
 
+        public GNGLoggerService()
+        {
+            _errorHandlerService = new ErrorHandlerService();
+        }
+
         /// <summary>
         /// Method CheckForExistingLog checks if a log for today already exists. If
         /// a log already exists for the current date, it will set the existing log as
@@ -87,7 +92,7 @@ namespace ServiceLayer.Services
             logIDMap.Add("InternalErrors", 1007);
             logIDMap.Add("MaliciousAttacks", 1008);
             logIDMap.Add("EventUpdated", 1009);
-            logIDMap.Add("SearchForUser", 1010);
+            logIDMap.Add("SearchAction", 1010);
             logIDMap.Add("FindEventForMe", 1011);
             logIDMap.Add("UserRatings", 1012);
             logIDMap.Add("EventJoined", 1013);
@@ -215,7 +220,7 @@ namespace ServiceLayer.Services
             }
             return logMade;
         }
-
+        /// <summary> 
         /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
         /// </summary>
         /// <returns></returns>

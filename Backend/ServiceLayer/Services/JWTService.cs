@@ -169,23 +169,5 @@ namespace ServiceLayer.Services
             }
         }
 
-        /// <summary>
-        /// Method GetUsersID finds the users id inside the jwt and returns it so that it
-        /// can be used for any operations that require the user id
-        /// </summary>
-        /// <param name="userJwtToken">Users jwt token as a string</param>
-        /// <returns>Return the sequential user id or null if the id cannot be found</returns>
-        public int GetUsersID(string userJwtToken)
-        {
-            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
-            //Take users claims since it holds the user id as a Value property
-            var usersClaims = jwt.Claims;
-            var uId = usersClaims.Select(u => u.Value).ToString();
-            //Attempts to parse the int from the string, return null if it cannot parse the string
-            Int32.TryParse(uId, out int uIdAsInt); 
-
-            return uIdAsInt;
-        }
-
     }
 }
