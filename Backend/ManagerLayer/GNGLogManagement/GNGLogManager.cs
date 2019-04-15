@@ -28,10 +28,10 @@ namespace ManagerLayer.GNGLogManagement
         /// </summary>
         /// <param name="startPoint">Starting URL</param>
         /// <param name="endPoint">Ending URL</param>
-        /// <param name="usersID">Hashed user ID (empty if user does not exist)</param>
+        /// <param name="usersID">user ID (empty if user does not exist)</param>
         /// <param name="ip">IP address of the user/guest</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogClicksMade(string startPoint, string endPoint, int usersID, string ip)
+        public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -73,12 +73,12 @@ namespace ManagerLayer.GNGLogManagement
         /// The error code and url of the error encountered will be tracked inside the log. If the
         /// log was failed to be made, it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID (empty if user does not exist)</param>
+        /// <param name="usersID">user ID (empty if user does not exist)</param>
         /// <param name="errorCode">Error code encountered</param>
         /// <param name="urlOfErr">URL of error encountered</param>
         /// <param name="ip">IP address of the user/guest</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogErrorsEncountered(int usersID, string errorCode, string urlOfErr, string errDesc, string ip)
+        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -119,11 +119,11 @@ namespace ManagerLayer.GNGLogManagement
         /// and user ID of the host will be tracked. If the log was failed to be made, 
         /// it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID</param>
+        /// <param name="usersID">user ID</param>
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address of user</param>
         /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogGNGEventsCreated(int usersID, int eventID, string ip)
+        public bool LogGNGEventsCreated(string usersID, int eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -164,11 +164,11 @@ namespace ManagerLayer.GNGLogManagement
         /// will keep track of the url that the user landed on as an entrypoint. If the log was failed to be made, 
         /// it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID (empty if not a registered user)</param>
+        /// <param name="usersID">user ID (empty if not a registered user)</param>
         /// <param name="urlEntered">URL entry point</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if log was successfully made</returns>
-        public bool LogEntryToWebsite(int usersID, string urlEntered, string ip)
+        public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -208,11 +208,11 @@ namespace ManagerLayer.GNGLogManagement
         /// URL outside of GreetNGroup. The log tracks the URL the user was last on before 
         /// exiting GreetNGroup. If the log was failed to be made, it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID (blank if user is not registered)</param>
+        /// <param name="usersID">user ID (blank if user is not registered)</param>
         /// <param name="urlOfExit">Last URL the user visited inside GreetNGroup</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogExitFromWebsite(int usersID, string urlOfExit, string ip)
+        public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -250,10 +250,10 @@ namespace ManagerLayer.GNGLogManagement
         /// <summary>
         /// Method LogAccountDeletion logs when a user deletes their GreetNGroup account.
         /// </summary>
-        /// <param name="usersID">Hashed user ID</param>
+        /// <param name="usersID">user ID</param>
         /// <param name="ip">IP address</param>
         /// <returns>Returns true or false if log was successfully made</returns>
-        public bool LogAccountDeletion(int usersID, string ip)
+        public bool LogAccountDeletion(string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -289,20 +289,20 @@ namespace ManagerLayer.GNGLogManagement
         }
 
         /// <summary>
-        /// Method LogGNGSearchForUser logs when a user searches for another user. The log
+        /// Method LogGNGSearchAction logs when a user searches for another user or event. The log
         /// tracks the search entry the user made. If the log was failed to be made, 
         /// it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID</param>
-        /// <param name="searchedUser">Search entry</param>
+        /// <param name="usersID">user ID</param>
+        /// <param name="searchedItem">Search entry</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogGNGSearchForUser(int usersID, string searchedUser, string ip)
+        public bool LogGNGSearchAction(string usersID, string searchedItem, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
             bool logMade = false;
-            listOfIDs.TryGetValue("SearchForUser", out int clickLogID);
+            listOfIDs.TryGetValue("SearchAction", out int clickLogID);
             string clickLogIDString = clickLogID.ToString();
             GNGLog log = new GNGLog
             {
@@ -310,7 +310,7 @@ namespace ManagerLayer.GNGLogManagement
                 userID = usersID,
                 ipAddress = ip,
                 dateTime = DateTime.Now.ToString(),
-                description = "User searched for " + searchedUser
+                description = "User searched for " + searchedItem
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -342,7 +342,7 @@ namespace ManagerLayer.GNGLogManagement
         /// <param name="eventID">Event ID</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogGNGJoinEvent(int usersID, int eventID, string ip)
+        public bool LogGNGJoinEvent(string usersID, int eventID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -383,11 +383,11 @@ namespace ManagerLayer.GNGLogManagement
         /// the rater and the ratee's user ID. If the log was failed to be made, 
         /// it will increment the errorCounter.
         /// </summary>
-        /// <param name="usersID">Hashed user ID of the rater</param>
-        /// <param name="ratedUserID">Hashed user ID of the ratee</param>
+        /// <param name="usersID">user ID of the rater</param>
+        /// <param name="ratedUserID">user ID of the ratee</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the logwas successfully made or not</returns>
-        public bool LogGNGUserRating(int usersID, string ratedUserID, string ip)
+        public bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -431,7 +431,7 @@ namespace ManagerLayer.GNGLogManagement
         /// <param name="usersID">Hahsed user ID</param>
         /// <param name="ip">IP Address</param>
         /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogGNGFindEventForMe(int usersID, string ip)
+        public bool LogGNGFindEventForMe(string usersID, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -467,7 +467,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogMaliciousAttack(string url, string ip, int usersID)
+        public bool LogMaliciousAttack(string url, string ip, string usersID)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -503,7 +503,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogGNGEventUpdate(int eventId, int userHostId, string ip)
+        public bool LogGNGEventUpdate(int eventId, string userHostId, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -539,7 +539,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogGNGEventJoined(int joinedUserId, int eventId, string ip)
+        public bool LogGNGEventJoined(string joinedUserId, int eventId, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -575,7 +575,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogBadRequest(int usersID, string ip, string url, string exception)
+        public bool LogBadRequest(string usersID, string ip, string url, string exception)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -611,7 +611,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogGNGEventDeleted(int hostId, int eventId, string ip)
+        public bool LogGNGEventDeleted(string hostId, int eventId, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
@@ -647,7 +647,7 @@ namespace ManagerLayer.GNGLogManagement
             return logMade;
         }
 
-        public bool LogGNGEventExpiration(int hostId, int eventId, string ip)
+        public bool LogGNGEventExpiration(string hostId, int eventId, string ip)
         {
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();

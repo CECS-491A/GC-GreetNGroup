@@ -234,8 +234,7 @@ import { error } from 'util';
                     zip: this.zip,
                     description: this.description,
                     date: new Date(this.date),
-                    startTime: new Date(this.startTime),
-                    selected: new Array(this.selected)
+                    startTime: new Date(this.startTime)
                 }
             },
             minDate () {
@@ -324,20 +323,21 @@ import { error } from 'util';
                 if(this.formHasErrors === false) {
                     var eventStartDateTime = new Date(this.form.date.getFullYear(), this.form.date.getMonth(), 
                     this.form.date.getDate(), this.form.startTime.getHours(), this.form.startTime.getMinutes());
-                }
-                var params = {
-                    userId: 1,
-                    startDate: eventStartDateTime,
-                    eventName: this.form.name,
-                    address: this.form.address,
-                    city: this.form.city,
-                    state: this.form.state,
-                    zip: this.form.zip,
-                    eventTags: this.form.selected,
-                    eventDescription: this.form.description,
-                    ip: this.form.ip
-                }
-                if(this.formHasErrors == false) {
+                    var eventTagsSelected = this.selected;
+
+                    var params = {
+                        userId: 1,
+                        startDate: eventStartDateTime,
+                        eventName: this.form.name,
+                        address: this.form.address,
+                        city: this.form.city,
+                        state: this.form.state,
+                        zip: this.form.zip,
+                        eventTags: eventTagsSelected,
+                        eventDescription: this.form.description,
+                        ip: this.ip
+                    }
+
                     axios.post("http://localhost:62008/api/event/createevent", params).then((response) => {
                         if(response != null) {
                             alert("Your event has been created! Redirecting.");
@@ -348,6 +348,7 @@ import { error } from 'util';
                             this.$router.push('Welcome');
                         }
                     }).catch(error => console.log(error));
+
                 }
             }
         }

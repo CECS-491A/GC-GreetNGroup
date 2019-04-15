@@ -92,7 +92,7 @@ namespace ServiceLayer.Services
             logIDMap.Add("InternalErrors", 1007);
             logIDMap.Add("MaliciousAttacks", 1008);
             logIDMap.Add("EventUpdated", 1009);
-            logIDMap.Add("SearchForUser", 1010);
+            logIDMap.Add("SearchAction", 1010);
             logIDMap.Add("FindEventForMe", 1011);
             logIDMap.Add("UserRatings", 1012);
             logIDMap.Add("EventJoined", 1013);
