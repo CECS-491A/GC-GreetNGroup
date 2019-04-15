@@ -6,7 +6,12 @@ namespace DataAccessLayer.Tables
     [Table("EventTag")]
     public class EventTag
     {
-        public EventTag() {}
+        public EventTag(int eventId, Event gngEvent, int tagId, Tag tag) {
+            EventId = eventId;
+            Event = gngEvent;
+            TagId = tagId;
+            Tag = tag;
+        }
 
         [Required, ForeignKey("Event"), Column(Order = 1), Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int EventId { get; set; }

@@ -1,7 +1,6 @@
 ﻿using System;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
-using ManagerLayer.JWTManagement;
 using DataAccessLayer.Tables;
 using ServiceLayer.Interface;
 
@@ -11,13 +10,13 @@ namespace ManagerLayer.LoginManagement
     {
         private ICryptoService _cryptoService;
         private IUserService _userService;
-        private JWTManager _JWTManager;
+        private IJWTService _jwtService;
 
         public LoginManager()
         {
             _cryptoService = new CryptoService();
-            _JWTManager = new JWTManager();
             _userService = new UserService();
+            _jwtService = new JWTService();
         }
 
         public string Login(SSOUserRequest request)
@@ -35,7 +34,7 @@ namespace ManagerLayer.LoginManagement
                 //Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return "https://greetngroup.com/home/" + _JWTManager.GrantToken(request.email).ToString();
+                    return "https://greetngroup.com/home/" + _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
                 }
                 else
                 {
@@ -51,7 +50,7 @@ namespace ManagerLayer.LoginManagement
                         false //IsActivated
                         );
                     _userService.InsertUser(createdUser); //Check for user acivation on home page
-                    return "https://greetngroup.com/home/" + _JWTManager.GrantToken(request.email).ToString();
+                    return _jwtService.CreateToken(request.email, createdUser.UserId);
                 }
             }
             return "-1";

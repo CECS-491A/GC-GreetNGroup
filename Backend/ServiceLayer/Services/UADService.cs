@@ -1,8 +1,6 @@
 ﻿using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
-using ServiceLayer.Interface;
-
 namespace ServiceLayer.Services
 {
     public class UADService : IUADService
@@ -13,7 +11,7 @@ namespace ServiceLayer.Services
         /// <param name="logs">list of logs</param>
         /// <param name="logID">log id that wants to be counted</param>
         /// <returns>returns an integer with the number of logs found</returns>
-        public int GetNumberofLogs(List<GNGLog> logs, string logID)
+        public int GetNumberofLogsID(List<GNGLog> logs, string logID)
         {
             int logcount = 0;
             for (int index = 0; index < logs.Count; index++)
@@ -25,7 +23,6 @@ namespace ServiceLayer.Services
             }
             return logcount;
         }
-
         /// <summary>
         /// Function that takes a list of logs and removes the logs not related to the specific month
         /// </summary>
@@ -100,12 +97,10 @@ namespace ServiceLayer.Services
             int pivot = usedCounts[left];
             while (true)
             {
-
                 while (usedCounts[left] < pivot)
                 {
                     left++;
                 }
-
                 while (usedCounts[right] > pivot)
                 {
                     right--;
@@ -120,13 +115,10 @@ namespace ServiceLayer.Services
                     logID[left] = logID[right];
                     logID[right] = tempID;
 
-                   
-
                     if (usedCounts[left] == usedCounts[right])
                     {
                         left++;
                     }
-                        
                 }
                 else
                 {
@@ -134,6 +126,7 @@ namespace ServiceLayer.Services
                 }
             }
         }
+
         /// <summary>
         /// Quicksort functions that sorts the average sessions times per page
         /// </summary>
@@ -143,6 +136,7 @@ namespace ServiceLayer.Services
         {
             PartitionDouble(sessiontimes, urls, 0, sessiontimes.Length - 1);
         }
+
         /// <summary>
         /// Function that partitions the list and orders it correctly
         /// </summary>
@@ -185,6 +179,7 @@ namespace ServiceLayer.Services
                 PartitionDouble(sessiontimes, urls, i, right);
             }
         }
+
         /// <summary>
         /// Function the calcualtes the average session time over the number of sessions
         /// </summary>
@@ -195,18 +190,21 @@ namespace ServiceLayer.Services
             double average = 0;
             double totalSessions = (session.Count) / 2;
             int totalTime = 0;
+            //Iterate list as pairs and find time difference for each pair
             for(int i = 1; i < session.Count;)
             {
                 DateTime end = DateTime.Parse(session[i - 1].dateTime);
                 DateTime beginning = DateTime.Parse(session[i].dateTime);
                 TimeSpan duration = end - beginning;
+                //Convert time to minutes
                 totalTime = totalTime + (int)duration.TotalMinutes;
                 i = i + 2;
             }
+            //Calculate the average time 
             average = totalTime / totalSessions;
-            
             return average;
         }
+
         /// <summary>
         /// Functions that removes logs without the specified string and keeps only entrence logs
         /// </summary>
@@ -214,6 +212,7 @@ namespace ServiceLayer.Services
         /// <param name="url">specific url</param>
         public void GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
+            //For every log check to see if the urls dont match
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 string[] words = logs[i].description.Split(' ');
@@ -223,6 +222,7 @@ namespace ServiceLayer.Services
                 }
             }
         }
+
         /// <summary>
         /// Functions that removes logs without the specified string and keeps only the exit logs
         /// </summary>
@@ -230,13 +230,16 @@ namespace ServiceLayer.Services
         /// <param name="url">specific url</param>
         public void GetExitLogswithURL(List<GNGLog> logs, string url)
         {
+            //For everylog find the exit point to the website
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 string logID = logs[i].logID;
+                //Check if its not logID 1001 or 1005
                 if(string.Compare(logID, "1001") != 0 && string.Compare(logID, "1005") != 0)
                 {
                         logs.Remove(logs[i]);
                 }
+                //Check to see if the url of the log doesnt match with the passed url
                 if (string.Compare(logID, "1001") == 0)
                 {
                     string[] word1001 = logs[i].description.Split(' ');
@@ -245,6 +248,7 @@ namespace ServiceLayer.Services
                         logs.Remove(logs[i]);
                     }
                 }
+                //Check to see if the url when the user logs off doesnt matches the passed url
                 if (string.Compare(logID, "1005") == 0)
                 {
                     string[] word1005 = logs[i].description.Split(' ');
@@ -254,7 +258,32 @@ namespace ServiceLayer.Services
                     }
                 }
             }
-
         }
+
+        /// <summary>
+        /// Functions that removes logs without the specified string and keeps only the exit logs
+        /// </summary>
+        /// <param name="logs">List of logs</param>
+        /// <param name="url">specific url</param>
+        public string ValidateInput(string month)
+        {
+            string result = "fail";
+            List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber" };
+            if (string.IsNullOrEmpty(month))
+            {
+                return result;
+            }
+            month.ToLower();
+            month = char.ToUpper(month[0]) + month.Substring(1);
+            for(int i = 0; i < months.Count; i++)
+            {
+                if(month.CompareTo(months[i]) == 0)
+                {
+                    result = month;
+                }
+            }
+            return result;
+        }
+
     }
 }

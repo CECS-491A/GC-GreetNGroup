@@ -4,7 +4,8 @@
     {
         int GetErrorOcurrenceCount();
         void IncrementErrorOccurrenceCount(string errorMessage);
-        void ContactSystemAdmin(string errorMessage);
+        void ResetErrorCount(string errorMessage);
+        string ContactSystemAdmin();
         bool IsErrorCounterAtMax();
     }
 }

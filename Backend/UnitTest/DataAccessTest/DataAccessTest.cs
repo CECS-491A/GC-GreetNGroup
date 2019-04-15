@@ -20,6 +20,7 @@ namespace UnitTest.DataAccessTest
 
         #region Pass Tests
 
+        // Attempts to retrieve an Event object from the database
         [TestMethod]
         public void TestRetrieveEvent()
         {
@@ -46,10 +47,13 @@ namespace UnitTest.DataAccessTest
             var eventTime = DateTime.Parse("10/20/2020");
             var eventName = "Pizza Party";
             var place = "CSULB";
-            var newEvent = new Event(UserId1, EventId1, eventTime, expected, place);
+            var newEvent = new Event(UserId1, EventId1, eventTime, expected, place, "");
 
             eventService.InsertMadeEvent(newEvent);
             var foundEvent = eventService.GetEventById(EventId1);
+
+            // Cleanup
+            userService.DeleteUser(user);
 
             Assert.AreEqual(expected, foundEvent.EventName);
         }
@@ -106,9 +110,42 @@ namespace UnitTest.DataAccessTest
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
         #endregion
 
         #region Fail Tests
+
+        // Attempts to add an existing user to the database 
+        [TestMethod]
+        public void TestInsertUserFail_Duplicate()
+        {
+            // Arrange 
+            const bool expected = false;
+            var actual = true;
+            var initial = false;
+            UserService userService = new UserService();
+
+            // Act
+            var firstName = "Example";
+            var lastName = "Set";
+            var userName = "e.e@fakemail.com";
+            var city = "Long Beach";
+            var state = "California";
+            var country = "United States";
+            var dob = DateTime.Parse("09/19/1999");
+
+            var user = new User(UserId1, firstName, lastName, userName, city, state, country, dob, true);
+            // Creates initial user
+            initial = userService.InsertUser(user);
+            // Attempts to duplicate user
+            actual = userService.InsertUser(user);
+
+            // Cleans up database of test data
+            if (initial) userService.DeleteUser(user);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
         #endregion
     }
 }
