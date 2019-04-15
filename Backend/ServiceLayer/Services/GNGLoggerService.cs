@@ -16,6 +16,11 @@ namespace ServiceLayer.Services
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
 
+        public GNGLoggerService()
+        {
+            _errorHandlerService = new ErrorHandlerService();
+        }
+
         /// <summary>
         /// Method CheckForExistingLog checks if a log for today already exists. If
         /// a log already exists for the current date, it will set the existing log as
@@ -87,11 +92,11 @@ namespace ServiceLayer.Services
             logIDMap.Add("InternalErrors", 1007);
             logIDMap.Add("MaliciousAttacks", 1008);
             logIDMap.Add("EventUpdated", 1009);
-            logIDMap.Add("SearchForUser", 1010);
+            logIDMap.Add("SearchAction", 1010);
             logIDMap.Add("FindEventForMe", 1011);
             logIDMap.Add("UserRatings", 1012);
             logIDMap.Add("EventJoined", 1013);
-            logIDMap.Add("ViewHistory", 1014);
+            logIDMap.Add("BadRequest", 1014);
             logIDMap.Add("EventDeleted", 1015);
             logIDMap.Add("EventExpired", 1016);
 
@@ -155,6 +160,75 @@ namespace ServiceLayer.Services
             List<GNGLog> logList = new List<GNGLog>();
             DirectoryInfo di = new DirectoryInfo(LOGS_FOLDERPATH);
             string[] dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
+            foreach (string dir in dirs)
+            {
+                if (new FileInfo(dir).Length != 0)
+                {
+                    using (StreamReader r = new StreamReader(dir))
+                    {
+                        string jsonFile = r.ReadToEnd();
+                        //Retrieve Current Logs
+                        List<GNGLog> logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                        for (int index = 0; index < logs.Count; index++)
+                        {
+                            logList.Add(logs[index]);
+                        }
+                    }
+                }
+            }
+            return logList;
+        }
+
+        /// <summary>
+        /// Method LogGNGInternalErrors logs errors that occur on the backend of GNG. Any errors 
+        /// in logging will increment the error counter in the error handler. Should this continue to
+        /// cause errors, the system admin will be contacted with the error message.
+        /// </summary>
+        /// <param name="exception">The exception that was caught in string form</param>
+        /// <returns>Returns true or false if the log was successfully made or not</returns>
+        public bool LogGNGInternalErrors(string exception)
+        {
+            CreateNewLog();
+            bool logMade = false;
+            listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
+            string clickLogIDString = clickLogID.ToString();
+            GNGLog log = new GNGLog
+            {
+                logID = clickLogIDString,
+                userID = "",
+                ipAddress = "",
+                dateTime = DateTime.Now.ToString(),
+                description = "Internal errors occurred: " + exception
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+            try
+            {
+                using (StreamWriter file = File.CreateText(currentLogPath))
+                {
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    logMade = true;
+                    file.Close();
+                }
+            }
+            catch (Exception e) //Catch any exceptions caused
+            {
+                logMade = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return logMade;
+        }
+        /// <summary> 
+        /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
+        /// </summary>
+        /// <returns></returns>
+        public List<GNGLog> ReadLogsPath(string path)
+        {
+            List<GNGLog> logList = new List<GNGLog>();
+            DirectoryInfo di = new DirectoryInfo(path);
+            string[] dirs = Directory.GetFiles(path, "*.json");
             foreach (string dir in dirs)
             {
                 if (new FileInfo(dir).Length != 0)

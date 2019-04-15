@@ -53,11 +53,11 @@ namespace UnitTest.GNGLoggerTest
         public void LogLogGNGEventsCreated()
         {
             GNGLogManager logManager = new GNGLogManager();
-            string userID = "1";
-            string eventID = "1";
+            int userID = 1;
+            int eventID = 1;
             string ipAddress = "1.1.1.1";
             bool actual = true;
-            actual = logManager.LogGNGEventsCreated(userID, eventID, ipAddress);
+            actual = logManager.LogGNGEventsCreated(userID.ToString(), eventID, ipAddress);
 
             Assert.AreEqual(actual, true);
         }

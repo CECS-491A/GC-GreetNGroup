@@ -7,6 +7,15 @@ namespace ServiceLayer.Services
 {
     public class ClaimService
     {
+        /*
+         * The functions within this service make use of the database context
+         * and similarly attempt to catch
+         *      ObjectDisposedException
+         * to ensure the context is still valid and we want to catch the error
+         * where it has been made
+         *
+         */
+
         /// <summary>
         /// This region handles inserting claim information into the database
         /// </summary>
@@ -25,7 +34,7 @@ namespace ServiceLayer.Services
                     ctx.SaveChanges();
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException od) // check for context availability : should pass
             {
                 // log
             }
@@ -34,7 +43,7 @@ namespace ServiceLayer.Services
         #endregion
 
         /// <summary>
-        /// This region checks user information in the database
+        /// This region checks for Claim information in the database
         /// </summary>
         #region Claim Information Check
 
@@ -56,6 +65,9 @@ namespace ServiceLayer.Services
 
         #endregion
 
+        /// <summary>
+        /// This region removes Claims from the database
+        /// </summary>
         #region Delete Claim Information
 
         public void DeleteClaimById(int claimId)

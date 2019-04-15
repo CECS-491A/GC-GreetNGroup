@@ -12,6 +12,7 @@ namespace ServiceLayer.Interface
         string GetLogsFolderpath();
         string GetLogsExtentionName();
         string GetCurrentLogPath();
+        bool LogGNGInternalErrors(string exception);
         Dictionary<string, int> GetLogIDs();
     }
 }

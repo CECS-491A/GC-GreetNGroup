@@ -14,16 +14,18 @@ namespace ServiceLayer.Services
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
         private SigningCredentials credentials;
         private ICryptoService _cryptoService;
+        private IGNGLoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
 
         public JWTService()
         {
             _cryptoService = new CryptoService();
+            _gngLoggerService = new GNGLoggerService();
             credentials = _cryptoService.GenerateJWTSignature();
             tokenHandler = new JwtSecurityTokenHandler();
         }
 
-        public string CreateToken(string username, string hashedUID)
+        public string CreateToken(string username, int uId)
         {
             var usersClaims = RetrieveClaims(username);
             var securityClaimsList = new List<System.Security.Claims.Claim>();
@@ -31,7 +33,7 @@ namespace ServiceLayer.Services
             //Takes the claims the user has and puts it in a list of Security Claims objects
             foreach (DataAccessLayer.Tables.Claim c in usersClaims)
             {
-                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, hashedUID));
+                securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, uId.ToString()));
             }
 
             var jwt = new JwtSecurityToken(
@@ -158,11 +160,14 @@ namespace ServiceLayer.Services
                     return claimsList;
                 }
             }
-            catch (ObjectDisposedException e)
+            // Exception caught specifically as it is used in the event that the context 
+            // doesnt exist or is broken or fails to dispose
+            catch (ObjectDisposedException od) 
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;
             }
         }
+
     }
 }

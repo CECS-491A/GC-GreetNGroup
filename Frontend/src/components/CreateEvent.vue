@@ -9,7 +9,7 @@
                     ref="name"
                     v-model="name"
                     :rules="[() => !!name || 'This field is required',
-                            () => !!name && name.length <= 50 || 'Title must be less than 50 characters', titleCheck
+                            () => !!name && name.length < 50 || 'Title must be less than 50 characters', titleCheck
                             ]"
                     :error-messages="errorMessages"
                     label="Event Title"
@@ -53,6 +53,15 @@
                     required
                     placeholder="79938"
                 ></v-text-field>
+                <v-textarea
+                    ref="description"
+                    v-model="description"
+                    :rules="[() => description.length < 250 || 'Description must be less than 250 characters']"
+                    :error-messages="errorMessages"
+                    label="Event Description (Optional)"
+                    placeholder="Bring your own beverages!"
+                    counter="250"
+                ></v-textarea>
                 <v-menu
                     ref="menu"
                     v-model="menu"
@@ -142,9 +151,9 @@
                             <v-checkbox v-model="selected" label="Outdoors" value="Outdoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Indoors" value="Indoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Music" value="Music"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Video Games" value="Games"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Games" value="Games"></v-checkbox>
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Arts and Crafts" value="Art"></v-checkbox>
+                            <v-checkbox v-model="selected" label="Art" value="Art"></v-checkbox>
                             <v-checkbox v-model="selected" label="Sports" value="Sports"></v-checkbox>
                             <v-checkbox v-model="selected" label="Miscellaneous" value="Miscellaneous"></v-checkbox>
                             <v-checkbox v-model="selected" label="Educational" value="Educational"></v-checkbox>
@@ -193,6 +202,8 @@
 <script>
 /* eslint-disable */
     var todaysDate = new Date();
+    import axios from 'axios'
+import { error } from 'util';
 
     export default {
         name: 'create-event',
@@ -203,13 +214,15 @@
         city: null,
         state: null,
         zip: null,
+        description: '',
         date: null,
         menu: false,
         timeMenu: false,
         dialog: false,
         startTime: null,
         formHasErrors: false,
-        selected: []
+        selected: new Array(),
+        ip: ''
         }),
         computed: {
             form () {
@@ -219,9 +232,9 @@
                     city: this.city,
                     state: this.state,
                     zip: this.zip,
-                    date: new Date().toISOString().substr(0, 10),
-                    startTime: new Date().toISOString(),
-                    selected: []
+                    description: this.description,
+                    date: new Date(this.date),
+                    startTime: new Date(this.startTime)
                 }
             },
             minDate () {
@@ -247,7 +260,13 @@
                 return timeString;
             }
         },
-
+        mounted () {
+            axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
+                this.ip = result.data.origin;
+            }, error => {
+                console.error(error);
+            });
+        },
         watch: {
             name () {
                 this.errorMessages = ''
@@ -295,13 +314,42 @@
             })
             },
             submit () {
-            this.formHasErrors = false
+                this.formHasErrors = false
+                Object.keys(this.form).forEach(f => {
+                    if (!this.form[f]) this.formHasErrors = true
 
-            Object.keys(this.form).forEach(f => {
-                if (!this.form[f]) this.formHasErrors = true
+                    this.$refs[f].validate(true)
+                })
+                if(this.formHasErrors === false) {
+                    var eventStartDateTime = new Date(this.form.date.getFullYear(), this.form.date.getMonth(), 
+                    this.form.date.getDate(), this.form.startTime.getHours(), this.form.startTime.getMinutes());
+                    var eventTagsSelected = this.selected;
 
-                this.$refs[f].validate(true)
-            })
+                    var params = {
+                        userId: 1,
+                        startDate: eventStartDateTime,
+                        eventName: this.form.name,
+                        address: this.form.address,
+                        city: this.form.city,
+                        state: this.form.state,
+                        zip: this.form.zip,
+                        eventTags: eventTagsSelected,
+                        eventDescription: this.form.description,
+                        ip: this.ip
+                    }
+
+                    axios.post("http://localhost:62008/api/event/createevent", params).then((response) => {
+                        if(response != null) {
+                            alert("Your event has been created! Redirecting.");
+                            this.$router.push('Welcome');
+                        }
+                        else {
+                            alert("There was a problem creating your event. Redirecting.");
+                            this.$router.push('Welcome');
+                        }
+                    }).catch(error => console.log(error));
+
+                }
             }
         }
     }
