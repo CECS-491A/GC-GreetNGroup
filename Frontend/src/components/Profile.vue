@@ -37,7 +37,7 @@
     <br />
     <h1>Birthday: {{this.json.DoB}}</h1>
     <br />
-    <h1>Residence: {{this.json.city + ', ' + this.json.State + ', ' + this.json.Country}}</h1>
+    <h1>Residence: {{this.json.City + ', ' + this.json.State + ', ' + this.json.Country}}</h1>
     <br />
   </div>
 </template>
@@ -59,7 +59,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: 'http://localhost:62008/api/user/' + this.userID,
+      url: 'https://api.greetngroup.com/api/user/' + this.userID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -73,20 +73,22 @@ export default {
   },
   methods: {
     submitRating: function (value) {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:62008/api/user/' + this.userID + '/rate',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        data: {
-          jwtToken: this.localStorage.getItem('Token'),
-          rating: value
-        }
-      })
-        .then(response => (this.json = response.data))
-        .catch(e => { this.errorMessage = e.response.data })
+      if (store.isLoggedIn === true) {
+        axios({
+          method: 'POST',
+          url: 'http://localhost:62008/api/user/' + this.userID + '/rate',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+          },
+          data: {
+            jwtToken: this.localStorage.getItem('Token'),
+            rating: value
+          }
+        })
+          .then(response => (this.json = response.data))
+          .catch(e => { this.errorMessage = e.response.data })
+      }
     } 
   }
 }
@@ -94,6 +96,7 @@ export default {
 
 <style>
 .Profile{
+  text-align: left;
   width: 70%;
   margin: 1px auto;
 }
