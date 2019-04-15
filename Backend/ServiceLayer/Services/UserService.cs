@@ -10,10 +10,12 @@ namespace ServiceLayer.Services
     public class UserService : IUserService
     {
         private ICryptoService _cryptoService;
+        private IGNGLoggerService _gngLoggerService;
 
         public UserService()
         {
             _cryptoService = new CryptoService();
+            _gngLoggerService = new GNGLoggerService();
         }
 
         /*
@@ -54,7 +56,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -66,6 +68,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Update User Information
         
+        // Updates user by replacing user object in database with new user object with updated fields
         public bool UpdateUser(User updatedUser)
         {
             try
@@ -84,11 +87,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
         
+        // Updates city information on user
         public bool UpdateUserCity(int uId, string city)
         {
             try
@@ -107,11 +111,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
 
+        // Updates state information of user
         public bool UpdateUserState(int uId, string state)
         {
             try
@@ -130,7 +135,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -142,6 +147,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Delete User Information
 
+        // Retrieves and deletes user from database
         public bool DeleteUser(User userToDelete)
         {
             try
@@ -161,7 +167,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -173,6 +179,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region User Information Check
 
+        // Finds username by string and returns true if found
         public bool IsUsernameFound(string username)
         {
             try
@@ -184,11 +191,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
 
+        // Finds the username by uId returns true if found
         public bool IsUsernameFoundById(int uId)
         {
             try
@@ -202,7 +210,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -214,6 +222,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region User Information Retrieval
 
+        // Returns User found by username string
         public int GetUserUid(string username)
         {
             try
@@ -226,11 +235,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return -1;
             }
         }
 
+        // Returns list of claims given a username string
         public List<Claim> GetUsersClaims(string username)
         {
             List<Claim> claimsList = new List<Claim>();
@@ -249,11 +259,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;
             }
         }
 
+        // Returns count of registered users
         public int GetRegisteredUserCount()
         {
             int count = 0;
@@ -268,11 +279,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return count;
             }
         }
 
+        // Returns user found via username string
         public User GetUserByUsername(string username)
         {
             try
@@ -286,11 +298,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return null;
             }
         }
 
+        // Returns user based on userId found
         public User GetUserById(int userID)
         {
             try
@@ -308,11 +321,12 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return null;
             }
         }
 
+        // Finds the next available userId
         public int GetNextUserID()
         {
             try
@@ -323,9 +337,9 @@ namespace ServiceLayer.Services
                     return user.UserId + 1;
                 }
             }
-            catch
+            catch (ObjectDisposedException od)
             {
-                //log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return 1;
             }
         }
