@@ -6,11 +6,9 @@ namespace DataAccessLayer.Tables
     [Table("EventTag")]
     public class EventTag
     {
-        public EventTag(int eventId, Event gngEvent, int tagId, Tag tag) {
+        public EventTag(int eventId, int tagId) {
             EventId = eventId;
-            Event = gngEvent;
             TagId = tagId;
-            Tag = tag;
         }
 
         [Required, ForeignKey("Event"), Column(Order = 1), Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
