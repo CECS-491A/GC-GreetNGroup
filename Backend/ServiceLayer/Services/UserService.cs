@@ -146,19 +146,28 @@ namespace ServiceLayer.Services
         /// The following region handles deletion of data from the user table in the database
         /// </summary>
         #region Delete User Information
-
-        // Retrieves and deletes user from database
+        
+        /*
+         * For our application, the DeleteUser function is made to set user values to null
+         * apart from UserId and userName which is used as reference 
+         */
         public bool DeleteUser(User userToDelete)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    /*
+                     * User(int uId, string firstName, string lastName, string userName, string city,
+                        string state, string country, DateTime dob, bool isActivated)
+                     */
                     var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userToDelete.UserId));
-
+                    var blankUser = new User(user.UserId, null, null, "User has been deleted", null, null,
+                                            null, null, null, false);
                     if (user != null)
                     {
-                        ctx.Users.Remove(user);
+                        //ctx.Users.Remove(user);
+                        user = blankUser;
                         ctx.SaveChanges();
                         return true;
                     }
