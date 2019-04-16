@@ -2,6 +2,7 @@
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
@@ -15,7 +16,12 @@ namespace ServiceLayer.Services
          * where it has been made
          *
          */
+        private IGNGLoggerService _gngLoggerService;
 
+        public ClaimService()
+        {
+            _gngLoggerService = new GNGLoggerService();
+        }
         /// <summary>
         /// This region handles inserting claim information into the database
         /// </summary>
