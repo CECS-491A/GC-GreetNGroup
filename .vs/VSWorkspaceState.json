@@ -9,6 +9,6 @@
     "\\Backend\\UnitTest",
     "\\Backend\\UnitTest\\DataAccessTest"
   ],
-  "SelectedNode": "\\Backend\\ServiceLayer\\Services\\UserService.cs",
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }
