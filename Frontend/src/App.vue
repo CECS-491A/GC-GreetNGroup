@@ -4,8 +4,8 @@
       <v-toolbar-title class = "NavigationToolBar">
         <span class="font-weight-light">GreetNGroup</span>
         <div>
-          <router-link to="/Search">Search</router-link>
-          <router-link to="/HelloWorld">HelloPage</router-link>
+          <router-link to="/search">Search</router-link>
+          <router-link to="/helloworld">HelloPage</router-link>
           <router-link to="/testlogin">Login</router-link>
           <router-link to="/analysisdashboard">User Analysis</router-link>
         </div>

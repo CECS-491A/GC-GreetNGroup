@@ -73,22 +73,20 @@ export default {
   },
   methods: {
     submitRating: function (value) {
-      if (store.isLoggedIn === true) {
-        axios({
-          method: 'POST',
-          url: 'http://localhost:62008/api/user/' + this.userID + '/rate',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true
-          },
-          data: {
-            jwtToken: this.localStorage.getItem('Token'),
-            rating: value
-          }
-        })
-          .then(response => (this.json = response.data))
-          .catch(e => { this.errorMessage = e.response.data })
-      }
+      axios({
+        method: 'POST',
+        url: 'http://localhost:62008/api/user/' + this.userID + '/rate',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          jwtToken: this.localStorage.getItem('Token'),
+          rating: value
+        }
+      })
+        .then(response => (this.json = response.data))
+        .catch(e => { this.errorMessage = e.response.data })
     } 
   }
 }
