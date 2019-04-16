@@ -2,8 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\UnitTest"
+    "\\Backend\\DataAccessLayer",
+    "\\Backend\\DataAccessLayer\\Tables",
+    "\\Backend\\ServiceLayer",
+    "\\Backend\\ServiceLayer\\Services",
+    "\\Backend\\UnitTest",
+    "\\Backend\\UnitTest\\DataAccessTest"
   ],
-  "SelectedNode": "\\Backend\\Backend.sln",
+  "SelectedNode": "\\Backend\\ServiceLayer\\Services\\UserService.cs",
   "PreviewInSolutionExplorer": false
 }
