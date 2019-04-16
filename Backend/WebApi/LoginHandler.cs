@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,12 @@ using ServiceLayer.Requests;
 
 namespace WebApi
 {
+    class launchResponse
+    {
+        [Required]
+        public string redirectURL { get; set; }
+    }
+
     public class LoginHandler : DelegatingHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
@@ -33,9 +40,11 @@ namespace WebApi
             }
             else
             {
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.Redirect)
+                var returnedRedirectURL = new launchResponse();
+                returnedRedirectURL.redirectURL = response;
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StringContent(response)
+                    Content = new StringContent(JsonConvert.SerializeObject(returnedRedirectURL))
                 };
                 var tsc = new TaskCompletionSource<HttpResponseMessage>();
                 tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
