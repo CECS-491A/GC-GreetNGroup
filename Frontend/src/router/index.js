@@ -11,6 +11,7 @@ import Profile from '@/components/Profile'
 import UpdateProfile from '@/components/UpdateProfile'
 import Home from '@/components/Home'
 import Welcome from '@/components/Welcome'
+import Logout from '@/components/Logout'
 // import Axios from 'axios'
 
 Vue.use(Router)
@@ -75,6 +76,11 @@ const router = new Router({
       path: '/updateprofile',
       name: 'UpdateProfile',
       component: UpdateProfile
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout
     }
   ]
 })
