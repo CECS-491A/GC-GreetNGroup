@@ -131,9 +131,7 @@ namespace UnitTest.DataAccessTest
             // Assert
             Assert.AreEqual(expected, foundEvent.EventName);
         }
-        #endregion
 
-        #region Insert Tests
         /// <summary>
         /// Adds a user into the database and checks if user exists inside the table
         /// Database is cleaned afterwards with a deletion of the inserted user
@@ -164,8 +162,10 @@ namespace UnitTest.DataAccessTest
             // Assert
             Assert.AreEqual(expected, actual);
         }
-        
+
+        /// <summary>
         /// Creates claim and tests if claim exists in db
+        /// </summary>
         [TestMethod]
         public void TestInsertClaimPass()
         {
@@ -211,7 +211,11 @@ namespace UnitTest.DataAccessTest
 
         }
 
-        #endregion
+        [TestMethod]
+        public void InsertEventTags_Pass()
+        {
+
+        }
 
         #endregion
 

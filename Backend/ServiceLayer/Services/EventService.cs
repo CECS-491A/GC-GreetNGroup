@@ -72,7 +72,7 @@ namespace ServiceLayer.Services
                             userEvent = null;
                         }
                         eventId++;
-                        Environment.SetEnvironmentVariable("EventId", eventId.ToString());
+                        Environment.SetEnvironmentVariable("EventId", eventId.ToString(), EnvironmentVariableTarget.User);
                     }
                     return userEvent;
                 }
