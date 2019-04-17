@@ -2,6 +2,7 @@
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
@@ -15,12 +16,18 @@ namespace ServiceLayer.Services
          * where it has been made
          *
          */
+        private IGNGLoggerService _gngLoggerService;
 
+        public ClaimService()
+        {
+            _gngLoggerService = new GNGLoggerService();
+        }
         /// <summary>
         /// This region handles inserting claim information into the database
         /// </summary>
         #region Insert Claim Information
 
+        // Inserts claim with corresponding claim id into database
         public void InsertClaim(int claimId, string claimName)
         {
             try
@@ -36,7 +43,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od) // check for context availability : should pass
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
             }
         }
 
@@ -47,6 +54,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Claim Information Check
 
+        // Checks if claim exists within the database given claimId
         public bool IsClaimInTable(int claimId)
         {
             try
@@ -58,7 +66,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
@@ -70,6 +78,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Delete Claim Information
 
+        // Removes claim from database given proper claimId
         public void DeleteClaimById(int claimId)
         {
             try
@@ -85,7 +94,7 @@ namespace ServiceLayer.Services
             }
             catch (ObjectDisposedException od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
             }
         }
 

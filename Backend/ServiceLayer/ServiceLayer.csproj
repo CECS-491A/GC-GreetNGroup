@@ -85,6 +85,7 @@
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\EventTagService.cs" />
     <Compile Include="Services\GNGArchiverService.cs" />
     <Compile Include="Services\GNGLoggerService.cs" />
     <Compile Include="Interface\IUADService.cs" />
