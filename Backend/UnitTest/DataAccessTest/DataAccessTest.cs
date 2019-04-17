@@ -219,6 +219,8 @@ namespace UnitTest.DataAccessTest
 
         #endregion
 
+        #endregion
+
         #region Fail Tests
 
         // Attempts to add an existing user to the database 
