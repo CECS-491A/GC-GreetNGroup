@@ -3,12 +3,15 @@
     "",
     "\\Backend",
     "\\Backend\\DataAccessLayer",
-    "\\Backend\\DataAccessLayer\\Tables",
+    "\\Backend\\ManagerLayer",
+    "\\Backend\\ManagerLayer\\LoginManagement",
+    "\\Backend\\ManagerLayer\\ProfileManagement",
     "\\Backend\\ServiceLayer",
-    "\\Backend\\ServiceLayer\\Services",
     "\\Backend\\UnitTest",
-    "\\Backend\\UnitTest\\DataAccessTest"
+    "\\Backend\\UnitTest\\UADTest",
+    "\\Backend\\WebApi",
+    "\\Backend\\WebApi\\Controllers"
   ],
-  "SelectedNode": "\\Backend\\Backend.sln",
+  "SelectedNode": "\\Backend\\UnitTest\\DataAccessTest\\DataAccessTest.cs",
   "PreviewInSolutionExplorer": false
 }
