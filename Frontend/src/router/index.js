@@ -12,6 +12,7 @@ import UpdateProfile from '@/components/UpdateProfile'
 import Home from '@/components/Home'
 import Welcome from '@/components/Welcome'
 import Logout from '@/components/Logout'
+import EventPage from '@/components/EventPage'
 // import Axios from 'axios'
 
 Vue.use(Router)
@@ -81,6 +82,11 @@ const router = new Router({
       path: '/logout',
       name: 'logout',
       component: Logout
+    },
+    {
+      path: '/eventpage/:name',
+      name: 'eventpage',
+      component: EventPage
     }
   ]
 })
