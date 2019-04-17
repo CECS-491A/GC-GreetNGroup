@@ -3,13 +3,15 @@
     <v-toolbar app dark>
       <v-toolbar-title class = "NavigationToolBar">
         <span class="font-weight-light">GreetNGroup</span>
-        <div>
-          <router-link to="/Search">Search</router-link>
-          <router-link to="/HelloWorld">HelloPage</router-link>
-          <router-link to="/testlogin">Login</router-link>
-          <router-link to="/analysisdashboard">User Analysis</router-link>
-        </div>
+        <v-spacer></v-spacer>
       </v-toolbar-title>
+      <div>
+          <v-btn to="/Search">Search</v-btn>
+          <v-btn to="/HelloWorld">HelloPage</v-btn>
+          <v-btn to="/testlogin">Login</v-btn>
+          <v-btn to="/analysisdashboard">User Analysis</v-btn>
+          <v-btn to="/logout"> Log Out</v-btn>
+        </div>
     </v-toolbar>
     <div id="app">
       <router-view/>
