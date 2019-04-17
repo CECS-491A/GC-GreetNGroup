@@ -9,17 +9,14 @@ namespace ServiceLayer.Services
 {
     public class EventService
     {
-        private ICryptoService _cryptoService;
         private IGNGLoggerService _gngLoggerService;
-        private int eventId;
         private Dictionary<string, int> tagIds;
-
+        private int eventId;
         public EventService()
         {
-            _cryptoService = new CryptoService();
             _gngLoggerService = new GNGLoggerService();
-            eventId = -1;
             tagIds = GenerateEventTagIds();
+            Int32.TryParse(Environment.GetEnvironmentVariable("EventId", EnvironmentVariableTarget.User), out eventId);
         }
 
         /*
@@ -57,7 +54,6 @@ namespace ServiceLayer.Services
         public Event InsertEvent(int userId, DateTime startDate, string eventName, 
             string address, string city, string state, string zip, List<string> eventTags, string eventDescription)
         {
-            eventId++;
             Event userEvent = null;
             if (IsUserAtMaxEventCreation(userId) == false)
             {
@@ -70,14 +66,13 @@ namespace ServiceLayer.Services
                         userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
 
                         ctx.Events.Add(userEvent);
-                        if(InsertEventTags(eventTags, eventId) == true)
-                        {
-                            ctx.SaveChanges();
-                        }
-                        else
+                        ctx.SaveChanges();
+                        if(InsertEventTags(eventTags, userEvent.EventId) == false)
                         {
                             userEvent = null;
                         }
+                        eventId++;
+                        Environment.SetEnvironmentVariable("EventId", eventId.ToString());
                     }
                     return userEvent;
                 }
@@ -101,12 +96,12 @@ namespace ServiceLayer.Services
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var gngEvent = ctx.Events.Where(e => e.EventId.Equals(eventId)) as Event;
+                    var gngEvent = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eventId));
                     foreach (string tag in eventTags)
                     {
                         if (tagIds.ContainsKey(tag))
                         {
-                            var tagToAdd = ctx.Tags.Where(t => t.TagName.Equals(tag)) as Tag;
+                            var tagToAdd = ctx.Tags.FirstOrDefault(t => t.TagName.Equals(tag));
                             var tagIdNum = tagToAdd.TagId;
                             var eventTag = new EventTag(eventId, gngEvent, tagIdNum, tagToAdd);
                             ctx.EventTags.Add(eventTag);

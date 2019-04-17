@@ -4,12 +4,40 @@ using ServiceLayer.Services;
 using ManagerLayer.GNGLogManagement;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Controllers
 {
     public class EventController : ApiController
     {
+        public class EventCreationRequest
+        {
+            [Required]
+            public int userId { get; set; }
+            [Required]
+            public DateTime startDate { get; set; }
+            [Required]
+            public string eventName { get; set; }
+            [Required]
+            public string address { get; set; }
+            [Required]
+            public string city { get; set; }
+            [Required]
+            public string state { get; set; }
+            [Required]
+            public string zip { get; set; }
+            [Required]
+            public List<string> eventTags { get; set; }
+            public string eventDescription { get; set; }
+            [Required]
+            public string ip { get; set; }
+            [Required]
+            public string url { get; set; }
+
+        }
+
         GNGLogManager gngLogManager = new GNGLogManager();
+        EventService eventService = new EventService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -36,21 +64,20 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/event/createevent")]
-        public IHttpActionResult CreateNewEvent(int userId, DateTime startDate, string eventName,
-            string address, string city, string state, string zip, List<string> eventTags, string eventDescription,
-            string ip, string url)
+        public IHttpActionResult CreateNewEvent([FromBody] EventCreationRequest request)
         {
             try
             {
-                EventService eventService = new EventService();
-                var newEvent = eventService.InsertEvent(userId, startDate, eventName, address, city, state, zip, eventTags, eventDescription);
+                var newEvent = eventService.InsertEvent(request.userId, request.startDate, request.eventName,
+                    request.address, request.city, request.state, request.zip, 
+                    request.eventTags, request.eventDescription);
                 var eventId = newEvent.EventId;
-                gngLogManager.LogGNGEventsCreated(userId.ToString(), eventId, ip);
+                gngLogManager.LogGNGEventsCreated(request.userId.ToString(), eventId, request.ip);
                 return Ok(newEvent);
             }
             catch(HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
+                gngLogManager.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
                 return BadRequest();
             }
 

@@ -53,6 +53,7 @@ namespace ManagerLayer.ArchiverManager
                         }
 
                     }
+                    fstream.Close();
                 }
 
             }

@@ -57,7 +57,6 @@
                     ref="description"
                     v-model="description"
                     :rules="[() => description.length < 250 || 'Description must be less than 250 characters']"
-                    :error-messages="errorMessages"
                     label="Event Description (Optional)"
                     placeholder="Bring your own beverages!"
                     counter="250"
@@ -221,7 +220,7 @@ import { error } from 'util';
         dialog: false,
         startTime: null,
         formHasErrors: false,
-        selected: new Array(),
+        selected: [],
         ip: ''
         }),
         computed: {
@@ -233,8 +232,8 @@ import { error } from 'util';
                     state: this.state,
                     zip: this.zip,
                     description: this.description,
-                    date: new Date(this.date),
-                    startTime: new Date(this.startTime)
+                    date: this.date,
+                    startTime: this.startTime
                 }
             },
             minDate () {
@@ -321,31 +320,33 @@ import { error } from 'util';
                     this.$refs[f].validate(true)
                 })
                 if(this.formHasErrors === false) {
-                    var eventStartDateTime = new Date(this.form.date.getFullYear(), this.form.date.getMonth(), 
-                    this.form.date.getDate(), this.form.startTime.getHours(), this.form.startTime.getMinutes());
+                    var eventStartTime = this.form.startTime.split(':');
+                    var eventDate = this.form.date.split('-');
+                    var eventStartDateTime = new Date(eventDate[0], eventDate[1], 
+                    eventDate[2], eventStartTime[0], eventStartTime[1]);
                     var eventTagsSelected = this.selected;
 
-                    var params = {
-                        userId: 1,
-                        startDate: eventStartDateTime,
-                        eventName: this.form.name,
-                        address: this.form.address,
-                        city: this.form.city,
-                        state: this.form.state,
-                        zip: this.form.zip,
-                        eventTags: eventTagsSelected,
-                        eventDescription: this.form.description,
-                        ip: this.ip
-                    }
-
-                    axios.post("http://localhost:62008/api/event/createevent", params).then((response) => {
+                    axios.post("http://localhost:62008/api/event/createevent",
+                        {
+                            userId: 1,
+                            startDate: eventStartDateTime,
+                            eventName: this.form.name,
+                            address: this.form.address,
+                            city: this.form.city,
+                            state: this.form.state,
+                            zip: this.form.zip,
+                            eventTags: eventTagsSelected,
+                            eventDescription: this.form.description,
+                            ip: this.ip,
+                            url: "http://www.greetngroup.com/CreateEvent"
+                        }).then((response) => {
                         if(response != null) {
                             alert("Your event has been created! Redirecting.");
-                            this.$router.push('Welcome');
+                            this.$router.push('/');
                         }
                         else {
                             alert("There was a problem creating your event. Redirecting.");
-                            this.$router.push('Welcome');
+                            this.$router.push('/');
                         }
                     }).catch(error => console.log(error));
 
