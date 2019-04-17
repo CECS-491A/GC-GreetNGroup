@@ -108,7 +108,7 @@ namespace ServiceLayer.Services
                         {
                             var tagToAdd = ctx.Tags.Where(t => t.TagName.Equals(tag)) as Tag;
                             var tagIdNum = tagToAdd.TagId;
-                            var eventTag = new EventTag(eventId, gngEvent, tagIdNum, tagToAdd);
+                            var eventTag = new EventTag(eventId, tagIdNum);
                             ctx.EventTags.Add(eventTag);
                         }
                     }
@@ -206,7 +206,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Delete Event Information
 
-        public bool DeleteEvent(string eId)
+        public bool DeleteEvent(int eId)
         {
             bool isSuccessfullyDeleted = false;
 

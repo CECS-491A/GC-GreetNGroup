@@ -9,7 +9,7 @@ using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
 {
-    class EventTagService
+    public class EventTagService
     {
         private IGNGLoggerService _gngLoggerService;
 
