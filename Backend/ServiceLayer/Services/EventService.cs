@@ -201,7 +201,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Delete Event Information
 
-        public bool DeleteEvent(string eId)
+        public bool DeleteEvent(int eId)
         {
             bool isSuccessfullyDeleted = false;
 

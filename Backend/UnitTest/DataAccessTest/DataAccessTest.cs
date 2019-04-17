@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataAccessLayer.Tables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer.Services;
@@ -11,22 +12,93 @@ namespace UnitTest.DataAccessTest
     {
         #region Testable Required Fields
 
-        private const int UserId1 = 50;
-        private const int UserId2 = 52;
-        private const int UserId3 = 53;
-        private const int CId = 30;
-        private const int EventId1 = 60;
+        private const int UserId1 = 40;     // unused UId
+        private const int TId1 = 2;         // indoor tag
+        private const int TId2 = 10;        // food tag
+        private const int CId = 30;         // claim id
+        private const int EventId1 = 60;    // unused EventId
 
         #endregion
 
         #region Pass Tests
+
+        #region Retrieve Tests
+
+        [TestMethod]
+        public void TestInsertEventTags()
+        {
+            EventTagService eventTagService = new EventTagService();
+            EventService eventService = new EventService();
+
+            //List<string> tags = new List<string>() {"Indoors", "Food"};
+            //var test = eventService.InsertEventTags(tags, 1);
+
+            eventTagService.InsertEventTag(1, 10);
+            eventTagService.InsertEventTag(1, 2);
+
+            eventTagService.DeleteEventTag(1, 10);
+            eventTagService.DeleteEventTag(1, 2);
+        }
+
+        [TestMethod]
+        public void TestRetrieveEventTags()
+        {
+            // Arrange
+            List<string> expected = new List<string> {"Indoors", "Food"};
+            List<string> actual;
+            const bool desiredResult = true;
+            var result = false;
+            EventTagService eventTagService = new EventTagService();
+            EventService eventService = new EventService();
+            UserService userService = new UserService();
+
+            // Act
+
+            // Creates temp user
+            var firstName = "Example";
+            var lastName = "Set";
+            var userName = "e.e@fakemail.com";
+            var city = "Long Beach";
+            var state = "California";
+            var country = "United States";
+            var dob = DateTime.Parse("09/19/1999");
+
+            var user = new User(UserId1, firstName, lastName, userName, city, state, country, dob, true);
+            userService.InsertUser(user);
+
+            // Creates temp event
+            var eventTime = DateTime.Parse("5/20/2028");
+            var eventName = "TestIn Party";
+            var place = "CSULB";
+            var newEvent = new Event(UserId1, EventId1, eventTime, eventName, place, "");
+
+            eventService.InsertMadeEvent(newEvent);
+            var foundEvent = eventService.GetEventById(EventId1);
+
+            // Adds event Tags to event
+            eventTagService.InsertEventTag(EventId1, TId1);
+            eventTagService.InsertEventTag(EventId1, TId2);
+
+            // Test
+            actual = eventTagService.ReturnEventTagsOfEvent(EventId1);
+            if (!expected.Except(actual).Any()) result = true;
+
+            // Cleanup
+            userService.DeleteUser(user);
+            eventTagService.DeleteEventTag(EventId1, TId1);
+            eventTagService.DeleteEventTag(EventId1, TId2);
+            if (foundEvent != null) eventService.DeleteEvent(EventId1);
+
+            // Assert
+            Assert.AreEqual(desiredResult, result);
+        }
 
         // Attempts to retrieve an Event object from the database
         [TestMethod]
         public void TestRetrieveEvent()
         {
             // Arrange
-            const string expected = "Pizza Party";
+            const string expected = "TestIn Party";
             EventService eventService = new EventService();
             UserService userService = new UserService();
 
@@ -45,8 +117,7 @@ namespace UnitTest.DataAccessTest
             userService.InsertUser(user);
 
             // Creates temp event under the user
-            var eventTime = DateTime.Parse("10/20/2020");
-            var eventName = "Pizza Party";
+            var eventTime = DateTime.Parse("5/20/2028");
             var place = "CSULB";
             var newEvent = new Event(UserId1, EventId1, eventTime, expected, place, "");
 
@@ -55,7 +126,9 @@ namespace UnitTest.DataAccessTest
 
             // Cleanup
             userService.DeleteUser(user);
+            if (foundEvent != null) eventService.DeleteEvent(EventId1);
 
+            // Assert
             Assert.AreEqual(expected, foundEvent.EventName);
         }
 
@@ -143,6 +216,8 @@ namespace UnitTest.DataAccessTest
         {
 
         }
+
+        #endregion
 
         #endregion
 
