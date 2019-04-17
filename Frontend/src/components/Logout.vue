@@ -11,8 +11,9 @@ export default {
     }
   },
   created () {
-    this.localStorage.setItem('Token', null)
-    this.$router.push('/home')
+    localStorage.setItem('Token', null)
+    alert('You have been logged out')
+    this.$router.push('/')
   }
 }
 </script>

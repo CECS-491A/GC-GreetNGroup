@@ -63,6 +63,7 @@
 
 <script>
 import axios from 'axios'
+import { apiURL } from '@/const.js'
 
 export default {
   name: 'UpdateProfile',
@@ -84,7 +85,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: 'https://api.greetngroup.com/api/user/update/getuser',
+      url: `${apiURL}` + 'user/update/getuser',
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -100,7 +101,7 @@ export default {
     UpdateProfile: function () {
       axios({
         method: 'GET',
-        url: 'https://api.greetngroup.com/api/user/update/getuser',
+        url: `${apiURL}` + 'user/update',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true

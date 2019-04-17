@@ -16,7 +16,7 @@
     >
     {{errorMessage}}
     </v-alert>
-    <div v-if="!userRetrieved">
+  <div v-if="!userRetrieved">
   <h1>Finding user</h1>
   </div>
   <div v-if="userRetrieved">
@@ -40,7 +40,7 @@
     <br />
     <h1>Birthday: {{this.json.DoB}}</h1>
     <br />
-    <h1>Residence: {{this.json.City + ', ' + this.json.State + ', ' + this.json.Country}}</h1>
+    <h1>Residence: {{this.json.city + ', ' + this.json.State + ', ' + this.json.Country}}</h1>
     <br />
     </div>
   </div>
@@ -66,7 +66,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: 'https://api.greetngroup.com/api/user/' + this.userID,
+      url: `${apiURL}/user/` + this.userID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -82,7 +82,7 @@ export default {
     submitRating: function (value) {
       axios({
         method: 'POST',
-        url: 'http://localhost:62008/api/user/' + this.userID + '/rate',
+        url: `${apiURL}/user/` + this.userID + '/rate',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
@@ -101,7 +101,6 @@ export default {
 
 <style>
 .Profile{
-  text-align: left;
   width: 70%;
   margin: 1px auto;
 }
