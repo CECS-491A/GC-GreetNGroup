@@ -33,6 +33,7 @@
                     ref="city"
                     v-model="city"
                     :rules="[() => !!city || 'This field is required', addressCheck]"
+                    :error-messages="errorMessages"
                     label="City"
                     placeholder="El Paso"
                     required
@@ -41,6 +42,7 @@
                     ref="state"
                     v-model="state"
                     :rules="[() => !!state || 'This field is required', addressCheck]"
+                    :error-messages="errorMessages"
                     label="State/Province/Region"
                     required
                     placeholder="TX"
@@ -49,6 +51,7 @@
                     ref="zip"
                     v-model="zip"
                     :rules="[() => !!zip || 'This field is required', addressCheck]"
+                    :error-messages="errorMessages"
                     label="ZIP / Postal Code"
                     required
                     placeholder="79938"
@@ -79,6 +82,7 @@
                             label="Date of Event"
                             prepend-icon="event"
                             :rules="[() => !!date || 'This field is required']"
+                            :error-messages="errorMessages"
                             readonly
                             required
                             v-on="on"
@@ -116,6 +120,7 @@
                             label="Time of Event"
                             prepend-icon="access_time"
                             :rules="[() => !!startTime || 'This field is required']"
+                            :error-messages="errorMessages"
                             readonly
                             required
                             v-on="on"
@@ -261,7 +266,8 @@ import { error } from 'util';
         },
         mounted () {
             axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
-                this.ip = result.data.origin;
+                var ipAddr = result.data.origin.split(',');
+                this.ip = ipAddr[0];
             }, error => {
                 console.error(error);
             });
@@ -285,7 +291,7 @@ import { error } from 'util';
             date () {
                 this.errorMessages = ''
             },
-            time () {
+            startTime () {
                 this.errorMessages = ''
             }
         },
@@ -322,8 +328,9 @@ import { error } from 'util';
                 if(this.formHasErrors === false) {
                     var eventStartTime = this.form.startTime.split(':');
                     var eventDate = this.form.date.split('-');
-                    var eventStartDateTime = new Date(eventDate[0], eventDate[1], 
-                    eventDate[2], eventStartTime[0], eventStartTime[1]);
+                    var properMonth = parseInt(eventDate[1]) - 1;
+                    var eventStartDateTime = new Date(Date.UTC(eventDate[0], properMonth.toString(), 
+                    eventDate[2], eventStartTime[0], eventStartTime[1]));
                     var eventTagsSelected = this.selected;
 
                     axios.post("http://localhost:62008/api/event/createevent",
