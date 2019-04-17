@@ -21,13 +21,13 @@ namespace ServiceLayer.Services
         #region Insert Tag Information
 
         // Inserts EventTag into the database, creates a link between an event and a tag
-        public bool InsertEventTag(int tagId, int eventId)
+        public bool InsertEventTag(int eventId, int tagId)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    EventTag newTag = new EventTag(tagId, eventId);
+                    EventTag newTag = new EventTag(eventId, tagId);
                     ctx.EventTags.Add(newTag);
                     ctx.SaveChanges();
                     return true;
@@ -74,13 +74,13 @@ namespace ServiceLayer.Services
         #region Delete Tag Information
 
         // Removes pair of tagId and eventId where values match in database
-        public bool DeleteEventTag(int tagId, int eventId)
+        public bool DeleteEventTag(int eventId, int tagId)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    EventTag foundTag = ctx.EventTags.FirstOrDefault(t => t.TagId.Equals(tagId) && t.EventId.Equals(eventId));
+                    var foundTag = ctx.EventTags.FirstOrDefault(t => t.EventId.Equals(eventId) && t.TagId.Equals(tagId));
 
                     if (foundTag != null)
                     {

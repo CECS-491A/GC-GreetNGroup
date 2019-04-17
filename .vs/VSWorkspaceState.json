@@ -9,9 +9,8 @@
     "\\Backend\\ServiceLayer",
     "\\Backend\\UnitTest",
     "\\Backend\\UnitTest\\UADTest",
-    "\\Backend\\WebApi",
-    "\\Backend\\WebApi\\Controllers"
+    "\\Backend\\WebApi"
   ],
-  "SelectedNode": "\\Backend\\UnitTest\\DataAccessTest\\DataAccessTest.cs",
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }

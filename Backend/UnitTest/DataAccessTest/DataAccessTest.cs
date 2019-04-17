@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataAccessLayer.Tables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer.Services;
@@ -29,11 +30,14 @@ namespace UnitTest.DataAccessTest
             EventTagService eventTagService = new EventTagService();
             EventService eventService = new EventService();
 
-            List<string> tags = new List<string>() {"Indoors", "Food"};
-            var test = eventService.InsertEventTags(tags, 88);
+            //List<string> tags = new List<string>() {"Indoors", "Food"};
+            //var test = eventService.InsertEventTags(tags, 1);
 
-            //eventTagService.InsertEventTag(1, TId1);
-            //eventTagService.InsertEventTag(1, TId2);
+            eventTagService.InsertEventTag(1, 10);
+            eventTagService.InsertEventTag(1, 2);
+
+            eventTagService.DeleteEventTag(1, 10);
+            eventTagService.DeleteEventTag(1, 2);
         }
 
         [TestMethod]
