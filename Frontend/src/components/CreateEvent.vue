@@ -57,7 +57,6 @@
                     ref="description"
                     v-model="description"
                     :rules="[() => description.length < 250 || 'Description must be less than 250 characters']"
-                    :error-messages="errorMessages"
                     label="Event Description (Optional)"
                     placeholder="Bring your own beverages!"
                     counter="250"
@@ -233,7 +232,7 @@ import { error } from 'util';
                     state: this.state,
                     zip: this.zip,
                     description: this.description,
-                    date: new Date(),
+                    date: this.date,
                     startTime: this.startTime
                 }
             },
@@ -322,8 +321,9 @@ import { error } from 'util';
                 })
                 if(this.formHasErrors === false) {
                     var eventStartTime = this.form.startTime.split(':');
-                    var eventStartDateTime = new Date(this.form.date.getFullYear(), this.form.date.getMonth(), 
-                    this.form.date.getDate(), eventStartTime[0], eventStartTime[1]);
+                    var eventDate = this.form.date.split('-');
+                    var eventStartDateTime = new Date(eventDate[0], eventDate[1], 
+                    eventDate[2], eventStartTime[0], eventStartTime[1]);
                     var eventTagsSelected = this.selected;
 
                     axios.post("http://localhost:62008/api/event/createevent",
@@ -342,11 +342,11 @@ import { error } from 'util';
                         }).then((response) => {
                         if(response != null) {
                             alert("Your event has been created! Redirecting.");
-                            this.$router.push('Welcome');
+                            this.$router.push('/');
                         }
                         else {
                             alert("There was a problem creating your event. Redirecting.");
-                            this.$router.push('Welcome');
+                            this.$router.push('/');
                         }
                     }).catch(error => console.log(error));
 

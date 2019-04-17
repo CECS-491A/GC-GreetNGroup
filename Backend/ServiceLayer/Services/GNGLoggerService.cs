@@ -57,11 +57,14 @@ namespace ServiceLayer.Services
             string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
             if (logExists == false)
             {
-
                 try
                 {
-                    var newLog = File.Create(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
-                    currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
+                    using (var fileStream = new FileStream(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER,
+                    FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+                    {
+                        currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
+                        fileStream.Close();
+                    }
                 }
                 //Catch IOException esxplicitly when it fails to create a log
                 //Let other errors bubble up

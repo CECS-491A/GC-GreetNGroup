@@ -37,6 +37,7 @@ namespace WebApi.Controllers
         }
 
         GNGLogManager gngLogManager = new GNGLogManager();
+        EventService eventService = new EventService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -67,7 +68,6 @@ namespace WebApi.Controllers
         {
             try
             {
-                EventService eventService = new EventService();
                 var newEvent = eventService.InsertEvent(request.userId, request.startDate, request.eventName,
                     request.address, request.city, request.state, request.zip, 
                     request.eventTags, request.eventDescription);

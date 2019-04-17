@@ -1,15 +1,19 @@
 ﻿using ServiceLayer.Interface;
+using System;
 
 namespace ServiceLayer.Services
 {
     public class ErrorHandlerService : IErrorHandlerService
     {
         private int errorCount;
+        
         private string errorMsg;
 
         public ErrorHandlerService()
         {
-            errorCount = 0;
+            //Using an environment variable to store amount of errors caused
+            //So processes calling error functions properly increment the counter
+            Int32.TryParse(Environment.GetEnvironmentVariable("ErrorCounter", EnvironmentVariableTarget.User), out errorCount);
         }
 
         /// <summary>
@@ -21,6 +25,7 @@ namespace ServiceLayer.Services
         {
             errorMsg = errorMessage;
             errorCount = 0;
+            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString());
         }
 
         /// <summary>
@@ -47,7 +52,8 @@ namespace ServiceLayer.Services
         public void IncrementErrorOccurrenceCount(string errorMessage)
         {
             errorCount++;
-            if(IsErrorCounterAtMax() == true)
+            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString());
+            if (IsErrorCounterAtMax() == true)
             {
                 ResetErrorCount(errorMessage);
             }

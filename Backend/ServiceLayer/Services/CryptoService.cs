@@ -12,6 +12,7 @@ namespace ServiceLayer.Services
     public class CryptoService: ICryptoService
     {
         private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
+        private readonly string jwtSignatureSecretKey = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
 
         RNGCryptoServiceProvider rng;
         IGNGLoggerService _gngLoggerService;

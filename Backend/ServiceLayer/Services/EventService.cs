@@ -9,15 +9,14 @@ namespace ServiceLayer.Services
 {
     public class EventService
     {
-        private ICryptoService _cryptoService;
         private IGNGLoggerService _gngLoggerService;
         private Dictionary<string, int> tagIds;
-
+        private int eventId;
         public EventService()
         {
-            _cryptoService = new CryptoService();
             _gngLoggerService = new GNGLoggerService();
             tagIds = GenerateEventTagIds();
+            Int32.TryParse(Environment.GetEnvironmentVariable("EventId", EnvironmentVariableTarget.User), out eventId);
         }
 
         /*
@@ -64,7 +63,7 @@ namespace ServiceLayer.Services
 
                     using (var ctx = new GreetNGroupContext())
                     {
-                        userEvent = new Event(userId, startDate, eventName, eventLocation, eventDescription);
+                        userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
 
                         ctx.Events.Add(userEvent);
                         ctx.SaveChanges();
@@ -72,6 +71,8 @@ namespace ServiceLayer.Services
                         {
                             userEvent = null;
                         }
+                        eventId++;
+                        Environment.SetEnvironmentVariable("EventId", eventId.ToString());
                     }
                     return userEvent;
                 }
