@@ -8,6 +8,7 @@
 
 <script>
 import axios from 'axios'
+import { apiURL } from '@/const.js'
 
 export default {
   name: 'HelloWorld',
@@ -19,7 +20,8 @@ export default {
     }
   },
   mounted () {
-    axios.get('https://api.greetngroup.com/api/hello/').then(response => (this.info = response.data))
+    axios.get(`${apiURL}/helloworld/hello`).then(response => (this.info = response.data))
+    console.log(process.env.VUE_APP_API_URL)
   }
 }
 </script>

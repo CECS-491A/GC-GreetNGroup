@@ -11,6 +11,7 @@ import Profile from '@/components/Profile'
 import UpdateProfile from '@/components/UpdateProfile'
 import Home from '@/components/Home'
 import Welcome from '@/components/Welcome'
+import Logout from '@/components/Logout'
 // import Axios from 'axios'
 
 Vue.use(Router)
@@ -25,36 +26,36 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Welcome',
+      name: 'welcome',
       component: Welcome
-    },
-    {
-      path: '/Search',
-      name: 'Search',
-      component: SearchPage
-    },
-    {
-      path: '/CreateEvent',
-      name: 'CreateEvent',
-      component: CreateEvent
-    },
-    {
-      path: '/testlogin',
-      name: 'TestLogin',
-      component: TestLogin
-    },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
     },
     {
       path: '*',
       component: PageNotFound
     },
     {
+      path: '/search',
+      name: 'search',
+      component: SearchPage
+    },
+    {
+      path: '/createevent',
+      name: 'createevent',
+      component: CreateEvent
+    },
+    {
+      path: '/testlogin',
+      name: 'testlogin',
+      component: TestLogin
+    },
+    {
+      path: '/helloworld',
+      name: 'helloworld',
+      component: HelloWorld
+    },
+    {
       path: '/analysisdashboard',
-      name: 'UserAnalysisDashboard',
+      name: 'useranalysisdashboard',
       component: AnalysisDashboard,
       meta: {
         isLoggedIn: true,
@@ -63,18 +64,23 @@ const router = new Router({
     },
     {
       path: '/profile/:id',
-      name: 'Profile',
+      name: 'profile',
       component: Profile
     },
     {
-      path: '/Home/:token',
-      name: 'Home',
+      path: '/home/:token',
+      name: 'home',
       component: Home
     },
     {
       path: '/updateprofile',
-      name: 'UpdateProfile',
+      name: 'updateprofile',
       component: UpdateProfile
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout
     }
   ]
 })
