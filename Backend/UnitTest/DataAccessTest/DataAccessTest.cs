@@ -25,22 +25,6 @@ namespace UnitTest.DataAccessTest
         #region Retrieve Tests
 
         [TestMethod]
-        public void TestInsertEventTags()
-        {
-            EventTagService eventTagService = new EventTagService();
-            EventService eventService = new EventService();
-
-            //List<string> tags = new List<string>() {"Indoors", "Food"};
-            //var test = eventService.InsertEventTags(tags, 1);
-
-            eventTagService.InsertEventTag(1, 10);
-            eventTagService.InsertEventTag(1, 2);
-
-            eventTagService.DeleteEventTag(1, 10);
-            eventTagService.DeleteEventTag(1, 2);
-        }
-
-        [TestMethod]
         public void TestRetrieveEventTags()
         {
             // Arrange
