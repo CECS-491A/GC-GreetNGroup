@@ -72,7 +72,7 @@ namespace ServiceLayer.Services
                             userEvent = null;
                         }
                         eventId++;
-                        Environment.SetEnvironmentVariable("EventId", eventId.ToString());
+                        Environment.SetEnvironmentVariable("EventId", eventId.ToString(), EnvironmentVariableTarget.User);
                     }
                     return userEvent;
                 }
@@ -103,7 +103,7 @@ namespace ServiceLayer.Services
                         {
                             var tagToAdd = ctx.Tags.FirstOrDefault(t => t.TagName.Equals(tag));
                             var tagIdNum = tagToAdd.TagId;
-                            var eventTag = new EventTag(eventId, gngEvent, tagIdNum, tagToAdd);
+                            var eventTag = new EventTag(eventId, tagIdNum);
                             ctx.EventTags.Add(eventTag);
                         }
                     }

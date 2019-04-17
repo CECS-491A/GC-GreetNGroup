@@ -163,7 +163,7 @@ namespace ServiceLayer.Services
                      */
                     var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userToDelete.UserId));
                     var blankUser = new User(user.UserId, null, null, "User has been deleted", null, null,
-                                            null, null, null, false);
+                                            null, DateTime.Now, false);
                     if (user != null)
                     {
                         //ctx.Users.Remove(user);
