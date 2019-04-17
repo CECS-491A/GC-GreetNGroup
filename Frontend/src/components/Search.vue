@@ -86,37 +86,60 @@ export default {
       errorInSearch: '',
       searchFilter: ['Users', 'Events'],
       filter: 'Events',
+      ip: '',
+      url: '',
       pageturner: false,
       pageStart: 0,
       pageEnd: 5,
       pageLimit: 5
     }
   },
+  mounted () {
+    axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
+        var ipAddr = result.data.origin.split(',');
+        this.ip = ipAddr[0];
+    }, error => {
+        console.error(error);
+    });
+  },
   methods: {
+    // Determines which field to search under
     checkSearchFilter: function (i) {
       if (i === 'Users') return true
       return false
     },
+    // Determines if there is a search query
     checkInput: function (i) {
       if (i !== '') return true
       return false
     },
+    // Finds events by partial name match
     findEventsByName: function (i) {
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchEvent/' + i)// build version -> 'https://api.greetngroup.com/api/searchEvent/' + i)
+      axios.get('http://localhost:62008/api/searchEvent/' + i, 
+      { 
+        ip: this.ip,
+        url: 'http://localhost:62008/api/searchEvent/' + i
+      }) // build version -> 'https://api.greetngroup.com/api/searchEvent/' + i)
         .then((response) => { 
           this.user = ''; const isDataAvailable = response.data && response.data.length > 0; this.events = isDataAvailable ? response.data : []; this.errorInSearch = isDataAvailable ? '' : 'Sorry! We could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
     },
+    // Finds username by identical name match
     findUserByUsername: function (i) {
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchUser/' + i)// build version -> 'https://api.greetngroup.com/api/searchUser/' + i)
+      axios.get('http://localhost:62008/api/searchUser/' + i,
+      { 
+        ip: this.ip,
+        url: 'http://localhost:62008/api/searchUser/' + i
+      }) // build version -> 'https://api.greetngroup.com/api/searchUser/' + i)
         .then((response) => { 
           this.events = []; const isDataAvailable = response.data; this.user = isDataAvailable ? response.data : ''; this.errorInSearch = isDataAvailable ? '' : 'Sorry! could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
     },
+    // Determines amount of results shown per page
     limitSearchResultsNext: function (i) {
       if (i.length >= this.pageStart + this.pageLimit) {
         // if over the max
@@ -130,6 +153,7 @@ export default {
         }
       }
     },
+    // Applies limit to results shown per page
     limitSearchResultsPrevious: function (i) {
       if (this.pageStart > 0) {
         if (this.pageStart - this.pageLimit >= 0) {
@@ -139,6 +163,7 @@ export default {
       }
     }
   },
+  // Computes list to be displayed
   computed: {
     limitSearchResults () {
       return this.events.slice(this.pageStart, this.pageEnd)
