@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,6 +10,13 @@ namespace WebApi.Controllers
 {
     public class FindEventsForMeController : ApiController
     {
+        // For FromBody field, supplies current user Ip, and url
+        public class FindEventsForMeRequest
+        {
+            [Required] public string Ip { get; set; }
+            [Required] public string Url { get; set; }
+        }
+
         /*
         [Route("api/FindEventsForMe/{date}")]
         public IHttpActionResult GetEventsByDate(DateTime date)
