@@ -79,6 +79,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\RateRequest.cs" />
+    <Compile Include="Requests\SearchBarRequest.cs" />
     <Compile Include="Requests\SSOUserRequest.cs" />
     <Compile Include="Requests\UpdateProfileRequest.cs" />
     <Compile Include="Services\ClaimService.cs" />

@@ -1,21 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Web.Http;
-using ServiceLayer.Services;
 using ManagerLayer.GNGLogManagement;
+using ManagerLayer.SearchManager;
 
 namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        GNGLogManager gngLogManager = new GNGLogManager();
-
-        // For FromBody field, supplies current user Ip, and url
-        public class SearchBarRequest
-        {
-            [Required] public string Ip { get; set; }
-            [Required] public string Url { get; set; }
-        }
+        readonly GNGLogManager _gngLogManager = new GNGLogManager();
 
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
@@ -23,44 +15,57 @@ namespace WebApi.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/searchEvent/{name}")]
-        public IHttpActionResult GetEventByName(string name, int userId, [FromBody]SearchBarRequest req)
+        [Route("api/searchEvent")]
+        public IHttpActionResult GetEventByName([FromUri]string name)
         {
+            var searchManager = new SearchManager();
             try
             {
+                // Prevents no input search
                 if (name.Length < 0) Ok();
-                var eventService = new EventService();
-                var e = eventService.GetEventListByName(name);
-                gngLogManager.LogGNGSearchAction(userId.ToString(), name, req.Ip);
+                
+                var e = searchManager.GetEventListByName(name);
+
+                //_gngLogManager.LogGNGSearchAction("", name, "");//uId, name, req.Ip);
+
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId.ToString(), req.Ip, req.Url, e.ToString());
+                //var uId = searchManager.GetUserIdFromJwt(req.jwtToken).ToString();
+                //_gngLogManager.LogBadRequest(uId, req.Ip, req.Url, e.ToString());
                 return BadRequest();
             }
         }
 
         /// <summary>
         /// Returns a user if the username matches an existing user in the database
+        /// Username is synonymous to email in this application
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/searchUser/{username}")]
-        public IHttpActionResult GetUserByEmail(string username, int userId, [FromBody]SearchBarRequest req)
+        [Route("api/searchUser")]
+        public IHttpActionResult GetUserByEmail([FromUri]string username)
         {
+            var searchManager = new SearchManager();
             try
             {
+                // Prevents no input search
                 if (username.Length < 0) Ok();
-                var userService = new UserService();
-                var e = userService.GetUserByUsername(username);
-                gngLogManager.LogGNGSearchAction(userId.ToString(), username, req.Ip);
+                
+                var e = searchManager.GetUserByUsername(username);
+                
+                // logger is in progress
+                //_gngLogManager.LogGNGSearchAction("", username, "");//userId.ToString(), username, req.Ip);
+
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId.ToString(), req.Ip, req.Url, e.ToString());
+
+                // logger is in progress
+                //_gngLogManager.LogBadRequest(uId, req.Ip, req.Url, e.ToString());
                 return BadRequest();
             }
         }
