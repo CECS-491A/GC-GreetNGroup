@@ -63,17 +63,16 @@ namespace WebApi.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/eventInfo")]
+        [Route("api/event/info")]
         public IHttpActionResult GetEventByName([FromUri]string name)
         {
-            var searchManager = new SearchManager();
             try
             {
                 // Prevents no input search
                 if (name.Length < 0) Ok();
 
                 // Retrieves info for GET
-                var e = searchManager.GetEventListByName(name);
+                var e = eventService.GetEventByName(name);
 
                 return Ok(e);
             }
