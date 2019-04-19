@@ -6,7 +6,14 @@ namespace DataAccessLayer.Tables
     [Table("EventTag")]
     public class EventTag
     {
-        public EventTag(int eventId, int tagId) {
+        public EventTag()
+        {
+            EventId = -1;
+            TagId = -1;
+        }
+
+        public EventTag(int eventId, int tagId)
+        {
             EventId = eventId;
             TagId = tagId;
         }

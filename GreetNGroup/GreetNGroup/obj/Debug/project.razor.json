@@ -1,7 +1,5 @@
 {
-  "ProjectFilePath": "c:\\Users\\EricAD\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\GreetNGroup.csproj",
-  "TargetFramework": "v4.5.1",
-  "TagHelpers": [],
+  "FilePath": "c:\\Users\\ericl\\Documents\\GitHub\\GreetNGroup\\GreetNGroup\\GreetNGroup\\GreetNGroup.csproj",
   "Configuration": {
     "ConfigurationName": "UnsupportedRazor",
     "LanguageVersion": "1.0",
@@ -10,5 +8,11 @@
         "ExtensionName": "UnsupportedRazorExtension"
       }
     ]
-  }
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 703
+  },
+  "RootNamespace": null,
+  "Documents": []
 }

@@ -18,6 +18,13 @@
               :menu-props="{ maxHeight: '200' }"
               label="Select a filter"
             ></v-select>
+            <v-select
+              v-model="pageLimit"
+              :items="resultCount"
+              :menu-props="{ maxHeight: '200' }"
+              label="Select display count"
+              hide-details
+            ></v-select>
       </v-flex>
       </v-layout>
       <v-layout align-start justify-center row wrap>
@@ -27,7 +34,9 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
                   <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
-                    <button id="event-b"> {{EventName}} </button>
+                    <router-link :to="'/eventpage/' + EventName">
+                      <button  id="event-b"> {{EventName}} </button>
+                    </router-link>
                     <article> {{'Start Date: ' + StartDate}} </article>
                   </div>
               </div>
@@ -39,7 +48,9 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="user !== null">
                 <div id="user-d">
-                  <button id="user-b"> {{user.UserName}} </button>
+                  <router-link :to="'/User/' + user.UserId">
+                    <button id="user-b" > {{user.UserName}} </button>
+                  </router-link>
                 </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
@@ -47,10 +58,10 @@
           </div>
           <div>
             <v-btn small color="primary" dark 
-            v-if="events.length > 5"
+            v-if="events.length > this.pageLimit"
             v-on:click.native="limitSearchResultsPrevious(events)">Previous</v-btn>
             <v-btn small color="primary" dark 
-              v-if="events.length > 5"
+              v-if="events.length > this.pageLimit"
               v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
           </div>
         </v-flex>
@@ -85,52 +96,69 @@ export default {
       eventName: '',
       errorInSearch: '',
       searchFilter: ['Users', 'Events'],
+      resultCount: [5, 10, 15, 20, 40],
       filter: 'Events',
       pageturner: false,
       pageStart: 0,
+      pageLimit: 5,
       pageEnd: 5,
-      pageLimit: 5
+      endReached: false
     }
   },
   methods: {
+    // Determines which field to search under
     checkSearchFilter: function (i) {
       if (i === 'Users') return true
       return false
     },
+    // Determines if there is a search query
     checkInput: function (i) {
       if (i !== '') return true
       return false
     },
+    // Finds events by partial name match
     findEventsByName: function (i) {
+      this.pageEnd = this.pageLimit
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchEvent/' + i)// build version -> 'https://api.greetngroup.com/api/searchEvent/' + i)
+      axios.get('http://localhost:62008/api/searchEvent?name=' + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
         .then((response) => { 
-          this.user = ''; const isDataAvailable = response.data && response.data.length > 0; this.events = isDataAvailable ? response.data : []; this.errorInSearch = isDataAvailable ? '' : 'Sorry! We could not find anything under that search at this time!'
+          this.user = '' 
+          const isDataAvailable = response.data && response.data.length > 0
+          this.events = isDataAvailable ? response.data : []
+          this.errorInSearch = isDataAvailable ? '' : 'Sorry! We could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
     },
+    // Finds username by identical name match
     findUserByUsername: function (i) {
+      this.pageEnd = this.pageLimit
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchUser/' + i)// build version -> 'https://api.greetngroup.com/api/searchUser/' + i)
+      axios.get('http://localhost:62008/api/searchUser?username=' + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
         .then((response) => { 
-          this.events = []; const isDataAvailable = response.data; this.user = isDataAvailable ? response.data : ''; this.errorInSearch = isDataAvailable ? '' : 'Sorry! could not find anything under that search at this time!'
+          this.events = []
+          const isDataAvailable = response.data
+          this.user = isDataAvailable ? response.data : ''
+          this.errorInSearch = isDataAvailable ? '' : 'Sorry! could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
     },
+    // Determines amount of results shown after next button press
     limitSearchResultsNext: function (i) {
-      if (i.length >= this.pageStart + this.pageLimit) {
-        // if over the max
-        if (i.length < this.pageStart + this.pageLimit) {
-          this.pageStart += this.pageLimit
-          this.pageEnd = i.length
-        } else if (i.length === this.pageStart + this.pageLimit) {
-        } else {
+      // if event list count is >= the starting count + limit of event listings allowed in a page
+      if (!this.endReached) {
+        if (i.length > this.pageEnd + this.pageLimit) { // if under the max
           this.pageStart += this.pageLimit
           this.pageEnd += this.pageLimit
+        } else if (i.length <= this.pageEnd + this.pageLimit) { // if over the max
+          this.endReached = true
+          this.pageStart = this.pageEnd
+          this.pageEnd = i.length
         }
       }
     },
+    // Determines amount of result shown after previous button press
     limitSearchResultsPrevious: function (i) {
+      this.endReached = false
       if (this.pageStart > 0) {
         if (this.pageStart - this.pageLimit >= 0) {
           this.pageEnd = this.pageStart
@@ -139,6 +167,7 @@ export default {
       }
     }
   },
+  // Computes list to be displayed
   computed: {
     limitSearchResults () {
       return this.events.slice(this.pageStart, this.pageEnd)

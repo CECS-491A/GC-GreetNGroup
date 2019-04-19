@@ -1,15 +1,10 @@
 ﻿using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
-using Newtonsoft.Json;
 using ServiceLayer.Interface;
 using ServiceLayer.Model;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web.Script.Serialization;
 
 namespace ManagerLayer.ProfileManagement
 {

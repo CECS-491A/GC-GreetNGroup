@@ -17,9 +17,7 @@ namespace ServiceLayer.Services
 
         private IErrorHandlerService _errorHandlerService;
         //Readonly because it should not be changed in functions outside of constructor
-        private readonly string LOGS_FOLDERPATH = Path.Combine(
-             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
-             @"Logs\");
+        private readonly string LOGS_FOLDERPATH = Environment.GetEnvironmentVariable("GngLogsPath", EnvironmentVariableTarget.User);
         //Constant because it must be the same throughout the program
         private const string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
