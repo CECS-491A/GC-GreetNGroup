@@ -8,6 +8,7 @@ namespace ManagerLayer.SearchManager
     {
         private readonly IUserService _userService = new UserService();
 
+        // Implements interface within this region
         #region Interface Implementation
 
         public User SearchByName(string name)

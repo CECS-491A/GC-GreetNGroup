@@ -34,7 +34,9 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
                   <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
-                    <button id="event-b"> {{EventName}} </button>
+                    <router-link :to="'/eventpage/' + EventName">
+                      <button  id="event-b"> {{EventName}} </button>
+                    </router-link>
                     <article> {{'Start Date: ' + StartDate}} </article>
                   </div>
               </div>
@@ -46,7 +48,9 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="user !== null">
                 <div id="user-d">
-                  <button id="user-b"> {{user.UserName}} </button>
+                  <router-link :to="'/User/' + user.UserId">
+                    <button id="user-b" > {{user.UserName}} </button>
+                  </router-link>
                 </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>

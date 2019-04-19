@@ -7,7 +7,7 @@ namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        readonly GNGLogManager _gngLogManager = new GNGLogManager();
+        private readonly GNGLogManager _gngLogManager = new GNGLogManager();
 
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
@@ -24,6 +24,7 @@ namespace WebApi.Controllers
                 // Prevents no input search
                 if (name.Length < 0) Ok();
                 
+                // Retrieves info for GET
                 var e = searchManager.GetEventListByName(name);
 
                 // logs action -- does not care about ip or userId
@@ -55,6 +56,7 @@ namespace WebApi.Controllers
                 // Prevents no input search
                 if (username.Length < 0) Ok();
                 
+                // Retrieves info for GET
                 var e = searchManager.GetUserByUsername(username);
                 
                 // logs action -- does not care about ip or userId
