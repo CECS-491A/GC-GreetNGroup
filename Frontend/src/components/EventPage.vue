@@ -53,7 +53,7 @@
 </template>
 <script>
 import axios from 'axios'
-
+// import { apiURL } from '@/const.js'
 export default {
   name: 'Profile',
   data () {
@@ -68,7 +68,13 @@ export default {
     }
   },
   created () {
-    axios.get('http://localhost:62008/api/searchEvent/' + this.eventNames).then((response) => { this.json = response.data }, this.eventRetrieved = true).catch(error => console.log(error))
+    axios.get('http://localhost:62008/api/searchEvent?name=' + this.eventNames) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
+      .then((response) => { 
+        this.user = '' 
+        const isDataAvailable = response.data && response.data.length > 0
+        this.json = isDataAvailable ? response.data : []
+      })
+      .catch(error => console.log(error))
   },
   methods: {
     joinEvent () {
