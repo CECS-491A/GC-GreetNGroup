@@ -8,12 +8,13 @@ namespace ServiceLayer.Services
 {
     public class GNGArchiverService : IGNGArchiverService
     {
-        IGNGLoggerService _gngLoggerService = new GNGLoggerService();
-
+        private IGNGLoggerService _gngLoggerService = new GNGLoggerService();
+        //Constant because this is the final max log lifetime that should not be altered
         private const int MAX_LOG_LIFETIME = 30;
+        //Readonly because it should not be changed in functions outside of constructor
         private readonly string ARCHIVES_FOLDERPATH = Path.Combine(
-             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName,
-             @"GreetNGroup\GreetNGroup\Archives\");
+             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+             @"Archives\");
 
         /// <summary>
         /// Method GetLogsFilename retrieves the log file names inside the Logs folder
@@ -63,6 +64,7 @@ namespace ServiceLayer.Services
             bool isOld = false;
             string[] splitDate = fileName.Split('_');
             string logDate = splitDate[0];
+            //TryParseExact to properly retrieve the date that is the name of the log
             DateTime.TryParseExact(logDate, "dd-MM-yyyy", new CultureInfo("en-US"),
                 DateTimeStyles.None, out DateTime dateOfLog);
             if ((DateTime.Now - dateOfLog).TotalDays > MAX_LOG_LIFETIME)

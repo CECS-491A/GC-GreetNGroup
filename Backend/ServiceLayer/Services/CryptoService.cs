@@ -11,7 +11,6 @@ namespace ServiceLayer.Services
 {
     public class CryptoService: ICryptoService
     {
-        private readonly string jwtSignatureSecretKey = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
         private readonly string AppLaunchSecretKey = "2E4747FAEB007F487E9B5894B9E4C53700AB3B3C964F1E40C3ED125FFF26DD83";
         //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
         //"D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE"
@@ -48,16 +47,10 @@ namespace ServiceLayer.Services
             return hex;
         }
 
-        public SigningCredentials GenerateJWTSignature()
+        public SigningCredentials GenerateJWTSignature(string symmetricKey)
         {
-            byte[] symmetricKey = new byte[256 / 8];
-            rng.GetBytes(symmetricKey);
-            var charKey = Encoding.UTF8.GetString(symmetricKey);
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(charKey));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            
-            return credentials;
+            return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
+                SecurityAlgorithms.HmacSha256Signature);
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
+﻿using System.Net.Http;
 using System.Web.Http;
 using ServiceLayer.Interface;
 using ServiceLayer.Services;
+using ManagerLayer.GNGLogManagement;
 
 namespace WebApi.Controllers
 {
@@ -13,9 +10,10 @@ namespace WebApi.Controllers
     {
         [HttpPost]
         [Route("api/error/contactsystemadmin")]
-        public IHttpActionResult CallSystemAdmin()
+        public IHttpActionResult CallSystemAdmin(string userId, string url, string ip)
         {
             IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
+            GNGLogManager gngLogManager = new GNGLogManager();
 
             try
             {
@@ -31,6 +29,7 @@ namespace WebApi.Controllers
             }
             catch(HttpRequestException e)
             {
+                gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
                 return BadRequest();
             }
 

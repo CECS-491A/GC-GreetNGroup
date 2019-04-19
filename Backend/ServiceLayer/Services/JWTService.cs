@@ -1,70 +1,81 @@
-﻿using DataAccessLayer.Tables;
-using DataAccessLayer.Context;
-using Microsoft.IdentityModel.Tokens;
+﻿using DataAccessLayer.Context;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using ServiceLayer.Interface;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("symmetricKey", EnvironmentVariableTarget.User);
-        private SigningCredentials credentials;
-        private ICryptoService _cryptoService;
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
         private IGNGLoggerService _gngLoggerService;
+        private ICryptoService _cryptoService;
         private JwtSecurityTokenHandler tokenHandler;
-
+        private readonly SigningCredentials credentials;
         public JWTService()
         {
-            _cryptoService = new CryptoService();
             _gngLoggerService = new GNGLoggerService();
-            credentials = _cryptoService.GenerateJWTSignature();
+            _cryptoService = new CryptoService();
             tokenHandler = new JwtSecurityTokenHandler();
+            credentials = _cryptoService.GenerateJWTSignature("testingsecretsymmetrickey");
         }
 
         public string CreateToken(string username, int uId)
         {
+            var jwtHeader = new JwtHeader(credentials);
+
             var usersClaims = RetrieveClaims(username);
             var securityClaimsList = new List<System.Security.Claims.Claim>();
 
             //Takes the claims the user has and puts it in a list of Security Claims objects
-            foreach (DataAccessLayer.Tables.Claim c in usersClaims)
+            foreach (var c in usersClaims)
             {
                 securityClaimsList.Add(new System.Security.Claims.Claim(c.ClaimName, uId.ToString()));
             }
 
-            var jwt = new JwtSecurityToken(
+            var jwtPayload = new JwtPayload(
                 issuer: "greetngroup.com",
-                audience: "greetngroup.com",
+                audience: username,
                 claims: securityClaimsList,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials);
+                notBefore: null,
+                expires: DateTime.Now.AddMinutes(30)
+                );
+
+            var jwt = new JwtSecurityToken(jwtHeader, jwtPayload);
 
             return tokenHandler.WriteToken(jwt);
         }
 
-        public string ValidateAndUpdateToken(string jwtToken)
+        public string UpdateToken(string jwtToken)
         {
             if (!IsJWTSignatureTampered(jwtToken))
             {
                 return RefreshToken(jwtToken);
             }
-            return "";
+            else
+            {
+                return "";
+            }
         }
 
-        public string RefreshToken(string jwtToken)
+        public string RefreshToken(string userJwtString)
         {
-            var oldJWT = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
-            var newJWT = new JwtSecurityToken(
-                issuer: oldJWT.Issuer,
-                audience: oldJWT.Audiences.ToString(),
-                claims: oldJWT.Claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials);
-            return tokenHandler.WriteToken(newJWT);
+            var jwtHeader = new JwtHeader(credentials);
+
+            var oldJwt = tokenHandler.ReadJwtToken(userJwtString);
+            var newJwtPayload = new JwtPayload(
+                issuer: oldJwt.Issuer,
+                audience: oldJwt.Audiences.ToString(),
+                claims: oldJwt.Claims,
+                notBefore: null,
+                expires: DateTime.Now.AddMinutes(30));
+
+            var newJwt = new JwtSecurityToken(jwtHeader, newJwtPayload);
+
+            return tokenHandler.WriteToken(newJwt);
         }
 
         /// <summary>
@@ -77,12 +88,13 @@ namespace ServiceLayer.Services
         /// <returns>True or false depending on if the user has the claim</returns>
         public bool CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
         {
+            //Must always check if JWT is tampered or not with JWT operations
             if (IsJWTSignatureTampered(userJwtToken) == false)
             {
                 var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
 
                 var usersCurrClaims = jwt.Claims;
-                bool pass = false;
+                var pass = false;
 
                 var usersCurrClaimsNames = new List<string>();
                 foreach (System.Security.Claims.Claim claim in usersCurrClaims)
@@ -101,19 +113,55 @@ namespace ServiceLayer.Services
             }
         }
 
-        public int GetUserIDFromToken(string jwtToken)
+        /// <summary>
+        /// Method GetUserIDFromToken retrieves user id from the jwt. If the id
+        /// cannot be parsed from the token or if the user's jwt signature has been tampered
+        /// return -1.
+        /// </summary>
+        /// <param name="userJwtToken">JWT in string format</param>
+        /// <returns>Return the user id as an int</returns>
+        public int GetUserIDFromToken(string userJwtToken)
         {
-            var jwt = tokenHandler.ReadToken(jwtToken) as JwtSecurityToken;
-            var usersCurrClaims = jwt.Claims;
-            var userID = usersCurrClaims.First().Value;
-            try
+            if(IsJWTSignatureTampered(userJwtToken) == false)
             {
-                return Convert.ToInt32(userID);
+                var jwt = tokenHandler.ReadJwtToken(userJwtToken);
+                var usersCurrClaims = jwt.Claims;
+                var userID = usersCurrClaims.First().Value;
+                try
+                {
+                    return Convert.ToInt32(userID);
+                }
+                //Catch format exception to show that it could not parse the userId 
+                //into an int value, let other errors bubble
+                catch (FormatException e)
+                {
+                    _gngLoggerService.LogGNGInternalErrors(e.ToString());
+                    return -1;
+                }
             }
-            catch (FormatException)
+            else
             {
-                //log
                 return -1;
+            }
+            
+        }
+
+        /// <summary>
+        /// Method GetUsernameFromToken retrieves the username from the jwt. If 
+        /// JWT signature has been tampered, return null.
+        /// </summary>
+        /// <param name="jwtString">Users JWT in string form</param>
+        /// <returns>Returns username as string</returns>
+        public string GetUsernameFromToken(string userJwtString)
+        {
+            if(IsJWTSignatureTampered(userJwtString) == false)
+            {
+                var jwt = tokenHandler.ReadJwtToken(userJwtString);
+                return jwt.Audiences.First();
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -126,12 +174,17 @@ namespace ServiceLayer.Services
         /// <param name="userJwtToken">users JWT in string format</param>
         /// <returns>Returns bool value based on if the user has tampered with their
         /// JWT</returns>
-        public bool IsJWTSignatureTampered(string userJwtToken)
+        public bool IsJWTSignatureTampered(string userJwtString)
         {
-            var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
-            bool isTampered = false;
-            SigningCredentials signature = jwt.SigningCredentials;
-            if (!credentials.ToString().Equals(signature.ToString()))
+            var jwt = tokenHandler.ReadJwtToken(userJwtString);
+            var isTampered = false;
+            var userPayload = jwt.Payload;
+
+            var unalteredHeader = new JwtHeader(credentials);
+            var unalteredJwt = new JwtSecurityToken(unalteredHeader, userPayload);
+            var unalteredJwtString = tokenHandler.WriteToken(unalteredJwt);
+
+            if (!userJwtString.Equals(unalteredJwtString))
             {
                 isTampered = true;
             }
@@ -146,19 +199,19 @@ namespace ServiceLayer.Services
         public List<DataAccessLayer.Tables.Claim> RetrieveClaims(string username)
         {
             var claimsList = new List<DataAccessLayer.Tables.Claim>();
-
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var usersClaims = ctx.UserClaims.Where(c => c.User.UserName.Equals(username));
-                    foreach (UserClaim claim in usersClaims)
+                    var user = ctx.Users.FirstOrDefault(u => u.UserName.Equals(username));
+                    var userId = user.UserId;
+                    var usersClaims = ctx.UserClaims.Where(c => c.UId.Equals(userId));
+                    foreach (var claim in usersClaims)
                     {
-                        claimsList.Add(claim.Claim);
+                        claimsList.Add(ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(claim.ClaimId)));
                     }
-
-                    return claimsList;
                 }
+                return claimsList;
             }
             // Exception caught specifically as it is used in the event that the context 
             // doesnt exist or is broken or fails to dispose

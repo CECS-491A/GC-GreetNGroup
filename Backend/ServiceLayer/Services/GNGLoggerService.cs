@@ -9,10 +9,19 @@ namespace ServiceLayer.Services
 {
     public class GNGLoggerService : IGNGLoggerService
     {
-        private IErrorHandlerService _errorHandlerService;
 
-        private readonly string LOGS_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\Backend\\Logs\\";
-        private readonly string LOG_IDENTIFIER = "_gnglog.json";
+        /* Every logging method will catch FileNotFoundException explicitly
+         * so we know that there is a problem when attempting to log. Let
+         * other exceptions bubble up
+         */
+
+        private IErrorHandlerService _errorHandlerService;
+        //Readonly because it should not be changed in functions outside of constructor
+        private readonly string LOGS_FOLDERPATH = Path.Combine(
+             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+             @"Logs\");
+        //Constant because it must be the same throughout the program
+        private const string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
 
@@ -30,10 +39,10 @@ namespace ServiceLayer.Services
         /// <returns>Returns true or false if log exists or not</returns>
         public bool CheckForExistingLog()
         {
-            bool logExists = false;
+            var logExists = false;
             try
             {
-                string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+                var currentDate = DateTime.Now.ToString("dd-MM-yyyy");
                 logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
             }
             //Catch FileNotFound explicitly as it catches errors where it cannot find the log
@@ -53,8 +62,8 @@ namespace ServiceLayer.Services
         /// </summary>
         public string CreateNewLog()
         {
-            bool logExists = CheckForExistingLog();
-            string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+            var logExists = CheckForExistingLog();
+            var currentDate = DateTime.Now.ToString("dd-MM-yyyy");
             if (logExists == false)
             {
                 try
@@ -92,7 +101,7 @@ namespace ServiceLayer.Services
         {
             listOfIDs = new Dictionary<string, int>();
 
-            Dictionary<string, int> logIDMap = new Dictionary<string, int>();
+            var logIDMap = new Dictionary<string, int>();
             logIDMap.Add("ClickEvent", 1001);
             logIDMap.Add("ErrorEncountered", 1002);
             logIDMap.Add("EventCreated", 1003);
@@ -134,13 +143,13 @@ namespace ServiceLayer.Services
         /// </summary>
         public List<GNGLog> FillCurrentLogsList()
         {
-            List<GNGLog> logList = new List<GNGLog> ();
+            var logList = new List<GNGLog>();
             //Check to see if file is empty
             if (new FileInfo(currentLogPath).Length != 0)
             {
-                using (StreamReader r = new StreamReader(currentLogPath))
+                using (var r = new StreamReader(currentLogPath))
                 {
-                    string jsonFile = r.ReadToEnd();
+                    var jsonFile = r.ReadToEnd();
                     //Retrieve Current Logs
                     logList = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
                     r.Close();
@@ -156,14 +165,14 @@ namespace ServiceLayer.Services
         /// <returns></returns>
         public List<GNGLog> ReadLogs()
         {
-            List<GNGLog> logList = new List<GNGLog>();
-            DirectoryInfo di = new DirectoryInfo(LOGS_FOLDERPATH);
-            string[] dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
-            foreach (string dir in dirs)
+            var logList = new List<GNGLog>();
+            var di = new DirectoryInfo(LOGS_FOLDERPATH);
+            var dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
+            foreach (var dir in dirs)
             {
                 if (new FileInfo(dir).Length != 0)
                 {
-                    using (StreamReader r = new StreamReader(dir))
+                    using (var r = new StreamReader(dir))
                     {
                         string jsonFile = r.ReadToEnd();
                         //Retrieve Current Logs
@@ -190,10 +199,10 @@ namespace ServiceLayer.Services
         public bool LogGNGInternalErrors(string exception)
         {
             CreateNewLog();
-            bool logMade = false;
+            var logMade = false;
             listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
-            string clickLogIDString = clickLogID.ToString();
-            GNGLog log = new GNGLog
+            var clickLogIDString = clickLogID.ToString();
+            var log = new GNGLog
             {
                 logID = clickLogIDString,
                 userID = "",
@@ -204,21 +213,9 @@ namespace ServiceLayer.Services
 
             var logList = FillCurrentLogsList();
             logList.Add(log);
-            try
-            {
-                using (StreamWriter file = File.CreateText(currentLogPath))
-                {
-                    JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(file, logList);
-                    logMade = true;
-                    file.Close();
-                }
-            }
-            catch (Exception e) //Catch any exceptions caused resulting of failure in writing log
-            {
-                logMade = false;
-                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
-            }
+
+            logMade = WriteGNGLogToFile(logList);
+
             return logMade;
         }
 
@@ -229,19 +226,19 @@ namespace ServiceLayer.Services
         /// <returns></returns>
         public List<GNGLog> ReadLogsPath(string path)
         {
-            List<GNGLog> logList = new List<GNGLog>();
-            DirectoryInfo di = new DirectoryInfo(path);
-            string[] dirs = Directory.GetFiles(path, "*.json");
-            foreach (string dir in dirs)
+            var logList = new List<GNGLog>();
+            var di = new DirectoryInfo(path);
+            var dirs = Directory.GetFiles(path, "*.json");
+            foreach (var dir in dirs)
             {
                 if (new FileInfo(dir).Length != 0)
                 {
-                    using (StreamReader r = new StreamReader(dir))
+                    using (var r = new StreamReader(dir))
                     {
-                        string jsonFile = r.ReadToEnd();
+                        var jsonFile = r.ReadToEnd();
                         //Retrieve Current Logs
-                        List<GNGLog> logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
-                        for (int index = 0; index < logs.Count; index++)
+                        var logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                        for (var index = 0; index < logs.Count; index++)
                         {
                             logList.Add(logs[index]);
                         }
@@ -250,6 +247,35 @@ namespace ServiceLayer.Services
                 }
             }
             return logList;
+        }
+
+        /// <summary>
+        /// Method WriteGNGLogToFile writes the logs into the JSON log file. Should the
+        /// write fail, the error counter is incremented and the exception is sent to
+        /// the error handler service if it causes 100 or more errors to send to the
+        /// system admin.
+        /// </summary>
+        /// <param name="logList">List of GNG logs to write to the file</param>
+        /// <returns>Returns true or false based on if it was written to file properly</returns>
+        public bool WriteGNGLogToFile(List<GNGLog> logList)
+        {
+            var isLogWritten = false;
+            try
+            {
+                using (var file = File.CreateText(currentLogPath))
+                {
+                    var jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(file, logList);
+                    isLogWritten = true;
+                    file.Close();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                isLogWritten = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+            }
+            return isLogWritten;
         }
     }
 }
