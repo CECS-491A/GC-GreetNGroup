@@ -8,6 +8,7 @@ namespace ManagerLayer.SearchManager
     {
         private readonly EventService _eventService = new EventService();
 
+        // Implements interface within this region
         #region Interface Implementation
 
         public List<Event> SearchByName(string name)
