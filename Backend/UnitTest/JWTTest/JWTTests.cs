@@ -3,7 +3,6 @@ using ServiceLayer.Services;
 using DataAccessLayer.Tables;
 using DataAccessLayer.Context;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System;
 using System.Linq;
 
@@ -16,6 +15,8 @@ namespace UnitTest.JWTTest
         UserService userService = new UserService();
         UserClaimsService userClaimsService = new UserClaimsService();
         GreetNGroupContext ctx = new GreetNGroupContext();
+
+        #region Passing Tests
 
         [TestMethod]
         public void AssignJwt_Pass()
@@ -98,6 +99,26 @@ namespace UnitTest.JWTTest
         }
 
         [TestMethod]
+        public void CheckIfUserHasTheseClaims_Pass()
+        {
+            //Assign
+            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU1NjcyMDEyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.2qSi4OwEFrbTD9GG3hx6fqZFuYVIjUzPGIRs8ZLjWB0";
+            var claimsToCheck = new List<string>();
+            claimsToCheck.Add(ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(1)).ClaimName);
+            claimsToCheck.Add(ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(2)).ClaimName);
+            var expected = true;
+
+            //Act
+            var actual = jwtService.CheckUserClaims(jwtString, claimsToCheck);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Failing Tests
+        [TestMethod]
         public void RetrieveUsersClaims_Fail()
         {
             //Assign
@@ -161,5 +182,24 @@ namespace UnitTest.JWTTest
 
             Assert.AreNotEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void CheckIfUserHasTheseClaims_Fail()
+        {
+            //Assign
+            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU1NjcyMDEyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.2qSi4OwEFrbTD9GG3hx6fqZFuYVIjUzPGIRs8ZLjWB0";
+            var claimsToCheck = new List<string>();
+            claimsToCheck.Add(ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(4)).ClaimName);
+            claimsToCheck.Add(ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(3)).ClaimName);
+            var expected = true;
+
+            //Act
+            var actual = jwtService.CheckUserClaims(jwtString, claimsToCheck);
+
+            //Assert
+            Assert.AreNotEqual(expected, actual);
+        }
+
+        #endregion
     }
 }

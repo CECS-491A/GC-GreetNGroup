@@ -91,7 +91,7 @@ namespace ServiceLayer.Services
             //Must always check if JWT is tampered or not with JWT operations
             if (IsJWTSignatureTampered(userJwtToken) == false)
             {
-                var jwt = tokenHandler.ReadToken(userJwtToken) as JwtSecurityToken;
+                var jwt = tokenHandler.ReadJwtToken(userJwtToken);
 
                 var usersCurrClaims = jwt.Claims;
                 var pass = false;
