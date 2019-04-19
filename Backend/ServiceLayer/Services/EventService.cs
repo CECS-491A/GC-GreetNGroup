@@ -254,14 +254,14 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Event Information Retrieval
 
-        public Event GetEventById(int eventId)
+        public Event GetEventById(int eId)
         {
             Event e = null;
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    e = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eventId));
+                    e = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
                     return e;
                 }
             }
@@ -272,6 +272,26 @@ namespace ServiceLayer.Services
             }
         }
 
+        // Retrieves event in list format given id
+        public List<Event> GetEventListById(int eId)
+        {
+            List<Event> e = null;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.Where(c => c.EventId.Equals(eId)).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return e;
+            }
+        }
+
+        // Retrieves event in list format give partial event name/search input
         public List<Event> GetEventListByName(string searchInput)
         {
             List<Event> e = null;

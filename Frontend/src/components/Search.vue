@@ -138,11 +138,11 @@ export default {
         })
         .catch(error => console.log(error))
     },
-    // Determines amount of results shown per page
+    // Determines amount of results shown after next button press
     limitSearchResultsNext: function (i) {
       // if event list count is >= the starting count + limit of event listings allowed in a page
       if (!this.endReached) {
-        if (i.length > this.pageEnd + this.pageLimit) {
+        if (i.length > this.pageEnd + this.pageLimit) { // if under the max
           this.pageStart += this.pageLimit
           this.pageEnd += this.pageLimit
         } else if (i.length <= this.pageEnd + this.pageLimit) { // if over the max
@@ -152,7 +152,7 @@ export default {
         }
       }
     },
-    // Applies limit to results shown per page
+    // Determines amount of result shown after previous button press
     limitSearchResultsPrevious: function (i) {
       this.endReached = false
       if (this.pageStart > 0) {

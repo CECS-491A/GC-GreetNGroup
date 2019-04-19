@@ -231,7 +231,7 @@ namespace ServiceLayer.Services
         /// </summary>
         #region User Information Retrieval
 
-        // Returns User found by username string
+        // Returns userId found through username
         public int GetUserUid(string username)
         {
             try
