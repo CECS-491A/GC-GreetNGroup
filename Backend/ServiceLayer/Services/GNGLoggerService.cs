@@ -11,7 +11,7 @@ namespace ServiceLayer.Services
     {
         private IErrorHandlerService _errorHandlerService;
 
-        private readonly string LOGS_FOLDERPATH = "C:\\Users\\Yuki\\Documents\\GitHub\\GreetNGroup\\Backend\\Logs\\";
+        private readonly string LOGS_FOLDERPATH = Environment.GetEnvironmentVariable("GngLogsPath", EnvironmentVariableTarget.User);
         private readonly string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;

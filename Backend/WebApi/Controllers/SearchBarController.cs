@@ -26,14 +26,15 @@ namespace WebApi.Controllers
                 
                 var e = searchManager.GetEventListByName(name);
 
-                //_gngLogManager.LogGNGSearchAction("", name, "");//uId, name, req.Ip);
+                // logs action -- does not care about ip or userId
+                _gngLogManager.LogGNGSearchAction("", name, "");
 
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-                //var uId = searchManager.GetUserIdFromJwt(req.jwtToken).ToString();
-                //_gngLogManager.LogBadRequest(uId, req.Ip, req.Url, e.ToString());
+                // logs error -- does not care about ip or userId
+                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
                 return BadRequest();
             }
         }
@@ -56,16 +57,15 @@ namespace WebApi.Controllers
                 
                 var e = searchManager.GetUserByUsername(username);
                 
-                // logger is in progress
-                //_gngLogManager.LogGNGSearchAction("", username, "");//userId.ToString(), username, req.Ip);
+                // logs action -- does not care about ip or userId
+                _gngLogManager.LogGNGSearchAction("", username, "");
 
                 return Ok(e);
             }
             catch (HttpRequestException e)
             {
-
-                // logger is in progress
-                //_gngLogManager.LogBadRequest(uId, req.Ip, req.Url, e.ToString());
+                // logs error -- does not care about ip or userId
+                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
                 return BadRequest();
             }
         }
