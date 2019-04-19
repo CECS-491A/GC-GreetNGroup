@@ -11,9 +11,9 @@ namespace ManagerLayer.ArchiverManager
     {
         private string archivesFolderPath;
 
-        IGNGArchiverService _gngArchiverService = new GNGArchiverService();
-        IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
-        IGNGLoggerService _gngLoggerService = new GNGLoggerService();
+        private IGNGArchiverService _gngArchiverService = new GNGArchiverService();
+        private IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
+        private IGNGLoggerService _gngLoggerService = new GNGLoggerService();
 
         public GNGArchiverManager()
         {
@@ -29,19 +29,21 @@ namespace ManagerLayer.ArchiverManager
         /// <returns>Return true or false depending if the archiving process was successful</returns>
         public bool ArchiveOldLogs()
         {
-            bool isSuccessfulArchive = false;
-            bool isSuccessfulDeletion = false;
-            List<string> logsToArchive = _gngArchiverService.GetOldLogs();
-            string archiveFileName = DateTime.Now.ToString("dd-MM-yyyy") + "_gngarchive.zip";
+            var isSuccessfulArchive = false;
+            var isSuccessfulDeletion = false;
+            var logsToArchive = _gngArchiverService.GetOldLogs();
+            var archiveFileName = DateTime.Now.ToString("dd-MM-yyyy") + "_gngarchive.zip";
             try
             {
-                using (FileStream fstream = new FileStream((archivesFolderPath + archiveFileName), FileMode.OpenOrCreate))
+                //Using filestream to allow fileshare to alleviate potential
+                //denial of access due to multiple calls to archive method
+                using (var fstream = new FileStream((archivesFolderPath + archiveFileName), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
-                    using (ZipArchive archiver = new ZipArchive(fstream, ZipArchiveMode.Update))
+                    using (var archiver = new ZipArchive(fstream, ZipArchiveMode.Update))
                     {
-                        foreach (string logDate in logsToArchive)
+                        foreach (var logDate in logsToArchive)
                         {
-                            string logPath = _gngLoggerService.GetLogsFolderpath() + logDate;
+                            var logPath = _gngLoggerService.GetLogsFolderpath() + logDate;
                             ZipArchiveEntry logEntry = archiver.CreateEntryFromFile(logPath, logDate);
 
                             isSuccessfulDeletion = RemoveLog(logPath);
@@ -57,6 +59,8 @@ namespace ManagerLayer.ArchiverManager
                 }
 
             }
+            //Catch this error explicitly to see if archiver cannot find the .zip file
+            //Let other errors bubble up
             catch (FileNotFoundException e)
             {
                 isSuccessfulArchive = false;
@@ -76,12 +80,14 @@ namespace ManagerLayer.ArchiverManager
         /// <returns>Returns true or false depending on if the removal was successful</returns>
         private bool RemoveLog(string logPath)
         {
-            bool isSuccessfulRemoval = false;
+            var isSuccessfulRemoval = false;
             try
             {
                 File.Delete(logPath);
                 isSuccessfulRemoval = true;
             }
+            //Catch this error explicitly to see if archiver cannot find the log file
+            //Let other errors bubble up
             catch (FileNotFoundException e)
             {
                 isSuccessfulRemoval = false;

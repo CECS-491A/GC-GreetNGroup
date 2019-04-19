@@ -11,6 +11,7 @@
           <v-btn to="/testlogin">Login</v-btn>
           <v-btn to="/analysisdashboard">User Analysis</v-btn>
           <v-btn to="/logout"> Log Out</v-btn>
+          <v-btn to="/CreateEvent">Create Event</v-btn>
         </div>
     </v-toolbar>
     <div id="app">

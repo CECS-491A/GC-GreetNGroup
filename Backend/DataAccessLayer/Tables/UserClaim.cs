@@ -8,6 +8,13 @@ namespace DataAccessLayer.Tables
     {
         public UserClaim() { }
 
+        public UserClaim(int userId, Claim claim)
+        {
+            UId = userId;
+            ClaimId = claim.ClaimId;
+            Claim = claim;
+        }
+
         [Required, ForeignKey("User"), Column(Order = 1), Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int UId{ get; set; }
         public User User { get; set; }

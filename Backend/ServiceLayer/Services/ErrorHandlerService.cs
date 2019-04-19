@@ -25,7 +25,7 @@ namespace ServiceLayer.Services
         {
             errorMsg = errorMessage;
             errorCount = 0;
-            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString());
+            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString(), EnvironmentVariableTarget.User);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ServiceLayer.Services
         public void IncrementErrorOccurrenceCount(string errorMessage)
         {
             errorCount++;
-            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString());
+            Environment.SetEnvironmentVariable("ErrorCounter", errorCount.ToString(), EnvironmentVariableTarget.User);
             if (IsErrorCounterAtMax() == true)
             {
                 ResetErrorCount(errorMessage);

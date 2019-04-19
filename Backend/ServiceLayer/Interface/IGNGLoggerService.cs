@@ -14,5 +14,6 @@ namespace ServiceLayer.Interface
         string GetCurrentLogPath();
         bool LogGNGInternalErrors(string exception);
         Dictionary<string, int> GetLogIDs();
+        bool WriteGNGLogToFile(List<GNGLog> logList);
     }
 }

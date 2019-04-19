@@ -119,6 +119,14 @@
     <Compile Include="Migrations\201904110241033_EditEvent_02.Designer.cs">
       <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904190852010_RemovedUnusedTables.cs" />
+    <Compile Include="Migrations\201904190852010_RemovedUnusedTables.Designer.cs">
+      <DependentUpon>201904190852010_RemovedUnusedTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904190859045_UpdateTables.cs" />
+    <Compile Include="Migrations\201904190859045_UpdateTables.Designer.cs">
+      <DependentUpon>201904190859045_UpdateTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
@@ -128,18 +136,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tables\ActionsTable.cs" />
     <Compile Include="Tables\Attendance.cs" />
-    <Compile Include="Tables\Blocklist.cs" />
     <Compile Include="Tables\Claim.cs" />
     <Compile Include="Tables\Event.cs" />
-    <Compile Include="Tables\EventRole.cs" />
     <Compile Include="Tables\EventTag.cs" />
-    <Compile Include="Tables\Friend.cs" />
     <Compile Include="Tables\Tag.cs" />
     <Compile Include="Tables\User.cs" />
     <Compile Include="Tables\UserAction.cs" />
     <Compile Include="Tables\UserClaim.cs" />
     <Compile Include="Tables\UserRating.cs" />
-    <Compile Include="Tables\UserTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -206,6 +210,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904110241033_EditEvent_02.resx">
       <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904190852010_RemovedUnusedTables.resx">
+      <DependentUpon>201904190852010_RemovedUnusedTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904190859045_UpdateTables.resx">
+      <DependentUpon>201904190859045_UpdateTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

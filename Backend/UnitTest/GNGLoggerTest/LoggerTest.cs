@@ -76,9 +76,20 @@ namespace UnitTest.GNGLoggerTest
         }
 
         [TestMethod]
-        public void LogBadRequest_Pass()
+        public void LogEvent_Fail()
         {
+            //Arrange
+            GNGLogManager logManager = new GNGLogManager();
+            int userID = 1;
+            int eventID = 1;
+            string ipAddress = "1.1.1.1";
+            bool expected = false;
 
+            //Act
+            bool actual = logManager.LogGNGEventsCreated(userID.ToString(), eventID, ipAddress);
+
+            //Assert
+            Assert.AreEqual(actual, expected);
         }
 
     }
