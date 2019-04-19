@@ -8,6 +8,13 @@ namespace DataAccessLayer.Tables
     {
         public Attendance() { }
 
+        public Attendance(int eventId, int userId, bool checkedIn, string role)
+        {
+            EventId = eventId;
+            UserId = userId;
+            CheckedIn = checkedIn;
+            RoleName = role;
+        }
         [Key, ForeignKey("Event"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int EventId { get; set; }
         public Event Event { get; set; }
