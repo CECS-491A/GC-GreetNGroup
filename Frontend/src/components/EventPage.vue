@@ -6,10 +6,10 @@
       <v-card>
         <v-card-title primary class="justify-center" >
           <div>
-            <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">{{this.json[0].EventName}}</h3>
-            <h2>Host: {{this.json[0].User}}</h2>
-            <h2>Time: {{this.json[0].StartDate }}</h2>
-            <h2>Location: {{this.json[0].EventLocation }}</h2>
+            <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">{{this.json.EventName}}</h3>
+            <h2>Host: {{this.json.User}}</h2>
+            <h2>Time: {{this.json.StartDate }}</h2>
+            <h2>Location: {{this.json.EventLocation }}</h2>
           </div>
         </v-card-title>
         <v-card-actions primary class="justify-center">
@@ -28,7 +28,7 @@
         <v-card-title primary class="justify-center">
           <div>
             <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">Description:</h3>
-            <h2>{{this.json[0].EventDescription }}</h2>
+            <h2>{{this.json.EventDescription }}</h2>
           </div>
         </v-card-title>
       </v-card>
@@ -62,19 +62,22 @@ export default {
       message: null,
       errorMessage: null,
       eventNames: this.$route.params.name,
-      json: [],
+      json: {},
       userAttending: [],
       eventTAGS: []
     }
   },
   created () {
-    axios.get('http://localhost:62008/api/eventInfo?name=' + this.eventNames) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
-      .then((response) => { 
-        this.user = '' 
-        const isDataAvailable = response.data && response.data.length > 0
-        this.json = isDataAvailable ? response.data : []
-      })
-      .catch(error => console.log(error))
+    axios({
+      method: 'GET',
+      url: 'http://localhost:62008/api/event/info?name=' + this.eventNames,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+    })
+      .then(response => (this.json = response.data), this.userRetrieved = true)
+      .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
     joinEvent () {

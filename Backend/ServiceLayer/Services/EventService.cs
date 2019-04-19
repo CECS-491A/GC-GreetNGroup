@@ -310,6 +310,25 @@ namespace ServiceLayer.Services
             }
         }
 
+        // Retrieves event in list format give partial event name/search input
+        public Event GetEventByName(string searchInput)
+        {
+            Event foundEvent = null;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    foundEvent = ctx.Events.FirstOrDefault(c => c.EventName.Equals(searchInput));
+                    return foundEvent;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return foundEvent;
+            }
+        }
+
         /// <summary>
         /// Method IsUserAtMaxEventCreation queries the database to check the creation
         /// count of the user attempting to create an event. If the user has reached 5
