@@ -37,7 +37,7 @@
                     <router-link :to="'/eventpage/' + EventName">
                       <button  id="event-b"> {{EventName}} </button>
                     </router-link>
-                    <article> {{'Start Date: ' + StartDate}} </article>
+                    <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
                   </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
@@ -115,6 +115,15 @@ export default {
     checkInput: function (i) {
       if (i !== '') return true
       return false
+    },
+    // Formats date into standard reading format
+    formatDate (date) {
+      // DateTime objects formatted as 'YYYY-MM-DD T HH:MM:SS', formatting will result in array of size 6
+      var splitDate = date.split('-').join(',').split('T').join(',').split(':').join(',').split(',')
+      var interval = parseInt(splitDate[3]) >= 12 ? 'PM' : 'AM'
+      var hour = parseInt(splitDate[3], 10) % 12 !== 0 ? parseInt(splitDate[3], 10) % 12 : 12
+      var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
+      return formattedDate
     },
     // Finds events by partial name match
     findEventsByName: function (i) {
