@@ -74,7 +74,7 @@ export default {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
-      },
+      }
     })
       .then(response => (this.json = response.data), this.userRetrieved = true)
       .catch(e => { this.errorMessage = e.response.data })
