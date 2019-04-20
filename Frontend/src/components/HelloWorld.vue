@@ -21,7 +21,6 @@ export default {
   },
   mounted () {
     axios.get(`${apiURL}/helloworld/hello`).then(response => (this.info = response.data))
-    console.log(process.env.VUE_APP_API_URL)
   }
 }
 </script>
