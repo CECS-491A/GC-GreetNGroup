@@ -35,10 +35,12 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
                   <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
+                    <p>{{findUserByUserId(UserId)}}</p>
                     <router-link :to="'/eventpage/' + EventName">
                       <button  id="event-b"> {{EventName}} </button>
                     </router-link>
                     <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
+                    <article> {{'Host: ' + eventHost}} </article>
                   </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
@@ -92,6 +94,7 @@ export default {
         IsActivated: '',
         EventCreationCount: ''
       },
+      eventHost: '',
       title: 'GreetNGroup',
       placeholderText: 'search for events',
       search: '',
@@ -134,6 +137,16 @@ export default {
       var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
       return formattedDate
     },
+    findUserByUserId: function (i) {
+      var url = `${apiURL}/searchUserId/` + i
+      axios.get(url)
+        .then((response) => {
+          const isDataAvailable = response.data && response.data.length > 0
+          var name = isDataAvailable ? response.data : ''
+          this.eventHost = name
+        })
+        .catch(error => console.log(error))
+    },
     // Finds events by partial name match
     findEventsByName: function (i) {
       this.pageLimit = this.newPageLimit
@@ -141,7 +154,7 @@ export default {
       this.pageEnd = this.pageLimit
       var url = `${apiURL}/searchEvent?name=`
       if (i === '') return
-      axios.get(url + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
+      axios.get(url + i)
         .then((response) => { 
           this.user = '' 
           const isDataAvailable = response.data && response.data.length > 0
@@ -157,7 +170,7 @@ export default {
       this.pageEnd = this.pageLimit
       var url = `${apiURL}/searchUser?username=`
       if (i === '') return
-      axios.get(url + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
+      axios.get(url + i)
         .then((response) => { 
           this.events = []
           const isDataAvailable = response.data
