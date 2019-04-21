@@ -19,7 +19,8 @@
               label="Select a filter"
             ></v-select>
             <v-select
-              v-model="pageLimit"
+              v-model="newPageLimit"
+              v-on:click="restResults()"
               :items="resultCount"
               :menu-props="{ maxHeight: '200' }"
               label="Select display count"
@@ -100,12 +101,19 @@ export default {
       filter: 'Events',
       pageturner: false,
       pageStart: 0,
+      newPageLimit: 5,
       pageLimit: 5,
       pageEnd: 5,
       endReached: false
     }
   },
   methods: {
+    resetResults: function () {
+      this.events = []
+      this.user = ''
+      this.pageStart = 0
+      this.pageEnd = this.pageLimit
+    },
     // Determines which field to search under
     checkSearchFilter: function (i) {
       if (i === 'Users') return true
@@ -127,6 +135,8 @@ export default {
     },
     // Finds events by partial name match
     findEventsByName: function (i) {
+      this.pageLimit = this.newPageLimit
+      this.pageStart = 0
       this.pageEnd = this.pageLimit
       if (i === '') return
       axios.get('http://localhost:62008/api/searchEvent?name=' + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
@@ -140,6 +150,8 @@ export default {
     },
     // Finds username by identical name match
     findUserByUsername: function (i) {
+      this.pageLimit = this.newPageLimit
+      this.pageStart = 0
       this.pageEnd = this.pageLimit
       if (i === '') return
       axios.get('http://localhost:62008/api/searchUser?username=' + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
