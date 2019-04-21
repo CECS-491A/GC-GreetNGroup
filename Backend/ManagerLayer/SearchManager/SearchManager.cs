@@ -20,5 +20,11 @@ namespace ManagerLayer.SearchManager
         {
             return _userManager.SearchByName(name);
         }
+
+        // Used to return User given id -- user is allowed to be null
+        public User GetUserByUserId(int id)
+        {
+            return _userManager.SearchById(id);
+        }
     }
 }

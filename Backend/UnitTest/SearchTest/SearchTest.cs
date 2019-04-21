@@ -89,6 +89,29 @@ namespace UnitTest.SearchTest
             Assert.AreEqual(expected, result);
         }
 
+        [TestMethod]
+        public void PassTestFindUserByUid()
+        {
+            // Arrange
+            var searchManager = new SearchManager();
+            var userService = new UserService();
+
+            const bool expected = true;
+
+            // Act
+            var dob = DateTime.Parse("09/19/1999");
+            var user = new User(UserId1, FirstName, LastName, UserName, City, State, Country, dob, true);
+            userService.InsertUser(user);
+
+            var result = searchManager.GetUserByUserId(UserId1).UserName.Equals(user.UserName);
+
+            // Cleanup
+            userService.DeleteUser(user);
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
+
         #endregion
 
         #region Fail Tests
