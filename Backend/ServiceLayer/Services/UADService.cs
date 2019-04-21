@@ -265,9 +265,9 @@ namespace ServiceLayer.Services
         /// </summary>
         /// <param name="logs">List of logs</param>
         /// <param name="url">specific url</param>
-        public string ValidateInput(string month)
+        public bool IsMonthValid(string month)
         {
-            string result = "fail";
+            var result = false;
             List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber" };
             if (string.IsNullOrEmpty(month))
             {
@@ -279,10 +279,40 @@ namespace ServiceLayer.Services
             {
                 if(month.CompareTo(months[i]) == 0)
                 {
-                    result = month;
+                    result = true;
                 }
             }
             return result;
+        }
+        /// <summary>
+        /// Function that Pairs starting and ending logs together to create sessions
+        /// </summary>
+        /// <param name="startLogs">List of Logs for when sessions begin</param>
+        /// <param name="endLogs">List of Logs whenever sessions end</param>
+        /// <returns>Paired List of Logs</returns>
+        public List<GNGLog> PairStartAndEndLogs(List<GNGLog> startLogs, List<GNGLog> endLogs)
+        {
+            List<GNGLog> sessions = new List<GNGLog>();
+            for (int k = 0; k < endLogs.Count; k++)
+            {
+                bool notFound = true;
+                int pos = 0;
+                while (notFound == true)
+                {
+                    if (startLogs[pos].userID == endLogs[k].userID)
+                    {
+                        sessions.Add(endLogs[k]);
+                        sessions.Add(startLogs[pos]);
+                        startLogs.Remove(startLogs[pos]);
+                        notFound = false;
+                    }
+                    else
+                    {
+                        pos++;
+                    }
+                }
+            }
+            return sessions;
         }
 
     }
