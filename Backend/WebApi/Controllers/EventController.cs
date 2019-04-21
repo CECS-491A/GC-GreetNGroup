@@ -3,6 +3,7 @@ using System.Web.Http;
 using ServiceLayer.Services;
 using ManagerLayer.GNGLogManagement;
 using ServiceLayer.Requests;
+using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -37,7 +38,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/event/createevent")]
-        public IHttpActionResult CreateNewEvent([FromBody] EventCreationRequest request)
+        public IHttpActionResult CreateNewEvent([FromBody] EventRequest request)
         {
             try
             {
@@ -45,8 +46,18 @@ namespace WebApi.Controllers
                     request.address, request.city, request.state, request.zip, 
                     request.eventTags, request.eventDescription);
                 var eventId = newEvent.EventId;
-                gngLogManager.LogGNGEventsCreated(request.userId.ToString(), eventId, request.ip);
-                return Ok(newEvent);
+                if(newEvent != null)
+                {
+                    gngLogManager.LogGNGEventsCreated(request.userId.ToString(), eventId, request.ip);
+                    return Ok(newEvent);
+                }
+                else
+                {
+                    gngLogManager.LogErrorsEncountered(request.userId.ToString(), HttpStatusCode.Conflict.ToString(),
+                        request.url, "The event failed to be created", request.ip);
+                    return Content(HttpStatusCode.Conflict, "Event Creation was unsuccessful");
+                }
+                
             }
             catch(HttpRequestException e)
             {
@@ -54,6 +65,34 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
+        }
+
+        [HttpPost]
+        [Route("api/event/{eventId}/updateevent")]
+        public IHttpActionResult UpdateEvent([FromBody] EventRequest request)
+        {
+            try
+            {
+                var eventToUpdate = eventService.GetEventById(request.eventId);
+                var isSuccessfulUpdate = eventService.UpdateEvent(request.eventId, request.userId, request.startDate, request.eventName,
+                    request.address, request.city, request.state, request.zip, request.eventTags, request.eventDescription);
+                if(isSuccessfulUpdate == true)
+                {
+                    gngLogManager.LogGNGEventUpdate(request.eventId, request.userId.ToString(), request.ip);
+                    return Content(HttpStatusCode.OK, true);
+                }
+                else
+                {
+                    gngLogManager.LogErrorsEncountered(request.userId.ToString(), HttpStatusCode.Conflict.ToString(), 
+                        request.url, "The event failed to update", request.ip);
+                    return Content(HttpStatusCode.Conflict, "The update was unsuccessful");
+                }
+            }
+            catch(HttpResponseException e)
+            {
+                gngLogManager.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
+                return BadRequest();
+            }
         }
     }
 }

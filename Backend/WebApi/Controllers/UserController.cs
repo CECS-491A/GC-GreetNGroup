@@ -4,12 +4,16 @@ using ServiceLayer.Requests;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using ManagerLayer.GNGLogManagement;
 
 namespace WebApi.Controllers
 {
     public class UserController : ApiController
     {
+        private GNGLogManager gngLogManager = new GNGLogManager();
+
         [HttpGet]
         [Route("api/user/{userID}")]
         public IHttpActionResult Get(string userID)
@@ -35,8 +39,9 @@ namespace WebApi.Controllers
                     return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                gngLogManager.LogBadRequest("", "", "", e.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
@@ -66,8 +71,9 @@ namespace WebApi.Controllers
                     return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 }
             }
-            catch (Exception) //Catch all errors
+            catch (Exception e) //Catch all errors
             {
+                gngLogManager.LogBadRequest("", "", "", e.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
