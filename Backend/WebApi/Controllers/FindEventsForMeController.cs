@@ -10,22 +10,15 @@ namespace WebApi.Controllers
 {
     public class FindEventsForMeController : ApiController
     {
-        // For FromBody field, supplies current user Ip, and url
-        public class FindEventsForMeRequest
-        {
-            [Required] public string Ip { get; set; }
-            [Required] public string Url { get; set; }
-        }
-
         /*
-        [Route("api/FindEventsForMe/{date}")]
-        public IHttpActionResult GetEventsByDate(DateTime date)
+        [Route("api/FindEventsForMe/")]
+        public IHttpActionResult GetEventsByDate([FromUri] date)
         {
-
+            
         }
 
-        [Route("api/FindEventsForMe/{state}")]
-        public IHttpActionResult GetEventsByState(string state)
+        [Route("api/FindEventsForMe/")]
+        public IHttpActionResult GetEventsByState([FromUri] state)
         {
 
         }

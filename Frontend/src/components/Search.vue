@@ -73,6 +73,7 @@
 
 <script>
 import axios from 'axios'
+import { apiURL } from '@/const.js'
 
 export default {
   name: 'SearchPage',
@@ -138,8 +139,9 @@ export default {
       this.pageLimit = this.newPageLimit
       this.pageStart = 0
       this.pageEnd = this.pageLimit
+      var url = `${apiURL}/searchEvent?name=`
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchEvent?name=' + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
+      axios.get(url + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
         .then((response) => { 
           this.user = '' 
           const isDataAvailable = response.data && response.data.length > 0
@@ -153,8 +155,9 @@ export default {
       this.pageLimit = this.newPageLimit
       this.pageStart = 0
       this.pageEnd = this.pageLimit
+      var url = `${apiURL}/searchUser?username=`
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchUser?username=' + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
+      axios.get(url + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
         .then((response) => { 
           this.events = []
           const isDataAvailable = response.data
