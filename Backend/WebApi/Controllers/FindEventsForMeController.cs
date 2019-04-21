@@ -10,35 +10,22 @@ namespace WebApi.Controllers
 {
     public class FindEventsForMeController : ApiController
     {
+        public class EventSearchFilters
+        {
+            public string Tags { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public string State { get; set; }
+        }
+
         /*
-        [Route("api/FindEventsForMe/")]
-        public IHttpActionResult GetEventsByDate([FromUri] date)
+        [Route("api/FindEventsForMe/{useTags}/{useDates}/{useStates}/")]
+        public IHttpActionResult GetEvents([FromUri] EventSearchFilters filter)
         {
-            
+            // make call to function with 4 params     findEvents(useTags, useDates, useStates, filter)
+            // use bools to determine strategy
+            // strategy will grab from filter as needed
         }
-
-        [Route("api/FindEventsForMe/")]
-        public IHttpActionResult GetEventsByState([FromUri] state)
-        {
-
-        }
-
-        [Route("api/FindEventsForMe/{tag}")]
-        public IHttpActionResult GetEventsByTag([FromUri] List<string> tag)
-        {
-
-        }
-
-        [Route("api/FindEventsForMe/{tag}/{date}")]
-        public IHttpActionResult GetEventsByTagAndDate([FromUri] List<string> tag, DateTime date)
-        {
-
-        }
-
-        [Route("api/FindEventsForMe/{tag}/{date}/{state}")]
-        public IHttpActionResult GetEventsByTagDateAndState([FromUri] List<string> tag, DateTime date, string state)
-        {
-
         }
         */
     }
