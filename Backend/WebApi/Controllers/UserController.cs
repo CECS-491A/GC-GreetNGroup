@@ -1,15 +1,18 @@
 ﻿using ManagerLayer.LoginManagement;
 using ManagerLayer.ProfileManagement;
 using ServiceLayer.Requests;
+using ServiceLayer.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace WebApi.Controllers
 {
     public class UserController : ApiController
     {
+        UserService userService = new UserService();
         [HttpGet]
         [Route("api/user/{userID}")]
         public IHttpActionResult Get(string userID)
@@ -112,6 +115,23 @@ namespace WebApi.Controllers
             else
             {
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+            }
+        }
+
+        [HttpGet]
+        [Route("api/user/username/{userID}")]
+        public IHttpActionResult GetUserByID(int userID)
+        {
+            try
+            {
+                // Retrieves info for GET
+                var user = userService.GetUserById(userID);
+                var fullName = user.FirstName + " " + user.LastName;
+                return Ok(fullName);
+            }
+            catch (HttpRequestException e)
+            {
+                return BadRequest();
             }
         }
     }

@@ -50,7 +50,7 @@
               <div v-if="user !== null">
                 <div id="user-d">
                   <router-link :to="'/User/' + user.UserId">
-                    <button id="user-b" > {{user.UserName}} </button>
+                    <button id="user-b" > {{user}} </button>
                   </router-link>
                 </div>
               </div>

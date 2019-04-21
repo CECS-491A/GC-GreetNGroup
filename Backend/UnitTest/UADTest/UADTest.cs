@@ -1,7 +1,6 @@
 ﻿using DataAccessLayer.Models;
 using ManagerLayer.UADManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Interface;
 using ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,8 @@ namespace UnitTest.UADTest
         public void TestMonthlyLoginvsRegistered()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetLoginVSRegistered("March");
+            string test = uadManager.GetLoginVSRegistered("March");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -25,7 +25,8 @@ namespace UnitTest.UADTest
         public void TestMonthlyLoginOverSixMonths()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetLoggedInMonthly("March");
+            string test = uadManager.GetLoggedInMonthly("June");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -34,7 +35,8 @@ namespace UnitTest.UADTest
         public void Top5MostUsedFeature()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetTop5MostUsedFeature("March");
+            string test = uadManager.GetTop5MostUsedFeature("March");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -43,7 +45,8 @@ namespace UnitTest.UADTest
         public void AverageSessionDuration()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetAverageSessionDuration("March");
+            string test = uadManager.GetAverageSessionDuration("March");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -52,7 +55,8 @@ namespace UnitTest.UADTest
         public void AverageSessionMonthly()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetAverageSessionMonthly("March");
+            string test = uadManager.GetAverageSessionMonthly("June");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -61,7 +65,8 @@ namespace UnitTest.UADTest
         public void Top5AveragePageSession()
         {
             UADManager uadManager = new UADManager();
-            uadManager.GetTop5AveragePageSession("March");
+            string test = uadManager.GetTop5AveragePageSession("March");
+            Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
@@ -109,7 +114,7 @@ namespace UnitTest.UADTest
             //Act
             logList = _loggerService.ReadLogsPath(path);
             logList = _uadService.GetLogsFortheMonth(logList, month);
-            if (logList.Count == 2)
+            if (logList.Count == 3)
             {
                 actual = true;
             }
