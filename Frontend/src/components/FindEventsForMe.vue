@@ -7,28 +7,36 @@
             <v-card ref="Tags">
                 <v-layout align-start justify-start row wrap>
                     <v-flex xs5>
-                        <v-checkbox v-model="useTags" label="Use Tags" value="UseTags"></v-checkbox>
+                        <v-checkbox v-model="useTags" label="Use Tags"></v-checkbox>
                     </v-flex>
                 </v-layout>
-                <v-radio-group row>
-                    <v-radio label="Outdoors" value="outdoors"></v-radio>
-                    <v-radio label="Indoors" value="indoors"></v-radio>
-                    <v-radio label="Music" value="music"></v-radio>
-                    <v-radio label="Games" value="games"></v-radio>
-                    <v-radio label="Fitness" value="fitness"></v-radio>
-                    <v-radio label="Art" value="art"></v-radio>
-                    <v-radio label="Sports" value="sports"></v-radio>
-                    <v-radio label="Educational" value="educational"></v-radio>
-                    <v-radio label="Food" value="food"></v-radio>
-                    <v-radio label="Discussion" value="discussion"></v-radio>
-                    <v-radio label="Miscellaneous" value="miscellaneous"></v-radio>
-                </v-radio-group>
+                <v-select
+                    v-model="selectedTags"
+                    :items="tags"
+                    label="Choose Tags"
+                    multiple
+                    >
+                    <template v-slot:prepend-item>
+                        <v-list-tile
+                        ripple
+                        @click="toggle"
+                        >
+                        <v-list-tile-action>
+                            <v-icon :color="selectedTags.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Select All</v-list-tile-title>
+                        </v-list-tile-content>
+                        </v-list-tile>
+                        <v-divider class="mt-2"></v-divider>
+                    </template>
+                </v-select>
             </v-card>
             <hr>
             <v-card ref="Dates">
                 <v-layout align-start justify-start row wrap>
                     <v-flex xs5>
-                        <v-checkbox v-model="useDates" label="Use Dates" value="UseDates"></v-checkbox>
+                        <v-checkbox v-model="useDates" label="Use Dates"></v-checkbox>
                     </v-flex>
                 </v-layout>
                 <v-radio-group row>
@@ -91,6 +99,37 @@
                     </v-menu>
                 </v-radio-group>
             </v-card>
+            <hr>
+            <v-card ref="Locations">
+                <v-layout align-start justify-start row wrap>
+                    <v-flex xs5>
+                        <v-checkbox v-model="useLocation" label="Use Location"></v-checkbox>
+                    </v-flex>
+                </v-layout>
+                <v-select
+                v-model="selectedStates"
+                :items="states"
+                label="Choose Location"
+                >
+                <template v-slot:prepend-item>
+                    <v-list-tile
+                    ripple
+                    @click="toggle"
+                    >
+                    <v-list-tile-action>
+                        <v-icon :color="selectedStates.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Select All</v-list-tile-title>
+                    </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider class="mt-2"></v-divider>
+                </template>
+                </v-select>
+            </v-card>
+            <v-card>
+                <button v-on:click="findEventsForMe()">Search</button>
+            </v-card>
         </v-container>
     </v-app>
 </template>
@@ -101,12 +140,33 @@ export default {
   data () {
     return {
       title: 'Find Events For Me',
-      useTags: '',
-      useDates: '',
+      useTags: false,
+      useDates: false,
+      useLocation: false,
       startDate: new Date().toISOString().substr(0, 10),
       startDateMenu: false,
       endDate: new Date().toISOString().substr(0, 10),
-      endDateMenu: false
+      endDateMenu: false,
+      tags: [
+        'Outdoors', 'Indoors', 'Music', 'Games', 'Fitness', 'Art', 'Sports', 'Educational', 'Food',
+        'Discussion', 'Miscellaneous'
+      ],
+      selectedTags: [],
+      states: [
+        'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 
+        'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois Indiana', 'Iowa', 'Kansas', 
+        'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+        'Mississippi', 'Missouri', 'Montana Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+        'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+        'Pennsylvania Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah',
+        'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+      ],
+      selectedStates: []
+    }
+  },
+  methods: {
+    findEventsForMe: function () {
+      return ''
     }
   }
 }
