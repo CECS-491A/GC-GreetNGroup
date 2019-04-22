@@ -4,6 +4,7 @@ using ServiceLayer.Services;
 using ManagerLayer.GNGLogManagement;
 using ServiceLayer.Requests;
 using System.Net;
+using ManagerLayer.SearchManager;
 
 namespace WebApi.Controllers
 {
@@ -91,6 +92,32 @@ namespace WebApi.Controllers
             catch(HttpResponseException e)
             {
                 gngLogManager.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
+            }
+        }
+        
+        /// <summary>
+        /// Returns a list of events based on partial matching of the user input
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/event/info")]
+        public IHttpActionResult GetEventByName([FromUri]string name)
+        {
+            try
+            {
+                // Prevents no input search
+                if (name.Length < 0) Ok();
+
+                // Retrieves info for GET
+                var e = eventService.GetEventByName(name);
+
+                return Ok(e);
+            }
+            catch (HttpRequestException e)
+            {
+                // logs error -- does not care about ip or userId
+                // gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
                 return BadRequest();
             }
         }

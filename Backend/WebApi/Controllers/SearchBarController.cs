@@ -72,5 +72,30 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
+
+        /// <summary>
+        /// Returns a user if the userId matches an existing userId in the database
+        /// </summary>
+        /// <param name="uId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/searchUserId/{uId}")]
+        public IHttpActionResult GetUserById(int uId)
+        {
+            var searchManager = new SearchManager();
+            try
+            {
+                // Retrieves info for GET
+                var e = searchManager.GetUserByUserId(uId).UserName;
+
+                return Ok(e);
+            }
+            catch (HttpRequestException e)
+            {
+                // logs error -- does not care about ip or userId
+                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/searchUserId", e.ToString());
+                return BadRequest();
+            }
+        }
     }
 }
