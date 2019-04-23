@@ -1,10 +1,13 @@
-﻿using DataAccessLayer.Context;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using DataAccessLayer.Tables;
+using Newtonsoft.Json;
 using ServiceLayer.Interface;
 using ServiceLayer.Model;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
-using System;
 
 namespace ManagerLayer.ProfileManagement
 {
@@ -24,112 +27,144 @@ namespace ManagerLayer.ProfileManagement
             _ratingService = new RatingService();
         }
 
-        public int GetUserController(string userID)
-        {
-            try
-            {
-                int userIDConverted = Convert.ToInt32(userID);
-                if (CheckUserExists(userIDConverted))
-                {
-                    return 1; //OK
-                }
-                return -1;
-            }
-            catch
-            {
-                //log
-                return -2;
-            }
-        }
-
         public bool CheckUserExists(int userID)
         {
             return _userService.IsUsernameFoundById(userID);
         }
 
-        public UserProfile GetUserProfile(string userID)
-        {
-            try
-            {
-                int convertedUserID = Convert.ToInt32(userID);
-                User retrievedUser = _userService.GetUserById(convertedUserID);
-                if (retrievedUser != null)
-                {
-                    UserProfile up = new UserProfile();
-                    up.FirstName = retrievedUser.FirstName;
-                    up.LastName = retrievedUser.LastName;
-                    up.UserName = retrievedUser.UserName;
-                    up.DoB = retrievedUser.DoB;
-                    up.City = retrievedUser.City;
-                    up.State = retrievedUser.State;
-                    up.Country = retrievedUser.Country;
-                    up.EventCreationCount = retrievedUser.EventCreationCount;
-                    up.Rating = GetUserRating(convertedUserID);
-                    return up;
-                }
-                return null;
-            }
-            catch (FormatException)
-            {
-                //log
-                return null;
-            }
-        }
-
-        public int GetUserToUpdateController(string jwtToken)
-        {
-            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
-            {
-                if (_userService.GetUserById(_jwtServce.GetUserIDFromToken(jwtToken)) != null)
-                {
-                    return 1; //OK
-                }
-                return -1; //BadRequest, invalid user
-            }
-            return -2; //Unauthorized, invalid token
-        }
-
-        public UpdateProfileRequest GetUserToUpdate(string jwtToken)
-        {
-            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
-            if(userID != -1)
-            {
-                User retrievedUser = _userService.GetUserById(userID);
-                UpdateProfileRequest request = new UpdateProfileRequest();
-                request.FirstName = retrievedUser.FirstName;
-                request.LastName = retrievedUser.LastName;
-                request.DoB = retrievedUser.DoB;
-                request.City = retrievedUser.City;
-                request.State = retrievedUser.State;
-                request.Country = retrievedUser.Country;
-                return request;
-            }
-            return null;
-        }
-
-        public int UpdateUserProfile(UpdateProfileRequest request)
-        {
-            if (!_jwtServce.IsJWTSignatureTampered(request.JwtToken)){
-                int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
-                User retrievedUser = _userService.GetUserById(userID);
-                retrievedUser.FirstName = request.FirstName;
-                retrievedUser.LastName = request.LastName;
-                retrievedUser.DoB = request.DoB;
-                retrievedUser.City = request.City;
-                retrievedUser.State = request.State;
-                retrievedUser.Country = request.Country;
-                if (_userService.UpdateUser(retrievedUser))
-                {
-                    return 1; //OK. succesful update
-                }
-                return -2; //Service unavailable
-            }
-            return -1; //Unauthorized, invalid token
-        }
-
         public string GetUserRating(int userID)
         {
             return _ratingService.GetRating(userID).ToString();
+        }
+
+        public HttpResponseMessage GetUser(string userID)
+        {
+            try
+            {
+                int userIDConverted = Convert.ToInt32(userID);
+                if (!CheckUserExists(userIDConverted))
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent("User does not exist")
+                    };
+                    return httpResponseFail;
+                }
+
+                User retrievedUser = _userService.GetUserById(userIDConverted);
+                if (retrievedUser == null)
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent("User does not exist")
+                    };
+                    return httpResponseFail;
+                }
+                UserProfile up = new UserProfile();
+                up.FirstName = retrievedUser.FirstName;
+                up.LastName = retrievedUser.LastName;
+                up.UserName = retrievedUser.UserName;
+                up.DoB = retrievedUser.DoB;
+                up.City = retrievedUser.City;
+                up.State = retrievedUser.State;
+                up.Country = retrievedUser.Country;
+                up.EventCreationCount = retrievedUser.EventCreationCount;
+                up.Rating = GetUserRating(userIDConverted);
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(up))
+                };
+                return httpResponse;
+            }
+            catch
+            {
+                //log
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    Content = new StringContent("Unable to get user")
+                };
+                return httpResponse;
+            }
+        }
+
+        public HttpResponseMessage GetUserToUpdate(string jwtToken)
+        {
+            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                {
+                    Content = new StringContent("Session is invalid")
+                };
+                return httpResponseFail;
+            }
+
+            if (_userService.GetUserById(_jwtServce.GetUserIDFromToken(jwtToken)) == null)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Unable to get user from token")
+                };
+                return httpResponseFail;
+            }
+
+            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
+            if (userID == -1)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Unable to retrieve user data, user not found")
+                };
+                return httpResponseFail;
+            }
+
+            User retrievedUser = _userService.GetUserById(userID);
+            UpdateProfileRequest request = new UpdateProfileRequest();
+            request.FirstName = retrievedUser.FirstName;
+            request.LastName = retrievedUser.LastName;
+            request.DoB = retrievedUser.DoB;
+            request.City = retrievedUser.City;
+            request.State = retrievedUser.State;
+            request.Country = retrievedUser.Country;
+
+            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(request))
+            };
+            return httpResponse;
+        }
+
+        public HttpResponseMessage UpdateUserProfile(UpdateProfileRequest request)
+        {
+            if (_jwtServce.IsJWTSignatureTampered(request.JwtToken)){
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                {
+                    Content = new StringContent("Session is invalid")
+                };
+                return httpResponseFail;
+            }
+
+            int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
+            User retrievedUser = _userService.GetUserById(userID);
+            retrievedUser.FirstName = request.FirstName;
+            retrievedUser.LastName = request.LastName;
+            retrievedUser.DoB = request.DoB;
+            retrievedUser.City = request.City;
+            retrievedUser.State = request.State;
+            retrievedUser.Country = request.Country;
+            if (!_userService.UpdateUser(retrievedUser))
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    Content = new StringContent("Unable to update user")
+                };
+                return httpResponseFail;
+            }
+
+            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("Profile has been updated")
+            };
+            return httpResponse;
         }
 
         public bool CheckProfileActivated(string jwtToken)
@@ -143,6 +178,7 @@ namespace ManagerLayer.ProfileManagement
             return false;
         }
 
+        /*
         public int RateUser(RateRequest request, string rateeID)
         {
             try
@@ -161,7 +197,6 @@ namespace ManagerLayer.ProfileManagement
                 return -1;
             }
         }
-
-
+        */
     }
 }

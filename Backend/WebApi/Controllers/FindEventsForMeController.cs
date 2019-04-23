@@ -12,7 +12,17 @@ namespace WebApi.Controllers
     {
         public class EventSearchFilters
         {
-            public string Tags { get; set; }
+            public string Outdoors { get; set; }
+            public string Indoors { get; set; }
+            public string Music { get; set; }
+            public string Games { get; set; }
+            public string Fitness { get; set; }
+            public string Art { get; set; }
+            public string Sports { get; set; }
+            public string Educational { get; set; }
+            public string Food { get; set; }
+            public string Discussion { get; set; }
+            public string Miscellaneous { get; set; }
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public string State { get; set; }

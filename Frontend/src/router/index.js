@@ -10,7 +10,7 @@ import AnalysisDashboard from '@/components/AnalysisDashboard'
 import CreateEvent from '@/components/CreateEvent'
 import Profile from '@/components/Profile'
 import UpdateProfile from '@/components/UpdateProfile'
-import Home from '@/components/Home'
+import Login from '@/components/Login'
 import Welcome from '@/components/Welcome'
 import Logout from '@/components/Logout'
 import EventPage from '@/components/EventPage'
@@ -75,9 +75,9 @@ const router = new Router({
       component: Profile
     },
     {
-      path: '/home/:token',
-      name: 'home',
-      component: Home
+      path: '/login/:token/:emailaddress',
+      name: 'login',
+      component: Login
     },
     {
       path: '/updateprofile',

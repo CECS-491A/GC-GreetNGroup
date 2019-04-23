@@ -5,15 +5,13 @@ Vue.use(vuex);
 
 const store = new Vuex.Store({
     state: {
+        email: '',
         status: '',
-        token: localStorage.getItem('Token') || '',
-        users: {
-            
-        }
+        token: localStorage.getItem('Token') || ''
     },
     getters: {
-        getUser: state => {
-            return state.users.filter(user => users.userName);
+        getEmail: state => {
+            return state.email;
         },
         isLoggedIn: state => {
             return !!state.token;
@@ -23,10 +21,10 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-        authentication_success(state, token, user){
+        authentication_success(state, token, email){
             state.status = 'success'
             state.token = token
-            state.user = user
+            state.email = email
         },
         authentication_invalid(state){
             state.status = 'unsuccessful'
@@ -34,6 +32,7 @@ const store = new Vuex.Store({
         logout(state){
             state.status = ''
             state.token = ''
+            state.email = ''
         }
     }
 })
