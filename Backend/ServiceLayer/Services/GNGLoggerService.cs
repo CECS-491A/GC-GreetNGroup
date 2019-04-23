@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using DataAccessLayer.Models;
 using ServiceLayer.Interface;
+using ServiceLayer.Model;
 
 namespace ServiceLayer.Services
 {
@@ -16,16 +17,14 @@ namespace ServiceLayer.Services
          */
 
         private IErrorHandlerService _errorHandlerService;
-        //Readonly because it should not be changed in functions outside of constructor
-        private readonly string LOGS_FOLDERPATH = Environment.GetEnvironmentVariable("GngLogsPath", EnvironmentVariableTarget.User);
-        //Constant because it must be the same throughout the program
-        private const string LOG_IDENTIFIER = "_gnglog.json";
         private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
+        private Configurations configurations;
 
         public GNGLoggerService()
         {
             _errorHandlerService = new ErrorHandlerService();
+            configurations = new Configurations();
         }
 
         /// <summary>
@@ -35,16 +34,18 @@ namespace ServiceLayer.Services
         /// the current log
         /// </summary>
         /// <returns>Returns true or false if log exists or not</returns>
-        public bool CheckForExistingLog()
+        public bool CheckForExistingLog(string fileName, string directory)
         {
             var logExists = false;
             try
             {
-                var currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-                logExists = File.Exists(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER);
+                //Format current day like this to prevent errors with using forward slashes
+                var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+                logExists = File.Exists(directory + fileName);
             }
-            //Catch FileNotFound explicitly as it catches errors where it cannot find the log
-            //Let other exceptions bubble up
+            /* Catch FileNotFound explicitly as it catches errors where it cannot find the log
+             * Let other exceptions bubble up
+             */ 
             catch (FileNotFoundException e)
             {
                 _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
@@ -58,35 +59,38 @@ namespace ServiceLayer.Services
         /// Method CreateNewLog creates a new log if a log does 
         /// not exist for the current date
         /// </summary>
-        public string CreateNewLog()
+        public bool CreateNewLog(string fileName, string directory)
         {
-            var logExists = CheckForExistingLog();
-            var currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-            if (logExists == false)
+            var isSuccessfulCreate = false;
+            var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+            if (CheckForExistingLog(fileName, directory) == false)
             {
                 try
                 {
-                    using (var fileStream = new FileStream(LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER,
+                    using (var fileStream = new FileStream(directory + fileName,
                     FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
-                        currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
+                        currentLogPath = directory + fileName;
                         fileStream.Close();
                     }
+                    isSuccessfulCreate = true;
+                    return isSuccessfulCreate;
                 }
-                //Catch IOException esxplicitly when it fails to create a log
-                //Let other errors bubble up
+                /* Catch IOException esxplicitly when it fails to create a log
+                 * Let other errors bubble up
+                 */ 
                 catch (IOException e)
                 {
                     _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+                    return isSuccessfulCreate;
                 }
 
             }
             else
             {
-                currentLogPath = LOGS_FOLDERPATH + currentDate + LOG_IDENTIFIER;
+                currentLogPath = directory + fileName;
+                return isSuccessfulCreate;
             }
-
-            return currentLogPath;
         }
 
         /// <summary>
@@ -118,16 +122,6 @@ namespace ServiceLayer.Services
             logIDMap.Add("EventExpired", 1016);
 
             return logIDMap;
-        }
-
-        public string GetLogsExtentionName()
-        {
-            return LOG_IDENTIFIER;
-        }
-
-        public string GetLogsFolderpath()
-        {
-            return LOGS_FOLDERPATH;
         }
 
         public string GetCurrentLogPath()
@@ -164,8 +158,8 @@ namespace ServiceLayer.Services
         public List<GNGLog> ReadLogs()
         {
             var logList = new List<GNGLog>();
-            var di = new DirectoryInfo(LOGS_FOLDERPATH);
-            var dirs = Directory.GetFiles(LOGS_FOLDERPATH, "*.json");
+            var di = new DirectoryInfo(configurations.GetLogDirectory());
+            var dirs = Directory.GetFiles(configurations.GetLogDirectory(), "*.json");
             foreach (var dir in dirs)
             {
                 if (new FileInfo(dir).Length != 0)
@@ -196,17 +190,19 @@ namespace ServiceLayer.Services
         /// <returns>Returns true or false if the log was successfully made or not</returns>
         public bool LogGNGInternalErrors(string exception)
         {
-            CreateNewLog();
+            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
             var clickLogIDString = clickLogID.ToString();
             var log = new GNGLog
             {
-                logID = clickLogIDString,
-                userID = "",
-                ipAddress = "",
-                dateTime = DateTime.Now.ToString(),
-                description = "Internal errors occurred: " + exception
+                //Don't care about user id or ip address for internal error log
+                LogID = clickLogIDString,
+                UserID = "",
+                IpAddress = "",
+                DateTime = DateTime.Now.ToString(),
+                Description = "Internal errors occurred: " + exception
             };
 
             var logList = FillCurrentLogsList();

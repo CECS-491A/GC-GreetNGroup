@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using ServiceLayer.Interface;
+using ServiceLayer.Model;
 
 namespace ServiceLayer.Services
 {
     public class GNGArchiverService : IGNGArchiverService
     {
-        private IGNGLoggerService _gngLoggerService = new GNGLoggerService();
-        //Constant because this is the final max log lifetime that should not be altered
-        private const int MAX_LOG_LIFETIME = 30;
-        //Readonly because it should not be changed in functions outside of constructor
-        private readonly string ARCHIVES_FOLDERPATH = Path.Combine(
-             Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
-             @"Archives\");
+        private IGNGLoggerService _gngLoggerService;
+        private Configurations configurations;
+
+        public GNGArchiverService()
+        {
+            _gngLoggerService = new GNGLoggerService();
+            configurations = new Configurations();
+        }
 
         /// <summary>
         /// Method GetLogsFilename retrieves the log file names inside the Logs folder
@@ -22,11 +24,11 @@ namespace ServiceLayer.Services
         /// <returns>List of log file names as strings</returns>
         public List<string> GetLogsFilename()
         {
-            string logFolderPath = _gngLoggerService.GetLogsFolderpath();
-            string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
-            string[] filepathsOfLogs = Directory.GetFiles(logFolderPath);
-            List<string> listOfLogs = new List<string>();
-            foreach (string filepath in filepathsOfLogs)
+            //Format current day like this to prevent errors with using forward slashes
+            var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+            var filepathsOfLogs = Directory.GetFiles(configurations.GetLogDirectory());
+            var listOfLogs = new List<string>();
+            foreach (var filepath in filepathsOfLogs)
             {
                 listOfLogs.Add(Path.GetFileName(filepath));
             }
@@ -65,18 +67,14 @@ namespace ServiceLayer.Services
             string[] splitDate = fileName.Split('_');
             string logDate = splitDate[0];
             //TryParseExact to properly retrieve the date that is the name of the log
-            DateTime.TryParseExact(logDate, "dd-MM-yyyy", new CultureInfo("en-US"),
-                DateTimeStyles.None, out DateTime dateOfLog);
-            if ((DateTime.Now - dateOfLog).TotalDays > MAX_LOG_LIFETIME)
+            DateTime.TryParseExact(logDate, configurations.GetDateTimeFormat(), 
+                new CultureInfo(configurations.GetCultureInfo()), DateTimeStyles.None, out DateTime dateOfLog);
+            if ((DateTime.Now - dateOfLog).TotalDays > configurations.GetMaxLogLifetime())
             {
                 isOld = true;
             }
             return isOld;
         }
 
-        public string GetArchiveFolderpath()
-        {
-            return ARCHIVES_FOLDERPATH;
-        }
     }
 }

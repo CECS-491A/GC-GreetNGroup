@@ -92,6 +92,31 @@ namespace WebApi.Controllers
             catch(HttpResponseException e)
             {
                 gngLogManager.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("api/event/{eventid}/delete")]
+        public IHttpActionResult DeleteEvent([FromBody] int eventId)
+        {
+            try
+            {
+                var isSuccessfulDelete = eventService.DeleteEvent(eventId);
+                if(isSuccessfulDelete == true)
+                {
+
+                    return Content(HttpStatusCode.OK, true);
+                }
+                else
+                {
+                    return Content(HttpStatusCode.Conflict, "The deletion was unsuccessful");
+                }
+            }
+            catch(HttpResponseException e)
+            {
+                gngLogManager.LogBadRequest("", "", "", e.ToString());
+                return BadRequest();
             }
         }
         

@@ -18,6 +18,7 @@ namespace ManagerLayer.GNGLogManagement
         private Dictionary<string, int> listOfIDs;
         private string currentLogpath;
         private List<GNGLog> logList = new List<GNGLog>();
+
         public GNGLogManager()
         {
             _errorHandlerService = new ErrorHandlerService();
@@ -45,11 +46,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = startPoint + " to " + endPoint
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = startPoint + " to " + endPoint
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -79,11 +80,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -111,11 +112,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventID + " created"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventID + " created"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -144,11 +145,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " entered at " + urlEntered
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " entered at " + urlEntered
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -176,11 +177,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " exited website from " + urlOfExit
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " exited website from " + urlOfExit
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -201,15 +202,15 @@ namespace ManagerLayer.GNGLogManagement
             _gngLoggerService.CreateNewLog();
             currentLogpath = _gngLoggerService.GetCurrentLogPath();
             var logMade = false;
-            listOfIDs.TryGetValue("ErrorEncountered", out int logID);
+            listOfIDs.TryGetValue("AccountDeletion", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " deleted account"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " deleted account"
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -237,11 +238,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User searched for " + searchedItem
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User searched for " + searchedItem
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -270,11 +271,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User " + usersID + " joined Event " + eventID
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " joined Event " + eventID
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -303,11 +304,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Rated " + ratedUserID
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " rated " + ratedUserID
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -335,11 +336,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event Searched for"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event Searched for"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -367,11 +368,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Malicious attack attempted at " + url
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Malicious attack attempted at " + url
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -398,11 +399,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = userHostId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " updated"
+                LogID = logIDString,
+                UserID = userHostId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " updated"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -429,11 +430,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = joinedUserId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User " + joinedUserId + " joined event " + eventId
+                LogID = logIDString,
+                UserID = joinedUserId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + joinedUserId + " joined event " + eventId
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -461,11 +462,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Bad request at " + url + ": " + exception
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Bad request at " + url + ": " + exception
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -492,11 +493,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = hostId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " deleted"
+                LogID = logIDString,
+                UserID = hostId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " deleted"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -523,11 +524,11 @@ namespace ManagerLayer.GNGLogManagement
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = hostId,
-                ipAddress = "",
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " expired"
+                LogID = logIDString,
+                UserID = hostId,
+                IpAddress = "",
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " expired"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();

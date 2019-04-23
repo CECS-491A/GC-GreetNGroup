@@ -5,13 +5,10 @@ namespace ServiceLayer.Interface
 {
     public interface IGNGLoggerService
     {
-        string CreateNewLog();
+        bool CreateNewLog(string fileName, string directory);
         List<GNGLog> FillCurrentLogsList();
         List<GNGLog> ReadLogs();
-        bool CheckForExistingLog();
-        string GetLogsFolderpath();
-        string GetLogsExtentionName();
-        string GetCurrentLogPath();
+        bool CheckForExistingLog(string fileName, string directory);
         bool LogGNGInternalErrors(string exception);
         Dictionary<string, int> GetLogIDs();
         bool WriteGNGLogToFile(List<GNGLog> logList);

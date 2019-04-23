@@ -1,23 +1,23 @@
 ﻿using ServiceLayer.Services;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using ServiceLayer.Interface;
+using ServiceLayer.Model;
 
 namespace ManagerLayer.ArchiverManager
 {
     public class GNGArchiverManager
     {
-        private string archivesFolderPath;
-
-        private IGNGArchiverService _gngArchiverService = new GNGArchiverService();
-        private IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
-        private IGNGLoggerService _gngLoggerService = new GNGLoggerService();
+        private IGNGArchiverService _gngArchiverService;
+        private IErrorHandlerService _errorHandlerService;
+        private Configurations configurations;
 
         public GNGArchiverManager()
         {
-            archivesFolderPath = _gngArchiverService.GetArchiveFolderpath();
+            _gngArchiverService = new GNGArchiverService();
+            _errorHandlerService = new ErrorHandlerService();
+            configurations = new Configurations();
         }
 
         /// <summary>
@@ -32,18 +32,26 @@ namespace ManagerLayer.ArchiverManager
             var isSuccessfulArchive = false;
             var isSuccessfulDeletion = false;
             var logsToArchive = _gngArchiverService.GetOldLogs();
-            var archiveFileName = DateTime.Now.ToString("dd-MM-yyyy") + "_gngarchive.zip";
+            var archiveFileName = DateTime.Now.ToString(configurations.GetDateTimeFormat()) + 
+                configurations.GetArchiveExtention();
+
+            if(logsToArchive.Count == 0)
+            {
+                isSuccessfulArchive = false;
+                return isSuccessfulArchive;
+            }
             try
             {
-                //Using filestream to allow fileshare to alleviate potential
-                //denial of access due to multiple calls to archive method
-                using (var fstream = new FileStream((archivesFolderPath + archiveFileName), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                /* Using filestream to allow fileshare to alleviate potential
+                * denial of access due to multiple calls to archive method
+                */
+                using (var fstream = new FileStream((configurations.GetArchivesDirectory() + archiveFileName), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
                     using (var archiver = new ZipArchive(fstream, ZipArchiveMode.Update))
                     {
                         foreach (var logDate in logsToArchive)
                         {
-                            var logPath = _gngLoggerService.GetLogsFolderpath() + logDate;
+                            var logPath = configurations.GetLogDirectory() + logDate;
                             ZipArchiveEntry logEntry = archiver.CreateEntryFromFile(logPath, logDate);
 
                             isSuccessfulDeletion = RemoveLog(logPath);
@@ -57,17 +65,17 @@ namespace ManagerLayer.ArchiverManager
                     }
                     fstream.Close();
                 }
-
+                return isSuccessfulArchive;
             }
-            //Catch this error explicitly to see if archiver cannot find the .zip file
-            //Let other errors bubble up
+            /* Catch this error explicitly to see if archiver cannot find the .zip file
+             * Let other errors bubble up
+             */
             catch (FileNotFoundException e)
             {
                 isSuccessfulArchive = false;
                 _errorHandlerService.IncrementErrorOccurrenceCount(e.ToString());
+                return isSuccessfulArchive;
             }
-
-            return isSuccessfulArchive;
         }
 
         /// <summary>
@@ -86,8 +94,9 @@ namespace ManagerLayer.ArchiverManager
                 File.Delete(logPath);
                 isSuccessfulRemoval = true;
             }
-            //Catch this error explicitly to see if archiver cannot find the log file
-            //Let other errors bubble up
+            /* Catch this error explicitly to see if archiver cannot find the log file
+             * Let other errors bubble up
+            */ 
             catch (FileNotFoundException e)
             {
                 isSuccessfulRemoval = false;

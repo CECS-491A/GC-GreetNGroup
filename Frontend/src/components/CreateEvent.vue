@@ -269,6 +269,7 @@ import { error } from 'util';
                 var ipAddr = result.data.origin.split(',');
                 this.ip = ipAddr[0];
             }, error => {
+                this.ip = "Error";
                 console.error(error);
             });
         },

@@ -7,6 +7,5 @@ namespace ServiceLayer.Interface
         List<string> GetLogsFilename();
         bool IsLogOlderThan30Days(string filename);
         List<string> GetOldLogs();
-        string GetArchiveFolderpath();
     }
 }
