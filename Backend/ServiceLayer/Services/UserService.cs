@@ -321,11 +321,7 @@ namespace ServiceLayer.Services
                 {
                     var user = ctx.Users.FirstOrDefault(c => c.UserId.Equals(userID));
 
-                    if (user != null)
-                    {
-                        return user;
-                    }
-                    return null;
+                    return user;
                 }
             }
             catch (ObjectDisposedException od)

@@ -19,7 +19,8 @@
               label="Select a filter"
             ></v-select>
             <v-select
-              v-model="pageLimit"
+              v-model="newPageLimit"
+              v-on:click="restResults()"
               :items="resultCount"
               :menu-props="{ maxHeight: '200' }"
               label="Select display count"
@@ -34,10 +35,12 @@
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
                   <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
+                    <p>{{findUserByUserId(UserId)}}</p>
                     <router-link :to="'/eventpage/' + EventName">
                       <button  id="event-b"> {{EventName}} </button>
                     </router-link>
-                    <article> {{'Start Date: ' + StartDate}} </article>
+                    <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
+                    <article> {{'Host: ' + eventHost}} </article>
                   </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
@@ -72,6 +75,7 @@
 
 <script>
 import axios from 'axios'
+import { apiURL } from '@/const.js'
 
 export default {
   name: 'SearchPage',
@@ -90,6 +94,7 @@ export default {
         IsActivated: '',
         EventCreationCount: ''
       },
+      eventHost: '',
       title: 'GreetNGroup',
       placeholderText: 'search for events',
       search: '',
@@ -100,12 +105,19 @@ export default {
       filter: 'Events',
       pageturner: false,
       pageStart: 0,
+      newPageLimit: 5,
       pageLimit: 5,
       pageEnd: 5,
       endReached: false
     }
   },
   methods: {
+    resetResults: function () {
+      this.events = []
+      this.user = ''
+      this.pageStart = 0
+      this.pageEnd = this.pageLimit
+    },
     // Determines which field to search under
     checkSearchFilter: function (i) {
       if (i === 'Users') return true
@@ -116,11 +128,33 @@ export default {
       if (i !== '') return true
       return false
     },
+    // Formats date into standard reading format
+    formatDate (date) {
+      // DateTime objects formatted as 'YYYY-MM-DD T HH:MM:SS', formatting will result in array of size 6
+      var splitDate = date.split('-').join(',').split('T').join(',').split(':').join(',').split(',')
+      var interval = parseInt(splitDate[3]) >= 12 ? 'PM' : 'AM'
+      var hour = parseInt(splitDate[3], 10) % 12 !== 0 ? parseInt(splitDate[3], 10) % 12 : 12
+      var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
+      return formattedDate
+    },
+    findUserByUserId: function (i) {
+      var url = `${apiURL}/searchUserId/` + i
+      axios.get(url)
+        .then((response) => {
+          const isDataAvailable = response.data && response.data.length > 0
+          var name = isDataAvailable ? response.data : ''
+          this.eventHost = name
+        })
+        .catch(error => console.log(error))
+    },
     // Finds events by partial name match
     findEventsByName: function (i) {
+      this.pageLimit = this.newPageLimit
+      this.pageStart = 0
       this.pageEnd = this.pageLimit
+      var url = `${apiURL}/searchEvent?name=`
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchEvent?name=' + i) // build version -> 'https://api.greetngroup.com/api/searchEvent?name=' + i)
+      axios.get(url + i)
         .then((response) => { 
           this.user = '' 
           const isDataAvailable = response.data && response.data.length > 0
@@ -131,9 +165,12 @@ export default {
     },
     // Finds username by identical name match
     findUserByUsername: function (i) {
+      this.pageLimit = this.newPageLimit
+      this.pageStart = 0
       this.pageEnd = this.pageLimit
+      var url = `${apiURL}/searchUser?username=`
       if (i === '') return
-      axios.get('http://localhost:62008/api/searchUser?username=' + i) // build version -> 'https://api.greetngroup.com/api/searchUser?username=' + i)
+      axios.get(url + i)
         .then((response) => { 
           this.events = []
           const isDataAvailable = response.data

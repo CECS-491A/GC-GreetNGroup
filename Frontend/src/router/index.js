@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import SearchPage from '@/components/Search'
+import FindEventsForMe from '@/components/FindEventsForMe'
 import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
 import TestLogin from '@/components/TestLogin'
@@ -38,6 +39,11 @@ const router = new Router({
       path: '/search',
       name: 'search',
       component: SearchPage
+    },
+    {
+      path: '/findeventsforme',
+      name: 'findeventsforme',
+      component: FindEventsForMe
     },
     {
       path: '/createevent',

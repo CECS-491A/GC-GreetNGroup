@@ -1,5 +1,6 @@
 ﻿using ManagerLayer.ProfileManagement;
 using ServiceLayer.Requests;
+using ServiceLayer.Services;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers
 {
     public class UserController : ApiController
     {
+        UserService userService = new UserService();
         [HttpGet]
         [Route("api/user/{userID}")]
         public HttpResponseMessage Get(string userID)
@@ -56,5 +58,22 @@ namespace WebApi.Controllers
             return
         }
         */
+
+        [HttpGet]
+        [Route("api/user/username/{userID}")]
+        public IHttpActionResult GetUserByID(int userID)
+        {
+            try
+            {
+                // Retrieves info for GET
+                var user = userService.GetUserById(userID);
+                var fullName = user.FirstName + " " + user.LastName;
+                return Ok(fullName);
+            }
+            catch (HttpRequestException e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
