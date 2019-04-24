@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.ArchiverManager;
+using Gucci.ManagerLayer.ArchiverManager;
 
 namespace UnitTest.GNGArchiverTest
 {
@@ -14,7 +14,7 @@ namespace UnitTest.GNGArchiverTest
         public void ArchiveLogs_Pass()
         {
             //Arrange
-            GNGArchiverManager archiver = new GNGArchiverManager();
+            ArchiverManager archiver = new ArchiverManager();
             bool expected = true;
             //Act
             bool actual = archiver.ArchiveOldLogs();
@@ -27,7 +27,7 @@ namespace UnitTest.GNGArchiverTest
         public void ArchiveLogs_Fail()
         {
             //Arrange
-            GNGArchiverManager archiver = new GNGArchiverManager();
+            ArchiverManager archiver = new ArchiverManager();
             bool expected = false;
             //Act
             bool actual = archiver.ArchiveOldLogs();

@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07DDD14E-6CE5-48BB-882F-7E5AE3C931F7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DataAccessLayer</RootNamespace>
+    <AssemblyName>DataAccessLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context\GreetNGroupContext.cs" />
+    <Compile Include="Migrations\201904050144001_AddUsers.cs" />
+    <Compile Include="Migrations\201904050144001_AddUsers.Designer.cs">
+      <DependentUpon>201904050144001_AddUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050145208_AddClaims.cs" />
+    <Compile Include="Migrations\201904050145208_AddClaims.Designer.cs">
+      <DependentUpon>201904050145208_AddClaims.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050146226_AddUserClaims.cs" />
+    <Compile Include="Migrations\201904050146226_AddUserClaims.Designer.cs">
+      <DependentUpon>201904050146226_AddUserClaims.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050147002_AddEvents.cs" />
+    <Compile Include="Migrations\201904050147002_AddEvents.Designer.cs">
+      <DependentUpon>201904050147002_AddEvents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050147342_AddTags.cs" />
+    <Compile Include="Migrations\201904050147342_AddTags.Designer.cs">
+      <DependentUpon>201904050147342_AddTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050148037_AddEventTags.cs" />
+    <Compile Include="Migrations\201904050148037_AddEventTags.Designer.cs">
+      <DependentUpon>201904050148037_AddEventTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050149144_AddUserTags.cs" />
+    <Compile Include="Migrations\201904050149144_AddUserTags.Designer.cs">
+      <DependentUpon>201904050149144_AddUserTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050149430_AddEventRoles.cs" />
+    <Compile Include="Migrations\201904050149430_AddEventRoles.Designer.cs">
+      <DependentUpon>201904050149430_AddEventRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050150067_AddAttendees.cs" />
+    <Compile Include="Migrations\201904050150067_AddAttendees.Designer.cs">
+      <DependentUpon>201904050150067_AddAttendees.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050151169_AddFriends.cs" />
+    <Compile Include="Migrations\201904050151169_AddFriends.Designer.cs">
+      <DependentUpon>201904050151169_AddFriends.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050152218_AddBlocks.cs" />
+    <Compile Include="Migrations\201904050152218_AddBlocks.Designer.cs">
+      <DependentUpon>201904050152218_AddBlocks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050152589_AddUserRatings.cs" />
+    <Compile Include="Migrations\201904050152589_AddUserRatings.Designer.cs">
+      <DependentUpon>201904050152589_AddUserRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050154021_AddActions.cs" />
+    <Compile Include="Migrations\201904050154021_AddActions.Designer.cs">
+      <DependentUpon>201904050154021_AddActions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904050154311_AddUserAction.cs" />
+    <Compile Include="Migrations\201904050154311_AddUserAction.Designer.cs">
+      <DependentUpon>201904050154311_AddUserAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060924013_EditEvent.cs" />
+    <Compile Include="Migrations\201904060924013_EditEvent.Designer.cs">
+      <DependentUpon>201904060924013_EditEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904110218437_EditRatings.cs" />
+    <Compile Include="Migrations\201904110218437_EditRatings.Designer.cs">
+      <DependentUpon>201904110218437_EditRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904110241033_EditEvent_02.cs" />
+    <Compile Include="Migrations\201904110241033_EditEvent_02.Designer.cs">
+      <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904190852010_RemovedUnusedTables.cs" />
+    <Compile Include="Migrations\201904190852010_RemovedUnusedTables.Designer.cs">
+      <DependentUpon>201904190852010_RemovedUnusedTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904190859045_UpdateTables.cs" />
+    <Compile Include="Migrations\201904190859045_UpdateTables.Designer.cs">
+      <DependentUpon>201904190859045_UpdateTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\GNGLog.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tables\ActionsTable.cs" />
+    <Compile Include="Tables\Attendance.cs" />
+    <Compile Include="Tables\Claim.cs" />
+    <Compile Include="Tables\Event.cs" />
+    <Compile Include="Tables\EventTag.cs" />
+    <Compile Include="Tables\Tag.cs" />
+    <Compile Include="Tables\User.cs" />
+    <Compile Include="Tables\UserAction.cs" />
+    <Compile Include="Tables\UserClaim.cs" />
+    <Compile Include="Tables\UserRating.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\DataAccessLayer.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Release\DataAccessLayer.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\DataAccessLayer.csprojAssemblyReference.cache" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904050144001_AddUsers.resx">
+      <DependentUpon>201904050144001_AddUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050145208_AddClaims.resx">
+      <DependentUpon>201904050145208_AddClaims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050146226_AddUserClaims.resx">
+      <DependentUpon>201904050146226_AddUserClaims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050147002_AddEvents.resx">
+      <DependentUpon>201904050147002_AddEvents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050147342_AddTags.resx">
+      <DependentUpon>201904050147342_AddTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050148037_AddEventTags.resx">
+      <DependentUpon>201904050148037_AddEventTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050149144_AddUserTags.resx">
+      <DependentUpon>201904050149144_AddUserTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050149430_AddEventRoles.resx">
+      <DependentUpon>201904050149430_AddEventRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050150067_AddAttendees.resx">
+      <DependentUpon>201904050150067_AddAttendees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050151169_AddFriends.resx">
+      <DependentUpon>201904050151169_AddFriends.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050152218_AddBlocks.resx">
+      <DependentUpon>201904050152218_AddBlocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050152589_AddUserRatings.resx">
+      <DependentUpon>201904050152589_AddUserRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050154021_AddActions.resx">
+      <DependentUpon>201904050154021_AddActions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904050154311_AddUserAction.resx">
+      <DependentUpon>201904050154311_AddUserAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060924013_EditEvent.resx">
+      <DependentUpon>201904060924013_EditEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110218437_EditRatings.resx">
+      <DependentUpon>201904110218437_EditRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110241033_EditEvent_02.resx">
+      <DependentUpon>201904110241033_EditEvent_02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904190852010_RemovedUnusedTables.resx">
+      <DependentUpon>201904190852010_RemovedUnusedTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904190859045_UpdateTables.resx">
+      <DependentUpon>201904190859045_UpdateTables.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gucci.DataAccessLayer.csproj" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Models;
+using Gucci.ServiceLayer.Services;
 using ManagerLayer.UADManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer.Services;
@@ -15,7 +16,7 @@ namespace UnitTest.UADTest
         public void getLoginComparedToRegistered_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetLoginComparedToRegistered("March", 2019);
+            string test = uadManager.GetLoginComparedToRegistered("April", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
         }
@@ -24,7 +25,7 @@ namespace UnitTest.UADTest
         public void GetMonthlyLoginOverSixMonths_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetLoggedInMonthly("March", 2019);
+            string test = uadManager.GetLoggedInMonthly("April", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
@@ -34,17 +35,17 @@ namespace UnitTest.UADTest
         public void GetTop5MostUsedFeature_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetTop5MostUsedFeature("March", 2019);
+            string test = uadManager.GetTop5MostUsedFeature("April", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
 
         [TestMethod]
-        public void GetAverageSessionDuration_Pas()
+        public void GetAverageSessionDuration_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetAverageSessionDuration("March", 1);
+            string test = uadManager.GetAverageSessionDuration("April", 1);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
         }
@@ -53,7 +54,7 @@ namespace UnitTest.UADTest
         public void GetAverageSessionMonthly_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetAverageSessionMonthly("March", 1);
+            string test = uadManager.GetAverageSessionMonthly("April", 1);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
@@ -63,7 +64,7 @@ namespace UnitTest.UADTest
         public void GetTop5AveragePageSession_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetTop5AveragePageSession("March", 2019);
+            string test = uadManager.GetTop5AveragePageSession("April", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
@@ -76,7 +77,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1001";
@@ -100,7 +101,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string month = "March";
@@ -125,7 +126,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1001";
@@ -206,7 +207,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
 
@@ -229,7 +230,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.endpoint.com";
             bool expected = true;
             bool actual = false;
@@ -253,7 +254,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.startpoint.com";
             bool expected = true;
             bool actual = false;
@@ -277,7 +278,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1010";
@@ -301,7 +302,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string month = "December";
@@ -326,7 +327,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1011";
@@ -350,7 +351,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.test.com";
             bool expected = true;
             bool actual = false;
@@ -374,7 +375,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.test.com";
             bool expected = true;
             bool actual = false;
@@ -482,7 +483,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
 

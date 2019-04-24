@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Services;
 using ManagerLayer.SearchManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceLayer.Services;

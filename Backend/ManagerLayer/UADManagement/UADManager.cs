@@ -71,9 +71,6 @@ namespace ManagerLayer.UADManagement
                 string sAverage = String.Format("{0:0.00}", average);
                 results = "Average Session Time for " + month + ": " + sAverage;
             }
-                
-            
-            
             return results;
         }
 
