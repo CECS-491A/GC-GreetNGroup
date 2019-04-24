@@ -91,7 +91,7 @@ export default {
         'Access-Control-Allow-Credentials': true
       },
       data: {
-        jwtToken: localStorage.getItem('Token')
+        jwtToken: localStorage.getItem('token')
       }
     })
       .then(response => (this.profile = response.data))

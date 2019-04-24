@@ -8,5 +8,6 @@ namespace ServiceLayer.Interface
         bool CheckUserClaims(string jwtToken, List<string> claimsToCheck);
         int GetUserIDFromToken(string jwtToken);
         bool IsJWTSignatureTampered(string userJwtToken);
+        string GetUsernameFromToken(string jwtToken);
     }
 }

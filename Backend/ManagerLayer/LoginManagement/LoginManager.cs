@@ -11,12 +11,14 @@ namespace ManagerLayer.LoginManagement
         private ICryptoService _cryptoService;
         private IUserService _userService;
         private IJWTService _jwtService;
+        private UserClaimsService _userClaimService;
 
         public LoginManager()
         {
             _cryptoService = new CryptoService();
             _userService = new UserService();
             _jwtService = new JWTService();
+            _userClaimService = new UserClaimsService();
         }
 
         public string Login(SSOUserRequest request)
@@ -34,7 +36,7 @@ namespace ManagerLayer.LoginManagement
                 // Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return "https://greetngroup.com/home/" + _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
+                    return "https://greetngroup.com/login/" + _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
                 }
                 else
                 {
@@ -50,6 +52,7 @@ namespace ManagerLayer.LoginManagement
                         false // IsActivated
                         );
                     _userService.InsertUser(createdUser); // Check for user acivation on home page
+                    _userClaimService.AddDefaultClaims(createdUser);
                     return _jwtService.CreateToken(request.email, createdUser.UserId);
                 }
             }
