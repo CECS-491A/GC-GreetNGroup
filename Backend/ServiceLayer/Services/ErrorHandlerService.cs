@@ -1,7 +1,7 @@
-﻿using ServiceLayer.Interface;
+﻿using Gucci.ServiceLayer.Interface;
 using System;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class ErrorHandlerService : IErrorHandlerService
     {

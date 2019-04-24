@@ -3,24 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private ICryptoService _cryptoService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
         public JWTService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             _cryptoService = new CryptoService();
             tokenHandler = new JwtSecurityTokenHandler();
-            credentials = _cryptoService.GenerateJWTSignature("testingsecretsymmetrickey");
+            credentials = _cryptoService.GenerateJWTSignature(symmetricKeyFinal);
         }
 
         public string CreateToken(string username, int uId)
@@ -41,7 +41,7 @@ namespace ServiceLayer.Services
                 audience: username,
                 claims: securityClaimsList,
                 notBefore: null,
-                expires: DateTime.Now.AddMinutes(30)
+                expires: DateTime.UtcNow.AddMinutes(30)
                 );
 
             var jwt = new JwtSecurityToken(jwtHeader, jwtPayload);
@@ -71,7 +71,7 @@ namespace ServiceLayer.Services
                 audience: oldJwt.Audiences.ToString(),
                 claims: oldJwt.Claims,
                 notBefore: null,
-                expires: DateTime.Now.AddMinutes(30));
+                expires: DateTime.UtcNow.AddMinutes(30));
 
             var newJwt = new JwtSecurityToken(jwtHeader, newJwtPayload);
 

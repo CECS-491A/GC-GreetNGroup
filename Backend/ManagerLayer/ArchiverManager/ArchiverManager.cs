@@ -2,20 +2,21 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using ServiceLayer.Interface;
-using ServiceLayer.Model;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
+using Gucci.ServiceLayer.Services;
 
-namespace ManagerLayer.ArchiverManager
+namespace Gucci.ManagerLayer.ArchiverManager
 {
-    public class GNGArchiverManager
+    public class ArchiverManager
     {
-        private IGNGArchiverService _gngArchiverService;
+        private IArchiverService _gngArchiverService;
         private IErrorHandlerService _errorHandlerService;
         private Configurations configurations;
 
-        public GNGArchiverManager()
+        public ArchiverManager()
         {
-            _gngArchiverService = new GNGArchiverService();
+            _gngArchiverService = new ArchiverService();
             _errorHandlerService = new ErrorHandlerService();
             configurations = new Configurations();
         }
@@ -37,14 +38,21 @@ namespace ManagerLayer.ArchiverManager
 
             if(logsToArchive.Count == 0)
             {
-                isSuccessfulArchive = false;
+                _errorHandlerService.IncrementErrorOccurrenceCount("Insufficient memory available to archive");
                 return isSuccessfulArchive;
             }
             try
             {
+                // If drive space is less than the minimum specified or is not available, return false
+                if(configurations.GetDriveInfo().AvailableFreeSpace < configurations.GetMinBytes()
+                    || !configurations.GetDriveInfo().IsReady)
+                {
+                    return isSuccessfulArchive;
+                }
+
                 /* Using filestream to allow fileshare to alleviate potential
-                * denial of access due to multiple calls to archive method
-                */
+                 * denial of access due to multiple calls to archive method
+                 */
                 using (var fstream = new FileStream((configurations.GetArchivesDirectory() + archiveFileName), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
                     using (var archiver = new ZipArchive(fstream, ZipArchiveMode.Update))
@@ -91,12 +99,16 @@ namespace ManagerLayer.ArchiverManager
             var isSuccessfulRemoval = false;
             try
             {
+                if(File.Exists(logPath) == false)
+                {
+                    return isSuccessfulRemoval;
+                }
                 File.Delete(logPath);
                 isSuccessfulRemoval = true;
             }
             /* Catch this error explicitly to see if archiver cannot find the log file
              * Let other errors bubble up
-            */ 
+             */ 
             catch (FileNotFoundException e)
             {
                 isSuccessfulRemoval = false;

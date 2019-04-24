@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using DataAccessLayer.Models;
-using ServiceLayer.Interface;
-using ServiceLayer.Model;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
-    public class GNGLoggerService : IGNGLoggerService
+    public class LoggerService : ILoggerService
     {
 
         /* Every logging method will catch FileNotFoundException explicitly
@@ -21,7 +21,7 @@ namespace ServiceLayer.Services
         private string currentLogPath;
         private Configurations configurations;
 
-        public GNGLoggerService()
+        public LoggerService()
         {
             _errorHandlerService = new ErrorHandlerService();
             configurations = new Configurations();
@@ -40,7 +40,7 @@ namespace ServiceLayer.Services
             try
             {
                 //Format current day like this to prevent errors with using forward slashes
-                var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+                var currentDate = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat());
                 logExists = File.Exists(directory + fileName);
             }
             /* Catch FileNotFound explicitly as it catches errors where it cannot find the log
@@ -62,7 +62,16 @@ namespace ServiceLayer.Services
         public bool CreateNewLog(string fileName, string directory)
         {
             var isSuccessfulCreate = false;
-            var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+            var currentDate = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat());
+
+            // If drive space is less than the minimum specified or is not available, return false
+            if (configurations.GetDriveInfo().AvailableFreeSpace < configurations.GetMinBytes()
+                || !configurations.GetDriveInfo().IsReady)
+            {
+                _errorHandlerService.IncrementErrorOccurrenceCount("Insufficient memory in drive to create new log");
+                return isSuccessfulCreate;
+            }
+
             if (CheckForExistingLog(fileName, directory) == false)
             {
                 try
@@ -201,7 +210,7 @@ namespace ServiceLayer.Services
                 LogID = clickLogIDString,
                 UserID = "",
                 IpAddress = "",
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = "Internal errors occurred: " + exception
             };
 
@@ -254,6 +263,15 @@ namespace ServiceLayer.Services
         public bool WriteGNGLogToFile(List<GNGLog> logList)
         {
             var isLogWritten = false;
+
+            // If drive space is less than the minimum specified or is not available, return false
+            if (configurations.GetDriveInfo().AvailableFreeSpace < configurations.GetMinBytes()
+                || !configurations.GetDriveInfo().IsReady)
+            {
+                _errorHandlerService.IncrementErrorOccurrenceCount("Insufficient memory in drive to write to log");
+                return isLogWritten;
+            }
+
             try
             {
                 using (var file = File.CreateText(currentLogPath))
@@ -271,5 +289,6 @@ namespace ServiceLayer.Services
             }
             return isLogWritten;
         }
+
     }
 }

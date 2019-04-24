@@ -1,9 +1,9 @@
 ﻿using DataAccessLayer.Models;
 using System.Collections.Generic;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
-    public interface IGNGLoggerService
+    public interface ILoggerService
     {
         bool CreateNewLog(string fileName, string directory);
         List<GNGLog> FillCurrentLogsList();
@@ -12,5 +12,6 @@ namespace ServiceLayer.Interface
         bool LogGNGInternalErrors(string exception);
         Dictionary<string, int> GetLogIDs();
         bool WriteGNGLogToFile(List<GNGLog> logList);
+        string GetCurrentLogPath();
     }
 }

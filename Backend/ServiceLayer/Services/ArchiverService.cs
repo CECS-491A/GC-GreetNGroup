@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using ServiceLayer.Interface;
-using ServiceLayer.Model;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
-    public class GNGArchiverService : IGNGArchiverService
+    public class ArchiverService : IArchiverService
     {
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private Configurations configurations;
 
-        public GNGArchiverService()
+        public ArchiverService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             configurations = new Configurations();
         }
 

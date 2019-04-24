@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.IO;
 
-namespace ServiceLayer.Model
+namespace Gucci.ServiceLayer.Model
 {
     public class Configurations
     {
@@ -15,6 +12,8 @@ namespace ServiceLayer.Model
         private const string LOG_EXTENTION = "_gnglog.json";
         private const string LOG_DIRECTORY = @"C:\Users\Yuki\Documents\GitHub\GreetNGroup\Backend\Logs\";
         private const string ARCHIVES_DIRECTORY = @"C:\Users\Yuki\Documents\GitHub\GreetNGroup\Backend\Archives\";
+        private static readonly DriveInfo drive = new DriveInfo("C");
+        private const double MIN_BYTES = 1024 * 25;
 
         public string GetDateTimeFormat()
         {
@@ -49,6 +48,16 @@ namespace ServiceLayer.Model
         public string GetArchivesDirectory()
         {
             return ARCHIVES_DIRECTORY;
+        }
+
+        public DriveInfo GetDriveInfo()
+        {
+            return drive;
+        }
+
+        public double GetMinBytes()
+        {
+            return MIN_BYTES;
         }
     }
 }

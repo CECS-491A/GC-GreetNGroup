@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class EventService
     {
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private Dictionary<string, int> tagIds;
         private int eventId;
         public EventService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             tagIds = GenerateEventTagIds();
             Int32.TryParse(Environment.GetEnvironmentVariable("EventId", EnvironmentVariableTarget.User), out eventId);
         }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.Model
+namespace Gucci.ServiceLayer.Model
 {
     public class UserProfile
     {

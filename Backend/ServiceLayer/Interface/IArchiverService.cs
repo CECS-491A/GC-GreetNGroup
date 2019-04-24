@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
-    public interface IGNGArchiverService
+    public interface IArchiverService
     {
         List<string> GetLogsFilename();
         bool IsLogOlderThan30Days(string filename);
