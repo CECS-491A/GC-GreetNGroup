@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
+using DataAccessLayer.DataTransferObject;
 using DataAccessLayer.Tables;
 using ServiceLayer.Interface;
 
@@ -300,6 +301,32 @@ namespace ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     e = ctx.Events.Where(name => name.EventName.Contains(searchInput)).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return e;
+            }
+        }
+
+        // Retrieves plain event details in list format give partial event name/search input
+        public List<DefaultEventSearchDto> GetPlainEventDetailListByName(string searchInput)
+        {
+            var e = new List<DefaultEventSearchDto>();
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    // Grabs events by needed columns and returns data transfer object
+                    e = ctx.Events.Where(name => name.EventName.Contains(searchInput))
+                        .Select(name => new DefaultEventSearchDto()
+                        {
+                            Uid = name.UserId,
+                            EventName = name.EventName,
+                            StartDate = name.StartDate
+                        }).ToList();
                     return e;
                 }
             }
