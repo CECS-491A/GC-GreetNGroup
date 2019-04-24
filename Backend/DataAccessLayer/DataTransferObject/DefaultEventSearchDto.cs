@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAccessLayer.DataTransferObject
+namespace Gucci.DataAccessLayer.DataTransferObject
 {
     public class DefaultEventSearchDto
     {
