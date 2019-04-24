@@ -1,9 +1,7 @@
-﻿using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
-using ServiceLayer.Interface;
-using ServiceLayer.Requests;
-using ServiceLayer.Services;
 using System;
 
 namespace ManagerLayer.UserManagement

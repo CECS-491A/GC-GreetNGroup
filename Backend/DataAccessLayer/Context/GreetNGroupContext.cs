@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Tables;
 
-namespace DataAccessLayer.Context
+namespace Gucci.DataAccessLayer.Context
 {
     public class GreetNGroupContext : DbContext
     {

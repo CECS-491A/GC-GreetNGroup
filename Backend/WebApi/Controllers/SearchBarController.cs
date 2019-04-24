@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.LogManagement;
-using ManagerLayer.SearchManager;
+using Gucci.ManagerLayer.SearchManager;
 
 namespace WebApi.Controllers
 {
@@ -36,7 +36,7 @@ namespace WebApi.Controllers
             catch (HttpRequestException e)
             {
                 // logs error -- does not care about ip or userId
-                _gngLogManager.LogBadRequest("", "", url, e.ToString());
+                //_gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -68,7 +68,7 @@ namespace WebApi.Controllers
             catch (HttpRequestException e)
             {
                 // logs error -- does not care about ip or userId
-                _gngLogManager.LogBadRequest("", "", url, e.ToString());
+                //_gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -93,7 +93,7 @@ namespace WebApi.Controllers
             catch (HttpRequestException e)
             {
                 // logs error -- does not care about ip or userId
-                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/searchUserId", e.ToString());
+                //_gngLogManager.LogBadRequest("", "", "https://greetngroup.com/searchUserId", e.ToString());
                 return BadRequest();
             }
         }

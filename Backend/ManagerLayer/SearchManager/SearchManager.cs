@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Tables;
 
-namespace ManagerLayer.SearchManager
+namespace Gucci.ManagerLayer.SearchManager
 {
     // This class provides an interface for interaction with required search functions
     public class SearchManager

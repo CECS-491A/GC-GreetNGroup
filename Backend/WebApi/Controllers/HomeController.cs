@@ -1,8 +1,10 @@
-﻿using Gucci.ManagerLayer.LogManagement;
-using ManagerLayer.ProfileManagement;
+using Gucci.ManagerLayer.LoginManagement;
+using Gucci.ManagerLayer.ProfileManagement;
+using Gucci.ServiceLayer.Requests;
 using System;
 using System.Net;
 using System.Web.Http;
+using Gucci.ManagerLayer.LogManagement;
 
 namespace WebApi.Controllers
 {
@@ -27,7 +29,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 //TODO: Update so that ip & url is included in FromBody for logging purposes
-                gngLogManager.LogBadRequest("", "", "", ex.ToString());
+                //gngLogManager.LogBadRequest("", "", "", ex.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }

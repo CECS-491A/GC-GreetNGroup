@@ -1,10 +1,10 @@
 ﻿using Gucci.DataAccessLayer.Models;
-using ServiceLayer.Interface;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 
-namespace ManagerLayer.AttendeeManagement
+namespace Gucci.ManagerLayer.AttendeeManagement
 {
     class AttendeeManager
     {

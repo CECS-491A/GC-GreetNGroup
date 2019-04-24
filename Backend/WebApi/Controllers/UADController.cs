@@ -1,8 +1,7 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using ManagerLayer.UADManagement;
+using Gucci.ManagerLayer.UADManagement;
 using Gucci.ManagerLayer.LogManagement;
-
 namespace WebApi.Controllers
 {
     public class UADController : ApiController
@@ -22,6 +21,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -36,6 +36,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -50,6 +51,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -64,6 +66,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -78,6 +81,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -92,6 +96,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }

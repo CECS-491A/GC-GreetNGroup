@@ -29,7 +29,7 @@ namespace WebApi.Controllers
             }
             catch(HttpRequestException e)
             {
-                gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
+                //gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
                 return BadRequest();
             }
 

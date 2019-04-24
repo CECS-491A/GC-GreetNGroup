@@ -1,10 +1,9 @@
-﻿using Gucci.DataAccessLayer.Models;
-using ServiceLayer.Interface;
+using Gucci.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Gucci.ServiceLayer.Interface;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class UADService : IUADService, ISortService
     {
@@ -183,7 +182,7 @@ namespace ServiceLayer.Services
                 while ((pivot.CompareTo(sessiontimes[j]) < 0) && (j > left))
                 {
                     j--;
-                } 
+                }
                 if (i <= j)
                 {
                     temp = sessiontimes[i];
@@ -228,7 +227,7 @@ namespace ServiceLayer.Services
                 totalTime = totalTime + (int)duration.TotalMinutes;
                 i = i + 2;
             }
-            //Calculate the average time 
+            //Calculate the average time
             average = totalTime / totalSessions;
             return average;
         }
@@ -339,7 +338,7 @@ namespace ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }
@@ -365,14 +364,14 @@ namespace ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }
                     }
                 }
             }
-            
+
             return sessions;
         }
         /// <summary>

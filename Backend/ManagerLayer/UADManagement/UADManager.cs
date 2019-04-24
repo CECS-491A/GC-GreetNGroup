@@ -1,10 +1,10 @@
-﻿using DataAccessLayer.Models;
+using Gucci.DataAccessLayer.Models;
+using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Services;
-using ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 
-namespace ManagerLayer.UADManagement
+namespace Gucci.ManagerLayer.UADManagement
 {
     public class UADManager
     {

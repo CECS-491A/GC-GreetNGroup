@@ -2,14 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\DataAccessLayer",
-    "\\Backend\\ManagerLayer",
-    "\\Backend\\ManagerLayer\\LoginManagement",
-    "\\Backend\\ManagerLayer\\ProfileManagement",
-    "\\Backend\\ManagerLayer\\UADManagement",
-    "\\Backend\\ServiceLayer",
-    "\\Backend\\WebApi",
-    "\\Backend\\WebApi\\Controllers"
+    "\\Backend\\UnitTest\\UADTest"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false

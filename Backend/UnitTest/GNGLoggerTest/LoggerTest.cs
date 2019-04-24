@@ -58,39 +58,5 @@ namespace UnitTest.GNGLoggerTest
             Assert.AreEqual(actual, true);
         }
 
-        [TestMethod]
-        public void LogGNGEventsCreated_Pass()
-        {
-            //Arrange
-            LogManager logManager = new LogManager();
-            int userID = 1;
-            int eventID = 1;
-            string ipAddress = "1.1.1.1";
-            bool actual = true;
-
-            //Act
-            actual = logManager.LogGNGEventsCreated(userID.ToString(), eventID, ipAddress);
-
-            //Assert
-            Assert.AreEqual(actual, true);
-        }
-
-        [TestMethod]
-        public void LogGNGEventUpdated_Pass()
-        {
-            //Arrange
-            LogManager logManager = new LogManager();
-            int userID = 1;
-            int eventID = 1;
-            string ipAddress = "1.1.1.1";
-            bool actual = true;
-
-            //Act
-            actual = logManager.LogGNGEventUpdate(eventID, userID.ToString(), ipAddress);
-
-            //Assert
-            Assert.AreEqual(actual, true);
-        }
-
     }
 }

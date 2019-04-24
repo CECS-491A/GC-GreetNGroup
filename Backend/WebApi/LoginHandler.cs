@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ManagerLayer.LoginManagement;
+using Gucci.ManagerLayer.LoginManagement;
 using Newtonsoft.Json;
-using ServiceLayer.Requests;
+using Gucci.ServiceLayer.Requests;
 
 namespace WebApi
 {

@@ -1,10 +1,10 @@
-﻿using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
+﻿using Gucci.DataAccessLayer.Context;
+using Gucci.DataAccessLayer.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class UserClaimsService
     {

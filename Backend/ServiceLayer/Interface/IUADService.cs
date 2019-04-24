@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Gucci.DataAccessLayer.Models;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Interface
 {
     public interface IUADService
     {

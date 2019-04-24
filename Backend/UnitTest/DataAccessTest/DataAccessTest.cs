@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer.Tables;
-using Gucci.ServiceLayer.Services;
+using Gucci.DataAccessLayer.Tables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Services;
 
 namespace UnitTest.DataAccessTest
 {
@@ -182,6 +181,8 @@ namespace UnitTest.DataAccessTest
             var state = "Texas";
             var zip = "99999";
             var description = "Hi";
+            var url = "http://www.hi.com";
+            var ip = "1.100.123.12";
             EventService es = new EventService();
             List<string> eventTags = new List<string>();
             eventTags.Add("Indoors");
@@ -189,7 +190,7 @@ namespace UnitTest.DataAccessTest
             
             //Act
             Event actual = es.InsertEvent(userId, todaysDate, eventName, address, city, state, zip
-                , eventTags, description);
+                , eventTags, description, ip, url);
 
             //Assert
             Assert.IsNotNull(actual);

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Services;
 
-namespace ManagerLayer.SearchManager
+namespace Gucci.ManagerLayer.SearchManager
 {
     class EventSearchManager : ISearchable<List<Event>>
     {

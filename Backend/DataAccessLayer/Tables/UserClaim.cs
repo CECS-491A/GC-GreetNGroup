@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLayer.Tables
+namespace Gucci.DataAccessLayer.Tables
 {
     [Table("UserClaim")]
     public class UserClaim
