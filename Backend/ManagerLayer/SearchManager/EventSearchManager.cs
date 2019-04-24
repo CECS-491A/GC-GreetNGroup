@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataAccessLayer.Tables;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Services;
 
 namespace ManagerLayer.SearchManager
 {

@@ -66,11 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interface\IArchiverService.cs" />
     <Compile Include="Interface\ICryptoService.cs" />
     <Compile Include="Interface\IErrorHandlerService.cs" />
-    <Compile Include="Interface\IArchiverService.cs" />
-    <Compile Include="Interface\ILoggerService.cs" />
     <Compile Include="Interface\IJWTService.cs" />
+    <Compile Include="Interface\ILoggerService.cs" />
     <Compile Include="Interface\ISortService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Model\Configurations.cs" />
@@ -86,16 +86,16 @@
     <Compile Include="Requests\SSOUserRequest.cs" />
     <Compile Include="Requests\SystemAdminRequest.cs" />
     <Compile Include="Requests\UpdateProfileRequest.cs" />
+    <Compile Include="Services\ArchiverService.cs" />
     <Compile Include="Services\AttendeesService.cs" />
     <Compile Include="Services\ClaimService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\EventTagService.cs" />
-    <Compile Include="Services\ArchiverService.cs" />
-    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Interface\IUADService.cs" />
     <Compile Include="Services\JWTService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\RatingService.cs" />
     <Compile Include="Services\UADService.cs" />
     <Compile Include="Services\UserClaimsService.cs" />
@@ -111,10 +111,13 @@
     <Folder Include="bin\Release\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\Gucci.DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
-      <Name>Gucci.DataAccessLayer</Name>
+      <Name>DataAccessLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gucci.ServiceLayer.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

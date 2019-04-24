@@ -3,6 +3,8 @@ using ServiceLayer.Requests;
 using ServiceLayer.Services;
 using DataAccessLayer.Tables;
 using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
 namespace ManagerLayer.LoginManagement
 {

@@ -1,16 +1,14 @@
-﻿using ManagerLayer.LoginManagement;
+﻿using Gucci.ManagerLayer.LogManagement;
 using ManagerLayer.ProfileManagement;
-using ServiceLayer.Requests;
 using System;
 using System.Net;
 using System.Web.Http;
-using ManagerLayer.GNGLogManagement;
 
 namespace WebApi.Controllers
 {
     public class HomeController : ApiController
     {
-        private GNGLogManager gngLogManager = new GNGLogManager();
+        private LogManager gngLogManager = new LogManager();
 
         [HttpGet]
         [Route("api/profile")]

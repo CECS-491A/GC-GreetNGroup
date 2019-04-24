@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using ServiceLayer.Interface;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using ServiceLayer.Interface;
 
 namespace ServiceLayer.Services
@@ -10,12 +12,12 @@ namespace ServiceLayer.Services
     public class UserService : IUserService
     {
         private ICryptoService _cryptoService;
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
 
         public UserService()
         {
             _cryptoService = new CryptoService();
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
         }
 
         /*
