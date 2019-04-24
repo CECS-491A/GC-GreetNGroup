@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Gucci.DataAccessLayer.DataTransferObject;
-using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Services;
 
 namespace Gucci.ManagerLayer.SearchManager
@@ -14,7 +13,7 @@ namespace Gucci.ManagerLayer.SearchManager
 
         public List<DefaultUserSearchDto> SearchByName(string name)
         {
-            return _userService.GetDefaultUserInfoByUsername(name);
+            return _userService.GetDefaultUserInfoListByUsername(name);
         }
 
         public List<DefaultUserSearchDto> SearchById(int id)
