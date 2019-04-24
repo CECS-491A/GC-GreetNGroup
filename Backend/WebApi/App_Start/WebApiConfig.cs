@@ -45,6 +45,14 @@ namespace WebApi
                 constraints: null,
                 handler: new DeleteHandler()
             );
+
+            config.Routes.MapHttpRoute(
+                name: "HealthCheckRoute",
+                routeTemplate: "health",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new HealthHandler()
+            );
         }
     }
 }

@@ -4,14 +4,18 @@
 </template>
 
 <script>
+import { store } from '@/router/request.js'
 export default {
   name: 'Logout',
   data () {
     return {
+      token: ''
     }
   },
   created () {
-    localStorage.setItem('Token', null)
+    localStorage.removeItem('token')
+    store.state.isLogin = false
+    store.state.email = ''
     alert('You have been logged out')
     this.$router.push('/')
   }

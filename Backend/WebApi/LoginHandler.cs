@@ -20,15 +20,15 @@ namespace WebApi
         protected override Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            LoginManager lm = new LoginManager();
+            LoginManager loginMan = new LoginManager();
 
             var content = request.Content;
-            string jsonContent = content.ReadAsStringAsync().Result;
+            var jsonContent = content.ReadAsStringAsync().Result;
             SSOUserRequest ssoRequest = new SSOUserRequest();
             ssoRequest = JsonConvert.DeserializeObject<SSOUserRequest>(jsonContent);
 
-            string response = lm.Login(ssoRequest);
-            if (response.Equals("-1"))
+            string response = loginMan.Login(ssoRequest);
+            if (response == "-1")
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
