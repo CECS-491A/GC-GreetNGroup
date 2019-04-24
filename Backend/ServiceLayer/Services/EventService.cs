@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
-using DataAccessLayer.DataTransferObject;
 using DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 
