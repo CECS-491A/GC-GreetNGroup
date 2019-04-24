@@ -80,17 +80,17 @@
     <None Include="UADTest\TestLogs\PassLogs_SessionTimes\SessionTimes1.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\Gucci.DataAccessLayer.csproj">
       <Project>{07DDD14E-6CE5-48BB-882F-7E5AE3C931F7}</Project>
-      <Name>DataAccessLayer</Name>
+      <Name>Gucci.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
+    <ProjectReference Include="..\ManagerLayer\Gucci.ManagerLayer.csproj">
       <Project>{2f492345-f79f-4123-8880-c2499fcdc67c}</Project>
-      <Name>ManagerLayer</Name>
+      <Name>Gucci.ManagerLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+    <ProjectReference Include="..\ServiceLayer\Gucci.ServiceLayer.csproj">
       <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
-      <Name>ServiceLayer</Name>
+      <Name>Gucci.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
