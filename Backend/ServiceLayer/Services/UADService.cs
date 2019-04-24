@@ -320,29 +320,59 @@ namespace ServiceLayer.Services
         public List<GNGLog> PairStartAndEndLogs(List<GNGLog> startLogs, List<GNGLog> endLogs)
         {
             var sessions = new List<GNGLog>();
-            for (int k = 0; k < endLogs.Count; k++)
+            if(startLogs.Count > endLogs.Count)
             {
-                var notFound = true;
-                var pos = 0;
-                while (notFound == true)
+                for (int k = 0; k < endLogs.Count; k++)
                 {
-                    if (startLogs[pos].UserID == endLogs[k].UserID)
+                    var notFound = true;
+                    var pos = 0;
+                    while (notFound == true)
                     {
-                        sessions.Add(endLogs[k]);
-                        sessions.Add(startLogs[pos]);
-                        startLogs.Remove(startLogs[pos]);
-                        notFound = false;
-                    }
-                    else
-                    {
-                        pos++;
-                    }
-                    if(pos == startLogs.Count())
-                    {
-                        notFound = false;
+                        if (startLogs[pos].UserID == endLogs[k].UserID)
+                        {
+                            sessions.Add(endLogs[k]);
+                            sessions.Add(startLogs[pos]);
+                            startLogs.Remove(startLogs[pos]);
+                            notFound = false;
+                        }
+                        else
+                        {
+                            pos++;
+                        }
+                        if (pos == startLogs.Count())
+                        {
+                            notFound = false;
+                        }
                     }
                 }
             }
+            else
+            {
+                for (int k = 0; k < startLogs.Count; k++)
+                {
+                    var notFound = true;
+                    var pos = 0;
+                    while (notFound == true)
+                    {
+                        if (endLogs[pos].UserID == startLogs[k].UserID)
+                        {
+                            sessions.Add(endLogs[pos]);
+                            sessions.Add(startLogs[k]);
+                            startLogs.Remove(endLogs[pos]);
+                            notFound = false;
+                        }
+                        else
+                        {
+                            pos++;
+                        }
+                        if (pos == startLogs.Count())
+                        {
+                            notFound = false;
+                        }
+                    }
+                }
+            }
+            
             return sessions;
         }
         /// <summary>
