@@ -26,19 +26,22 @@
 </template>
 
 <script>
-import { store } from '@/router/store.js'
+import { store } from '@/router/request.js'
 
 export default {
   name: 'Home',
   data () {
     return {
-      loading: false
+      loading: false,
+      profileIsActivated: false
     }
   },
   created () {
     this.loading = true
-    store.authentication_success(this.$route.param.token, this.$route.param.emailaddress)
-    this.$router.push('/welcome')
+    localStorage.setItem('token', this.$route.params.token)
+    store.state.isLogin = true
+    store.getEmail()
+    this.$router.push('/')
   }
 }
 </script>
