@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ManagerLayer.GNGLogManagement;
+using Gucci.ManagerLayer.LogManagement;
 
 namespace UnitTest.GNGLoggerTest
 {
@@ -13,7 +13,7 @@ namespace UnitTest.GNGLoggerTest
         public void LogClickEvent_Pass()
         {
             //Arrange
-            GNGLogManager logManager = new GNGLogManager();
+            LogManager logManager = new LogManager();
             int userID = 1;
             string startPoint = "https://www.greetngroup.com/join";
             string endPoint = "https://www.greetngroup.com/create";
@@ -30,7 +30,7 @@ namespace UnitTest.GNGLoggerTest
         public void LogEntrytoWebsite_Pass()
         {
             //Arrange
-            GNGLogManager logManager = new GNGLogManager();
+            LogManager logManager = new LogManager();
             int userID = 1;
             string url = "https://www.startpoint.com";
             string ipAddress = "1.1.1.1";
@@ -46,7 +46,7 @@ namespace UnitTest.GNGLoggerTest
         public void LogExitFromWebsite_Pass()
         {
             //Arrange
-            GNGLogManager logManager = new GNGLogManager();
+            LogManager logManager = new LogManager();
             string userID = "1";
             string url = "https://www.endpoint.com";
             string ipAddress = "1.1.1.1";
@@ -62,7 +62,7 @@ namespace UnitTest.GNGLoggerTest
         public void LogGNGEventsCreated_Pass()
         {
             //Arrange
-            GNGLogManager logManager = new GNGLogManager();
+            LogManager logManager = new LogManager();
             int userID = 1;
             int eventID = 1;
             string ipAddress = "1.1.1.1";
@@ -79,7 +79,7 @@ namespace UnitTest.GNGLoggerTest
         public void LogGNGEventUpdated_Pass()
         {
             //Arrange
-            GNGLogManager logManager = new GNGLogManager();
+            LogManager logManager = new LogManager();
             int userID = 1;
             int eventID = 1;
             string ipAddress = "1.1.1.1";
