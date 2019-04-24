@@ -88,6 +88,10 @@
       <Project>{2f492345-f79f-4123-8880-c2499fcdc67c}</Project>
       <Name>Gucci.ManagerLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\Gucci.ServiceLayer.csproj">
+      <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
+      <Name>Gucci.ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

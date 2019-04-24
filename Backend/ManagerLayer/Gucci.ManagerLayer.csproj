@@ -109,6 +109,10 @@
       <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
       <Name>Gucci.DataAccessLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\Gucci.ServiceLayer.csproj">
+      <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
+      <Name>Gucci.ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
