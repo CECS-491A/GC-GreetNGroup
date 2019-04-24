@@ -32,7 +32,7 @@ namespace Gucci.ManagerLayer.ArchiverManager
             var isSuccessfulArchive = false;
             var isSuccessfulDeletion = false;
             var logsToArchive = _gngArchiverService.GetOldLogs();
-            var archiveFileName = DateTime.Now.ToString(configurations.GetDateTimeFormat()) + 
+            var archiveFileName = DateTime.Now.ToString(configurations.GetDateTimeFormat()) +
                 configurations.GetArchiveExtention();
 
             if(logsToArchive.Count == 0)
@@ -107,7 +107,7 @@ namespace Gucci.ManagerLayer.ArchiverManager
             }
             /* Catch this error explicitly to see if archiver cannot find the log file
              * Let other errors bubble up
-             */ 
+             */
             catch (FileNotFoundException e)
             {
                 isSuccessfulRemoval = false;

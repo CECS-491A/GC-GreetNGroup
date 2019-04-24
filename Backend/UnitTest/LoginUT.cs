@@ -1,11 +1,6 @@
-﻿using ManagerLayer.LoginManagement;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Gucci.ManagerLayer.LoginManagement;
+using Gucci.ServiceLayer.Requests;
 
 namespace UnitTest
 {

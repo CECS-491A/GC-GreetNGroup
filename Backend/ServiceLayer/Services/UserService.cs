@@ -301,7 +301,34 @@ namespace Gucci.ServiceLayer.Services
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    // Searches user table in terms of the DefaultUserSearchDto to minimize
+                    // columns returned 
                     var user = ctx.Users.Where(u => u.UserName.Contains(username))
+                        .Select(u => new DefaultUserSearchDto()
+                        {
+                            Username = u.UserName
+                        }).ToList();
+
+                    return user;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return null;
+            }
+        }
+
+        // Returns user found via EventId
+        public List<DefaultUserSearchDto> GetDefaultUserInfoById(int userId)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    // Searches user table in terms of the DefaultUserSearchDto to minimize
+                    // columns returned 
+                    var user = ctx.Users.Where(c => c.UserId.Equals(userId))
                         .Select(u => new DefaultUserSearchDto()
                         {
                             Username = u.UserName

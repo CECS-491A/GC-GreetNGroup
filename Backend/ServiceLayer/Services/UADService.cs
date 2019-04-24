@@ -182,7 +182,7 @@ namespace Gucci.ServiceLayer.Services
                 while ((pivot.CompareTo(sessiontimes[j]) < 0) && (j > left))
                 {
                     j--;
-                } 
+                }
                 if (i <= j)
                 {
                     temp = sessiontimes[i];
@@ -227,7 +227,7 @@ namespace Gucci.ServiceLayer.Services
                 totalTime = totalTime + (int)duration.TotalMinutes;
                 i = i + 2;
             }
-            //Calculate the average time 
+            //Calculate the average time
             average = totalTime / totalSessions;
             return average;
         }
@@ -371,7 +371,7 @@ namespace Gucci.ServiceLayer.Services
                     }
                 }
             }
-            
+
             return sessions;
         }
         /// <summary>
