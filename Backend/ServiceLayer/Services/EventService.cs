@@ -418,12 +418,37 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     // Grabs events by needed columns and returns data transfer object
-                    e = ctx.Events.Where(name => name.EventName.Contains(searchInput))
-                        .Select(name => new DefaultEventSearchDto()
+                    e = ctx.Events.Where(n => n.EventName.Contains(searchInput))
+                        .Select(n => new DefaultEventSearchDto()
                         {
-                            Uid = name.UserId,
-                            EventName = name.EventName,
-                            StartDate = name.StartDate
+                            Uid = n.UserId,
+                            EventName = n.EventName,
+                            StartDate = n.StartDate
+                        }).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return e;
+            }
+        }
+
+        // Retrieves plain event details in list format given event id
+        public List<DefaultEventSearchDto> GetPlainEventDetailListById(int eId)
+        {
+            var e = new List<DefaultEventSearchDto>();
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.Where(c => c.EventId.Equals(eId))
+                        .Select(c => new DefaultEventSearchDto()
+                        {
+                            Uid = c.UserId,
+                            EventName = c.EventName,
+                            StartDate = c.StartDate
                         }).ToList();
                     return e;
                 }

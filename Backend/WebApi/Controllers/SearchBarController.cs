@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.LogManagement;
 using Gucci.ManagerLayer.SearchManager;
@@ -7,7 +8,7 @@ namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        private LogManager _gngLogManager = new LogManager();
+        private readonly LogManager _gngLogManager = new LogManager();
         private const string url = "https://greetngroup.com/search";
 
         /// <summary>
@@ -86,7 +87,8 @@ namespace WebApi.Controllers
             try
             {
                 // Retrieves info for GET
-                var e = searchManager.GetUserByUserId(uId).UserName;
+                var e = searchManager.GetUserByUserId(uId).FirstOrDefault();
+                if (e == null) return Ok("No UserName Found");
 
                 return Ok(e);
             }
