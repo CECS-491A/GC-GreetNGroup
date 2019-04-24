@@ -1,13 +1,13 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using ManagerLayer.GNGLogManagement;
+using Gucci.ManagerLayer.LogManagement;
 using ManagerLayer.SearchManager;
 
 namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        private GNGLogManager _gngLogManager = new GNGLogManager();
+        private LogManager _gngLogManager = new LogManager();
         private const string url = "https://greetngroup.com/search";
 
         /// <summary>

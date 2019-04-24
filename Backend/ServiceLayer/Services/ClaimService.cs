@@ -2,7 +2,9 @@
 using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
+
 
 namespace ServiceLayer.Services
 {
@@ -16,11 +18,11 @@ namespace ServiceLayer.Services
          * where it has been made
          *
          */
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
 
         public ClaimService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
         }
         /// <summary>
         /// This region handles inserting claim information into the database

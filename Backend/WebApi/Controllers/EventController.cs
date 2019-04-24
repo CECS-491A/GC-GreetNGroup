@@ -1,17 +1,16 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using ServiceLayer.Services;
-using ManagerLayer.GNGLogManagement;
 using ServiceLayer.Requests;
 using System.Net;
-using ManagerLayer.SearchManager;
+using Gucci.ServiceLayer.Services;
+using Gucci.ManagerLayer.LogManagement;
 
 namespace WebApi.Controllers
 {
     public class EventController : ApiController
     {
         
-        GNGLogManager gngLogManager = new GNGLogManager();
+        LogManager gngLogManager = new LogManager();
         EventService eventService = new EventService();
 
         /// <summary>

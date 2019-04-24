@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
 using DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
+using Gucci.ServiceLayer.Services;
 using Newtonsoft.Json;
 using ServiceLayer.Interface;
-using ServiceLayer.Model;
 using ServiceLayer.Requests;
 using ServiceLayer.Services;
 
@@ -85,6 +86,11 @@ namespace ManagerLayer.ProfileManagement
                 };
                 return httpResponse;
             }
+        }
+
+        public int RateUser(RateRequest request, string userID)
+        {
+            throw new NotImplementedException();
         }
 
         public HttpResponseMessage GetUserToUpdate(string jwtToken)

@@ -3,10 +3,11 @@
     <h1 class='display-2'>User Analytics </h1>
 
     <div>
-    <input v-model='input' type="text" placeholder="Search for month">
+    <input v-model='month' type="text" :maxlength=15 placeholder="Search for a month">
+    <input v-model='year' type="text" :maxlength=4 placeholder="Search for year">
     </div>
     <div>
-    <button @click="searchInput()">Search</button>
+    <button @click="searchInput(month, year)">Search</button>
 
     <v-container fluid grid-list-md>
     <v-layout row wrap>
@@ -70,18 +71,38 @@ export default {
       top5feature: '',
       top5pages: '',
       loginmonth: '',
-      sessionmonthly: ''
+      sessionmonthly: '',
+      month: '',
+      year: ''
     }
   },
 
   methods: {
-    searchInput: function () {
-      axios.get('http://localhost:62008/api/UAD/LoginVSRegistered/' + this.input).then((response) => { this.logvsreg = response.data }).catch(error => console.log(error))
-      axios.get('http://localhost:62008/api/UAD/AverageSessionDuration/' + this.input).then((response) => { this.avgsession = response.data }).catch(error => console.log(error))
-      axios.get('http://localhost:62008/api/UAD/GetTop5MostUsedFeature/' + this.input).then((response) => { this.top5feature = response.data }).catch(error => console.log(error))
-      axios.get('http://localhost:62008/api/UAD/Top5AveragePageSession/' + this.input).then((response) => { this.top5pages = response.data }).catch(error => console.log(error))
-      axios.get('http://localhost:62008/api/UAD/LoggedInMonthly/' + this.input).then((response) => { this.loginmonth = response.data }).catch(error => console.log(error))
-      axios.get('http://localhost:62008/api/UAD/AverageSessionMonthly/' + this.input).then((response) => { this.sessionmonthly = response.data }).catch(error => console.log(error))
+    checkMonth: function (i) {
+      var months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+      i = i.charAt(0).toUpperCase() + i.slice(1)
+      if (months.indexOf(i) !== -1) {
+        return true
+      }
+      return false
+    },
+    checkYear: function (i) {
+      return (Number.isInteger(+i) && (+i > 0)) 
+    },
+    searchInput: function (month, year) {
+      var checkMonth = this.checkMonth(month)
+      var checkYear = this.checkYear(year)
+      if (checkYear === true && checkMonth === true) {
+        month = month.charAt(0).toUpperCase() + month.slice(1)
+        axios.get('http://localhost:62008/api/UAD/LoginVSRegistered/' + month + '/' + year).then((response) => { this.logvsreg = response.data }).catch(error => console.log(error))
+        axios.get('http://localhost:62008/api/UAD/AverageSessionDuration/' + month + '/' + year).then((response) => { this.avgsession = response.data }).catch(error => console.log(error))
+        axios.get('http://localhost:62008/api/UAD/GetTop5MostUsedFeature/' + month + '/' + year).then((response) => { this.top5feature = response.data }).catch(error => console.log(error))
+        axios.get('http://localhost:62008/api/UAD/Top5AveragePageSession/' + month + '/' + year).then((response) => { this.top5pages = response.data }).catch(error => console.log(error))
+        axios.get('http://localhost:62008/api/UAD/LoggedInMonthly/' + month + '/' + year).then((response) => { this.loginmonth = response.data }).catch(error => console.log(error))
+        axios.get('http://localhost:62008/api/UAD/AverageSessionMonthly/' + month + '/' + year).then((response) => { this.sessionmonthly = response.data }).catch(error => console.log(error)) 
+      } else {
+        alert('Not a valid Date')
+      } 
     }
   } 
     
