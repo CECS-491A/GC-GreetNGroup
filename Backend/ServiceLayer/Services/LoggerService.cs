@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using DataAccessLayer.Models;
+using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
 

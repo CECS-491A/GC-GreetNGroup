@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Models;
+﻿using Gucci.DataAccessLayer.Models;
 using ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;

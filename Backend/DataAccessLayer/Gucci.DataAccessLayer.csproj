@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\GreetNGroupContext.cs" />
+    <Compile Include="DataTransferObject\DefaultEventSearchDto.cs" />
+    <Compile Include="DataTransferObject\DefaultUserSearchDto.cs" />
     <Compile Include="Migrations\201904050144001_AddUsers.cs" />
     <Compile Include="Migrations\201904050144001_AddUsers.Designer.cs">
       <DependentUpon>201904050144001_AddUsers.cs</DependentUpon>
