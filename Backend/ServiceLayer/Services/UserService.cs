@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Context;
+using DataAccessLayer.DataTransferObject;
 using DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Services;
@@ -292,6 +293,29 @@ namespace ServiceLayer.Services
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return count;
+            }
+        }
+
+        // Returns user found via partial match of username
+        public List<DefaultUserSearchDto> GetDefaultUserInfoByUsername(string username)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.Where(u => u.UserName.Contains(username))
+                        .Select(u => new DefaultUserSearchDto()
+                        {
+                            Username = u.UserName
+                        }).ToList();
+
+                    return user;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return null;
             }
         }
 
