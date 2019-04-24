@@ -1,9 +1,12 @@
 ﻿using DataAccessLayer.Models;
+using ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace ServiceLayer.Services
 {
-    public class UADService : IUADService
+    public class UADService : IUADService, ISortService
     {
         /// <summary>
         /// Function that returns the number of logs with a specific logid
@@ -16,7 +19,7 @@ namespace ServiceLayer.Services
             int logcount = 0;
             for (int index = 0; index < logs.Count; index++)
             {
-                if (logs[index].logID.Equals(logID) == true)
+                if (logs[index].LogID.Equals(logID) == true)
                 {
                     logcount++;
                 }
@@ -34,7 +37,7 @@ namespace ServiceLayer.Services
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 //Return the Name of the month
-                DateTime parsedDate = DateTime.Parse(logs[i].dateTime);
+                DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
                 if (string.Compare(parsedDate.ToString("MMMM"), month) != 0)
                 {
                     logs.Remove(logs[i]);
@@ -42,7 +45,26 @@ namespace ServiceLayer.Services
             }
             return logs;
         }
-
+        /// <summary>
+        /// Function that takes a list of logs and removes the logs not related to the specific month and year
+        /// </summary>
+        /// <param name="logs">List of logs</param>
+        /// <param name="month">specified month</param>
+        /// <param name="year">specified year</param>
+        /// <returns>returns logs with the specified month and year</returns>
+        public List<GNGLog> GetLogsForMonthAndYear(List<GNGLog> logs, string month, int year)
+        {
+            for (int i = logs.Count - 1; i >= 0; i--)
+            {
+                //Return the Name of the month
+                DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
+                if (string.Compare(parsedDate.ToString("MMMM"), month) != 0 || parsedDate.Year != year)
+                {
+                    logs.Remove(logs[i]);
+                }
+            }
+            return logs;
+        }
         /// <summary>
         /// Removes logs from list that does not have the specified ID
         /// </summary>
@@ -52,7 +74,7 @@ namespace ServiceLayer.Services
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                if (string.Compare(logs[i].logID, ID) != 0)
+                if (string.Compare(logs[i].LogID, ID) != 0)
                 {
                     logs.Remove(logs[i]);
                 }
@@ -132,9 +154,9 @@ namespace ServiceLayer.Services
         /// </summary>
         /// <param name="sessiontimes">array of session times</param>
         /// <param name="urls">list of urls</param>
-        public void QuickSortDouble<T>(T[] sessiontimes, List<string> urls) where T : IComparable<T>
+        public void QuickSortDouble<T>(List<T> sessiontimes, List<string> urls) where T : IComparable<T>
         {
-            PartitionDouble(sessiontimes, urls, 0, sessiontimes.Length - 1);
+            PartitionDouble(sessiontimes, urls, 0, sessiontimes.Count - 1);
         }
 
         /// <summary>
@@ -145,18 +167,23 @@ namespace ServiceLayer.Services
         /// <param name="urls">list of urls</param>
         /// <param name="left">left index of array</param>
         /// <param name="right">right index of array</param>
-        public void PartitionDouble<T>(T[] sessiontimes, List<string> urls, int left, int right) where T : IComparable<T>
+        public void PartitionDouble<T>(List<T> sessiontimes, List<string> urls, int left, int right) where T : IComparable<T>
         {
             int i, j;
             T pivot, temp;
             i = left;
             j = right;
             pivot = sessiontimes[(left + right) / 2];
-
             do
             {
-                while ((sessiontimes[i].CompareTo(pivot) < 0) && (i < right)) i++;
-                while ((pivot.CompareTo(sessiontimes[j]) < 0) && (j > left)) j--;
+                while ((sessiontimes[i].CompareTo(pivot) < 0) && (i < right))
+                {
+                    i++;
+                }
+                while ((pivot.CompareTo(sessiontimes[j]) < 0) && (j > left))
+                {
+                    j--;
+                } 
                 if (i <= j)
                 {
                     temp = sessiontimes[i];
@@ -187,15 +214,16 @@ namespace ServiceLayer.Services
         /// <returns>the average session time</returns>
         public double CalculateAverageSessionTime(List<GNGLog> session)
         {
-            double average = 0;
-            double totalSessions = (session.Count) / 2;
-            int totalTime = 0;
+            var average = 0;
+            var totalSessions = (session.Count) / 2;
+            var totalTime = 0;
             //Iterate list as pairs and find time difference for each pair
             for(int i = 1; i < session.Count;)
             {
-                DateTime end = DateTime.Parse(session[i - 1].dateTime);
-                DateTime beginning = DateTime.Parse(session[i].dateTime);
+                DateTime end = DateTime.Parse(session[i - 1].DateTime);
+                DateTime beginning = DateTime.Parse(session[i].DateTime);
                 TimeSpan duration = end - beginning;
+                Console.WriteLine(duration);
                 //Convert time to minutes
                 totalTime = totalTime + (int)duration.TotalMinutes;
                 i = i + 2;
@@ -212,10 +240,11 @@ namespace ServiceLayer.Services
         /// <param name="url">specific url</param>
         public void GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
+            logs = GetLogswithID(logs, "1001");
             //For every log check to see if the urls dont match
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                string[] words = logs[i].description.Split(' ');
+                string[] words = logs[i].Description.Split(' ');
                 if (string.Compare(words[2], url) != 0)
                 {
                     logs.Remove(logs[i]);
@@ -233,7 +262,7 @@ namespace ServiceLayer.Services
             //For everylog find the exit point to the website
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                string logID = logs[i].logID;
+                string logID = logs[i].LogID;
                 //Check if its not logID 1001 or 1005
                 if(string.Compare(logID, "1001") != 0 && string.Compare(logID, "1005") != 0)
                 {
@@ -242,8 +271,8 @@ namespace ServiceLayer.Services
                 //Check to see if the url of the log doesnt match with the passed url
                 if (string.Compare(logID, "1001") == 0)
                 {
-                    string[] word1001 = logs[i].description.Split(' ');
-                    if (string.Compare(word1001[0], url) != 0)
+                    string[] lastPageUrl = logs[i].Description.Split(' ');
+                    if (string.Compare(lastPageUrl[0], url) != 0)
                     {
                         logs.Remove(logs[i]);
                     }
@@ -251,8 +280,8 @@ namespace ServiceLayer.Services
                 //Check to see if the url when the user logs off doesnt matches the passed url
                 if (string.Compare(logID, "1005") == 0)
                 {
-                    string[] word1005 = logs[i].description.Split(' ');
-                    if (string.Compare(word1005[4], url) != 0)
+                    string[] logoutUrl = logs[i].Description.Split(' ');
+                    if (string.Compare(logoutUrl[4], url) != 0)
                     {
                         logs.Remove(logs[i]);
                     }
@@ -261,20 +290,18 @@ namespace ServiceLayer.Services
         }
 
         /// <summary>
-        /// Functions that removes logs without the specified string and keeps only the exit logs
+        /// Functions that removes logs without the specified month and keeps only the exit logs
         /// </summary>
         /// <param name="logs">List of logs</param>
         /// <param name="url">specific url</param>
         public bool IsMonthValid(string month)
         {
             var result = false;
-            List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber" };
+            var months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             if (string.IsNullOrEmpty(month))
             {
                 return result;
             }
-            month.ToLower();
-            month = char.ToUpper(month[0]) + month.Substring(1);
             for(int i = 0; i < months.Count; i++)
             {
                 if(month.CompareTo(months[i]) == 0)
@@ -292,14 +319,14 @@ namespace ServiceLayer.Services
         /// <returns>Paired List of Logs</returns>
         public List<GNGLog> PairStartAndEndLogs(List<GNGLog> startLogs, List<GNGLog> endLogs)
         {
-            List<GNGLog> sessions = new List<GNGLog>();
+            var sessions = new List<GNGLog>();
             for (int k = 0; k < endLogs.Count; k++)
             {
-                bool notFound = true;
-                int pos = 0;
+                var notFound = true;
+                var pos = 0;
                 while (notFound == true)
                 {
-                    if (startLogs[pos].userID == endLogs[k].userID)
+                    if (startLogs[pos].UserID == endLogs[k].UserID)
                     {
                         sessions.Add(endLogs[k]);
                         sessions.Add(startLogs[pos]);
@@ -310,10 +337,64 @@ namespace ServiceLayer.Services
                     {
                         pos++;
                     }
+                    if(pos == startLogs.Count())
+                    {
+                        notFound = false;
+                    }
                 }
             }
             return sessions;
         }
+        /// <summary>
+        /// Function that Formats the top 5 features into a string
+        /// </summary>
+        /// <param name="features">List of features</param>
+        /// <param name="useCount">List of features use count</param>
+        /// <returns>Proper string of top features</returns>
+        public string FormatTop5Features(List<string> features, List<int> useCount)
+        {
+            var result = "";
+            if(features.Count >= 5)
+            {
+                for(int i = features.Count - 1; i >= features.Count - 5; i--)
+                {
+                    result = result + " " + features[i] + " times used: " + useCount[i] + "\n";
+                }
+            }
+            else
+            {
+                for (int i = features.Count - 1; i >= 0; i--)
+                {
+                    result = result + " " + features[i] + " times used: " + useCount[i] + "\n";
+                }
+            }
+            return result;
+        }
 
+        /// <summary>
+        /// Function that Formats the top 5 pages into a string
+        /// </summary>
+        /// <param name="features">List of features</param>
+        /// <param name="timeSpent">List of time spent on page</param>
+        /// <returns>Proper string of top pages</returns>
+        public string FormatTop5Pages(List<string> features, List<double> timeSpent)
+        {
+            var result = "";
+            if (features.Count >= 5)
+            {
+                for (int i = features.Count - 1; i >= features.Count - 5; i--)
+                {
+                    result = result + " " + features[i] + " average time spent: " + timeSpent[i] + "\n";
+                }
+            }
+            else
+            {
+                for (int i = features.Count - 1; i >= 0; i--)
+                {
+                    result = result + " " + features[i] + " average time spent: " + timeSpent[i] + "\n";
+                }
+            }
+            return result;
+        }
     }
 }

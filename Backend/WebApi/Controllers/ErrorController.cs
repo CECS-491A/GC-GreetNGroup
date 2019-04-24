@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using ServiceLayer.Interface;
-using ServiceLayer.Services;
-using ManagerLayer.GNGLogManagement;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
+using Gucci.ManagerLayer.LogManagement;
 
 namespace WebApi.Controllers
 {
@@ -13,7 +13,7 @@ namespace WebApi.Controllers
         public IHttpActionResult CallSystemAdmin(string userId, string url, string ip)
         {
             IErrorHandlerService _errorHandlerService = new ErrorHandlerService();
-            GNGLogManager gngLogManager = new GNGLogManager();
+            LogManager gngLogManager = new LogManager();
 
             try
             {

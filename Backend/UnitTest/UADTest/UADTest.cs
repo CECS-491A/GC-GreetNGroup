@@ -12,60 +12,58 @@ namespace UnitTest.UADTest
     {
         #region ManagerTest
         [TestMethod]
-        public void TestMonthlyLoginvsRegistered()
+        public void getLoginComparedToRegistered_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetLoginVSRegistered("March");
+            string test = uadManager.GetLoginComparedToRegistered("March", 2019);
+            Console.WriteLine(test);
+            Assert.AreEqual(true, true);
+        }
+
+        [TestMethod]
+        public void GetMonthlyLoginOverSixMonths_Pass()
+        {
+            UADManager uadManager = new UADManager();
+            string test = uadManager.GetLoggedInMonthly("March", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
 
         [TestMethod]
-        public void TestMonthlyLoginOverSixMonths()
+        public void GetTop5MostUsedFeature_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetLoggedInMonthly("June");
+            string test = uadManager.GetTop5MostUsedFeature("March", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
 
         [TestMethod]
-        public void Top5MostUsedFeature()
+        public void GetAverageSessionDuration_Pas()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetTop5MostUsedFeature("March");
+            string test = uadManager.GetAverageSessionDuration("March", 1);
+            Console.WriteLine(test);
+            Assert.AreEqual(true, true);
+        }
+
+        [TestMethod]
+        public void GetAverageSessionMonthly_Pass()
+        {
+            UADManager uadManager = new UADManager();
+            string test = uadManager.GetAverageSessionMonthly("March", 1);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
         }
 
         [TestMethod]
-        public void AverageSessionDuration()
+        public void GetTop5AveragePageSession_Pass()
         {
             UADManager uadManager = new UADManager();
-            string test = uadManager.GetAverageSessionDuration("March");
-            Console.WriteLine(test);
-            Assert.AreEqual(true, true);
-
-        }
-
-        [TestMethod]
-        public void AverageSessionMonthly()
-        {
-            UADManager uadManager = new UADManager();
-            string test = uadManager.GetAverageSessionMonthly("June");
-            Console.WriteLine(test);
-            Assert.AreEqual(true, true);
-
-        }
-
-        [TestMethod]
-        public void Top5AveragePageSession()
-        {
-            UADManager uadManager = new UADManager();
-            string test = uadManager.GetTop5AveragePageSession("March");
+            string test = uadManager.GetTop5AveragePageSession("March", 2019);
             Console.WriteLine(test);
             Assert.AreEqual(true, true);
 
@@ -151,7 +149,7 @@ namespace UnitTest.UADTest
         public void QuickSortInteger_Pass()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
             List<int> numList = new List<int> {5, 4, 3, 2, 1};
@@ -170,7 +168,7 @@ namespace UnitTest.UADTest
         public void QuickSortInteger_Pass_DuplicateNumbers()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
             List<int> numList = new List<int> { 2, 3, 5, 3, 1 };
@@ -188,10 +186,10 @@ namespace UnitTest.UADTest
         public void QuickSortDouble_Pass()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
-            double[] numList = { 5.5, 4.4, 3.3, 2.2, 1.1 };
+            List<double> numList = new List<double> { 5.5, 4.4, 3.3, 2.2, 1.1 };
             List<string> wordList = new List<string> { "E", "D", "C", "B", "A" };
 
             //Act
@@ -403,7 +401,7 @@ namespace UnitTest.UADTest
         public void QuickSortInteger_Fail_LessWordsThanNumbers()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
             List<int> numList = new List<int> { 5, 4, 3, 2, 1 };
@@ -430,7 +428,7 @@ namespace UnitTest.UADTest
         public void QuickSortInteger_Fail_LessNumbersThanWords()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
             List<int> numList = new List<int> { 5, 4, 3, 2};
@@ -456,7 +454,7 @@ namespace UnitTest.UADTest
         public void QuickSortInteger_Fail_MoreWordsThanNumbers()
         {
             //Arrange
-            IUADService _uadService = new UADService();
+            var _uadService = new UADService();
             bool expected = true;
             bool actual = false;
             List<int> numList = new List<int> { 5, 4, 3, 2, 1 };
