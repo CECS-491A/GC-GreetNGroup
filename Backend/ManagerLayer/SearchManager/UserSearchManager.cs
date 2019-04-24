@@ -1,8 +1,8 @@
-﻿using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
-using ServiceLayer.Services;
+﻿using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
-namespace ManagerLayer.SearchManager
+namespace Gucci.ManagerLayer.SearchManager
 {
     class UserSearchManager : ISearchable<User>
     {

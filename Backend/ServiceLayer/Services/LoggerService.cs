@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using DataAccessLayer.Models;
+using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
 
@@ -290,5 +290,69 @@ namespace Gucci.ServiceLayer.Services
             return isLogWritten;
         }
 
+        /// <summary>
+        /// Method LogErrorsEncountered logs any errors a user encountered inside GreetNGroup.
+        /// The error code and url of the error encountered will be tracked inside the log. If the
+        /// log was failed to be made, it will increment the errorCounter.
+        /// </summary>
+        /// <param name="usersID">user ID (empty if user does not exist)</param>
+        /// <param name="errorCode">Error code encountered</param>
+        /// <param name="urlOfErr">URL of error encountered</param>
+        /// <param name="ip">IP address of the user/guest</param>
+        /// <returns>Return true or false if the log was made successfully</returns>
+        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
+        {
+            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            listOfIDs.TryGetValue("ErrorEncountered", out int logID);
+            var logIDString = logID.ToString();
+            var log = new GNGLog
+            {
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
+            };
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogBadRequest logs when a user gets a bad request code from the controller
+        /// </summary>
+        /// <param name="usersID">UserID who received the bad request (Blank if user is not registered)</param>
+        /// <param name="ip">IP of the user</param>
+        /// <param name="url">Url of where the bad request occurred</param>
+        /// <param name="exception">Exception message</param>
+        /// <returns></returns>
+        public bool LogBadRequest(string usersID, string ip, string url, string exception)
+        {
+            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            listOfIDs.TryGetValue("BadRequest", out int logID);
+            var logIDString = logID.ToString();
+            var log = new GNGLog
+            {
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Bad request at " + url + ": " + exception
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
     }
 }

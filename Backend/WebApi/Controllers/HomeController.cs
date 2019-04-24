@@ -1,16 +1,16 @@
-﻿using ManagerLayer.LoginManagement;
-using ManagerLayer.ProfileManagement;
-using ServiceLayer.Requests;
+﻿using Gucci.ManagerLayer.LoginManagement;
+using Gucci.ManagerLayer.ProfileManagement;
+using Gucci.ServiceLayer.Requests;
 using System;
 using System.Net;
 using System.Web.Http;
-using ManagerLayer.GNGLogManagement;
+using Gucci.ManagerLayer.LogManagement;
 
 namespace WebApi.Controllers
 {
     public class HomeController : ApiController
     {
-        private GNGLogManager gngLogManager = new GNGLogManager();
+        private LogManager gngLogManager = new LogManager();
 
         [HttpGet]
         [Route("api/profile")]
@@ -29,7 +29,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 //TODO: Update so that ip & url is included in FromBody for logging purposes
-                gngLogManager.LogBadRequest("", "", "", ex.ToString());
+                //gngLogManager.LogBadRequest("", "", "", ex.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }

@@ -3,9 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Gucci.ServiceLayer.Interface;
-using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
-using System.Collections.Generic;
 
 namespace Gucci.ServiceLayer.Services
 {

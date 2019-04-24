@@ -1,22 +1,22 @@
-﻿using DataAccessLayer.Models;
-using ServiceLayer.Interface;
-using ServiceLayer.Services;
+﻿using Gucci.DataAccessLayer.Models;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 
-namespace ManagerLayer.UADManagement
+namespace Gucci.ManagerLayer.UADManagement
 {
     public class UADManager
     {
         private static List<GNGLog> loglist = new List<GNGLog>();
-        GNGLoggerService _gngLoggerService;
+        LoggerService _gngLoggerService;
         UADService _uadService;
         UserService userManager;
         private static List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber" };
 
         public UADManager()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             _uadService = new UADService();
             userManager = new UserService();
             loglist = _gngLoggerService.ReadLogs();

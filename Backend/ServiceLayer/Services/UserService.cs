@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+using Gucci.DataAccessLayer.Context;
+using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class UserService : IUserService
     {
         private ICryptoService _cryptoService;
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
 
         public UserService()
         {
             _cryptoService = new CryptoService();
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
         }
 
         /*

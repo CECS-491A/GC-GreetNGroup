@@ -1,7 +1,9 @@
-﻿using DataAccessLayer.Models;
+﻿using Gucci.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
-namespace ServiceLayer.Services
+using Gucci.ServiceLayer.Interface;
+
+namespace Gucci.ServiceLayer.Services
 {
     public class UADService : IUADService
     {
@@ -16,7 +18,7 @@ namespace ServiceLayer.Services
             int logcount = 0;
             for (int index = 0; index < logs.Count; index++)
             {
-                if (logs[index].logID.Equals(logID) == true)
+                if (logs[index].LogID.Equals(logID) == true)
                 {
                     logcount++;
                 }
@@ -34,7 +36,7 @@ namespace ServiceLayer.Services
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 //Return the Name of the month
-                DateTime parsedDate = DateTime.Parse(logs[i].dateTime);
+                DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
                 if (string.Compare(parsedDate.ToString("MMMM"), month) != 0)
                 {
                     logs.Remove(logs[i]);
@@ -52,7 +54,7 @@ namespace ServiceLayer.Services
         {
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                if (string.Compare(logs[i].logID, ID) != 0)
+                if (string.Compare(logs[i].LogID, ID) != 0)
                 {
                     logs.Remove(logs[i]);
                 }
@@ -193,8 +195,8 @@ namespace ServiceLayer.Services
             //Iterate list as pairs and find time difference for each pair
             for(int i = 1; i < session.Count;)
             {
-                DateTime end = DateTime.Parse(session[i - 1].dateTime);
-                DateTime beginning = DateTime.Parse(session[i].dateTime);
+                DateTime end = DateTime.Parse(session[i - 1].DateTime);
+                DateTime beginning = DateTime.Parse(session[i].DateTime);
                 TimeSpan duration = end - beginning;
                 //Convert time to minutes
                 totalTime = totalTime + (int)duration.TotalMinutes;
@@ -215,7 +217,7 @@ namespace ServiceLayer.Services
             //For every log check to see if the urls dont match
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                string[] words = logs[i].description.Split(' ');
+                string[] words = logs[i].Description.Split(' ');
                 if (string.Compare(words[2], url) != 0)
                 {
                     logs.Remove(logs[i]);
@@ -233,7 +235,7 @@ namespace ServiceLayer.Services
             //For everylog find the exit point to the website
             for (int i = logs.Count - 1; i >= 0; i--)
             {
-                string logID = logs[i].logID;
+                string logID = logs[i].LogID;
                 //Check if its not logID 1001 or 1005
                 if(string.Compare(logID, "1001") != 0 && string.Compare(logID, "1005") != 0)
                 {
@@ -242,7 +244,7 @@ namespace ServiceLayer.Services
                 //Check to see if the url of the log doesnt match with the passed url
                 if (string.Compare(logID, "1001") == 0)
                 {
-                    string[] word1001 = logs[i].description.Split(' ');
+                    string[] word1001 = logs[i].Description.Split(' ');
                     if (string.Compare(word1001[0], url) != 0)
                     {
                         logs.Remove(logs[i]);
@@ -251,7 +253,7 @@ namespace ServiceLayer.Services
                 //Check to see if the url when the user logs off doesnt matches the passed url
                 if (string.Compare(logID, "1005") == 0)
                 {
-                    string[] word1005 = logs[i].description.Split(' ');
+                    string[] word1005 = logs[i].Description.Split(' ');
                     if (string.Compare(word1005[4], url) != 0)
                     {
                         logs.Remove(logs[i]);
@@ -299,7 +301,7 @@ namespace ServiceLayer.Services
                 int pos = 0;
                 while (notFound == true)
                 {
-                    if (startLogs[pos].userID == endLogs[k].userID)
+                    if (startLogs[pos].UserID == endLogs[k].UserID)
                     {
                         sessions.Add(endLogs[k]);
                         sessions.Add(startLogs[pos]);

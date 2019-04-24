@@ -2,14 +2,14 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Tables;
 using Newtonsoft.Json;
-using ServiceLayer.Interface;
-using ServiceLayer.Model;
-using ServiceLayer.Requests;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
+using Gucci.ServiceLayer.Requests;
+using Gucci.ServiceLayer.Services;
 
-namespace ManagerLayer.ProfileManagement
+namespace Gucci.ManagerLayer.ProfileManagement
 {
 
     public class ProfileManager

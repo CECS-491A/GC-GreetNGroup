@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.Requests
+namespace Gucci.ServiceLayer.Requests
 {
     class SystemAdminRequest
     {

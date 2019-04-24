@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ServiceLayer.Requests
+namespace Gucci.ServiceLayer.Requests
 {
     public class EventRequest
     {

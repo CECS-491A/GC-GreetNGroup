@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer.Tables;
-using ManagerLayer.SearchManager;
+using Gucci.DataAccessLayer.Tables;
+using Gucci.ManagerLayer.SearchManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Services;
 
 namespace UnitTest.SearchTest
 {

@@ -1,21 +1,20 @@
-﻿using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+﻿using Gucci.DataAccessLayer.Context;
+using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
 using System;
 using System.Linq;
-using ServiceLayer.Services;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     
     public class AttendeesService
     {
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private EventService _eventService;
         private UserService _userService;
         public AttendeesService ()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             _eventService = new EventService();
             _userService = new UserService();
         }

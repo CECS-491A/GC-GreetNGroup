@@ -1,7 +1,8 @@
-﻿using DataAccessLayer.Models;
-using ManagerLayer.UADManagement;
+﻿using Gucci.DataAccessLayer.Models;
+using Gucci.ManagerLayer.UADManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 
@@ -78,7 +79,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1001";
@@ -102,7 +103,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string month = "March";
@@ -127,7 +128,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1001";
@@ -208,7 +209,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
 
@@ -231,7 +232,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.endpoint.com";
             bool expected = true;
             bool actual = false;
@@ -255,7 +256,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.startpoint.com";
             bool expected = true;
             bool actual = false;
@@ -279,7 +280,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1010";
@@ -303,7 +304,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string month = "December";
@@ -328,7 +329,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
             string logID = "1011";
@@ -352,7 +353,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.test.com";
             bool expected = true;
             bool actual = false;
@@ -376,7 +377,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             string entryLog = "https://www.test.com";
             bool expected = true;
             bool actual = false;
@@ -484,7 +485,7 @@ namespace UnitTest.UADTest
         {
             //Arrange
             IUADService _uadService = new UADService();
-            GNGLoggerService _loggerService = new GNGLoggerService();
+            LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
 

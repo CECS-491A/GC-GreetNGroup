@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ServiceLayer</RootNamespace>
+    <RootNamespace>Gucci.ServiceLayer</RootNamespace>
     <AssemblyName>ServiceLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
