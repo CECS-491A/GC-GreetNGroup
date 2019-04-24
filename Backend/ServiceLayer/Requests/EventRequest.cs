@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServiceLayer.Requests
 {
-    public class EventCreationRequest
+    public class EventRequest
     {
+        public int eventId { get; set; }
         [Required]
         public int userId { get; set; }
         [Required]

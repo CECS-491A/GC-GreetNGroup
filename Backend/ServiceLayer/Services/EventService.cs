@@ -4,18 +4,19 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.DataTransferObject;
 using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class EventService
     {
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private Dictionary<string, int> tagIds;
         private int eventId;
         public EventService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             tagIds = GenerateEventTagIds();
             Int32.TryParse(Environment.GetEnvironmentVariable("EventId", EnvironmentVariableTarget.User), out eventId);
         }
@@ -128,7 +129,88 @@ namespace ServiceLayer.Services
         /// </summary>
         #region Update Event Information
 
-        public bool UpdateEventStartDate(string eId, DateTime startDate)
+        public bool DeleteEventTag(string tag, int eventId)
+        {
+            bool isSuccessfulDelete = false;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var eventTags = ctx.EventTags.Where(e => e.EventId.Equals(eventId));
+                    foreach(var tags in eventTags)
+                    {
+                        if (tags.Tag.TagName.Equals(tag))
+                        {
+                            ctx.EventTags.Remove(tags);
+                            isSuccessfulDelete = true;
+                        }
+                    }
+                    ctx.SaveChanges();
+                }
+                return isSuccessfulDelete;
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return isSuccessfulDelete;
+            }
+        }
+
+        public bool UpdateEvent(int eId, int userId, DateTime startDate, string eventName,
+            string address, string city, string state, string zip, List<string> eventTags, string eventDescription)
+        {
+            var isSuccessfullyUpdated = false;
+            var isTagsSuccessfullyUpdated = false;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var currentEvent = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eId));
+                    if (currentEvent != null)
+                    {
+                        currentEvent.UserId = userId;
+                        currentEvent.EventName = eventName;
+                        currentEvent.StartDate = startDate;
+                        currentEvent.EventLocation = ParseAddress(address, city, state, zip);
+                        currentEvent.EventDescription = eventDescription;
+                        ctx.SaveChanges();
+                        if(eventTags.Count != 0)
+                        {
+                            var currentEventTags = ctx.EventTags.Where(e => e.EventId.Equals(eId));
+
+                            foreach(var tags in currentEventTags)
+                            {
+                                if (!eventTags.Contains(tags.Tag.TagName))
+                                {
+                                    isTagsSuccessfullyUpdated = DeleteEventTag(tags.Tag.TagName, eId);
+                                }
+                                else
+                                {
+                                    eventTags.Remove(tags.Tag.TagName);
+                                }
+                            }
+                            if(eventTags.Count != 0)
+                            {
+                                isTagsSuccessfullyUpdated = InsertEventTags(eventTags, eId);
+                            }
+                            
+                        }
+                        if(isTagsSuccessfullyUpdated == true)
+                        {
+                            isSuccessfullyUpdated = true;
+                        }
+                    }
+                }
+                return isSuccessfullyUpdated;
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return isSuccessfullyUpdated;
+            }
+        }
+
+        public bool UpdateEventStartDate(int eId, DateTime startDate)
         {
             bool isSuccessfullyUpdated = false;
             try

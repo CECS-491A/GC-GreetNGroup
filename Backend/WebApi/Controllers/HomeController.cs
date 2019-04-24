@@ -4,11 +4,14 @@ using ServiceLayer.Requests;
 using System;
 using System.Net;
 using System.Web.Http;
+using ManagerLayer.GNGLogManagement;
 
 namespace WebApi.Controllers
 {
     public class HomeController : ApiController
     {
+        private GNGLogManager gngLogManager = new GNGLogManager();
+
         [HttpGet]
         [Route("api/profile")]
         public IHttpActionResult Get([FromBody]string jwtToken)
@@ -25,6 +28,8 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
+                //TODO: Update so that ip & url is included in FromBody for logging purposes
+                gngLogManager.LogBadRequest("", "", "", ex.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
