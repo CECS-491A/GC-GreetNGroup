@@ -423,6 +423,7 @@ namespace Gucci.ServiceLayer.Services
                         {
                             Uid = n.UserId,
                             EventName = n.EventName,
+                            EventLocation = n.EventLocation,
                             StartDate = n.StartDate
                         }).ToList();
                     return e;
@@ -448,6 +449,7 @@ namespace Gucci.ServiceLayer.Services
                         {
                             Uid = c.UserId,
                             EventName = c.EventName,
+                            EventLocation = c.EventLocation,
                             StartDate = c.StartDate
                         }).ToList();
                     return e;
@@ -551,6 +553,22 @@ namespace Gucci.ServiceLayer.Services
             eventTagIds.Add("Discussion", 11);
 
             return eventTagIds;
+        }
+
+        // Filters list of given event information by removing passed dates
+        public List<DefaultEventSearchDto> FilterOutPastEvents(List<DefaultEventSearchDto> unfiltered)
+        {
+            var filtered = new List<DefaultEventSearchDto>();
+            var currentTime = new DateTime().ToLocalTime();
+            foreach (var c in unfiltered)
+            {
+                if (DateTime.Compare(c.StartDate, currentTime) >= 0)
+                {
+                    filtered.Add(c);
+                }
+            }
+
+            return filtered;
         }
 
         #endregion
