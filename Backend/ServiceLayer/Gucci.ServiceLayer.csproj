@@ -80,12 +80,7 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD:Backend/ServiceLayer/ServiceLayer.csproj
-    <Compile Include="Requests\EventCreationRequest.cs" />
-    <Compile Include="Requests\FindEventRequest.cs" />
-=======
     <Compile Include="Requests\EventRequest.cs" />
->>>>>>> master:Backend/ServiceLayer/Gucci.ServiceLayer.csproj
     <Compile Include="Requests\RateRequest.cs" />
     <Compile Include="Requests\SearchBarRequest.cs" />
     <Compile Include="Requests\SSOUserRequest.cs" />
