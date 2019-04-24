@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
     interface ISortService
     {

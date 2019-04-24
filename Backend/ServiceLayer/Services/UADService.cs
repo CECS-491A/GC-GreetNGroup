@@ -338,7 +338,7 @@ namespace Gucci.ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }
@@ -364,7 +364,7 @@ namespace Gucci.ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }

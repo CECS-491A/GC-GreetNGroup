@@ -4,6 +4,7 @@ using System.Linq;
 using Gucci.DataAccessLayer.Context;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
+using Gucci.DataAccessLayer.DataTransferObject;
 
 namespace Gucci.ServiceLayer.Services
 {
