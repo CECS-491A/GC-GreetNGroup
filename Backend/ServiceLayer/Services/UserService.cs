@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer.Context;
-using DataAccessLayer.DataTransferObject;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Context;
+using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
-using Gucci.ServiceLayer.Services;
-using ServiceLayer.Interface;
+using Gucci.DataAccessLayer.DataTransferObject;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class UserService : IUserService
     {

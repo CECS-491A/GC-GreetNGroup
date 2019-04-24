@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
-using DataAccessLayer.Tables;
-using DataAccessLayer.Context;
+using Gucci.ServiceLayer.Services;
+using Gucci.DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Context;
 using System.Collections.Generic;
 using System;
 using System.Linq;

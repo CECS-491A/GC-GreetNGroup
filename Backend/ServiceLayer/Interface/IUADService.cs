@@ -1,8 +1,8 @@
-﻿using DataAccessLayer.Models;
+﻿using Gucci.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Interface
 {
     public interface IUADService
     {

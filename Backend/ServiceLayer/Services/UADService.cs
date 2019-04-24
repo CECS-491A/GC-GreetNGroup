@@ -1,10 +1,9 @@
-﻿using DataAccessLayer.Models;
-using ServiceLayer.Interface;
+using Gucci.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Gucci.ServiceLayer.Interface;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class UADService : IUADService, ISortService
     {
@@ -339,7 +338,7 @@ namespace ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }
@@ -365,7 +364,7 @@ namespace ServiceLayer.Services
                         {
                             pos++;
                         }
-                        if (pos == startLogs.Count())
+                        if (pos == startLogs.Count)
                         {
                             notFound = false;
                         }

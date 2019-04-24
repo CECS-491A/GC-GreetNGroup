@@ -1,8 +1,8 @@
-﻿using DataAccessLayer.Models;
-using Gucci.ServiceLayer.Services;
-using ManagerLayer.UADManagement;
+using Gucci.DataAccessLayer.Models;
+using Gucci.ManagerLayer.UADManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 

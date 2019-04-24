@@ -1,12 +1,10 @@
 ﻿using System;
-using ServiceLayer.Requests;
-using ServiceLayer.Services;
-using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
-using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
+using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
 
-namespace ManagerLayer.LoginManagement
+namespace Gucci.ManagerLayer.LoginManagement
 {
     public class LoginManager
     {

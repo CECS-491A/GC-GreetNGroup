@@ -1,6 +1,6 @@
-﻿using ManagerLayer.ProfileManagement;
-using ServiceLayer.Requests;
-using ServiceLayer.Services;
+﻿using Gucci.ManagerLayer.ProfileManagement;
+using Gucci.ServiceLayer.Requests;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -34,7 +34,7 @@ namespace WebApi.Controllers
             }
             catch (Exception e)
             {
-                gngLogManager.LogBadRequest("", "", "", e.ToString());
+                //gngLogManager.LogBadRequest("", "", "", e.ToString());
                 //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
@@ -71,7 +71,7 @@ namespace WebApi.Controllers
             }
             catch (Exception e) //Catch all errors
             {
-                gngLogManager.LogBadRequest("", "", "", e.ToString());
+                //gngLogManager.LogBadRequest("", "", "", e.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 /*
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)

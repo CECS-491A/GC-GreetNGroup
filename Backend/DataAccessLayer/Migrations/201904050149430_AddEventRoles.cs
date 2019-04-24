@@ -1,4 +1,4 @@
-namespace DataAccessLayer.Migrations
+namespace Gucci.DataAccessLayer.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

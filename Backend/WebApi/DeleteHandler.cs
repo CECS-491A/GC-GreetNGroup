@@ -1,6 +1,6 @@
 ﻿using ManagerLayer.UserManagement;
 using Newtonsoft.Json;
-using ServiceLayer.Requests;
+using Gucci.ServiceLayer.Requests;
 using System.Net;
 using System.Net.Http;
 using System.Threading;

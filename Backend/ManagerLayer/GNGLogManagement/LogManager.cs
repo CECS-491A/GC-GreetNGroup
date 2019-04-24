@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Models;
+﻿using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
@@ -63,69 +63,9 @@ namespace Gucci.ManagerLayer.LogManagement
 
         }
 
-        /// <summary>
-        /// Method LogErrorsEncountered logs any errors a user encountered inside GreetNGroup.
-        /// The error code and url of the error encountered will be tracked inside the log. If the
-        /// log was failed to be made, it will increment the errorCounter.
-        /// </summary>
-        /// <param name="usersID">user ID (empty if user does not exist)</param>
-        /// <param name="errorCode">Error code encountered</param>
-        /// <param name="urlOfErr">URL of error encountered</param>
-        /// <param name="ip">IP address of the user/guest</param>
-        /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("ErrorEncountered", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = usersID,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
-            };
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
+        
 
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
-
-        /// <summary>
-        /// Method LogGNGEventsCreated logs the events users made on GreetNGroup. The event ID
-        /// and user ID of the host will be tracked. If the log was failed to be made, 
-        /// it will increment the errorCounter.
-        /// </summary>
-        /// <param name="usersID">user ID</param>
-        /// <param name="eventID">Event ID</param>
-        /// <param name="ip">IP Address of user</param>
-        /// <returns>Return true or false if the log was made successfully</returns>
-        public bool LogGNGEventsCreated(string usersID, int eventID, string ip)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("EventCreated", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = usersID,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = "Event " + eventID + " created"
-            };
-
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
+        
 
         /// <summary>
         /// Method LogEntryToWebsite logs when a user first enters GreetNGroup. The log
@@ -375,35 +315,7 @@ namespace Gucci.ManagerLayer.LogManagement
             return logMade;
         }
 
-        /// <summary>
-        /// Method LogGNGEventUpdate logs when a user updates their GNG event info
-        /// </summary>
-        /// <param name="eventId">Event id of the event</param>
-        /// <param name="userHostId">User id of the host</param>
-        /// <param name="ip">IP address of the host</param>
-        /// <returns>Returns a bool based on if the log was successfully made or not</returns>
-        public bool LogGNGEventUpdate(int eventId, string userHostId, string ip)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("EventUpdated", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = userHostId,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = "Event " + eventId + " updated"
-            };
 
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
 
         /// <summary>
         /// LogGNGEventJoined logs when a user successfully joins a GNG event to participate in.
@@ -435,95 +347,5 @@ namespace Gucci.ManagerLayer.LogManagement
             return logMade;
         }
 
-        /// <summary>
-        /// Method LogBadRequest logs when a user gets a bad request code from the controller
-        /// </summary>
-        /// <param name="usersID">UserID who received the bad request (Blank if user is not registered)</param>
-        /// <param name="ip">IP of the user</param>
-        /// <param name="url">Url of where the bad request occurred</param>
-        /// <param name="exception">Exception message</param>
-        /// <returns></returns>
-        public bool LogBadRequest(string usersID, string ip, string url, string exception)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("BadRequest", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = usersID,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = "Bad request at " + url + ": " + exception
-            };
-
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
-
-        /// <summary>
-        /// Method LogGNGEventDeleted logs when a user deletes their GNG event
-        /// </summary>
-        /// <param name="hostId">User ID of the host</param>
-        /// <param name="eventId">Event ID of the event being deleted</param>
-        /// <param name="ip">IP Address of the host</param>
-        /// <returns>Returns a bool based on if it was logged successfully</returns>
-        public bool LogGNGEventDeleted(string hostId, int eventId, string ip)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("EventDeleted", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = hostId,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = "Event " + eventId + " deleted"
-            };
-
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
-
-        /// <summary>
-        /// Method LogGNGEventExpiration logs when an event has passed and can no longer
-        /// be joined
-        /// </summary>
-        /// <param name="hostId">User ID of the host who created the event</param>
-        /// <param name="eventId">Event ID of the event that expired</param>
-        /// <returns>Returns a bool based on if it was logged successfully or not</returns>
-        public bool LogGNGEventExpiration(string hostId, int eventId)
-        {
-            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
-            var logMade = false;
-            listOfIDs.TryGetValue("EventExpired", out int logID);
-            var logIDString = logID.ToString();
-            var log = new GNGLog
-            {
-                LogID = logIDString,
-                UserID = hostId,
-                IpAddress = "N/A",
-                DateTime = DateTime.Now.ToString(),
-                Description = "Event " + eventId + " expired"
-            };
-
-            logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
     }
 }

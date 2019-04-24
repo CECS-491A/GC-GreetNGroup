@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using DataAccessLayer.Context;
-using DataAccessLayer.Tables;
+using Gucci.DataAccessLayer.Context;
+using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
-using Gucci.ServiceLayer.Services;
 
-
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class ClaimService
     {

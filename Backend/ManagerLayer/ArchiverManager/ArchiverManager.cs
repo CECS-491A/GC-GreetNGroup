@@ -1,9 +1,9 @@
-﻿using System;
+using Gucci.ServiceLayer.Services;
+using System;
 using System.IO;
 using System.IO.Compression;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
-using Gucci.ServiceLayer.Services;
 
 namespace Gucci.ManagerLayer.ArchiverManager
 {

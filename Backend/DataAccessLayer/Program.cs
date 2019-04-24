@@ -1,4 +1,4 @@
-﻿namespace DataAccessLayer
+﻿namespace Gucci.DataAccessLayer
 {
     class Program
     {

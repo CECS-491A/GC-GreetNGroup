@@ -1,6 +1,6 @@
-﻿using DataAccessLayer.Tables;
+﻿using Gucci.DataAccessLayer.Tables;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
     public interface IUserService
     {
