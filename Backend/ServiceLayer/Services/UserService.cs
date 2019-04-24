@@ -293,6 +293,29 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        // Returns user found via partial match of username
+        public List<DefaultUserSearchDto> GetDefaultUserInfoByUsername(string username)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.Where(u => u.UserName.Contains(username))
+                        .Select(u => new DefaultUserSearchDto()
+                        {
+                            Username = u.UserName
+                        }).ToList();
+
+                    return user;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return null;
+            }
+        }
+
         // Returns user found via username string
         public User GetUserByUsername(string username)
         {

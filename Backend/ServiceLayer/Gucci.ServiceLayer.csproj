@@ -71,6 +71,7 @@
     <Compile Include="Interface\IArchiverService.cs" />
     <Compile Include="Interface\ILoggerService.cs" />
     <Compile Include="Interface\IJWTService.cs" />
+    <Compile Include="Interface\ISortService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Model\Configurations.cs" />
     <Compile Include="Model\UserProfile.cs" />

@@ -1,4 +1,4 @@
-﻿using Gucci.ManagerLayer.LoginManagement;
+using Gucci.ManagerLayer.LoginManagement;
 using Gucci.ManagerLayer.ProfileManagement;
 using Gucci.ServiceLayer.Requests;
 using System;

@@ -6,10 +6,10 @@
     "\\Backend\\ManagerLayer",
     "\\Backend\\ManagerLayer\\LoginManagement",
     "\\Backend\\ManagerLayer\\ProfileManagement",
+    "\\Backend\\ManagerLayer\\UADManagement",
     "\\Backend\\ServiceLayer",
-    "\\Backend\\UnitTest",
-    "\\Backend\\UnitTest\\UADTest",
-    "\\Backend\\WebApi"
+    "\\Backend\\WebApi",
+    "\\Backend\\WebApi\\Controllers"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false

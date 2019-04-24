@@ -6,34 +6,17 @@ namespace WebApi.Controllers
 {
     public class UADController : ApiController
     {
-
+        UADManager _uadManager = new UADManager();
         private LogManager gngLogManager = new LogManager();
         private const string url = "https://www.greetngroup.com/analysisdashboard";
 
         [HttpGet]
-        [Route("api/UAD/LoginVSRegistered/{month}")]
-        public IHttpActionResult GetLoginvsRegistered(string month)
+        [Route("api/UAD/LoginVSRegistered/{month}/{year}")]
+        public IHttpActionResult GetLoginvsRegistered(string month, int year)
         {
             try
             {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetLoginVSRegistered(month);
-                return Ok(result);
-            }
-            catch(HttpRequestException e)
-            {
-                //gngLogManager.LogBadRequest("", "", url, e.ToString());
-                return BadRequest();
-            }
-        }
-        [HttpGet]
-        [Route("api/UAD/AverageSessionDuration/{month}")]
-        public IHttpActionResult GetAverageSessionDuration(string month)
-        {
-            try
-            {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetAverageSessionDuration(month);
+                var result = _uadManager.GetLoginComparedToRegistered(month, year);
                 return Ok(result);
             }
             catch (HttpRequestException e)
@@ -43,13 +26,12 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
-        [Route("api/UAD/GetTop5MostUsedFeature/{month}")]
-        public IHttpActionResult GetTop5MostUsedFeature(string month)
+        [Route("api/UAD/AverageSessionDuration/{month}/{year}")]
+        public IHttpActionResult GetAverageSessionDuration(string month, int year)
         {
             try
             {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetTop5MostUsedFeature(month);
+                var result = _uadManager.GetAverageSessionDuration(month, year);
                 return Ok(result);
             }
             catch (HttpRequestException e)
@@ -59,13 +41,12 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
-        [Route("api/UAD/Top5AveragePageSession/{month}")]
-        public IHttpActionResult GetTop5AveragePageSession(string month)
+        [Route("api/UAD/GetTop5MostUsedFeature/{month}/{year}")]
+        public IHttpActionResult GetTop5MostUsedFeature(string month, int year)
         {
             try
             {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetTop5AveragePageSession(month);
+                var result = _uadManager.GetTop5MostUsedFeature(month, year);
                 return Ok(result);
             }
             catch (HttpRequestException e)
@@ -75,13 +56,12 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
-        [Route("api/UAD/LoggedInMonthly/{month}")]
-        public IHttpActionResult GetLoggedInMonthly(string month)
+        [Route("api/UAD/Top5AveragePageSession/{month}/{year}")]
+        public IHttpActionResult GetTop5AveragePageSession(string month, int year)
         {
             try
             {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetLoggedInMonthly(month);
+                var result = _uadManager.GetTop5AveragePageSession(month, year);
                 return Ok(result);
             }
             catch (HttpRequestException e)
@@ -91,13 +71,27 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
-        [Route("api/UAD/AverageSessionMonthly/{month}")]
-        public IHttpActionResult GetAverageSessionMonthly(string month)
+        [Route("api/UAD/LoggedInMonthly/{month}/{year}")]
+        public IHttpActionResult GetLoggedInMonthly(string month, int year)
         {
             try
             {
-                UADManager _uadManager = new UADManager();
-                var result = _uadManager.GetAverageSessionMonthly(month);
+                var result = _uadManager.GetLoggedInMonthly(month, year);
+                return Ok(result);
+            }
+            catch (HttpRequestException e)
+            {
+                //gngLogManager.LogBadRequest("", "", url, e.ToString());
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        [Route("api/UAD/AverageSessionMonthly/{month}/{year}")]
+        public IHttpActionResult GetAverageSessionMonthly(string month, int year)
+        {
+            try
+            {
+                var result = _uadManager.GetAverageSessionMonthly(month, year);
                 return Ok(result);
             }
             catch (HttpRequestException e)

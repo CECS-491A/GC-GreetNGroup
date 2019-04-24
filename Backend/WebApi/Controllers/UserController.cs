@@ -35,7 +35,12 @@ namespace WebApi.Controllers
             catch (Exception e)
             {
                 //gngLogManager.LogBadRequest("", "", "", e.ToString());
-                return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Service Unavailable")
+                };
+                return httpResponseFail;
             }
         }
 
@@ -68,11 +73,13 @@ namespace WebApi.Controllers
             {
                 //gngLogManager.LogBadRequest("", "", "", e.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
+                /*
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("Unable to retrieve user data, user not found")
                 };
                 return httpResponseFail;
+                */
             }
         }
 

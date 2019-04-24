@@ -16,7 +16,6 @@ namespace Gucci.DataAccessLayer.Tables
             EventName = eventName;
             EventLocation = eventLocation;
             EventDescription = eventDescription;
-
         }
 
         [Required, ForeignKey("User")]

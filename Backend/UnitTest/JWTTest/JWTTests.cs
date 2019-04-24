@@ -5,6 +5,7 @@ using Gucci.DataAccessLayer.Context;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Gucci.ServiceLayer.Services;
 
 namespace UnitTest.JWTTest
 {

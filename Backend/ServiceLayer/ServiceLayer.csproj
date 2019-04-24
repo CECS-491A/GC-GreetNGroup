@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F492345-F79F-4123-8880-C2499FCDC67C}</ProjectGuid>
+    <ProjectGuid>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ManagerLayer</RootNamespace>
-    <AssemblyName>ManagerLayer</AssemblyName>
+    <RootNamespace>ServiceLayer</RootNamespace>
+    <AssemblyName>ServiceLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -57,19 +57,7 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.4.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,26 +66,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArchiverManager\ArchiverManager.cs" />
-    <Compile Include="AttendeeManagement\AttendeeManager.cs" />
-    <Compile Include="GNGLogManagement\LogManager.cs" />
-    <Compile Include="LoginManagement\LoginManager.cs" />
+    <Compile Include="Interface\IArchiverService.cs" />
+    <Compile Include="Interface\ICryptoService.cs" />
+    <Compile Include="Interface\IErrorHandlerService.cs" />
+    <Compile Include="Interface\IJWTService.cs" />
+    <Compile Include="Interface\ILoggerService.cs" />
+    <Compile Include="Interface\ISortService.cs" />
+    <Compile Include="Interface\IUserService.cs" />
+    <Compile Include="Model\Configurations.cs" />
+    <Compile Include="Model\UserProfile.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Include="ProfileManagement\ProfileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchManager\EventSearchManager.cs" />
-    <Compile Include="SearchManager\ISearchable.cs" />
-    <Compile Include="SearchManager\SearchManager.cs" />
-    <Compile Include="SearchManager\UserSearchManager.cs" />
-    <Compile Include="UADManagement\UADManager.cs" />
-    <Compile Include="UserManager.cs" />
+    <Compile Include="Requests\EventRequest.cs" />
+    <Compile Include="Requests\RateRequest.cs" />
+    <Compile Include="Requests\SearchBarRequest.cs" />
+    <Compile Include="Requests\SSOUserRequest.cs" />
+    <Compile Include="Requests\SystemAdminRequest.cs" />
+    <Compile Include="Requests\UpdateProfileRequest.cs" />
+    <Compile Include="Services\ArchiverService.cs" />
+    <Compile Include="Services\AttendeesService.cs" />
+    <Compile Include="Services\ClaimService.cs" />
+    <Compile Include="Services\CryptoService.cs" />
+    <Compile Include="Services\ErrorHandlerService.cs" />
+    <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\EventTagService.cs" />
+    <Compile Include="Interface\IUADService.cs" />
+    <Compile Include="Services\JWTService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\UADService.cs" />
+    <Compile Include="Services\UserClaimsService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="obj\Release\ManagerLayer.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\ServiceLayer.csproj.CoreCompileInputs.cache" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -105,14 +111,13 @@
     <Folder Include="bin\Release\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\Gucci.DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
-      <Name>Gucci.DataAccessLayer</Name>
+      <Name>DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLayer\Gucci.ServiceLayer.csproj">
-      <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
-      <Name>Gucci.ServiceLayer</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gucci.ServiceLayer.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

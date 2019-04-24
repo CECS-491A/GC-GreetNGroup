@@ -6,6 +6,7 @@ using Gucci.DataAccessLayer.Tables;
 using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
+using Gucci.DataAccessLayer.DataTransferObject;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -398,6 +399,32 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     e = ctx.Events.Where(name => name.EventName.Contains(searchInput)).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return e;
+            }
+        }
+
+        // Retrieves plain event details in list format give partial event name/search input
+        public List<DefaultEventSearchDto> GetPlainEventDetailListByName(string searchInput)
+        {
+            var e = new List<DefaultEventSearchDto>();
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    // Grabs events by needed columns and returns data transfer object
+                    e = ctx.Events.Where(name => name.EventName.Contains(searchInput))
+                        .Select(name => new DefaultEventSearchDto()
+                        {
+                            Uid = name.UserId,
+                            EventName = name.EventName,
+                            StartDate = name.StartDate
+                        }).ToList();
                     return e;
                 }
             }

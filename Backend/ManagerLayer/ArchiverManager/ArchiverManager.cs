@@ -1,4 +1,4 @@
-﻿using Gucci.ServiceLayer.Services;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.IO;
 using System.IO.Compression;

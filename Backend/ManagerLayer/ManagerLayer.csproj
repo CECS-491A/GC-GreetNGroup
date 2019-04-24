@@ -53,6 +53,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.4.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
@@ -105,14 +106,17 @@
     <Folder Include="bin\Release\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\Gucci.DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{07ddd14e-6ce5-48bb-882f-7e5ae3c931f7}</Project>
-      <Name>Gucci.DataAccessLayer</Name>
+      <Name>DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLayer\Gucci.ServiceLayer.csproj">
-      <Project>{19C796FE-0AB3-43D6-AE5E-C2D6DC5E0FA3}</Project>
-      <Name>Gucci.ServiceLayer</Name>
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+      <Project>{19c796fe-0ab3-43d6-ae5e-c2d6dc5e0fa3}</Project>
+      <Name>ServiceLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gucci.ManagerLayer.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
