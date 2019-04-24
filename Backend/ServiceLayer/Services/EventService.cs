@@ -4,7 +4,7 @@ using System.Linq;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
-
+using DataAccessLayer.DataTransferObject;
 namespace Gucci.ServiceLayer.Services
 {
     public class EventService
