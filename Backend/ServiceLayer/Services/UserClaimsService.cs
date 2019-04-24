@@ -31,6 +31,39 @@ namespace ServiceLayer.Services
             }
         }
 
+        public bool AddDefaultClaims(User newUser)
+        {
+            var isSuccessfulAdd = false;
+            try
+            {
+                using(var ctx = new GreetNGroupContext())
+                {
+                    var userID = newUser.UserId;
+                    var claimToAdd = ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(1));
+                    var claimToAdd2 = ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(2));
+                    var claimToAdd3 = ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(8));
+                    var claimToAdd4 = ctx.Claims.FirstOrDefault(c => c.ClaimId.Equals(9));
+
+                    var userClaim = new UserClaim(userID, claimToAdd);
+                    var userClaim2 = new UserClaim(userID, claimToAdd2);
+                    var userClaim3 = new UserClaim(userID, claimToAdd3);
+                    var userClaim4 = new UserClaim(userID, claimToAdd4);
+
+                    ctx.UserClaims.Add(userClaim);
+                    ctx.UserClaims.Add(userClaim2);
+                    ctx.UserClaims.Add(userClaim3);
+                    ctx.UserClaims.Add(userClaim4);
+                    ctx.SaveChanges();
+                    isSuccessfulAdd = true;
+                    return isSuccessfulAdd;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                return isSuccessfulAdd;
+            }
+        }
+
         public List<Claim> GetUsersClaims(string username)
         {
             List<Claim> claimsList = new List<Claim>();

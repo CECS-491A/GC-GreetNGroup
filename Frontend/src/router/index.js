@@ -5,7 +5,6 @@ import SearchPage from '@/components/Search'
 import FindEventsForMe from '@/components/FindEventsForMe'
 import HelloWorld from '@/components/HelloWorld'
 import PageNotFound from '@/components/PageNotFound'
-import TestLogin from '@/components/TestLogin'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
 import CreateEvent from '@/components/CreateEvent'
 import Profile from '@/components/Profile'
@@ -51,11 +50,6 @@ const router = new Router({
       component: CreateEvent
     },
     {
-      path: '/testlogin',
-      name: 'testlogin',
-      component: TestLogin
-    },
-    {
       path: '/helloworld',
       name: 'helloworld',
       component: HelloWorld
@@ -75,7 +69,7 @@ const router = new Router({
       component: Profile
     },
     {
-      path: '/login/:token/:emailaddress',
+      path: '/login/:token',
       name: 'login',
       component: Login
     },

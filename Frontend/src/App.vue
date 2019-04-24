@@ -1,28 +1,21 @@
 <template>
   <v-app>
-    <v-toolbar app dark>
-      <v-toolbar-title class = "NavigationToolBar">
-        <span class="font-weight-light">GreetNGroup</span>
-        <v-spacer></v-spacer>
-      </v-toolbar-title>
-      <div>
-          <v-btn to="/Search">Search</v-btn>
-          <v-btn to="/HelloWorld">HelloPage</v-btn>
-          <v-btn to="/testlogin">Login</v-btn>
-          <v-btn to="/analysisdashboard">User Analysis</v-btn>
-          <v-btn to="/logout"> Log Out</v-btn>
-          <v-btn to="/CreateEvent">Create Event</v-btn>
-        </div>
-    </v-toolbar>
-    <div id="app">
-      <router-view/>
-    </div>
+    <nav-bar />
+
+    <v-content>
+      <router-view />
+    </v-content>
   </v-app>
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue'
+
 export default {
-  name: 'App'
+  name: 'app',
+  components: {
+    NavBar
+  }
 }
 </script>
 

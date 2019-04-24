@@ -167,6 +167,25 @@ namespace ManagerLayer.ProfileManagement
             return httpResponse;
         }
 
+        public HttpResponseMessage GetEmail(string jwtToken)
+        {
+            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                {
+                    Content = new StringContent("Session is invalid")
+                };
+                return httpResponseFail;
+            }
+            var retrievedEmail = _jwtServce.GetUsernameFromToken(jwtToken);
+
+            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(retrievedEmail)
+            };
+            return httpResponse;
+        }
+
         public bool CheckProfileActivated(string jwtToken)
         {
             int userID = _jwtServce.GetUserIDFromToken(jwtToken);
@@ -177,6 +196,8 @@ namespace ManagerLayer.ProfileManagement
             }
             return false;
         }
+
+
 
         /*
         public int RateUser(RateRequest request, string rateeID)
