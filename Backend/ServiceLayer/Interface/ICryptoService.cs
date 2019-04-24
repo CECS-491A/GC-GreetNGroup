@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
     public interface ICryptoService
     {

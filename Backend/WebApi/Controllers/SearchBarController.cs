@@ -7,7 +7,8 @@ namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        private readonly GNGLogManager _gngLogManager = new GNGLogManager();
+        private GNGLogManager _gngLogManager = new GNGLogManager();
+        private const string url = "https://greetngroup.com/search";
 
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
@@ -35,7 +36,7 @@ namespace WebApi.Controllers
             catch (HttpRequestException e)
             {
                 // logs error -- does not care about ip or userId
-                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
+                _gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -67,7 +68,7 @@ namespace WebApi.Controllers
             catch (HttpRequestException e)
             {
                 // logs error -- does not care about ip or userId
-                _gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
+                _gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }

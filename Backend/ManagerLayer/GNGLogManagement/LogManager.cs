@@ -1,12 +1,13 @@
 ﻿using DataAccessLayer.Models;
-using ServiceLayer.Services;
+using Gucci.ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Model;
 
-namespace ManagerLayer.GNGLogManagement
+namespace Gucci.ManagerLayer.LogManagement
 {
-    public class GNGLogManager
+    public class LogManager
     {
         /* Every logging method will catch FileNotFoundException explicitly
          * so we know that there is a problem when attempting to log. Let
@@ -14,16 +15,19 @@ namespace ManagerLayer.GNGLogManagement
          */
 
         private IErrorHandlerService _errorHandlerService;
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
         private Dictionary<string, int> listOfIDs;
-        private string currentLogpath;
         private List<GNGLog> logList = new List<GNGLog>();
-        public GNGLogManager()
+        private Configurations configurations;
+        private string logFileName;
+
+        public LogManager()
         {
             _errorHandlerService = new ErrorHandlerService();
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
             listOfIDs = _gngLoggerService.GetLogIDs();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            configurations = new Configurations();
+            logFileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
         }
 
         /// <summary>
@@ -38,18 +42,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Return true or false if the log was made successfully</returns>
         public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("ClickEvent", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = startPoint + " to " + endPoint
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = startPoint + " to " + endPoint
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -72,18 +75,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Return true or false if the log was made successfully</returns>
         public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -104,18 +106,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Return true or false if the log was made successfully</returns>
         public bool LogGNGEventsCreated(string usersID, int eventID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventCreated", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventID + " created"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventID + " created"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -137,18 +138,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if log was successfully made</returns>
         public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EntryToWebsite", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " entered at " + urlEntered
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " entered at " + urlEntered
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -169,18 +169,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if the log was successfully made</returns>
         public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("ExitFromWebsite", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " exited website from " + urlOfExit
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " exited website from " + urlOfExit
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -198,18 +197,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if log was successfully made</returns>
         public bool LogAccountDeletion(string usersID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("ErrorEncountered", out int logID);
+            listOfIDs.TryGetValue("AccountDeletion", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = usersID + " deleted account"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " deleted account"
             };
             logList = _gngLoggerService.FillCurrentLogsList();
             logList.Add(log);
@@ -230,18 +228,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if the log was successfully made</returns>
         public bool LogGNGSearchAction(string usersID, string searchedItem, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("SearchAction", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User searched for " + searchedItem
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User searched for " + searchedItem
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -263,18 +260,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if the log was successfully made</returns>
         public bool LogGNGJoinEvent(string usersID, int eventID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventJoined", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User " + usersID + " joined Event " + eventID
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " joined Event " + eventID
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -296,18 +292,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if the logwas successfully made or not</returns>
         public bool LogGNGUserRating(string usersID, string ratedUserID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("UserRatings", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Rated " + ratedUserID
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + usersID + " rated " + ratedUserID
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -328,18 +323,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns true or false if the log was successfully made</returns>
         public bool LogGNGFindEventForMe(string usersID, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("FindEventForMe", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event Searched for"
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event Searched for"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -360,18 +354,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns bool based on if log was successfully made</returns>
         public bool LogMaliciousAttack(string url, string ip, string usersID)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("MaliciousAttacks", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Malicious attack attempted at " + url
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Malicious attack attempted at " + url
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -391,18 +384,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns a bool based on if the log was successfully made or not</returns>
         public bool LogGNGEventUpdate(int eventId, string userHostId, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventUpdated", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = userHostId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " updated"
+                LogID = logIDString,
+                UserID = userHostId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " updated"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -422,18 +414,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns a bool based on if the log was successfully made</returns>
         public bool LogGNGEventJoined(string joinedUserId, int eventId, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventJoined", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = joinedUserId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "User " + joinedUserId + " joined event " + eventId
+                LogID = logIDString,
+                UserID = joinedUserId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User " + joinedUserId + " joined event " + eventId
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -454,18 +445,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns></returns>
         public bool LogBadRequest(string usersID, string ip, string url, string exception)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("BadRequest", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = usersID,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Bad request at " + url + ": " + exception
+                LogID = logIDString,
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Bad request at " + url + ": " + exception
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -485,18 +475,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns a bool based on if it was logged successfully</returns>
         public bool LogGNGEventDeleted(string hostId, int eventId, string ip)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventDeleted", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = hostId,
-                ipAddress = ip,
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " deleted"
+                LogID = logIDString,
+                UserID = hostId,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " deleted"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();
@@ -516,18 +505,17 @@ namespace ManagerLayer.GNGLogManagement
         /// <returns>Returns a bool based on if it was logged successfully or not</returns>
         public bool LogGNGEventExpiration(string hostId, int eventId)
         {
-            _gngLoggerService.CreateNewLog();
-            currentLogpath = _gngLoggerService.GetCurrentLogPath();
+            _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("EventExpired", out int logID);
             var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                logID = logIDString,
-                userID = hostId,
-                ipAddress = "",
-                dateTime = DateTime.Now.ToString(),
-                description = "Event " + eventId + " expired"
+                LogID = logIDString,
+                UserID = hostId,
+                IpAddress = "N/A",
+                DateTime = DateTime.Now.ToString(),
+                Description = "Event " + eventId + " expired"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();

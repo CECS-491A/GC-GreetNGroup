@@ -1,10 +1,15 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using ManagerLayer.UADManagement;
+using ManagerLayer.GNGLogManagement;
 namespace WebApi.Controllers
 {
     public class UADController : ApiController
     {
+
+        private GNGLogManager gngLogManager = new GNGLogManager();
+        private const string url = "https://www.greetngroup.com/analysisdashboard";
+
         [HttpGet]
         [Route("api/UAD/LoginVSRegistered/{month}")]
         public IHttpActionResult GetLoginvsRegistered(string month)
@@ -17,6 +22,7 @@ namespace WebApi.Controllers
             }
             catch(HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -32,6 +38,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -47,6 +54,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -62,6 +70,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -77,6 +86,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -92,6 +102,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                gngLogManager.LogBadRequest("", "", url, e.ToString());
                 return BadRequest();
             }
         }

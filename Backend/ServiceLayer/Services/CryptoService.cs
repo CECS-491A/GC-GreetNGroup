@@ -2,12 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 using System.Collections.Generic;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class CryptoService: ICryptoService
     {
@@ -17,12 +17,12 @@ namespace ServiceLayer.Services
         //"2E4747FAEB007F487E9B5894B9E4C53700AB3B3C964F1E40C3ED125FFF26DD83"
 
         RNGCryptoServiceProvider rng;
-        IGNGLoggerService _gngLoggerService;
+        ILoggerService _gngLoggerService;
 
         public CryptoService()
         {
             rng = new RNGCryptoServiceProvider();
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
         }
 
         public string HashHMAC(string message)

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ServiceLayer.Interface
+namespace Gucci.ServiceLayer.Interface
 {
     public interface IJWTService
     {

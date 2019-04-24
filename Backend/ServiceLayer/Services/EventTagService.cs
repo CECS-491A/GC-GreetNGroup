@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccessLayer.Context;
 using DataAccessLayer.Tables;
-using ServiceLayer.Interface;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
-namespace ServiceLayer.Services
+namespace Gucci.ServiceLayer.Services
 {
     public class EventTagService
     {
-        private IGNGLoggerService _gngLoggerService;
+        private ILoggerService _gngLoggerService;
 
         public EventTagService()
         {
-            _gngLoggerService = new GNGLoggerService();
+            _gngLoggerService = new LoggerService();
         }
 
         #region Insert Tag Information

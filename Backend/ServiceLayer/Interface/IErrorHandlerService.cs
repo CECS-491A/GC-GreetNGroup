@@ -1,4 +1,4 @@
-﻿namespace ServiceLayer.Interface
+﻿namespace Gucci.ServiceLayer.Interface
 {
     public interface IErrorHandlerService
     {
