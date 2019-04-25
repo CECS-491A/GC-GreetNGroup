@@ -6,7 +6,7 @@
     <v-container fluid>
       <v-layout align-start justify-center row wrap>
         <v-flex xs5>
-          <input id="searchbar" type="text" v-model="search" placeholder= 'search' />
+          <input id="searchbar" type="text" v-model="search" :maxlength=50 placeholder= 'search' />
           <button v-on:click="checkSearchFilter(filter) ? findUserByUsername(search) : findEventsByName(search)">Search</button>
         </v-flex>
       </v-layout>
@@ -34,12 +34,13 @@
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
-                  <div id="events" v-for="{Uid, EventName, StartDate, index} in limitSearchResultsEvents" :key="index">
+                  <div id="events" v-for="{Uid, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
                     <p>{{findUserByUserId(Uid)}}</p>
                     <router-link :to="'/eventpage/' + EventName">
                       <button  id="event-b"> {{EventName}} </button>
                     </router-link>
                     <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
+                    <article> {{'Location: ' + EventLocation}} </article>
                     <article> {{'Host: ' + eventHost}} </article>
                   </div>
               </div>
@@ -89,7 +90,7 @@ export default {
     return {
       events: [],
       user: [],
-      eventHost: '',
+      eventHost: [],
       title: 'GreetNGroup',
       placeholderText: 'search for events',
       search: '',
@@ -134,7 +135,7 @@ export default {
     },
     // Return username given id in event search
     findUserByUserId: function (i) {
-      var url = `${apiURL}/searchUserId/` + i
+      var url = `${apiURL}/user/username/` + i
       axios.get(url)
         .then((response) => {
           const isDataAvailable = response.data && response.data.length > 0

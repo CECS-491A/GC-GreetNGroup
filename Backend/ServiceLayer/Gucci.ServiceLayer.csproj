@@ -81,6 +81,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\EventRequest.cs" />
+    <Compile Include="Requests\JoinOrLeaveEventRequest.cs" />
     <Compile Include="Requests\RateRequest.cs" />
     <Compile Include="Requests\SearchBarRequest.cs" />
     <Compile Include="Requests\SSOUserRequest.cs" />

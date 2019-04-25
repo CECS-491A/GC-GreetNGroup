@@ -296,7 +296,7 @@ namespace Gucci.ServiceLayer.Services
         }
 
         // Returns user found via partial match of username
-        public List<DefaultUserSearchDto> GetDefaultUserInfoByUsername(string username)
+        public List<DefaultUserSearchDto> GetDefaultUserInfoListByUsername(string username)
         {
             try
             {
