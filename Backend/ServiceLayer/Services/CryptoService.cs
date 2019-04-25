@@ -44,11 +44,5 @@ namespace Gucci.ServiceLayer.Services
             string hex = BitConverter.ToString(b).Replace("-", "");
             return hex;
         }
-
-        public SigningCredentials GenerateJWTSignature(string symmetricKey)
-        {
-            return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
-                SecurityAlgorithms.HmacSha256Signature);
-        }
     }
 }
