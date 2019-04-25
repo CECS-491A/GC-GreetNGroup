@@ -13,14 +13,14 @@ namespace WebApi
         protected override Task<HttpResponseMessage> SendAsync(
            HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            UserManager um = new UserManager();
+            UserManager userMan = new UserManager();
 
             var content = request.Content;
             string jsonContent = content.ReadAsStringAsync().Result;
             SSOUserRequest ssoRequest = new SSOUserRequest();
             ssoRequest = JsonConvert.DeserializeObject<SSOUserRequest>(jsonContent);
 
-            if (um.DeleteUserSSO(ssoRequest))
+            if (userMan.DeleteUserSSO(ssoRequest))
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {

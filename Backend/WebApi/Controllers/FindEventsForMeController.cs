@@ -6,6 +6,7 @@ namespace Gucci.WebApi.Controllers
 
     public class FindEventsForMeController : ApiController
     {
+        /*
         [HttpPost]
         [Route("api/FindEventsForMe/")]
         public IHttpActionResult GetEvents([FromBody] FindEventsForMeRequest request)
@@ -46,5 +47,6 @@ namespace Gucci.WebApi.Controllers
 
             }
         }
+        */
     }
 }

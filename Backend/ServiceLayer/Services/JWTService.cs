@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Gucci.ServiceLayer.Interface;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -12,15 +13,13 @@ namespace Gucci.ServiceLayer.Services
     {
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
         private ILoggerService _gngLoggerService;
-        private ICryptoService _cryptoService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
         public JWTService()
         {
             _gngLoggerService = new LoggerService();
-            _cryptoService = new CryptoService();
             tokenHandler = new JwtSecurityTokenHandler();
-            credentials = _cryptoService.GenerateJWTSignature(symmetricKeyFinal);
+            credentials = GenerateJWTSignature(symmetricKeyFinal);
         }
 
         public string CreateToken(string username, int uId)
@@ -222,5 +221,10 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        public SigningCredentials GenerateJWTSignature(string symmetricKey)
+        {
+            return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
+                SecurityAlgorithms.HmacSha256Signature);
+        }
     }
 }

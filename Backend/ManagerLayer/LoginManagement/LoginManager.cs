@@ -8,6 +8,7 @@ namespace Gucci.ManagerLayer.LoginManagement
 {
     public class LoginManager
     {
+        private readonly string AppLaunchSecretKey;
         private ICryptoService _cryptoService;
         private IUserService _userService;
         private IJWTService _jwtService;
@@ -15,7 +16,17 @@ namespace Gucci.ManagerLayer.LoginManagement
 
         public LoginManager()
         {
-            _cryptoService = new CryptoService();
+            AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
+            _userService = new UserService();
+            _jwtService = new JWTService();
+            _userClaimService = new UserClaimsService();
+        }
+
+        public LoginManager(string SSOSecretKey)
+        {
+            AppLaunchSecretKey = SSOSecretKey;
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
             _userService = new UserService();
             _jwtService = new JWTService();
             _userClaimService = new UserClaimsService();
