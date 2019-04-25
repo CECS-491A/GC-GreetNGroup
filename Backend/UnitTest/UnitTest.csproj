@@ -66,6 +66,7 @@
     <Compile Include="GNGArchiverTest\ArchiverTests.cs" />
     <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="JWTTest\JWTTests.cs" />
+    <Compile Include="ProfileManagerUT.cs" />
     <Compile Include="UserManagerUT.cs" />
     <Compile Include="LoginUT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

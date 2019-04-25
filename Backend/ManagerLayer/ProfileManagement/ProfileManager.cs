@@ -27,7 +27,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
             _ratingService = new RatingService();
         }
 
-        public bool CheckUserExists(int userID)
+        public bool DoesUserExists(int userID)
         {
             return _userService.IsUsernameFoundById(userID);
         }
@@ -42,7 +42,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
             try
             {
                 int userIDConverted = Convert.ToInt32(userID);
-                if (!CheckUserExists(userIDConverted))
+                if (!DoesUserExists(userIDConverted))
                 {
                     var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
@@ -191,7 +191,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
             return httpResponse;
         }
 
-        public bool CheckProfileActivated(string jwtToken)
+        public bool IsProfileActivated(string jwtToken)
         {
             int userID = _jwtServce.GetUserIDFromToken(jwtToken);
             if (_userService.IsUsernameFoundById(userID))
@@ -201,8 +201,6 @@ namespace Gucci.ManagerLayer.ProfileManagement
             }
             return false;
         }
-
-
 
         /*
         public int RateUser(RateRequest request, string rateeID)
