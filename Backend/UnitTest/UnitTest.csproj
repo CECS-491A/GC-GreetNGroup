@@ -65,11 +65,11 @@
     <Compile Include="GNGArchiverTest\ArchiverTests.cs" />
     <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="JWTTest\JWTTests.cs" />
+    <Compile Include="UserManagerUT.cs" />
     <Compile Include="LoginUT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchTest\SearchTest.cs" />
     <Compile Include="UADTest\UADTest.cs" />
-    <Compile Include="UserManagementUT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

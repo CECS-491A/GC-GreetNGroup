@@ -1,36 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
+using Gucci.DataAccessLayer.Context;
 
 namespace WebApi
 {
     public class HealthHandler : DelegatingHandler
     {
+        private const string awsInstanceIPAddress = "54.193.2.190";
+        private const int timeout = 12000; // 12 seconds
+        private const string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
         protected override Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            using (var _db = new GreetNGroupContext())
             {
-                Content = new StringContent("Good Health")
-            };
-            var tsc = new TaskCompletionSource<HttpResponseMessage>();
-            tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
-            return tsc.Task;
+                try
+                {
+                    var existingConnection = _db.Database.Exists();
+                    if (!existingConnection)
+                    {
+                        var httpResponseError = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                        {
+                            Content = new StringContent("GreetNGroup is offline, database connection error")
+                        };
+                        var tscError = new TaskCompletionSource<HttpResponseMessage>();
+                        tscError.SetResult(httpResponseError);   // Also sets the task state to "RanToCompletion"
+                        return tscError.Task;
+                    }
+                    _db.SaveChanges();
 
-            /*
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-            {
-                Content = new StringContent("Under Maintenance")
-            };
-            var tsc = new TaskCompletionSource<HttpResponseMessage>();
-            tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
-            return tsc.Task;
-            */
+                    Ping pingSender = new Ping();
+                    PingOptions options = new PingOptions();
+
+                    // Use the default Ttl value which is 128,
+                    // but change the fragmentation behavior.
+                    options.DontFragment = true;
+                    
+                    
+                    byte[] buffer = Encoding.ASCII.GetBytes(data);
+                    PingReply reply = pingSender.Send(awsInstanceIPAddress, timeout, buffer, options);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent("GreetNGroup is online")
+                        };
+                        var tscSuccess = new TaskCompletionSource<HttpResponseMessage>();
+                        tscSuccess.SetResult(httpResponseSuccess);   // Also sets the task state to "RanToCompletion"
+                        return tscSuccess.Task;
+                    }
+
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("GreetNGroup is offline")
+                    };
+                    var tsc = new TaskCompletionSource<HttpResponseMessage>();
+                    tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
+                    return tsc.Task;
+
+                }
+                catch (Exception) // catch error when trying to call db, return status of internal problems
+                {
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("GreetNGroup is offline")
+                    };
+                    var tsc = new TaskCompletionSource<HttpResponseMessage>();
+                    tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
+                    return tsc.Task;
+                }
+            }
         }
     }
 }

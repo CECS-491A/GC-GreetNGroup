@@ -10,6 +10,7 @@ namespace Gucci.ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
+        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
         private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
         private ILoggerService _gngLoggerService;
         private ICryptoService _cryptoService;
@@ -18,7 +19,7 @@ namespace Gucci.ServiceLayer.Services
         public JWTService()
         {
             _gngLoggerService = new LoggerService();
-            _cryptoService = new CryptoService();
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
             tokenHandler = new JwtSecurityTokenHandler();
             credentials = _cryptoService.GenerateJWTSignature(symmetricKeyFinal);
         }

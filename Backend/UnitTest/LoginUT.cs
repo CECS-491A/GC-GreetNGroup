@@ -11,7 +11,7 @@ namespace UnitTest
         public void Login_Pass()
         {
             //Arrange
-            LoginManager lm = new LoginManager();
+            LoginManager lm = new LoginManager("D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE");
             SSOUserRequest request = new SSOUserRequest();
 
             request.email = "julianpoyo+22@gmail.com";
@@ -30,7 +30,7 @@ namespace UnitTest
         public void Login_Fail()
         {
             //Arrange
-            LoginManager lm = new LoginManager();
+            LoginManager lm = new LoginManager("D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE");
             SSOUserRequest request = new SSOUserRequest();
 
             request.email = "julianpoyo+22@gmail.com";
