@@ -53,7 +53,7 @@
 </template>
 <script>
 import axios from 'axios'
-// import { apiURL } from '@/const.js'
+import { apiURL } from '@/const.js'
 export default {
   name: 'Profile',
   data () {
@@ -72,7 +72,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: 'http://localhost:62008/api/event/info?name=' + this.eventNames,
+      url: `${apiURL}/event/info?name=` + this.eventNames,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -84,7 +84,7 @@ export default {
   beforeUpdate () {
     axios({
       method: 'GET',
-      url: 'http://localhost:62008/api/user/username/' + this.json.UserId,
+      url: `${apiURL}/user/username/` + this.json.UserId,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -94,9 +94,39 @@ export default {
       .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
-    joinEvent () {
+    joinEvent: function () {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/joinevent`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          jwtToken: this.localStorage.getItem('Token'),
+          eventID: this.json.eventId
+        }
+      })
+        .then(response => (this.message = response.data))
+        .catch(e => { this.errorMessage = e.response.data })
+      alert(this.message)
     },
-    leaveEvent () {
+    leaveEvent: function () {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/leaveevent`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          jwtToken: this.localStorage.getItem('Token'),
+          eventID: this.json.eventId
+        }
+      })
+        .then(response => (this.message = response.data))
+        .catch(e => { this.errorMessage = e.response.data })
+      alert(this.message)
     },
     formatDate (date) {
       // DateTime objects formatted as 'YYYY-MM-DD T HH:MM:SS', formatting will result in array of size 6

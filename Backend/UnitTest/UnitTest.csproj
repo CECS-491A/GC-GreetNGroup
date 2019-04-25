@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="CryptoUT.cs" />
     <Compile Include="DataAccessTest\DataAccessTest.cs" />
+    <Compile Include="EventJoinTest\EventJoinTest.cs" />
     <Compile Include="GNGArchiverTest\ArchiverTests.cs" />
     <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="JWTTest\JWTTests.cs" />
