@@ -1,6 +1,5 @@
 ﻿using Gucci.ServiceLayer.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

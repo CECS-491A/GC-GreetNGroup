@@ -1,6 +1,6 @@
-﻿using ManagerLayer.LoginManagement;
+﻿using Gucci.ManagerLayer.LoginManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceLayer.Requests;
+using Gucci.ServiceLayer.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
