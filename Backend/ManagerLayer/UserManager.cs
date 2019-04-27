@@ -41,7 +41,7 @@ namespace ManagerLayer.UserManagement
             // Check if user exists
             if (!_userService.IsUsernameFound(request.email))
             {
-                return false;
+                return true;
             }
 
             try
