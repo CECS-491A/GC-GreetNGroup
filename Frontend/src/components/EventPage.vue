@@ -29,26 +29,30 @@
           <div>
             <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">Description:</h3>
             <h2>{{this.json.EventDescription }}</h2>
+            <div style = "font-size: 15px; font-weight: bold;">Tags: <span v-for="(tag, index) in eventTags" v-bind:key="index">
+            <span v-if="index != 0">, </span><span>{{ tag }}</span>
+            </span></div>
           </div>
         </v-card-title>
       </v-card>
     </v-flex>
   </v-layout>
   </v-container>
-
-  <v-container fluid grid-list-md>
-  <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
-        <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">
-          <div>
-            <h3 class="headline mb-0" >Attendees:</h3>
-          </div>
-        </v-card-title>
+  <v-expansion-panel style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+    <v-expansion-panel-content
+      v-for="(item,i) in 1"
+      :key="i"
+    >
+      <template v-slot:header>
+        <div>Attendees</div>
+      </template>
+      <v-card style="width: 95%; text-decoration: none;">
+        <li v-for="(value, index) in usersAttending"  v-bind:key="index" >
+            {{value}}
+            </li>
       </v-card>
-    </v-flex>
-  </v-layout>
-  </v-container>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
 </div>
 </template>
 <script>
@@ -65,8 +69,8 @@ export default {
       userName: null,
       userID: null,
       json: {},
-      userAttending: [],
-      eventTAGS: []
+      usersAttending: [],
+      eventTags: []
     }
   },
   created () {
@@ -91,6 +95,26 @@ export default {
       }
     })
       .then(response => (this.userName = response.data))
+      .catch(e => { this.errorMessage = e.response.data })
+    axios({
+      method: 'GET',
+      url: `${apiURL}/attendee/` + this.json.EventId,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then(response => (this.usersAttending = response.data))
+      .catch(e => { this.errorMessage = e.response.data })
+    axios({
+      method: 'GET',
+      url: `${apiURL}/event/tags/` + this.json.EventId,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then(response => (this.eventTags = response.data))
       .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
