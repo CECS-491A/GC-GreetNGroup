@@ -108,6 +108,26 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/user/isuseractivated/{jwtToken}")]
+        public HttpResponseMessage IsUserActivated([FromUri] string jwtToken)
+        {
+            try
+            {
+                ProfileManager profileMan = new ProfileManager();
+                var response = profileMan.IsProfileActivated(jwtToken);
+                return response;
+            }
+            catch
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Unable to update user")
+                };
+                return httpResponseFail;
+            }
+        }
+
+        [HttpGet]
         [Route("api/user/username/{userID}")]
         public IHttpActionResult GetUserByID(int userID)
         {

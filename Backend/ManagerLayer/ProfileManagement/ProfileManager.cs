@@ -191,15 +191,24 @@ namespace Gucci.ManagerLayer.ProfileManagement
             return httpResponse;
         }
 
-        public bool IsProfileActivated(string jwtToken)
+        public HttpResponseMessage IsProfileActivated(string jwtToken)
         {
-            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
-            if (_userService.IsUsernameFoundById(userID))
+            var userID = _jwtServce.GetUserIDFromToken(jwtToken);
+            if (!_userService.IsUsernameFoundById(userID))
             {
-                User retrievedUser = _userService.GetUserById(userID);
-                return retrievedUser.IsActivated;
+                var failHttpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("false")
+                };
+                return failHttpResponse;
             }
-            return false;
+
+            User retrievedUser = _userService.GetUserById(userID);
+            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(Convert.ToString(retrievedUser.IsActivated))
+            };
+            return httpResponse;
         }
 
         /*
