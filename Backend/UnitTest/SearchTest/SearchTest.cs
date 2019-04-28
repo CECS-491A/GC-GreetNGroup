@@ -62,7 +62,7 @@ namespace UnitTest.SearchTest
             eventTagService.InsertEventTag(EventId1, 4);
             eventTagService.InsertEventTag(EventId2, 4);
             var foundEvents = eventFinderService.FindEventByEventTags(new List<string>() { "Art" });
-            var sortedEvents = eventFinderService.SortEventListByDate(foundEvents, eventTime2, eventTime);
+            var sortedEvents = eventFinderService.CullEventListByDateRange(foundEvents, eventTime2, eventTime);
 
             if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
             {
@@ -104,7 +104,7 @@ namespace UnitTest.SearchTest
             var expectedEvent2 = new Event(UserId1, EventId2, eventTime2, EventName2, Place, "");
             eventService.InsertMadeEvent(expectedEvent2);
 
-            var sortedEvents = eventFinderService.SortEventsByDate(eventTime2, eventTime);
+            var sortedEvents = eventFinderService.FindEventsByDateRange(eventTime2, eventTime);
             if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
             {
                 result = true;

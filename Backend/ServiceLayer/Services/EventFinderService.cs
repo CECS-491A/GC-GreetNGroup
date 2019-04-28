@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Gucci.DataAccessLayer.Context;
 using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
 
 namespace Gucci.ServiceLayer.Services
 {
     public class EventFinderService
     {
+        private ILoggerService _gngLoggerService;
+
         // Return lists of events based on list of tags
         public List<Event> FindEventByEventTags(List<string> eventTags)
         {
@@ -43,6 +46,11 @@ namespace Gucci.ServiceLayer.Services
                     return filteredEventList;
                 }
             }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                throw;
+            }
             catch (Exception e) // This is a catch all for error occuring in db
             {
                 Console.WriteLine(e);
@@ -51,7 +59,7 @@ namespace Gucci.ServiceLayer.Services
         }
 
         // Returns complete list of events sorted by those existing within a date range
-        public List<Event> SortEventsByDate(DateTime startDate, DateTime endDate)
+        public List<Event> FindEventsByDateRange(DateTime startDate, DateTime endDate)
         {
             var resultList = new List<Event>();
 
@@ -69,6 +77,11 @@ namespace Gucci.ServiceLayer.Services
                     return resultList;
                 }
             }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                throw;
+            }
             catch (Exception e) // Catch all for error occuring in db
             {
                 Console.WriteLine(e);
@@ -77,7 +90,7 @@ namespace Gucci.ServiceLayer.Services
         }
 
         // Return a sorted list when given a list, of events falling in the range of startDate and endDate
-        public List<Event> SortEventListByDate(List<Event> eventList, DateTime startDate, DateTime endDate)
+        public List<Event> CullEventListByDateRange(List<Event> eventList, DateTime startDate, DateTime endDate)
         {
             var resultList = new List<Event>();
 
