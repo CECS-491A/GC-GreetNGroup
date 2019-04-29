@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Gucci.DataAccessLayer.DataTransferObject;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ManagerLayer.SearchManager;
@@ -16,7 +15,9 @@ namespace UnitTest.SearchTest
 
         // Event Fields
         private const int EventId1 = 60;
+        private const int EventId2 = 61;
         private const string EventName = "TestIn Party";
+        private const string EventName2 = "TestIn Event";
         private const string Place = "CSULB";
 
         // User Fields
@@ -31,6 +32,134 @@ namespace UnitTest.SearchTest
         #endregion
 
         #region Pass Tests
+
+        [TestMethod]
+        public void PassTestSortByTagsAndDateRange()
+        {
+            // Arrange
+            var eventFinderService = new EventFinderService();
+            var userService = new UserService();
+            var eventService = new EventService();
+            var eventTagService = new EventTagService();
+
+            const bool expected = true;
+            var result = false;
+
+            // Act
+            var dob = DateTime.Parse("09/19/1999");
+            var user = new User(UserId1, FirstName, LastName, UserName, City, State, Country, dob, true);
+            userService.InsertUser(user);
+
+            var eventTime = DateTime.Parse("5/25/2028");
+            var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
+            eventService.InsertMadeEvent(expectedEvent);
+
+            var eventTime2 = DateTime.Parse("5/20/2028");
+            var expectedEvent2 = new Event(UserId1, EventId2, eventTime2, EventName2, Place, "");
+            eventService.InsertMadeEvent(expectedEvent2);
+
+            // TagId 4 -> Art
+            eventTagService.InsertEventTag(EventId1, 4);
+            eventTagService.InsertEventTag(EventId2, 4);
+            var foundEvents = eventFinderService.FindEventByEventTags(new List<string>() { "Art" });
+            var sortedEvents = eventFinderService.CullEventListByDateRange(foundEvents, eventTime2, eventTime);
+
+            if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
+            {
+                result = true;
+            }
+
+            // Cleanup
+            userService.DeleteUser(user);
+            eventTagService.DeleteEventTag(EventId1, 4);
+            eventTagService.DeleteEventTag(EventId2, 4);
+            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId2);
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PassTestFindEventsWithinDateRange()
+        {
+            // Arrange
+            var eventFinderService = new EventFinderService();
+            var userService = new UserService();
+            var eventService = new EventService();
+
+            const bool expected = true;
+            var result = false;
+
+            // Act
+            var dob = DateTime.Parse("09/19/1999");
+            var user = new User(UserId1, FirstName, LastName, UserName, City, State, Country, dob, true);
+            userService.InsertUser(user);
+
+            var eventTime = DateTime.Parse("5/25/2028");
+            var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
+            eventService.InsertMadeEvent(expectedEvent);
+
+            var eventTime2 = DateTime.Parse("5/20/2028");
+            var expectedEvent2 = new Event(UserId1, EventId2, eventTime2, EventName2, Place, "");
+            eventService.InsertMadeEvent(expectedEvent2);
+
+            var sortedEvents = eventFinderService.FindEventsByDateRange(eventTime2, eventTime);
+            if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
+            {
+                result = true;
+            }
+
+            // Cleanup
+            userService.DeleteUser(user);
+            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId2);
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PassTestFindEventsByTag()
+        {
+            // Arrange
+            var eventFinderService = new EventFinderService();
+            var userService = new UserService();
+            var eventService = new EventService();
+            var eventTagService = new EventTagService();
+
+            const bool expected = true;
+            var result = false;
+
+            // Act
+            var dob = DateTime.Parse("09/19/1999");
+            var user = new User(UserId1, FirstName, LastName, UserName, City, State, Country, dob, true);
+            userService.InsertUser(user);
+
+            var eventTime = DateTime.Parse("5/20/2028");
+            var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
+            eventService.InsertMadeEvent(expectedEvent);
+
+            // TagId 4 -> Art
+            eventTagService.InsertEventTag(EventId1, 4);
+            var foundEvents = eventFinderService.FindEventByEventTags(new List<string>(){"Art"});
+
+            foreach (var events in foundEvents)
+            {
+                if (events.EventId.Equals(expectedEvent.EventId))
+                {
+                    result = true;
+                }
+            }
+
+            // Cleanup
+            userService.DeleteUser(user);
+            eventTagService.DeleteEventTag(EventId1, 4);
+            eventService.DeleteEvent(EventId1);
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
 
         [TestMethod]
         public void PassTestFindEventsByName()

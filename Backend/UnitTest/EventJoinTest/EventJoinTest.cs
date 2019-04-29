@@ -9,6 +9,7 @@ namespace UnitTest.EventJoinTest
     {
         private JWTService jwtService = new JWTService();
         private AttendeeManager attendeeManager = new AttendeeManager();
+        private AttendeesService attendeeService = new AttendeesService();
         [TestMethod]
         public void JoinEvent_Pass_ValidEverything()
         {
@@ -56,6 +57,21 @@ namespace UnitTest.EventJoinTest
 
             Console.WriteLine(result);
 
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetAttendees_Pass_ValidEverything()
+        {
+            // assign
+            var eventid = 0;
+
+            // act 
+            var result = attendeeService.GetAttendees(eventid);
+            for(int i = 0; i < result.Count; i++)
+            {
+                Console.WriteLine(result[i]);
+            }
             Assert.IsNotNull(result);
         }
     }
