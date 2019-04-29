@@ -69,6 +69,7 @@
     <Compile Include="Interface\ICryptoService.cs" />
     <Compile Include="Interface\IErrorHandlerService.cs" />
     <Compile Include="Interface\IArchiverService.cs" />
+    <Compile Include="Interface\IEventTagService.cs" />
     <Compile Include="Interface\ILoggerService.cs" />
     <Compile Include="Interface\IJWTService.cs" />
     <Compile Include="Interface\ISortService.cs" />

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Gucci.ManagerLayer.LoginManagement;
 using Gucci.ServiceLayer.Requests;
 
