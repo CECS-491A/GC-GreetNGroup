@@ -30,7 +30,7 @@ namespace WebApi.Controllers
                 var e = searchManager.GetEventListByName(name);
 
                 // logs action -- does not care about ip or userId
-                _gngLogManager.LogGNGSearchAction("", name, "");
+                // _gngLogManager.LogGNGSearchAction("", name, "");
 
                 return Ok(e);
             }
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
                 var e = searchManager.GetUserByUsername(username);
                 
                 // logs action -- does not care about ip or userId
-                _gngLogManager.LogGNGSearchAction("", username, "");
+                // _gngLogManager.LogGNGSearchAction("", username, "");
 
                 return Ok(e);
             }

@@ -30,7 +30,7 @@ namespace Gucci.ServiceLayer.Services
         {
             try
             {
-                Attendance attendee = new Attendance(eventId, userId, false, "fill") ;
+                Attendance attendee = new Attendance(eventId, userId, false) ;
                 using (var ctx = new GreetNGroupContext())
                 {
                     ctx.Attendees.Add(attendee);
