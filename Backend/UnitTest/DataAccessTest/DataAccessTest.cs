@@ -12,11 +12,11 @@ namespace UnitTest.DataAccessTest
     {
         #region Testable Required Fields
 
-        private const int UserId1 = 40;     // unused UId
-        private const int TId1 = 2;         // indoor tag
-        private const int TId2 = 10;        // food tag
-        private const int CId = 30;         // claim id
-        private const int EventId1 = 60;    // unused EventId
+        private const int UserId1 = 40;             // unused UId
+        private const string TId1 = "Indoor";       // indoor tag
+        private const string TId2 = "Food";         // food tag
+        private const int CId = 30;                 // claim id
+        private const int EventId1 = 60;            // unused EventId
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace UnitTest.DataAccessTest
             userService.DeleteUser(user);
             eventTagService.DeleteEventTag(EventId1, TId1);
             eventTagService.DeleteEventTag(EventId1, TId2);
-            if (foundEvent != null) eventService.DeleteEvent(EventId1);
+            if (foundEvent != null) eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(desiredResult, result);
@@ -110,7 +110,7 @@ namespace UnitTest.DataAccessTest
 
             // Cleanup
             userService.DeleteUser(user);
-            if (foundEvent != null) eventService.DeleteEvent(EventId1);
+            if (foundEvent != null) eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, foundEvent.EventName);

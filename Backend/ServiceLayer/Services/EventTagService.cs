@@ -19,9 +19,9 @@ namespace Gucci.ServiceLayer.Services
         #region Insert Tag Information
 
         // Inserts EventTag into the database, creates a link between an event and a tag
-        public bool InsertEventTag(int eventId, int tag)
+        public bool InsertEventTag(int eventId, string tag)
         {
-            bool isSuccessfulAdd = false;
+            var isSuccessfulAdd = false;
             try
             {
                 using (var ctx = new GreetNGroupContext())
@@ -58,9 +58,9 @@ namespace Gucci.ServiceLayer.Services
                 {
                     var tagIdList = ctx.EventTags.Where(e => e.EventId.CompareTo(eventId) == 0).ToList();
 
-                    foreach (EventTag t in tagIdList)
+                    foreach (var tag in tagIdList)
                     {
-                        tagNameList.Add(ctx.Tags.FirstOrDefault(c => c.TagId.Equals(t.TagId))?.TagName);
+                        tagNameList.Add(ctx.Tags.FirstOrDefault(c => c.TagId.Equals(tag.TagId))?.TagName);
                     }
                     
                     return tagNameList;
@@ -78,7 +78,7 @@ namespace Gucci.ServiceLayer.Services
         #region Delete Tag Information
 
         // Removes pair of tagId and eventId where values match in database
-        public bool DeleteEventTag(int eventId, int tag)
+        public bool DeleteEventTag(int eventId, string tag)
         {
             bool isSuccessfulDelete = false;
             try
