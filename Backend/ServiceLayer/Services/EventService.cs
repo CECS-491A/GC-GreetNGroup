@@ -13,7 +13,7 @@ namespace Gucci.ServiceLayer.Services
     public class EventService
     {
         private ILoggerService _gngLoggerService;
-        private Dictionary<string, int> tagIds;
+        private IEventTagService _eventTagService;
         private int eventId;
         private Configurations configurations;
 
@@ -21,7 +21,7 @@ namespace Gucci.ServiceLayer.Services
         {
             configurations = new Configurations();
             _gngLoggerService = new LoggerService();
-            tagIds = GenerateEventTagIds();
+            _eventTagService = new EventTagService();
             Int32.TryParse(Environment.GetEnvironmentVariable("EventId", EnvironmentVariableTarget.User), out eventId);
         }
 
@@ -74,12 +74,15 @@ namespace Gucci.ServiceLayer.Services
 
                         ctx.Events.Add(userEvent);
                         ctx.SaveChanges();
-                        if(InsertEventTags(eventTags, userEvent.EventId) == false)
+                        foreach(var tags in eventTags)
                         {
-                            userEvent = null;
-                            _gngLoggerService.LogErrorsEncountered(userId.ToString(), "409 Conflict",
-                                url, "The event failed to be created", ip);
-                            return userEvent;
+                            if (_eventTagService.InsertEventTag(eventId, tags) == false)
+                            {
+                                userEvent = null;
+                                _gngLoggerService.LogErrorsEncountered(userId.ToString(), "409 Conflict",
+                                    url, "The event failed to be created", ip);
+                                return userEvent;
+                            }
                         }
                         LogGNGEventsCreated(userId.ToString(), eventId, ip);
                         eventId++;
@@ -100,71 +103,13 @@ namespace Gucci.ServiceLayer.Services
             
         }
 
-        public bool InsertEventTags(List<string> eventTags, int eventId)
-        {
-            bool isSuccessfulAdd = false;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var gngEvent = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eventId));
-                    foreach (string tag in eventTags)
-                    {
-                        if (tagIds.ContainsKey(tag))
-                        {
-                            var tagToAdd = ctx.Tags.FirstOrDefault(t => t.TagName.Equals(tag));
-                            var tagIdNum = tagToAdd.TagId;
-                            var eventTag = new EventTag(eventId, tagIdNum);
-                            ctx.EventTags.Add(eventTag);
-                        }
-                    }
-                    ctx.SaveChanges();
-                    isSuccessfulAdd = true;
-                }
-                return isSuccessfulAdd;
-            }
-            catch (ObjectDisposedException od)
-            {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isSuccessfulAdd;
-            }
-            
-        }
-
         #endregion
 
         /// <summary>
         /// The following region handles update of Event specific information
         /// </summary>
         #region Update Event Information
-
-        public bool DeleteEventTag(string tag, int eventId)
-        {
-            bool isSuccessfulDelete = false;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    var eventTags = ctx.EventTags.Where(e => e.EventId.Equals(eventId));
-                    foreach(var tags in eventTags)
-                    {
-                        if (tags.Tag.TagName.Equals(tag))
-                        {
-                            ctx.EventTags.Remove(tags);
-                            isSuccessfulDelete = true;
-                        }
-                    }
-                    ctx.SaveChanges();
-                }
-                return isSuccessfulDelete;
-            }
-            catch (ObjectDisposedException od)
-            {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isSuccessfulDelete;
-            }
-        }
-
+ 
         public bool UpdateEvent(int eId, int userId, DateTime startDate, string eventName,
             string address, string city, string state, string zip, List<string> eventTags, string eventDescription,
             string url, string ip)
@@ -184,6 +129,7 @@ namespace Gucci.ServiceLayer.Services
                         currentEvent.EventLocation = ParseAddress(address, city, state, zip);
                         currentEvent.EventDescription = eventDescription;
                         ctx.SaveChanges();
+
                         if(eventTags.Count != 0)
                         {
                             var currentEventTags = ctx.EventTags.Where(e => e.EventId.Equals(eId));
@@ -192,22 +138,24 @@ namespace Gucci.ServiceLayer.Services
                             {
                                 if (!eventTags.Contains(tags.Tag.TagName))
                                 {
-                                    isTagsSuccessfullyUpdated = DeleteEventTag(tags.Tag.TagName, eId);
+                                    isTagsSuccessfullyUpdated = _eventTagService.DeleteEventTag(eId, tags.Tag.TagName);
                                 }
                                 else
                                 {
                                     eventTags.Remove(tags.Tag.TagName);
                                 }
                             }
-                            if(eventTags.Count != 0)
+
+                            foreach (var tags in eventTags)
                             {
-                                isTagsSuccessfullyUpdated = InsertEventTags(eventTags, eId);
+                                isTagsSuccessfullyUpdated = _eventTagService.InsertEventTag(eId, tags);
                             }
-                            
+
                         }
                         if(isTagsSuccessfullyUpdated == true)
                         {
                             isSuccessfullyUpdated = true;
+                            LogGNGEventUpdate(eventId, userId.ToString(), ip);
                         }
                     }
                     else
@@ -226,70 +174,31 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
-        public bool UpdateEventStartDate(int eId, DateTime startDate)
+        public bool SetEventToExpired(int eId)
         {
-            bool isSuccessfullyUpdated = false;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    Event curEvent = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
-                    if (curEvent != null)
-                        curEvent.StartDate = startDate;
-                    ctx.SaveChanges();
-                    isSuccessfullyUpdated = true;
-                }
-                return isSuccessfullyUpdated;
-            }
-            catch (ObjectDisposedException od)
-            {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isSuccessfullyUpdated;
-            }
-        }
+            var isSuccessfulEventUpdate = false;
 
-        public bool UpdateEventName(string eId, string newEventName)
-        {
-            bool isSuccessfullyUpdated = false;
             try
             {
-                using (var ctx = new GreetNGroupContext())
+                if (IsEventExpired(eId) == true)
                 {
-                    Event curEvent = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
-                    if (curEvent != null)
-                        curEvent.EventName = newEventName;
-                    ctx.SaveChanges();
-                    isSuccessfullyUpdated = true;
+                    using (var ctx = new GreetNGroupContext())
+                    {
+                        var eventToUpdate = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eId));
+                        eventToUpdate.IsEventExpired = true;
+                        ctx.SaveChanges();
+                    }
                 }
-                return isSuccessfullyUpdated;
-            }
-            catch (ObjectDisposedException od)
-            {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isSuccessfullyUpdated;
-            }
-        }
-
-        public bool UpdateEventLocation(string eId, string address, string city, string state, string zip)
-        {
-            bool isSuccessfullyUpdated = false;
-            try
-            {
-                string newLocation = ParseAddress(address, city, state, zip);
-                using (var ctx = new GreetNGroupContext())
+                else
                 {
-                    Event curEvent = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
-                    if (curEvent != null)
-                        curEvent.EventLocation = newLocation;
-                    ctx.SaveChanges();
-                    isSuccessfullyUpdated = true;
+                    return isSuccessfulEventUpdate;
                 }
-                return isSuccessfullyUpdated;
+                return isSuccessfulEventUpdate;
             }
-            catch (ObjectDisposedException od)
+            catch (Exception e)
             {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isSuccessfullyUpdated;
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
+                return isSuccessfulEventUpdate;
             }
         }
 
@@ -300,7 +209,7 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         #region Delete Event Information
 
-        public bool DeleteEvent(int eId)
+        public bool DeleteEvent(int eId, int userId, string ip)
         {
             bool isSuccessfullyDeleted = false;
 
@@ -314,6 +223,7 @@ namespace Gucci.ServiceLayer.Services
                     ctx.SaveChanges();
                     isSuccessfullyDeleted = true;
                 }
+                LogGNGEventDeleted(userId.ToString(), eId, ip);
                 return isSuccessfullyDeleted;
             }
             catch (ObjectDisposedException od)
@@ -346,6 +256,29 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        public bool IsEventExpired(int eId)
+        {
+            var isExpired = false;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var eventToCheck = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eventId));
+                    var eventStartTime = eventToCheck.StartDate;
+                    if ((DateTime.UtcNow - eventStartTime).TotalMinutes > configurations.GetMaxEventUptime())
+                    {
+                        isExpired = true;
+                    }
+                }
+                return isExpired;
+            }
+            catch (Exception e)
+            {
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
+                return isExpired;
+            }
+
+        }
         #endregion
 
         /// <summary>
@@ -510,26 +443,11 @@ namespace Gucci.ServiceLayer.Services
             return address + " " + city + ", " + state + " " + zip;
         }
 
-        public Dictionary<string, int> GenerateEventTagIds()
-        {
-            Dictionary<string, int> eventTagIds = new Dictionary<string, int>();
-            eventTagIds.Add("Outdoors", 1);
-            eventTagIds.Add("Indoors", 2);
-            eventTagIds.Add("Music", 3);
-            eventTagIds.Add("Games", 4);
-            eventTagIds.Add("Fitness", 5);
-            eventTagIds.Add("Art", 6);
-            eventTagIds.Add("Sports", 7);
-            eventTagIds.Add("Miscellaneous", 8);
-            eventTagIds.Add("Educational", 9);
-            eventTagIds.Add("Food", 10);
-            eventTagIds.Add("Discussion", 11);
-
-            return eventTagIds;
-        }
-
         #endregion
 
+        /// <summary>
+        /// The following region performs logging specific to event functions
+        /// </summary>
         #region Logging Functions
 
         /// <summary>
@@ -543,7 +461,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Return true or false if the log was made successfully</returns>
         public bool LogGNGEventsCreated(string usersID, int eventID, string ip)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             var log = new GNGLog
@@ -572,7 +490,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Returns a bool based on if the log was successfully made or not</returns>
         public bool LogGNGEventUpdate(int eventId, string userHostId, string ip)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             var log = new GNGLog
@@ -601,7 +519,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Returns a bool based on if it was logged successfully</returns>
         public bool LogGNGEventDeleted(string hostId, int eventId, string ip)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             var log = new GNGLog
@@ -630,7 +548,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Returns a bool based on if it was logged successfully or not</returns>
         public bool LogGNGEventExpiration(string hostId, int eventId)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             var log = new GNGLog
@@ -640,6 +558,37 @@ namespace Gucci.ServiceLayer.Services
                 IpAddress = "N/A",
                 DateTime = DateTime.Now.ToString(),
                 Description = "Event " + eventId + " expired"
+            };
+
+            var logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogGNGSearchAction logs when a user searches for another user or event. The log
+        /// tracks the search entry the user made. If the log was failed to be made, 
+        /// it will increment the errorCounter.
+        /// </summary>
+        /// <param name="usersID">user ID</param>
+        /// <param name="searchedItem">Search entry</param>
+        /// <param name="ip">IP Address</param>
+        /// <returns>Returns true or false if the log was successfully made</returns>
+        public bool LogGNGSearchAction(string usersID, string searchedItem, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "SearchAction",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User searched for " + searchedItem
             };
 
             var logList = _gngLoggerService.FillCurrentLogsList();

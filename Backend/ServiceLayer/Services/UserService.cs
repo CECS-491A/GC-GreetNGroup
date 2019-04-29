@@ -5,6 +5,8 @@ using Gucci.DataAccessLayer.Context;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using Gucci.DataAccessLayer.DataTransferObject;
+using Gucci.ServiceLayer.Model;
+using Gucci.DataAccessLayer.Models;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -12,11 +14,13 @@ namespace Gucci.ServiceLayer.Services
     {
         private ICryptoService _cryptoService;
         private ILoggerService _gngLoggerService;
+        private Configurations configurations;
 
         public UserService()
         {
             _cryptoService = new CryptoService();
             _gngLoggerService = new LoggerService();
+            configurations = new Configurations();
         }
 
         /*
@@ -371,6 +375,129 @@ namespace Gucci.ServiceLayer.Services
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return 1;
             }
+        }
+
+        #endregion
+
+        #region Logging Functions
+
+        /// <summary>
+        /// Method LogEntryToWebsite logs when a user first enters GreetNGroup. The log
+        /// will keep track of the url that the user landed on as an entrypoint. If the log was failed to be made, 
+        /// it will increment the errorCounter.
+        /// </summary>
+        /// <param name="usersID">user ID (empty if not a registered user)</param>
+        /// <param name="urlEntered">URL entry point</param>
+        /// <param name="ip">IP Address</param>
+        /// <returns>Returns true or false if log was successfully made</returns>
+        public bool LogEntryToWebsite(string usersID, string urlEntered, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "EntryToWebsite",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = "User " + usersID + " entered at " + urlEntered
+            };
+            var logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogClicksMade logs a user navigating around GreetNGroup based on the
+        /// url they started at and the url they ended at inside GreetNGroup. If the log
+        /// failed to be made, it will increment the errorCounter.
+        /// </summary>
+        /// <param name="startPoint">Starting URL</param>
+        /// <param name="endPoint">Ending URL</param>
+        /// <param name="usersID">user ID (empty if user does not exist)</param>
+        /// <param name="ip">IP address of the user/guest</param>
+        /// <returns>Return true or false if the log was made successfully</returns>
+        public bool LogClicksMade(string startPoint, string endPoint, string usersID, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "ClickEvent",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = startPoint + " to " + endPoint
+            };
+            var logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
+
+            return logMade;
+
+        }
+
+        /// <summary>
+        /// Method LogExitFromWebsite logs when a user exits GreetNGroup and goes off to a 
+        /// URL outside of GreetNGroup. The log tracks the URL the user was last on before 
+        /// exiting GreetNGroup. If the log was failed to be made, it will increment the errorCounter.
+        /// </summary>
+        /// <param name="usersID">user ID (blank if user is not registered)</param>
+        /// <param name="urlOfExit">Last URL the user visited inside GreetNGroup</param>
+        /// <param name="ip">IP Address</param>
+        /// <returns>Returns true or false if the log was successfully made</returns>
+        public bool LogExitFromWebsite(string usersID, string urlOfExit, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "ExitFromWebsite",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = "User " + usersID + " exited website from " + urlOfExit
+            };
+            var logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogAccountDeletion logs when a user deletes their GreetNGroup account.
+        /// </summary>
+        /// <param name="usersID">user ID</param>
+        /// <param name="ip">IP address</param>
+        /// <returns>Returns true or false if log was successfully made</returns>
+        public bool LogAccountDeletion(string usersID, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "AccountDeletion",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = "User " + usersID + " deleted account"
+            };
+            var logList = _gngLoggerService.FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
+
+            return logMade;
         }
 
         #endregion
