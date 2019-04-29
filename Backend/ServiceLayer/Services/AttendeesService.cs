@@ -2,6 +2,7 @@
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Gucci.ServiceLayer.Services
@@ -118,5 +119,49 @@ namespace Gucci.ServiceLayer.Services
             }
         }
         #endregion
+
+        /// <summary>
+        /// Checks to see if attendee aready exist in the table
+        /// </summary>
+        /// <param name="eventId">event id </param>
+        /// <param name="userId">user id</param>
+        /// <returns>a boolean if the attendee exist in the list or not</returns>
+        public List<string> GetAttendees(int eventId)
+        {
+            var attendees = new List<Attendance>();
+            var user = new List<User>();
+            var names = new List<string>();
+            var ctx = new GreetNGroupContext();
+            try
+            {
+
+                attendees = ctx.Attendees.Where(c => c.EventId.Equals(eventId)).ToList();
+                if(attendees.Count != 0)
+                {
+                    for(int i = 0; i < attendees.Count; i++)
+                    {
+                       
+                        user.Add(_userService.GetUserById(attendees[i].UserId));
+                  
+                    }
+                   
+                    for(int i = 0; i < user.Count; i++)
+                    {
+                        names.Add(user[i].FirstName + " " + user[i].LastName);
+                    }
+                    return names;
+                }
+                else
+                {
+                    return names;
+                }
+
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return names;
+            }
+        }
     }
 }

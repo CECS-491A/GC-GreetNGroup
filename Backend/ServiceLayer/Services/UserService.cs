@@ -15,10 +15,11 @@ namespace Gucci.ServiceLayer.Services
         private ICryptoService _cryptoService;
         private ILoggerService _gngLoggerService;
         private Configurations configurations;
+        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public UserService()
         {
-            _cryptoService = new CryptoService();
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
             _gngLoggerService = new LoggerService();
             configurations = new Configurations();
         }
@@ -299,13 +300,40 @@ namespace Gucci.ServiceLayer.Services
         }
 
         // Returns user found via partial match of username
-        public List<DefaultUserSearchDto> GetDefaultUserInfoByUsername(string username)
+        public List<DefaultUserSearchDto> GetDefaultUserInfoListByUsername(string username)
         {
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
+                    // Searches user table in terms of the DefaultUserSearchDto to minimize
+                    // columns returned 
                     var user = ctx.Users.Where(u => u.UserName.Contains(username))
+                        .Select(u => new DefaultUserSearchDto()
+                        {
+                            Username = u.UserName
+                        }).ToList();
+
+                    return user;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return null;
+            }
+        }
+
+        // Returns user found via EventId
+        public List<DefaultUserSearchDto> GetDefaultUserInfoById(int userId)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    // Searches user table in terms of the DefaultUserSearchDto to minimize
+                    // columns returned 
+                    var user = ctx.Users.Where(c => c.UserId.Equals(userId))
                         .Select(u => new DefaultUserSearchDto()
                         {
                             Username = u.UserName

@@ -1,24 +1,25 @@
 ﻿using System.Collections.Generic;
+using Gucci.DataAccessLayer.DataTransferObject;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Services;
 
 namespace Gucci.ManagerLayer.SearchManager
 {
-    class EventSearchManager : ISearchable<List<Event>>
+    class EventSearchManager : ISearchable<List<DefaultEventSearchDto>>
     {
         private readonly EventService _eventService = new EventService();
 
         // Implements interface within this region
         #region Interface Implementation
 
-        public List<Event> SearchByName(string name)
+        public List<DefaultEventSearchDto> SearchByName(string name)
         {
-            return _eventService.GetEventListByName(name);
+            return _eventService.GetPlainEventDetailListByName(name);
         }
 
-        public List<Event> SearchById(int id)
+        public List<DefaultEventSearchDto> SearchById(int id)
         {
-            return  _eventService.GetEventListById(id);
+            return  _eventService.GetPlainEventDetailListById(id);
         }
 
         #endregion

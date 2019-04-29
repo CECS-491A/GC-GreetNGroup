@@ -12,6 +12,7 @@ namespace WebApi.Controllers
     {
         private EventService eventService = new EventService();
         private ILoggerService _gngLoggerService = new LoggerService();
+        private EventTagService eventTagService = new EventTagService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -131,11 +132,35 @@ namespace WebApi.Controllers
                 if (name.Length < 0) Ok();
 
                 // Retrieves info for GET
-                var e = eventService.GetEventByName(name);
+                var eventFound = eventService.GetEventByName(name);
 
-                return Ok(e);
+                return Ok(eventFound);
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException error)
+            {
+                // logs error -- does not care about ip or userId
+                // gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of events based on partial matching of the user input
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/event/tags/{eventid}")]
+        public IHttpActionResult GetEventTAGS(int eventId)
+        {
+            try
+            {
+                // Retrieves info for GET
+                var tags = eventTagService.ReturnEventTagsOfEvent(eventId);
+
+                return Ok(tags);
+            }
+            catch (HttpRequestException error)
             {
                 // logs error -- does not care about ip or userId
                 // gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());

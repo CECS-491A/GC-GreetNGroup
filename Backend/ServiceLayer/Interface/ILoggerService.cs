@@ -1,5 +1,6 @@
 ﻿using Gucci.DataAccessLayer.Models;
 using System.Collections.Generic;
+using Gucci.DataAccessLayer.Models;
 
 namespace Gucci.ServiceLayer.Interface
 {

@@ -82,6 +82,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\EventRequest.cs" />
+    <Compile Include="Requests\JoinOrLeaveEventRequest.cs" />
     <Compile Include="Requests\RateRequest.cs" />
     <Compile Include="Requests\SearchBarRequest.cs" />
     <Compile Include="Requests\SSOUserRequest.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Services\ClaimService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
+    <Compile Include="Services\EventFinderService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\EventTagService.cs" />
     <Compile Include="Services\ArchiverService.cs" />

@@ -351,12 +351,39 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     // Grabs events by needed columns and returns data transfer object
-                    e = ctx.Events.Where(name => name.EventName.Contains(searchInput))
-                        .Select(name => new DefaultEventSearchDto()
+                    e = ctx.Events.Where(n => n.EventName.Contains(searchInput))
+                        .Select(n => new DefaultEventSearchDto()
                         {
-                            Uid = name.UserId,
-                            EventName = name.EventName,
-                            StartDate = name.StartDate
+                            Uid = n.UserId,
+                            EventName = n.EventName,
+                            EventLocation = n.EventLocation,
+                            StartDate = n.StartDate
+                        }).ToList();
+                    return e;
+                }
+            }
+            catch (ObjectDisposedException od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return e;
+            }
+        }
+
+        // Retrieves plain event details in list format given event id
+        public List<DefaultEventSearchDto> GetPlainEventDetailListById(int eId)
+        {
+            var e = new List<DefaultEventSearchDto>();
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    e = ctx.Events.Where(c => c.EventId.Equals(eId))
+                        .Select(c => new DefaultEventSearchDto()
+                        {
+                            Uid = c.UserId,
+                            EventName = c.EventName,
+                            EventLocation = c.EventLocation,
+                            StartDate = c.StartDate
                         }).ToList();
                     return e;
                 }
@@ -441,6 +468,22 @@ namespace Gucci.ServiceLayer.Services
         public string ParseAddress(string address, string city, string state, string zip)
         {
             return address + " " + city + ", " + state + " " + zip;
+        }
+
+        // Filters list of given event information by removing passed dates
+        public List<DefaultEventSearchDto> FilterOutPastEvents(List<DefaultEventSearchDto> unfiltered)
+        {
+            var filtered = new List<DefaultEventSearchDto>();
+            var currentTime = new DateTime().ToLocalTime();
+            foreach (var c in unfiltered)
+            {
+                if (DateTime.Compare(c.StartDate, currentTime) >= 0)
+                {
+                    filtered.Add(c);
+                }
+            }
+
+            return filtered;
         }
 
         #endregion

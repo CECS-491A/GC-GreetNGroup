@@ -6,7 +6,7 @@
     <v-container fluid>
       <v-layout align-start justify-center row wrap>
         <v-flex xs5>
-          <input id="searchbar" type="text" v-model="search" placeholder= 'search' />
+          <input id="searchbar" type="text" v-model="search" :maxlength=50 placeholder= 'search' />
           <button v-on:click="checkSearchFilter(filter) ? findUserByUsername(search) : findEventsByName(search)">Search</button>
         </v-flex>
       </v-layout>
@@ -34,12 +34,13 @@
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
-                  <div id="events" v-for="{UserId, User, EventId, StartDate, EventName, index} in limitSearchResults" :key="index">
-                    <p>{{findUserByUserId(UserId)}}</p>
+                  <div id="events" v-for="{Uid, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
+                    <p>{{findUserByUserId(Uid)}}</p>
                     <router-link :to="'/eventpage/' + EventName">
                       <button  id="event-b"> {{EventName}} </button>
                     </router-link>
                     <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
+                    <article> {{'Location: ' + EventLocation}} </article>
                     <article> {{'Host: ' + eventHost}} </article>
                   </div>
               </div>
@@ -50,9 +51,9 @@
             <div id="user-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="user !== null">
-                <div id="user-d">
-                  <router-link :to="'/User/' + user.UserId">
-                    <button id="user-b" > {{user.UserName}} </button>
+                <div id="user-d" v-for="{Username, index} in limitSearchResultsUsers" :key="index">
+                  <router-link :to="'/User/' + Username">
+                    <button id="user-b" > {{Username}} </button>
                   </router-link>
                 </div>
               </div>
@@ -66,6 +67,12 @@
             <v-btn small color="primary" dark 
               v-if="events.length > this.pageLimit"
               v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
+            <v-btn small color="primary" dark 
+            v-if="user.length > this.pageLimit"
+            v-on:click.native="limitSearchResultsPrevious(user)">Previous</v-btn>
+            <v-btn small color="primary" dark 
+              v-if="user.length > this.pageLimit"
+              v-on:click.native="limitSearchResultsNext(user)">Next</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -82,19 +89,8 @@ export default {
   data () {
     return {
       events: [],
-      user: {
-        UserId: '',
-        FirstName: '',
-        LastName: '',
-        UserName: '',
-        City: '',
-        State: '',
-        Country: '',
-        DoB: '',
-        IsActivated: '',
-        EventCreationCount: ''
-      },
-      eventHost: '',
+      user: [],
+      eventHost: [],
       title: 'GreetNGroup',
       placeholderText: 'search for events',
       search: '',
@@ -114,7 +110,7 @@ export default {
   methods: {
     resetResults: function () {
       this.events = []
-      this.user = ''
+      this.user = []
       this.pageStart = 0
       this.pageEnd = this.pageLimit
     },
@@ -137,8 +133,9 @@ export default {
       var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
       return formattedDate
     },
+    // Return username given id in event search
     findUserByUserId: function (i) {
-      var url = `${apiURL}/searchUserId/` + i
+      var url = `${apiURL}/user/username/` + i
       axios.get(url)
         .then((response) => {
           const isDataAvailable = response.data && response.data.length > 0
@@ -156,7 +153,7 @@ export default {
       if (i === '') return
       axios.get(url + i)
         .then((response) => { 
-          this.user = '' 
+          this.user = [] 
           const isDataAvailable = response.data && response.data.length > 0
           this.events = isDataAvailable ? response.data : []
           this.errorInSearch = isDataAvailable ? '' : 'Sorry! We could not find anything under that search at this time!'
@@ -174,7 +171,7 @@ export default {
         .then((response) => { 
           this.events = []
           const isDataAvailable = response.data
-          this.user = isDataAvailable ? response.data : ''
+          this.user = isDataAvailable ? response.data : []
           this.errorInSearch = isDataAvailable ? '' : 'Sorry! could not find anything under that search at this time!'
         })
         .catch(error => console.log(error))
@@ -206,8 +203,11 @@ export default {
   },
   // Computes list to be displayed
   computed: {
-    limitSearchResults () {
+    limitSearchResultsEvents () {
       return this.events.slice(this.pageStart, this.pageEnd)
+    },
+    limitSearchResultsUsers () {
+      return this.user.slice(this.pageStart, this.pageEnd)
     }
   }
 }

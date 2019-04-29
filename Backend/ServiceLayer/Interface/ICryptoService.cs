@@ -7,7 +7,5 @@ namespace Gucci.ServiceLayer.Interface
         //Winn Created
         string HashHMAC(string message);
         string GenerateToken();
-        //Jonalyn
-        SigningCredentials GenerateJWTSignature(string symmetricKey);
     }
 }

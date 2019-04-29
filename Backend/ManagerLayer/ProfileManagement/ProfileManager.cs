@@ -17,11 +17,12 @@ namespace Gucci.ManagerLayer.ProfileManagement
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
+        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public ProfileManager()
         {
             _userService = new UserService();
-            _cryptoService = new CryptoService();
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
             _jwtServce = new JWTService();
             _ratingService = new RatingService();
         }
