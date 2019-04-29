@@ -104,7 +104,7 @@ namespace UnitTest.SearchTest
             var expectedEvent2 = new Event(UserId1, EventId2, eventTime2, EventName2, Place, "");
             eventService.InsertMadeEvent(expectedEvent2);
 
-            var sortedEvents = eventFinderService.FindEventsByDateRange(eventTime2, eventTime);
+            var sortedEvents = eventFinderService.FindEventsByDateRange("5/20/2028", "5/25/2028");
             if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
             {
                 result = true;

@@ -59,9 +59,11 @@ namespace Gucci.ServiceLayer.Services
         }
 
         // Returns complete list of events sorted by those existing within a date range
-        public List<Event> FindEventsByDateRange(DateTime startDate, DateTime endDate)
+        public List<Event> FindEventsByDateRange(string sDate, string eDate)
         {
             var resultList = new List<Event>();
+            var startDate = DateTime.Parse(sDate);
+            var endDate = DateTime.Parse(eDate);
 
             // If the search start date exists after the end date
             if (startDate.CompareTo(endDate) > 0) return resultList;

@@ -9,8 +9,8 @@ namespace Gucci.ServiceLayer.Requests
         public bool UseDates { get; set; }
         public bool UseLocation { get; set; }
         public List<string> Tags { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string State { get; set; }
     }
 }
