@@ -73,8 +73,8 @@ namespace UnitTest.SearchTest
             userService.DeleteUser(user);
             eventTagService.DeleteEventTag(EventId1, 4);
             eventTagService.DeleteEventTag(EventId2, 4);
-            eventService.DeleteEvent(EventId1);
-            eventService.DeleteEvent(EventId2);
+            eventService.DeleteEvent(EventId1, UserId1, "");
+            eventService.DeleteEvent(EventId2, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -112,8 +112,8 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
-            eventService.DeleteEvent(EventId2);
+            eventService.DeleteEvent(EventId1, UserId1, "");
+            eventService.DeleteEvent(EventId2, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -155,7 +155,7 @@ namespace UnitTest.SearchTest
             // Cleanup
             userService.DeleteUser(user);
             eventTagService.DeleteEventTag(EventId1, 4);
-            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -195,7 +195,7 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);

@@ -19,7 +19,7 @@ namespace Gucci.ServiceLayer.Services
         #region Insert Tag Information
 
         // Inserts EventTag into the database, creates a link between an event and a tag
-        public bool InsertEventTag(int eventId, string tag)
+        public bool InsertEventTag(int eventId, int tag)
         {
             bool isSuccessfulAdd = false;
             try
@@ -78,7 +78,7 @@ namespace Gucci.ServiceLayer.Services
         #region Delete Tag Information
 
         // Removes pair of tagId and eventId where values match in database
-        public bool DeleteEventTag(int eventId, string tag)
+        public bool DeleteEventTag(int eventId, int tag)
         {
             bool isSuccessfulDelete = false;
             try
