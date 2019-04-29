@@ -59,8 +59,8 @@ namespace UnitTest.SearchTest
             eventService.InsertMadeEvent(expectedEvent2);
 
             // TagId 4 -> Art
-            eventTagService.InsertEventTag(EventId1, 4);
-            eventTagService.InsertEventTag(EventId2, 4);
+            eventTagService.InsertEventTag(EventId1, "Art");
+            eventTagService.InsertEventTag(EventId2, "Art");
             var foundEvents = eventFinderService.FindEventByEventTags(new List<string>() { "Art" });
             var sortedEvents = eventFinderService.CullEventListByDateRange(foundEvents, eventTime2, eventTime);
 
@@ -71,8 +71,8 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventTagService.DeleteEventTag(EventId1, 4);
-            eventTagService.DeleteEventTag(EventId2, 4);
+            eventTagService.DeleteEventTag(EventId1, "Art");
+            eventTagService.DeleteEventTag(EventId2, "Art");
             eventService.DeleteEvent(EventId1, UserId1, "");
             eventService.DeleteEvent(EventId2, UserId1, "");
 
@@ -141,7 +141,7 @@ namespace UnitTest.SearchTest
             eventService.InsertMadeEvent(expectedEvent);
 
             // TagId 4 -> Art
-            eventTagService.InsertEventTag(EventId1, 4);
+            eventTagService.InsertEventTag(EventId1, "Art");
             var foundEvents = eventFinderService.FindEventByEventTags(new List<string>(){"Art"});
 
             foreach (var events in foundEvents)
@@ -154,7 +154,7 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventTagService.DeleteEventTag(EventId1, 4);
+            eventTagService.DeleteEventTag(EventId1, "Art");
             eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
@@ -303,7 +303,7 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
