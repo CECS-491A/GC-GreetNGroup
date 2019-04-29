@@ -19,5 +19,11 @@ namespace Gucci.DataAccessLayer.Context
         public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<ActionsTable> Actions { get; set; }
         public DbSet<UserAction> UserAction { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<GreetNGroupContext>(null);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

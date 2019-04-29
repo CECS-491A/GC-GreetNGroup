@@ -2,14 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\ManagerLayer",
-    "\\Backend\\UnitTest\\SearchTest",
-    "\\Frontend\\src",
-    "\\Frontend\\src\\components",
-    "\\GreetNGroup\\GreetNGroup",
-    "\\GreetNGroup\\GreetNGroup\\Logging",
-    "\\GreetNGroup\\GreetNGroup\\Scripts",
-    "\\GreetNGroup\\GreetNGroup\\UAD"
+    "\\Backend\\ManagerLayer"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
