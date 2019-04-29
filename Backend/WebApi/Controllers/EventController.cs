@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/event/createevent")]
+        [Route("api/event/createEvent")]
         public IHttpActionResult CreateNewEvent([FromBody] EventRequest request)
         {
             try

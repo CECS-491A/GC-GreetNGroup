@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Requests;
@@ -6,7 +7,6 @@ using Gucci.ServiceLayer.Services;
 
 namespace Gucci.WebApi.Controllers
 {
-    /*
     public class FindEventsForMeController : ApiController
     {
         [HttpPost]
@@ -27,7 +27,7 @@ namespace Gucci.WebApi.Controllers
             // Return list of events unfiltered
             if (!request.UseTags && !request.UseDates && !request.UseLocation)
             {
-
+                //filteredEventList = failList;
             }
             // Return list of events filtered by tags
             else if (request.UseTags && !request.UseDates && !request.UseLocation)
@@ -47,8 +47,8 @@ namespace Gucci.WebApi.Controllers
             // Filtered by Tags and Dates
             else if (request.UseTags && request.UseDates && !request.UseLocation)
             {
-                tempList = eventFinder.FindEventByEventTags(request.Tags);
-                filteredEventList = eventFinder.CullEventListByDateRange(tempList, request.StartDate, request.EndDate);
+                //tempList = eventFinder.FindEventByEventTags(request.Tags);
+                //filteredEventList = eventFinder.CullEventListByDateRange(tempList, request.StartDate, request.EndDate);
             }
             // Filtered by Tags and Location
             else if (request.UseTags && !request.UseDates && request.UseLocation)
@@ -70,5 +70,4 @@ namespace Gucci.WebApi.Controllers
             return Ok(filteredEventList);
         }
     }
-    */
 }

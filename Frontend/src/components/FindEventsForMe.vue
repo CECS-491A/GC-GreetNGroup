@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <div class="Title">
-            <h1>{{ title }}</h1>
+            <h1>{{ this.events }}</h1>
         </div>
         <v-container fluid>
             <v-card ref="Tags">
@@ -19,10 +19,9 @@
                     <template v-slot:prepend-item>
                         <v-list-tile
                         ripple
-                        @click="toggle"
                         >
                         <v-list-tile-action>
-                            <v-icon :color="selectedTags.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                            <v-icon :color="selectedTags.length > 0 ? 'indigo darken-4' : ''"></v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>Select All</v-list-tile-title>
@@ -114,10 +113,9 @@
                 <template v-slot:prepend-item>
                     <v-list-tile
                     ripple
-                    @click="toggle"
                     >
                     <v-list-tile-action>
-                        <v-icon :color="selectedStates.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                        <v-icon :color="selectedStates.length > 0 ? 'indigo darken-4' : ''"></v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>Select All</v-list-tile-title>
@@ -135,6 +133,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { apiURL } from '@/const.js'
+
 export default {
   name: 'FindEventsForMe',
   data () {
@@ -147,6 +148,7 @@ export default {
       startDateMenu: false,
       endDate: new Date().toISOString().substr(0, 10),
       endDateMenu: false,
+      events: [],
       tags: [
         'Outdoors', 'Indoors', 'Music', 'Games', 'Fitness', 'Art', 'Sports', 'Educational', 'Food',
         'Discussion', 'Miscellaneous'
@@ -166,7 +168,19 @@ export default {
   },
   methods: {
     findEventsForMe: function () {
-      return ''
+      var url = `${apiURL}/FindEventsForMe`
+      axios.post(url, {
+        UseTags: this.useTags,
+        UseDates: this.useDates,
+        UseLocation: this.useLocation,
+        Tags: this.selectedTags,
+        StartDate: this.startDate,
+        EndDate: this.endDate,
+        State: this.state
+      }).then((response) => {
+        const isDataAvailable = response.data && response.data.length > 0
+        this.events = isDataAvailable ? response.data : []
+      })
     }
   }
 }
