@@ -126,18 +126,6 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void GetUserToUpdate_Pass()
-        {
-
-        }
-
-        [TestMethod]
-        public void GetUserToUpdate_Fail()
-        {
-
-        }
-
-        [TestMethod]
         public void UpdateUserProfile_Pass()
         {
 
