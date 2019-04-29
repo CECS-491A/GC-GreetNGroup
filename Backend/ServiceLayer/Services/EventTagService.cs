@@ -80,20 +80,23 @@ namespace Gucci.ServiceLayer.Services
         // Removes pair of tagId and eventId where values match in database
         public bool DeleteEventTag(int eventId, string tag)
         {
-            bool isSuccessfulDelete = false;
+            var isSuccessfulDelete = false;
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
                     var eventTags = ctx.EventTags.Where(e => e.EventId.Equals(eventId));
+                    var targetTagId = ctx.Tags.FirstOrDefault(t => t.TagName.Equals(tag)).TagId;
+
                     foreach (var tags in eventTags)
                     {
-                        if (tags.Tag.TagName.Equals(tag))
+                        if (tags.TagId.Equals(targetTagId))
                         {
                             ctx.EventTags.Remove(tags);
                             isSuccessfulDelete = true;
                         }
                     }
+
                     ctx.SaveChanges();
                 }
                 return isSuccessfulDelete;

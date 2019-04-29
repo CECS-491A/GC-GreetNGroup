@@ -93,6 +93,7 @@ namespace WebApi.Controllers
             }
         }
 
+        /*
         [HttpGet]
         [Route("api/event/{eventid}/delete")]
         public IHttpActionResult DeleteEvent([FromBody] int eventId)
@@ -116,7 +117,8 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
-        
+        */
+
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
         /// </summary>
