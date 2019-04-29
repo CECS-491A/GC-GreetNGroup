@@ -137,6 +137,10 @@
     <Compile Include="Migrations\201904290421343_editAttendance.Designer.cs">
       <DependentUpon>201904290421343_editAttendance.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904292035171_event_edit03.cs" />
+    <Compile Include="Migrations\201904292035171_event_edit03.Designer.cs">
+      <DependentUpon>201904292035171_event_edit03.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
@@ -232,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904290421343_editAttendance.resx">
       <DependentUpon>201904290421343_editAttendance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904292035171_event_edit03.resx">
+      <DependentUpon>201904292035171_event_edit03.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
