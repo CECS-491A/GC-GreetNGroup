@@ -294,10 +294,11 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     e = ctx.Events.FirstOrDefault(c => c.EventId.Equals(eId));
+
                     return e;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (Exception od)
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return e;
@@ -611,36 +612,6 @@ namespace Gucci.ServiceLayer.Services
             return logMade;
         }
 
-        /// <summary>
-        /// Method LogGNGSearchAction logs when a user searches for another user or event. The log
-        /// tracks the search entry the user made. If the log was failed to be made, 
-        /// it will increment the errorCounter.
-        /// </summary>
-        /// <param name="usersID">user ID</param>
-        /// <param name="searchedItem">Search entry</param>
-        /// <param name="ip">IP Address</param>
-        /// <returns>Returns true or false if the log was successfully made</returns>
-        public bool LogGNGSearchAction(string usersID, string searchedItem, string ip)
-        {
-            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
-            _gngLoggerService.CreateNewLog(fileName, configurations.GetLogDirectory());
-            var logMade = false;
-            var log = new GNGLog
-            {
-                LogID = "SearchAction",
-                UserID = usersID,
-                IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
-                Description = "User searched for " + searchedItem
-            };
-
-            var logList = _gngLoggerService.FillCurrentLogsList();
-            logList.Add(log);
-
-            logMade = _gngLoggerService.WriteGNGLogToFile(logList);
-
-            return logMade;
-        }
         #endregion
     }
 

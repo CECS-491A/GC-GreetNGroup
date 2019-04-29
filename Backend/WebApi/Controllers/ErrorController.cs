@@ -3,11 +3,14 @@ using System.Web.Http;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Services;
 using Gucci.ManagerLayer.LogManagement;
+using System;
 
 namespace WebApi.Controllers
 {
     public class ErrorController : ApiController
     {
+        private ILoggerService _gngLoggerService = new LoggerService();
+
         [HttpPost]
         [Route("api/error/contactsystemadmin")]
         public IHttpActionResult CallSystemAdmin(string userId, string url, string ip)
@@ -27,9 +30,9 @@ namespace WebApi.Controllers
                     return Ok();
                 }
             }
-            catch(HttpRequestException e)
+            catch(Exception e)
             {
-                //gngLogManager.LogBadRequest(userId, ip, url, e.ToString());
+                _gngLoggerService.LogBadRequest(userId, ip, url, e.ToString());
                 return BadRequest();
             }
 

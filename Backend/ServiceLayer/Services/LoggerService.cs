@@ -302,7 +302,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Return true or false if the log was made successfully</returns>
         public bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("ErrorEncountered", out int logID);
@@ -312,7 +312,7 @@ namespace Gucci.ServiceLayer.Services
                 LogID = logIDString,
                 UserID = usersID,
                 IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = errorCode + " encountered at " + urlOfErr + "\n" + errDesc
             };
             var logList = FillCurrentLogsList();
@@ -333,7 +333,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns></returns>
         public bool LogBadRequest(string usersID, string ip, string url, string exception)
         {
-            var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
             listOfIDs.TryGetValue("BadRequest", out int logID);
@@ -343,8 +343,69 @@ namespace Gucci.ServiceLayer.Services
                 LogID = logIDString,
                 UserID = usersID,
                 IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = "Bad request at " + url + ": " + exception
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogMaliciousAttack logs any attempted malicious attacks
+        /// made by a registered or nonregistered user
+        /// </summary>
+        /// <param name="url">Url where the malicious attack occurred</param>
+        /// <param name="ip">IP address of the attacker</param>
+        /// <param name="usersID">User ID of attacker (empty string if not a registered user)</param>
+        /// <returns>Returns bool based on if log was successfully made</returns>
+        public bool LogMaliciousAttack(string url, string ip, string usersID)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "MaliciousAttacks",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = "Malicious attack attempted at " + url
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+
+        /// <summary>
+        /// Method LogGNGSearchAction logs when a user searches for another user or event. The log
+        /// tracks the search entry the user made. If the log was failed to be made, 
+        /// it will increment the errorCounter.
+        /// </summary>
+        /// <param name="usersID">user ID</param>
+        /// <param name="searchedItem">Search entry</param>
+        /// <param name="ip">IP Address</param>
+        /// <returns>Returns true or false if the log was successfully made</returns>
+        public bool LogGNGSearchAction(string usersID, string searchedItem, string ip)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "SearchAction",
+                UserID = usersID,
+                IpAddress = ip,
+                DateTime = DateTime.Now.ToString(),
+                Description = "User searched for " + searchedItem
             };
 
             var logList = FillCurrentLogsList();
