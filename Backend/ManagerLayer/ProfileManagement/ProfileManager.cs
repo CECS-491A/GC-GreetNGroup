@@ -13,7 +13,6 @@ namespace Gucci.ManagerLayer.ProfileManagement
 
     public class ProfileManager
     {
-        private ICryptoService _cryptoService;
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
@@ -22,7 +21,6 @@ namespace Gucci.ManagerLayer.ProfileManagement
         public ProfileManager()
         {
             _userService = new UserService();
-            _cryptoService = new CryptoService(AppLaunchSecretKey);
             _jwtServce = new JWTService();
             _ratingService = new RatingService();
         }
@@ -60,16 +58,18 @@ namespace Gucci.ManagerLayer.ProfileManagement
                     };
                     return httpResponseFail;
                 }
-                UserProfile up = new UserProfile();
-                up.FirstName = retrievedUser.FirstName;
-                up.LastName = retrievedUser.LastName;
-                up.UserName = retrievedUser.UserName;
-                up.DoB = retrievedUser.DoB;
-                up.City = retrievedUser.City;
-                up.State = retrievedUser.State;
-                up.Country = retrievedUser.Country;
-                up.EventCreationCount = retrievedUser.EventCreationCount;
-                up.Rating = GetUserRating(userIDConverted);
+                UserProfile up = new UserProfile
+                {
+                    FirstName = retrievedUser.FirstName,
+                    LastName = retrievedUser.LastName,
+                    UserName = retrievedUser.UserName,
+                    DoB = retrievedUser.DoB,
+                    City = retrievedUser.City,
+                    State = retrievedUser.State,
+                    Country = retrievedUser.Country,
+                    EventCreationCount = retrievedUser.EventCreationCount,
+                    Rating = GetUserRating(userIDConverted)
+                };
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(up))
@@ -91,53 +91,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
         {
             throw new NotImplementedException();
         }
-
-        public HttpResponseMessage GetUserToUpdate(string jwtToken)
-        {
-            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                {
-                    Content = new StringContent("Session is invalid")
-                };
-                return httpResponseFail;
-            }
-
-            if (_userService.GetUserById(_jwtServce.GetUserIDFromToken(jwtToken)) == null)
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to get user from token")
-                };
-                return httpResponseFail;
-            }
-
-            int userID = _jwtServce.GetUserIDFromToken(jwtToken);
-            if (userID == -1)
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to retrieve user data, user not found")
-                };
-                return httpResponseFail;
-            }
-
-            User retrievedUser = _userService.GetUserById(userID);
-            UpdateProfileRequest request = new UpdateProfileRequest();
-            request.FirstName = retrievedUser.FirstName;
-            request.LastName = retrievedUser.LastName;
-            request.DoB = retrievedUser.DoB;
-            request.City = retrievedUser.City;
-            request.State = retrievedUser.State;
-            request.Country = retrievedUser.Country;
-
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(JsonConvert.SerializeObject(request))
-            };
-            return httpResponse;
-        }
-
+        
         public HttpResponseMessage UpdateUserProfile(UpdateProfileRequest request)
         {
             if (_jwtServce.IsJWTSignatureTampered(request.JwtToken)){

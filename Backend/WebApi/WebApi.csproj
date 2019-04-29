@@ -146,7 +146,6 @@
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FindEventsForMeController.cs" />
     <Compile Include="Controllers\HelloWorldController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchBarController.cs" />
     <Compile Include="Controllers\UADController.cs" />
@@ -155,6 +154,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HealthHandler.cs" />
+    <Compile Include="LogOutHandler .cs" />
     <Compile Include="LoginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

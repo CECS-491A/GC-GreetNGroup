@@ -9,7 +9,15 @@ namespace Gucci.DataAccessLayer.Tables
     {
         public User()
         {
+            FirstName = null;
+            LastName = null;
+            UserName = null;
+            City = null;
+            State = null;
+            Country = null;
+            DoB = DateTime.Now;
             IsActivated = false;
+            EventCreationCount = 0;
         }
 
         public User(int uId, string firstName, string lastName, string userName, string city,

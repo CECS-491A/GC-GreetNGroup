@@ -1,25 +1,64 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gucci.DataAccessLayer.Tables;
+using Gucci.ManagerLayer.ProfileManagement;
+using Gucci.ServiceLayer.Model;
+using Gucci.ServiceLayer.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace UnitTest
 {
     [TestClass]
     public class ProfileManagerUT
     {
-        [TestMethod]
-        public void DoesUserExist_Pass()
-        {
+        TestingUtils tu;
+        ProfileManager profileMan;
+        UserService _userService;
 
+        public ProfileManagerUT()
+        {
+            tu = new TestingUtils();
+            profileMan = new ProfileManager();
+            _userService = new UserService();
         }
 
         [TestMethod]
-        public void DoesUserExist_Fail()
+        public void DoesUserExist_Pass()
         {
+            //Arrange
+            var newUser = tu.CreateUser();
+            var userID = newUser.UserId;
+            var expected = true;
 
+            //Act
+            var actual = profileMan.DoesUserExists(userID);
+            tu.DeleteUserFromDB(newUser);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void DoesUserExist_Fail_UserNotInDB()
+        {
+            //Arrange
+            var newUser = new User
+            {
+                UserId = _userService.GetNextUserID()
+            };
+            var expected = false;
+
+            //Act
+            var actual = profileMan.DoesUserExists(newUser.UserId);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -29,7 +68,7 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void GetUserRating_Fail()
+        public void GetUserRating_Fail_UserNotInDB()
         {
 
         }
@@ -37,13 +76,53 @@ namespace UnitTest
         [TestMethod]
         public void GetUser_Pass()
         {
+            //Arrange
+            var newUser = tu.CreateUser();
+            var userID = newUser.UserId;
+            UserProfile userPro = new UserProfile
+            {
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                UserName = newUser.UserName,
+                DoB = newUser.DoB,
+                City = newUser.City,
+                State = newUser.State,
+                Country = newUser.Country,
+                EventCreationCount = newUser.EventCreationCount,
+                Rating = profileMan.GetUserRating(userID)
+            };
+            var expected = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(userPro))
+            };
+
+            //Act
+            var actual = profileMan.GetUser(Convert.ToString(userID));
+            tu.DeleteUserFromDB(newUser);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
 
         }
 
         [TestMethod]
-        public void GetUser_Fail()
+        public void GetUser_Fail_UserNotInDB()
         {
+            //Arrange
+            User newUser = new User
+            {
+                UserId = _userService.GetNextUserID()
+            };
+            var expected = new HttpResponseMessage(HttpStatusCode.NotFound)
+            {
+                Content = new StringContent("User does not exist")
+            };
 
+            //Act
+            var actual = profileMan.GetUser(Convert.ToString(newUser.UserId));
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -79,7 +158,7 @@ namespace UnitTest
         [TestMethod]
         public void GetEmail_Fail()
         {
-
+            
         }
     }
 }

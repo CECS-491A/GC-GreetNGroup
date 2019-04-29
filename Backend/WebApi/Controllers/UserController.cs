@@ -65,27 +65,6 @@ namespace WebApi.Controllers
             }
         }
 
-        // Method to get the user that is going to be updated
-        [HttpGet]
-        [Route("api/user/update/getuser")]
-        public HttpResponseMessage GetUserToUpdate(string jwtToken)
-        {
-            try
-            {
-                ProfileManager profileMan = new ProfileManager();
-                var response = profileMan.GetUserToUpdate(jwtToken);
-                return response;
-            }
-            catch
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to retrieve user")
-                };
-                return httpResponseFail;
-            }
-        }
-
         // Method to update the user
         [HttpPost]
         [Route("api/user/update")]
@@ -95,26 +74,6 @@ namespace WebApi.Controllers
             {
                 ProfileManager profileMan = new ProfileManager();
                 var response = profileMan.UpdateUserProfile(request);
-                return response;
-            }
-            catch
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to update user")
-                };
-                return httpResponseFail;
-            }
-        }
-
-        [HttpGet]
-        [Route("api/user/isuseractivated/{jwtToken}")]
-        public HttpResponseMessage IsUserActivated([FromUri] string jwtToken)
-        {
-            try
-            {
-                ProfileManager profileMan = new ProfileManager();
-                var response = profileMan.IsProfileActivated(jwtToken);
                 return response;
             }
             catch

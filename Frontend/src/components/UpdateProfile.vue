@@ -11,6 +11,7 @@
     >
     {{message}}
     </v-alert>
+
     <v-alert
       :value="errorMessage"
       dismissible
@@ -19,41 +20,40 @@
     >
     {{errorMessage}}
     </v-alert>
-    
     <br />
 
     <v-text-field
             name="FirstName"
             id="FirstName"
-            v-model="FirstName"
+            v-model="this.firstName"
             type="text"
             label="First Name"/>
       <br />
       <v-text-field
             name="LastName"
             id="LastName"
-            v-model="LastName"
+            v-model="this.lastName"
             type="text"
             label="Last Name"/>
       <br />
       <v-text-field
             name="City"
             id="City"
-            v-model="City"
+            v-model="this.city"
             type="text"
             label="City"/>
       <br />
       <v-text-field
             name="State"
             id="State"
-            v-model="State"
+            v-model="this.state"
             type="text"
             label="State"/>
       <br />
       <v-text-field
             name="Country"
             id="Country"
-            v-model="this.profile.Country"
+            v-model="this.country"
             type="text"
             label="Country"/>
       <br />
@@ -70,50 +70,33 @@ export default {
   data () {
     return {
       errorMessage: null,
-      profile: {
-        FirstName: null,
-        LastName: null,
-        DoB: null,
-        City: null,
-        State: null,
-        Country: null,
-        JwtToken: null
-      },
-      message: null
+      firstName: null,
+      lastName: null,
+      DoB: null,
+      city: null,
+      state: null,
+      country: null,
+      message: null,
+      errorMessage: null
     }
-  },
-  created () {
-    axios({
-      method: 'GET',
-      url: `${apiURL}` + 'user/update/getuser',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      data: {
-        jwtToken: localStorage.getItem('token')
-      }
-    })
-      .then(response => (this.profile = response.data))
-      .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
     UpdateProfile: function () {
       axios({
-        method: 'GET',
+        method: 'POST',
         url: `${apiURL}` + 'user/update',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
         data: {
-          FirstName: this.profile.FirstName,
-          LastName: this.profile.LastName,
-          DoB: this.profile.DoB,
-          City: this.profile.City,
-          State: this.profile.State,
-          Country: this.profile.Country,
-          JwtToken: null
+          FirstName: this.firstName,
+          LastName: this.lastName,
+          DoB: this.DoB,
+          City: this.city,
+          State: this.state,
+          Country: this.country,
+          JwtToken: localStorage.getItem('token')
         }
       })
         .then(response => (this.message = response.data))

@@ -51,17 +51,8 @@ namespace Gucci.ManagerLayer.LoginManagement
                 }
                 else
                 {
-                    User createdUser = new User(  // If user doesn't exist, create a placeholder user that is not activated
-                        _userService.GetNextUserID(), // UserID
-                        null, // First name
-                        null, // Last name
-                        request.email, // Username
-                        null, // City
-                        null, // State
-                        null, // Country
-                        DateTime.Now, // Minimum datetime for DOB
-                        false // IsActivated
-                        );
+                    User createdUser = new User();
+                    createdUser.UserId = _userService.GetNextUserID();
                     _userService.InsertUser(createdUser); // Check for user acivation on home page
                     _userClaimService.AddDefaultClaims(createdUser);
                     return _jwtService.CreateToken(request.email, createdUser.UserId);
