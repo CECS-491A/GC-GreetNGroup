@@ -7,7 +7,7 @@ using Gucci.ServiceLayer.Interface;
 
 namespace Gucci.ServiceLayer.Services
 {
-    public class EventTagService
+    public class EventTagService : IEventTagService
     {
         private ILoggerService _gngLoggerService;
 
@@ -19,23 +19,29 @@ namespace Gucci.ServiceLayer.Services
         #region Insert Tag Information
 
         // Inserts EventTag into the database, creates a link between an event and a tag
-        public bool InsertEventTag(int eventId, int tagId)
+        public bool InsertEventTag(int eventId, string tag)
         {
+            bool isSuccessfulAdd = false;
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    EventTag newTag = new EventTag(eventId, tagId);
-                    ctx.EventTags.Add(newTag);
+                    var tagToAdd = ctx.Tags.FirstOrDefault(t => t.TagName.Equals(tag));
+                    var tagIdNum = tagToAdd.TagId;
+                    var eventTag = new EventTag(eventId, tagIdNum);
+                    ctx.EventTags.Add(eventTag);
+
                     ctx.SaveChanges();
-                    return true;
+                    isSuccessfulAdd = true;
                 }
+                return isSuccessfulAdd;
             }
             catch (ObjectDisposedException od)
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return false;
+                return isSuccessfulAdd;
             }
+
         }
 
         #endregion
@@ -72,28 +78,30 @@ namespace Gucci.ServiceLayer.Services
         #region Delete Tag Information
 
         // Removes pair of tagId and eventId where values match in database
-        public bool DeleteEventTag(int eventId, int tagId)
+        public bool DeleteEventTag(int eventId, string tag)
         {
+            bool isSuccessfulDelete = false;
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var foundTag = ctx.EventTags.FirstOrDefault(t => t.EventId.Equals(eventId) && t.TagId.Equals(tagId));
-
-                    if (foundTag != null)
+                    var eventTags = ctx.EventTags.Where(e => e.EventId.Equals(eventId));
+                    foreach (var tags in eventTags)
                     {
-                        ctx.EventTags.Remove(foundTag);
-                        ctx.SaveChanges();
-                        return true;
+                        if (tags.Tag.TagName.Equals(tag))
+                        {
+                            ctx.EventTags.Remove(tags);
+                            isSuccessfulDelete = true;
+                        }
                     }
-
-                    return false;
+                    ctx.SaveChanges();
                 }
+                return isSuccessfulDelete;
             }
             catch (ObjectDisposedException od)
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return false;
+                return isSuccessfulDelete;
             }
         }
 

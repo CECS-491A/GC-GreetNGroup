@@ -16,6 +16,7 @@ namespace Gucci.DataAccessLayer.Tables
             EventName = eventName;
             EventLocation = eventLocation;
             EventDescription = eventDescription;
+            IsEventExpired = false;
         }
 
         [Required, ForeignKey("User")]
@@ -35,5 +36,8 @@ namespace Gucci.DataAccessLayer.Tables
         public string EventLocation { get; set; }
 
         public string EventDescription { get; set; }
+
+        [Required]
+        public bool IsEventExpired { get; set; }
     }
 }

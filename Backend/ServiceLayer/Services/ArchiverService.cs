@@ -25,7 +25,7 @@ namespace Gucci.ServiceLayer.Services
         public List<string> GetLogsFilename()
         {
             //Format current day like this to prevent errors with using forward slashes
-            var currentDate = DateTime.Now.ToString(configurations.GetDateTimeFormat());
+            var currentDate = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat());
             var filepathsOfLogs = Directory.GetFiles(configurations.GetLogDirectory());
             var listOfLogs = new List<string>();
             foreach (var filepath in filepathsOfLogs)
@@ -69,7 +69,7 @@ namespace Gucci.ServiceLayer.Services
             //TryParseExact to properly retrieve the date that is the name of the log
             DateTime.TryParseExact(logDate, configurations.GetDateTimeFormat(), 
                 new CultureInfo(configurations.GetCultureInfo()), DateTimeStyles.None, out DateTime dateOfLog);
-            if ((DateTime.Now - dateOfLog).TotalDays > configurations.GetMaxLogLifetime())
+            if ((DateTime.UtcNow - dateOfLog).TotalDays > configurations.GetMaxLogLifetime())
             {
                 isOld = true;
             }
