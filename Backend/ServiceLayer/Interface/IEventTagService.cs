@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Gucci.ServiceLayer.Interface
 {
     public interface IEventTagService
     {
-        bool InsertEventTag(int eventId, string tagId);
+        bool InsertEventTag(int eventId, int tagId);
+        bool DeleteEventTag(int eventId, int tag);
         List<string> ReturnEventTagsOfEvent(int eventId);
-        bool DeleteEventTag(int eventId, string tag);
-
     }
 }
