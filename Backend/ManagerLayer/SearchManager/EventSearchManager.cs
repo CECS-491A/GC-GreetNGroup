@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Gucci.DataAccessLayer.DataTransferObject;
-using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Services;
 
 namespace Gucci.ManagerLayer.SearchManager
