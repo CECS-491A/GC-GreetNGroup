@@ -16,7 +16,6 @@ namespace Gucci.ManagerLayer.LogManagement
 
         private IErrorHandlerService _errorHandlerService;
         private ILoggerService _gngLoggerService;
-        private Dictionary<string, int> listOfIDs;
         private List<GNGLog> logList = new List<GNGLog>();
         private Configurations configurations;
         private string logFileName;
@@ -25,7 +24,6 @@ namespace Gucci.ManagerLayer.LogManagement
         {
             _errorHandlerService = new ErrorHandlerService();
             _gngLoggerService = new LoggerService();
-            listOfIDs = _gngLoggerService.GetLogIDs();
             configurations = new Configurations();
             logFileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
         }
@@ -43,11 +41,9 @@ namespace Gucci.ManagerLayer.LogManagement
         {
             _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("EventJoined", out int logID);
-            var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                LogID = logIDString,
+                LogID = "EventJoined",
                 UserID = usersID,
                 IpAddress = ip,
                 DateTime = DateTime.UtcNow.ToString(),
@@ -74,15 +70,13 @@ namespace Gucci.ManagerLayer.LogManagement
         {
             _gngLoggerService.CreateNewLog(logFileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("FindEventForMe", out int logID);
-            var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                LogID = logIDString,
+                LogID = "FindEventForMe",
                 UserID = usersID,
                 IpAddress = ip,
                 DateTime = DateTime.UtcNow.ToString(),
-                Description = "Event Searched for"
+                Description = "Used Find Events For Me"
             };
 
             logList = _gngLoggerService.FillCurrentLogsList();

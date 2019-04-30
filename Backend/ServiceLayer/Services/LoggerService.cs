@@ -17,7 +17,6 @@ namespace Gucci.ServiceLayer.Services
          */
 
         private IErrorHandlerService _errorHandlerService;
-        private Dictionary<string, int> listOfIDs;
         private string currentLogPath;
         private Configurations configurations;
 
@@ -102,37 +101,6 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
-        /// <summary>
-        /// Author: Jonalyn
-        /// Method GetLogIDs creates a Dictionary of int values representing the specific
-        /// event that is being logged and string keys associated with that ID
-        /// </summary>
-        /// <returns>Dictionary<string, int> which holds the mapped ids</returns>
-        public Dictionary<string, int> GetLogIDs()
-        {
-            listOfIDs = new Dictionary<string, int>();
-
-            var logIDMap = new Dictionary<string, int>();
-            logIDMap.Add("ClickEvent", 1001);
-            logIDMap.Add("ErrorEncountered", 1002);
-            logIDMap.Add("EventCreated", 1003);
-            logIDMap.Add("EntryToWebsite", 1004);
-            logIDMap.Add("ExitFromWebsite", 1005);
-            logIDMap.Add("AccountDeletion", 1006);
-            logIDMap.Add("InternalErrors", 1007);
-            logIDMap.Add("MaliciousAttacks", 1008);
-            logIDMap.Add("EventUpdated", 1009);
-            logIDMap.Add("SearchAction", 1010);
-            logIDMap.Add("FindEventForMe", 1011);
-            logIDMap.Add("UserRatings", 1012);
-            logIDMap.Add("EventJoined", 1013);
-            logIDMap.Add("BadRequest", 1014);
-            logIDMap.Add("EventDeleted", 1015);
-            logIDMap.Add("EventExpired", 1016);
-
-            return logIDMap;
-        }
-
         public string GetCurrentLogPath()
         {
             return currentLogPath;
@@ -202,14 +170,12 @@ namespace Gucci.ServiceLayer.Services
             var fileName = configurations.GetDateTimeFormat() + configurations.GetLogExtention();
             CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("InternalErrors", out int clickLogID);
-            var clickLogIDString = clickLogID.ToString();
             var log = new GNGLog
             {
                 //Don't care about user id or ip address for internal error log
-                LogID = clickLogIDString,
-                UserID = "",
-                IpAddress = "",
+                LogID = "InternalErrors",
+                UserID = "N/A",
+                IpAddress = "N/A",
                 DateTime = DateTime.UtcNow.ToString(),
                 Description = "Internal errors occurred: " + exception
             };
@@ -305,11 +271,9 @@ namespace Gucci.ServiceLayer.Services
             var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("ErrorEncountered", out int logID);
-            var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                LogID = logIDString,
+                LogID = "ErrorEncountered",
                 UserID = usersID,
                 IpAddress = ip,
                 DateTime = DateTime.UtcNow.ToString(),
@@ -336,11 +300,9 @@ namespace Gucci.ServiceLayer.Services
             var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
             CreateNewLog(fileName, configurations.GetLogDirectory());
             var logMade = false;
-            listOfIDs.TryGetValue("BadRequest", out int logID);
-            var logIDString = logID.ToString();
             var log = new GNGLog
             {
-                LogID = logIDString,
+                LogID = "BadRequest",
                 UserID = usersID,
                 IpAddress = ip,
                 DateTime = DateTime.UtcNow.ToString(),
@@ -404,7 +366,7 @@ namespace Gucci.ServiceLayer.Services
                 LogID = "SearchAction",
                 UserID = usersID,
                 IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = "User searched for " + searchedItem
             };
 

@@ -571,7 +571,7 @@ namespace Gucci.ServiceLayer.Services
                 LogID = "EventDeleted",
                 UserID = hostId,
                 IpAddress = ip,
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = "Event " + eventId + " deleted"
             };
 
@@ -600,7 +600,7 @@ namespace Gucci.ServiceLayer.Services
                 LogID = "EventExpired",
                 UserID = hostId,
                 IpAddress = "N/A",
-                DateTime = DateTime.Now.ToString(),
+                DateTime = DateTime.UtcNow.ToString(),
                 Description = "Event " + eventId + " expired"
             };
 
