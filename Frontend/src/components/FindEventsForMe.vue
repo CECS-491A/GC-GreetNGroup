@@ -163,7 +163,7 @@ export default {
         'Pennsylvania Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah',
         'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
       ],
-      selectedStates: []
+      selectedStates: ''
     }
   },
   methods: {
@@ -176,7 +176,7 @@ export default {
         Tags: this.selectedTags,
         StartDate: this.startDate,
         EndDate: this.endDate,
-        State: this.state
+        State: this.selectedStates
       }).then((response) => {
         const isDataAvailable = response.data && response.data.length > 0
         this.events = isDataAvailable ? response.data : []

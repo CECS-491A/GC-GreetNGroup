@@ -18,7 +18,7 @@ namespace UnitTest.SearchTest
         private const int EventId2 = 61;
         private const string EventName = "TestIn Party";
         private const string EventName2 = "TestIn Event";
-        private const string Place = "CSULB, California";
+        private const string Place = "CSULB, California 90807";
 
         // User Fields
         private const int UserId1 = 40;
@@ -53,7 +53,7 @@ namespace UnitTest.SearchTest
             var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
             eventService.InsertMadeEvent(expectedEvent);
 
-            var foundEvents = eventFinderService.FindEventsByState(State);
+            var foundEvents = eventFinderService.FindEventsByState("California");
             foreach (var events in foundEvents)
             {
                 if (events.EventId.Equals(expectedEvent.EventId))
