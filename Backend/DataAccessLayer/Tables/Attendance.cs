@@ -8,12 +8,11 @@ namespace Gucci.DataAccessLayer.Tables
     {
         public Attendance() { }
 
-        public Attendance(int eventId, int userId, bool checkedIn, string role)
+        public Attendance(int eventId, int userId, bool checkedIn)
         {
             EventId = eventId;
             UserId = userId;
             CheckedIn = checkedIn;
-            RoleName = role;
         }
         [Key, ForeignKey("Event"), Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual int EventId { get; set; }
@@ -25,7 +24,5 @@ namespace Gucci.DataAccessLayer.Tables
 
         [Required]
         public bool CheckedIn { get; set; }
-
-        public string RoleName { get; set; }
     }
 }

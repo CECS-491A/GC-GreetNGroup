@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/event/createevent")]
+        [Route("api/event/createEvent")]
         public IHttpActionResult CreateNewEvent([FromBody] EventRequest request)
         {
             try
@@ -93,6 +93,7 @@ namespace WebApi.Controllers
             }
         }
 
+        /*
         [HttpGet]
         [Route("api/event/{eventid}/delete")]
         public IHttpActionResult DeleteEvent([FromBody] int eventId)
@@ -116,7 +117,8 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
-        
+        */
+
         /// <summary>
         /// Returns a list of events based on partial matching of the user input
         /// </summary>

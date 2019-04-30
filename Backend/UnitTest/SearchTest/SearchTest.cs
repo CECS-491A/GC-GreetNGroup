@@ -18,7 +18,7 @@ namespace UnitTest.SearchTest
         private const int EventId2 = 61;
         private const string EventName = "TestIn Party";
         private const string EventName2 = "TestIn Event";
-        private const string Place = "CSULB";
+        private const string Place = "CSULB, California";
 
         // User Fields
         private const int UserId1 = 40;
@@ -32,6 +32,43 @@ namespace UnitTest.SearchTest
         #endregion
 
         #region Pass Tests
+
+        [TestMethod]
+        public void PassTestSortByState()
+        {
+            // Arrange
+            var eventFinderService = new EventFinderService();
+            var userService = new UserService();
+            var eventService = new EventService();
+
+            const bool expected = true;
+            var result = false;
+
+            // Act
+            var dob = DateTime.Parse("09/19/1999");
+            var user = new User(UserId1, FirstName, LastName, UserName, City, State, Country, dob, true);
+            userService.InsertUser(user);
+
+            var eventTime = DateTime.Parse("5/25/2028");
+            var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
+            eventService.InsertMadeEvent(expectedEvent);
+
+            var foundEvents = eventFinderService.FindEventsByState(State);
+            foreach (var events in foundEvents)
+            {
+                if (events.EventId.Equals(expectedEvent.EventId))
+                {
+                    result = true;
+                }
+            }
+
+            // Cleanup
+            userService.DeleteUser(user);
+            eventService.DeleteEvent(EventId1, UserId1, "");
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
 
         [TestMethod]
         public void PassTestSortByTagsAndDateRange()
@@ -59,10 +96,10 @@ namespace UnitTest.SearchTest
             eventService.InsertMadeEvent(expectedEvent2);
 
             // TagId 4 -> Art
-            eventTagService.InsertEventTag(EventId1, 4);
-            eventTagService.InsertEventTag(EventId2, 4);
+            eventTagService.InsertEventTag(EventId1, "Art");
+            eventTagService.InsertEventTag(EventId2, "Art");
             var foundEvents = eventFinderService.FindEventByEventTags(new List<string>() { "Art" });
-            var sortedEvents = eventFinderService.CullEventListByDateRange(foundEvents, eventTime2, eventTime);
+            var sortedEvents = eventFinderService.CullEventListByDateRange(foundEvents, "5/20/2028", "5/25/2028");
 
             if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
             {
@@ -71,10 +108,10 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventTagService.DeleteEventTag(EventId1, 4);
-            eventTagService.DeleteEventTag(EventId2, 4);
-            eventService.DeleteEvent(EventId1);
-            eventService.DeleteEvent(EventId2);
+            eventTagService.DeleteEventTag(EventId1, "Art");
+            eventTagService.DeleteEventTag(EventId2, "Art");
+            eventService.DeleteEvent(EventId1, UserId1, "");
+            eventService.DeleteEvent(EventId2, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -104,7 +141,7 @@ namespace UnitTest.SearchTest
             var expectedEvent2 = new Event(UserId1, EventId2, eventTime2, EventName2, Place, "");
             eventService.InsertMadeEvent(expectedEvent2);
 
-            var sortedEvents = eventFinderService.FindEventsByDateRange(eventTime2, eventTime);
+            var sortedEvents = eventFinderService.FindEventsByDateRange("5/20/2028", "5/25/2028");
             if (sortedEvents[0].EventId == expectedEvent2.EventId && sortedEvents[1].EventId == expectedEvent.EventId)
             {
                 result = true;
@@ -112,8 +149,8 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
-            eventService.DeleteEvent(EventId2);
+            eventService.DeleteEvent(EventId1, UserId1, "");
+            eventService.DeleteEvent(EventId2, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -141,7 +178,7 @@ namespace UnitTest.SearchTest
             eventService.InsertMadeEvent(expectedEvent);
 
             // TagId 4 -> Art
-            eventTagService.InsertEventTag(EventId1, 4);
+            eventTagService.InsertEventTag(EventId1, "Art");
             var foundEvents = eventFinderService.FindEventByEventTags(new List<string>(){"Art"});
 
             foreach (var events in foundEvents)
@@ -154,8 +191,8 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventTagService.DeleteEventTag(EventId1, 4);
-            eventService.DeleteEvent(EventId1);
+            eventTagService.DeleteEventTag(EventId1, "Art");
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -195,7 +232,7 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -303,7 +340,7 @@ namespace UnitTest.SearchTest
 
             // Cleanup
             userService.DeleteUser(user);
-            eventService.DeleteEvent(EventId1);
+            eventService.DeleteEvent(EventId1, UserId1, "");
 
             // Assert
             Assert.AreEqual(expected, result);
