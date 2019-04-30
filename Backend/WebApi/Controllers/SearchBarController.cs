@@ -1,14 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.LogManagement;
 using Gucci.ManagerLayer.SearchManager;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
 namespace WebApi.Controllers
 {
     public class SearchBarController : ApiController
     {
-        private readonly LogManager _gngLogManager = new LogManager();
+        private ILoggerService _gngLoggerService = new LoggerService();
         private const string url = "https://greetngroup.com/search";
 
         /// <summary>
@@ -30,14 +33,14 @@ namespace WebApi.Controllers
                 var e = searchManager.GetEventListByName(name);
 
                 // logs action -- does not care about ip or userId
-                // _gngLogManager.LogGNGSearchAction("", name, "");
+                _gngLoggerService.LogGNGSearchAction("N/A", name, "N/A");
 
                 return Ok(e);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 // logs error -- does not care about ip or userId
-                //_gngLogManager.LogBadRequest("", "", url, e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -62,14 +65,14 @@ namespace WebApi.Controllers
                 var e = searchManager.GetUserByUsername(username);
                 
                 // logs action -- does not care about ip or userId
-                // _gngLogManager.LogGNGSearchAction("", username, "");
+                _gngLoggerService.LogGNGSearchAction("N/A", username, "N/A");
 
                 return Ok(e);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 // logs error -- does not care about ip or userId
-                //_gngLogManager.LogBadRequest("", "", url, e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", url, e.ToString());
                 return BadRequest();
             }
         }
@@ -92,10 +95,10 @@ namespace WebApi.Controllers
 
                 return Ok(e);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 // logs error -- does not care about ip or userId
-                //_gngLogManager.LogBadRequest("", "", "https://greetngroup.com/searchUserId", e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", url, e.ToString());
                 return BadRequest();
             }
         }

@@ -4,13 +4,14 @@ using Gucci.ServiceLayer.Requests;
 using System;
 using System.Net;
 using System.Web.Http;
-using Gucci.ManagerLayer.LogManagement;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
 namespace WebApi.Controllers
 {
     public class HomeController : ApiController
     {
-        private LogManager gngLogManager = new LogManager();
+        private ILoggerService _gngLoggerService = new LoggerService();
 
         [HttpGet]
         [Route("api/profile")]
@@ -29,7 +30,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 //TODO: Update so that ip & url is included in FromBody for logging purposes
-                //gngLogManager.LogBadRequest("", "", "", ex.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", "https://www.greetngroup.com/", ex.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
