@@ -16,7 +16,9 @@ namespace Gucci.ManagerLayer.LoginManagement
 
         public LoginManager()
         {
-            AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
+            // "D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE" For testing
+            AppLaunchSecretKey = "D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE";
+            //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
             _cryptoService = new CryptoService(AppLaunchSecretKey);
             _userService = new UserService();
             _jwtService = new JWTService();

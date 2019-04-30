@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { apiURL } from '@/const.js'
 import { isProfileEnabled } from '@/router/request'
 
 export default {

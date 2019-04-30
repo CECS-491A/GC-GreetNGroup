@@ -36,6 +36,36 @@
             type="text"
             label="Last Name"/>
       <br />
+      <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="dob"
+            label="Date of Birth"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+            id="dob"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          ref="picker"
+          v-model="dob"
+          :max="new Date().toISOString().substr(0, 10)"
+          min="1900-01-01"
+          @change="updateDate"
+        ></v-date-picker>
+      </v-menu>
+      <br />
       <v-text-field
             name="City"
             id="City"
@@ -69,7 +99,6 @@ export default {
   name: 'UpdateProfile',
   data () {
     return {
-      errorMessage: null,
       firstName: null,
       lastName: null,
       DoB: null,
@@ -81,6 +110,9 @@ export default {
     }
   },
   methods: {
+    updateDate (date) {
+      this.$refs.menu.save(date)
+    },
     UpdateProfile: function () {
       axios({
         method: 'POST',
