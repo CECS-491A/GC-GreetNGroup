@@ -44,7 +44,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `${apiURL}/user/isuseractivated/` + this.$route.params.token,
+      url: `${apiURL}/profile/isprofileactivated/` + this.$route.params.token,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true

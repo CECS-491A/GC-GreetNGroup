@@ -66,7 +66,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: `${apiURL}/user/` + this.userID,
+      url: `${apiURL}/profile/` + this.userID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -79,6 +79,7 @@ export default {
       .catch(e => { this.errorMessage = e.response.data })
   },
   methods: {
+    /*
     submitRating: function (value) {
       axios({
         method: 'POST',
@@ -94,7 +95,8 @@ export default {
       })
         .then(response => (this.json = response.data))
         .catch(e => { this.errorMessage = e.response.data })
-    } 
+    }
+    */ 
   }
 }
 </script>

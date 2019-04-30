@@ -20,7 +20,7 @@ const store = {
   getEmail(){
     axios({
       method: 'POST',
-      url: `${apiURL}/user/email/getemail`,
+      url: `${apiURL}/user/getemail`,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -37,7 +37,7 @@ const store = {
 function isProfileEnabled () {
   return axios({
     method: 'GET',
-    url: `${apiURL}/user/isuseractivated/` + localStorage.getItem('token'),
+    url: `${apiURL}/profile/isprofileactivated/` + localStorage.getItem('token'),
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true

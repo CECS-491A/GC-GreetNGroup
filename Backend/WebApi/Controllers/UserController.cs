@@ -24,7 +24,7 @@ namespace WebApi.Controllers
 
         // Method to get the email of a user given the JWTToken
         [HttpPost]
-        [Route("api/user/email/getemail")]
+        [Route("api/user/getemail")]
         public HttpResponseMessage GetEmail([FromBody]GetEmailRequest request)
         {
             try

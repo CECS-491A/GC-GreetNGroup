@@ -56,8 +56,8 @@ namespace WebApi.Controllers
 
 
         [HttpGet]
-        [Route("api/profile/isprofileactivated")]
-        public HttpResponseMessage IsProfileActivated([FromUri] string jwtToken)
+        [Route("api/profile/isprofileactivated/{jwtToken}")]
+        public HttpResponseMessage IsProfileActivated(string jwtToken)
         {
             try
             {

@@ -129,6 +129,12 @@ namespace Gucci.ManagerLayer.ProfileManagement
             retrievedUser.City = request.City;
             retrievedUser.State = request.State;
             retrievedUser.Country = request.Country;
+
+            if (!retrievedUser.IsActivated) //Check to see if the profile is activated, if not, activate it
+            {
+                retrievedUser.IsActivated = true;
+            }
+
             if (!_userService.UpdateUser(retrievedUser))
             {
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
