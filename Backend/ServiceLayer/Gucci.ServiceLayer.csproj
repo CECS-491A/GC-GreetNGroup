@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interface\ICryptoService.cs" />
     <Compile Include="Interface\IErrorHandlerService.cs" />
     <Compile Include="Interface\IArchiverService.cs" />
     <Compile Include="Interface\IEventTagService.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="Requests\UpdateProfileRequest.cs" />
     <Compile Include="Services\AttendeesService.cs" />
     <Compile Include="Services\ClaimService.cs" />
-    <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\EventFinderService.cs" />
     <Compile Include="Services\EventService.cs" />
@@ -101,6 +99,7 @@
     <Compile Include="Interface\IUADService.cs" />
     <Compile Include="Services\JWTService.cs" />
     <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\SignatureService.cs" />
     <Compile Include="Services\UADService.cs" />
     <Compile Include="Services\UserClaimsService.cs" />
     <Compile Include="Services\UserService.cs" />

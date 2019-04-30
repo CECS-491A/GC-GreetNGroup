@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 using Gucci.ManagerLayer.LoginManagement;
 using Newtonsoft.Json;
 using Gucci.ServiceLayer.Requests;
+using System;
 
 namespace WebApi
 {
-    class launchResponse
-    {
-        [Required]
-        public string redirectURL { get; set; }
-    }
-
     public class LoginHandler : DelegatingHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
@@ -27,7 +22,7 @@ namespace WebApi
             SSOUserRequest ssoRequest = new SSOUserRequest();
             ssoRequest = JsonConvert.DeserializeObject<SSOUserRequest>(jsonContent);
 
-            string response = loginMan.Login(ssoRequest);
+            var response = loginMan.Login(ssoRequest);
             if (response == "-1")
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
@@ -40,12 +35,13 @@ namespace WebApi
             }
             else
             {
-                var returnedRedirectURL = new launchResponse();
-                returnedRedirectURL.redirectURL = response;
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(returnedRedirectURL))
-                };
+                var httpResponse = new HttpResponseMessage();
+                httpResponse.StatusCode = HttpStatusCode.Moved;
+                //httpResponse.Headers.Location = new Uri("https://localhost:62008");
+                //httpResponse.Headers.Add("Location", response);
+                //httpResponse.Content = new StringContent("asdf");
+                //httpResponse.Headers.Remove("Location");
+                //httpResponse.Headers.Add("Location", response);
                 var tsc = new TaskCompletionSource<HttpResponseMessage>();
                 tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
                 return tsc.Task;

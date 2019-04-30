@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
@@ -100,6 +102,28 @@ namespace Gucci.ManagerLayer.ProfileManagement
                     Content = new StringContent("Session is invalid")
                 };
                 return httpResponseFail;
+            }
+
+            List<string> userInfo = new List<string>
+                {
+                request.FirstName,
+                request.LastName,
+                request.DoB.ToString(),
+                request.City,
+                request.State,
+                request.Country
+            };
+            
+            foreach(string item in userInfo)
+            {
+                if (String.IsNullOrWhiteSpace(item))
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("Fields cannot be null")
+                    };
+                    return httpResponseFail;
+                }
             }
 
             int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
