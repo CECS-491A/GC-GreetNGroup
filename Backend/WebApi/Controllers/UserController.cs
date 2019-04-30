@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.LogManagement;
+using ManagerLayer.UserManagement;
 
 namespace WebApi.Controllers
 {
@@ -21,29 +22,6 @@ namespace WebApi.Controllers
         private LogManager gngLogManager = new LogManager();
         UserService userService = new UserService();
 
-        // Method to get the user given their ID
-        [HttpGet]
-        [Route("api/user/{userID}")]
-        public HttpResponseMessage Get(string userID)
-        {
-            try
-            {
-                ProfileManager profileMan = new ProfileManager();
-                var result = profileMan.GetUser(userID);
-                return result;
-            }
-            catch (Exception e)
-            {
-                //gngLogManager.LogBadRequest("", "", "", e.ToString());
-                //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Service Unavailable")
-                };
-                return httpResponseFail;
-            }
-        }
-
         // Method to get the email of a user given the JWTToken
         [HttpPost]
         [Route("api/user/email/getemail")]
@@ -51,7 +29,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                ProfileManager profileMan = new ProfileManager();
+                UserProfileManager profileMan = new UserProfileManager();
                 var result = profileMan.GetEmail(request.token);
                 return result;
             }
@@ -60,27 +38,6 @@ namespace WebApi.Controllers
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("Unable to retrieve email")
-                };
-                return httpResponseFail;
-            }
-        }
-
-        // Method to update the user
-        [HttpPost]
-        [Route("api/user/update")]
-        public HttpResponseMessage Update([FromBody] UpdateProfileRequest request)
-        {
-            try
-            {
-                ProfileManager profileMan = new ProfileManager();
-                var response = profileMan.UpdateUserProfile(request);
-                return response;
-            }
-            catch
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to update user")
                 };
                 return httpResponseFail;
             }
@@ -102,6 +59,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
+        
 
         /*
         [HttpPost]

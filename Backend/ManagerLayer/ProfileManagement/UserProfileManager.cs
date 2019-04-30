@@ -13,23 +13,18 @@ using Newtonsoft.Json;
 namespace Gucci.ManagerLayer.ProfileManagement
 {
 
-    public class ProfileManager
+    public class UserProfileManager
     {
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
         private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
-        public ProfileManager()
+        public UserProfileManager()
         {
             _userService = new UserService();
             _jwtServce = new JWTService();
             _ratingService = new RatingService();
-        }
-
-        public bool DoesUserExists(int userID)
-        {
-            return _userService.IsUsernameFoundById(userID);
         }
 
         public string GetUserRating(int userID)
@@ -42,7 +37,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
             try
             {
                 int userIDConverted = Convert.ToInt32(userID);
-                if (!DoesUserExists(userIDConverted))
+                if (!_userService.IsUsernameFoundById(userIDConverted))
                 {
                     var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {

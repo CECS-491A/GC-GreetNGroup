@@ -18,6 +18,11 @@ namespace ManagerLayer.UserManagement
             _signatureService = new SignatureService();
         }
 
+        public bool DoesUserExists(int userID)
+        {
+            return _userService.IsUsernameFoundById(userID);
+        }
+
         public bool DeleteUserSSO(SSOUserRequest request)
         {
             try

@@ -35,13 +35,10 @@ namespace WebApi
             }
             else
             {
-                var httpResponse = new HttpResponseMessage();
-                httpResponse.StatusCode = HttpStatusCode.Moved;
-                //httpResponse.Headers.Location = new Uri("https://localhost:62008");
-                //httpResponse.Headers.Add("Location", response);
-                //httpResponse.Content = new StringContent("asdf");
-                //httpResponse.Headers.Remove("Location");
-                //httpResponse.Headers.Add("Location", response);
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.Redirect)
+                {
+                    Content = new StringContent("https://greetngroup.com/login/" + response)
+                };
                 var tsc = new TaskCompletionSource<HttpResponseMessage>();
                 tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
                 return tsc.Task;

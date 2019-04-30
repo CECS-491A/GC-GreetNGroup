@@ -147,7 +147,9 @@
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FindEventsForMeController.cs" />
     <Compile Include="Controllers\HelloWorldController.cs" />
+    <Compile Include="Controllers\JWTController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchBarController.cs" />
     <Compile Include="Controllers\UADController.cs" />

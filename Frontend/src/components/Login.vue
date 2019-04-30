@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { apiURL } from '@/const.js'
 import { store } from '@/router/request.js'
 
 export default {
@@ -33,14 +35,30 @@ export default {
   data () {
     return {
       loading: false,
-      profileIsActivated: false
+      profileIsActivated: false,
+      isValidToken: false
     }
   },
   created () {
     this.loading = true
-    localStorage.setItem('token', this.$route.params.token)
-    store.state.isLogin = true
-    store.getEmail()
+
+    axios({
+      method: 'GET',
+      url: `${apiURL}/user/isuseractivated/` + this.$route.params.token,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then(response => { this.isValidToken = response.data })
+      .catch(e => { this.isValidToken = e.data })
+
+    if (this.isTokenValid) {
+      localStorage.setItem('token', this.$route.params.token)
+      store.state.isLogin = true
+      store.getEmail()
+      this.$router.push('/')
+    }
     this.$router.push('/')
   }
 }

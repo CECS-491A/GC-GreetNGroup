@@ -11,16 +11,16 @@ using Newtonsoft.Json;
 namespace UnitTest
 {
     [TestClass]
-    public class ProfileManagerUT
+    public class UserProfileManagerUT
     {
         TestingUtils tu;
-        ProfileManager profileMan;
+        UserProfileManager profileMan;
         UserService _userService;
 
-        public ProfileManagerUT()
+        public UserProfileManagerUT()
         {
             tu = new TestingUtils();
-            profileMan = new ProfileManager();
+            profileMan = new UserProfileManager();
             _userService = new UserService();
         }
 

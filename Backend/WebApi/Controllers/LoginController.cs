@@ -27,8 +27,10 @@ namespace WebApi.Controllers
             }
             else
             {
-                var redirect = this.Request.CreateResponse(HttpStatusCode.Moved);
-                redirect.Headers.Location = new Uri("https://greetngroup.com/login/" + response);
+                var redirectURL = "https://greetngroup.com/login/" + response;
+                var redirect = Request.CreateResponse(HttpStatusCode.SeeOther);
+                redirect.Content = new StringContent(redirectURL);
+                //redirect.Headers.Location = new Uri(redirectURL);
                 return redirect;
             }
         }

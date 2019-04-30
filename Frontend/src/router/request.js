@@ -35,14 +35,23 @@ const store = {
 };
 
 function isProfileEnabled () {
-  return axios.get(`${apiURL}/user/isuseractivated/` + localStorage.getItem('token'))
-    .then(response =>{
-      if(response.data !== true){
-        this.$router.push('/updateprofile')
-      }
-    });
+  return axios({
+    method: 'GET',
+    url: `${apiURL}/user/isuseractivated/` + localStorage.getItem('token'),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+  })
+  .then(response =>{
+    if(response.data !== true){
+      this.$router.push('/updateprofile')
+    }
+  })
+  .catch(
+    this.$router.push('/')
+  )
 }
-
 
 export{
   store,
