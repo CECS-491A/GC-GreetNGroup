@@ -2,7 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\ManagerLayer"
+    "\\Backend\\Logs",
+    "\\Backend\\ManagerLayer",
+    "\\Backend\\ManagerLayer\\UADManagement",
+    "\\Backend\\ServiceLayer",
+    "\\Backend\\ServiceLayer\\Services",
+    "\\Backend\\UnitTest",
+    "\\Backend\\UnitTest\\GNGLoggerTest",
+    "\\Backend\\UnitTest\\UADTest"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
