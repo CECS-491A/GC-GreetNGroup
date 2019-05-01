@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <div class="Title">
-            <h1>{{ this.events }}</h1>
+            <h1>{{ this.title }}</h1>
         </div>
         <v-container fluid>
             <v-card ref="Tags">
@@ -67,7 +67,6 @@
                         <v-btn flat color="primary" @click="$refs.startDateMenu.save(startDate)">OK</v-btn>
                     </v-date-picker>
                     </v-menu>
-
                     <v-menu
                     ref="endDateMenu"
                     v-model="endDateMenu"
@@ -118,7 +117,7 @@
                         <v-icon :color="selectedStates.length > 0 ? 'indigo darken-4' : ''"></v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>Select All</v-list-tile-title>
+                        <v-list-tile-title>Select a State</v-list-tile-title>
                     </v-list-tile-content>
                     </v-list-tile>
                     <v-divider class="mt-2"></v-divider>
@@ -126,9 +125,45 @@
                 </v-select>
             </v-card>
             <v-card>
-                <button v-on:click="findEventsForMe()">Search</button>
+                <v-select
+                v-model="pageLimit"
+                v-on:click="resetResults()"
+                :items="resultCount"
+                :menu-props="{ maxHeight: '200' }"
+                label="Select display count"
+                hide-details
+                ></v-select>
+            </v-card>
+            <v-card>
+                <v-btn large v-on:click="findEventsForMe()">Search</v-btn>
             </v-card>
         </v-container>
+        <v-container fluid>
+            <v-card ref="Events">
+                <div id="events" v-for="{UserId, EventId, StartDate, EventName, EventLocation, EventDescription, index} in limitSearchResultsEvents" :key="index">
+                    <v-card ref="Event">
+                        <p>{{findUserByUserId(UserId)}}</p>
+                        <router-link :to="'/eventpage/' + EventName">
+                        <button  id="event-b"> {{EventName}} </button>
+                        </router-link>
+                        <article> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>
+                        <article> {{'Location: ' + EventLocation}} </article>
+                        <article> {{'Host: ' + eventHost}} </article>
+                        <article> {{'Description: '}} </article>
+                        <article> {{EventDescription}} </article>
+                    </v-card>
+                </div>
+            </v-card>
+        </v-container>
+        <div>
+            <v-btn small color="primary" dark 
+                v-if="events.length > this.pageLimit"
+                v-on:click.native="limitSearchResultsPrevious(events)">Previous</v-btn>
+            <article> {{this.currentPage + '/' + this.pageCount}} </article>
+            <v-btn small color="primary" dark 
+                v-if="events.length > this.pageLimit"
+                v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
+        </div>
     </v-app>
 </template>
 
@@ -149,6 +184,7 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       endDateMenu: false,
       events: [],
+      eventHost: [],
       tags: [
         'Outdoors', 'Indoors', 'Music', 'Games', 'Fitness', 'Art', 'Sports', 'Educational', 'Food',
         'Discussion', 'Miscellaneous'
@@ -163,11 +199,25 @@ export default {
         'Pennsylvania Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah',
         'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
       ],
-      selectedStates: ''
+      selectedStates: '',
+      resultCount: [5, 10, 15, 20, 40],
+      pageStart: 0,
+      newPageLimit: 5,
+      pageLimit: 5,
+      pageEnd: 5,
+      currentPage: 1
     }
   },
   methods: {
+    resetResults: function () {
+      this.events = []
+      this.pageStart = 0
+      this.pageEnd = this.pageLimit
+    },
     findEventsForMe: function () {
+      this.pageStart = 0
+      this.currentPage = 1
+      this.pageEnd = this.pageLimit
       var url = `${apiURL}/FindEventsForMe`
       axios.post(url, {
         UseTags: this.useTags,
@@ -181,6 +231,54 @@ export default {
         const isDataAvailable = response.data && response.data.length > 0
         this.events = isDataAvailable ? response.data : []
       })
+    },
+    findUserByUserId: function (i) {
+      var url = `${apiURL}/user/username/` + i
+      axios.get(url)
+        .then((response) => {
+          const isDataAvailable = response.data && response.data.length > 0
+          var name = isDataAvailable ? response.data : ''
+          this.eventHost = name
+        })
+        .catch(error => console.log(error))
+    },
+    // Determines amount of results shown after next button press
+    limitSearchResultsNext: function (i) {
+      // if event list count is >= the starting count + limit of event listings allowed in a page
+      if (!this.endReached) {
+        if (i.length > this.pageEnd + this.pageLimit) { // if under the max
+          this.currentPage += 1
+          this.pageStart += this.pageLimit
+          this.pageEnd += this.pageLimit
+        } else if (i.length <= this.pageEnd + this.pageLimit) { // if over the max
+          this.currentPage += 1
+          this.endReached = true
+          this.pageStart = this.pageEnd
+          this.pageEnd = i.length
+        }
+      }
+    },
+    // Determines amount of result shown after previous button press
+    limitSearchResultsPrevious: function (i) {
+      this.endReached = false
+      if (this.pageStart > 0) {
+        if (this.pageStart - this.pageLimit >= 0) {
+          this.currentPage -= 1
+          this.pageEnd = this.pageStart
+          this.pageStart -= this.pageLimit
+        }
+      }
+    }
+  },
+  // Computes list to be displayed
+  computed: {
+    limitSearchResultsEvents () {
+      return this.events.slice(this.pageStart, this.pageEnd)
+    },
+    pageCount () {
+      var pageCount = Math.round(this.events.length / this.pageLimit)
+      if (pageCount === 0) pageCount = 1
+      return pageCount
     }
   }
 }

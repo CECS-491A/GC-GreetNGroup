@@ -132,17 +132,17 @@ namespace Gucci.ManagerLayer.UADManagement
             loglist = _uadService.GetLogsForMonthAndYear(loglist, month, year);
             var features = new List<String>() { "EventCreated", "EventJoined", "SearchAction", "FindEventForMe", "UserRatings"};
             var timesFeaturedUsed = new List<int>() {};
-            Dictionary<string, int> listOfIDs = _gngLoggerService.GetLogIDs();
+            //Dictionary<string, int> listOfIDs = _gngLoggerService.GetLogIDs();
             var result = "";
 
             // For each feature get the amount of times they were used
             for (int i = 0; i < features.Count; i++)
             {
                 // Get the log id for the feature
-                listOfIDs.TryGetValue(features[i], out int clickLogID);
-                var logID = clickLogID.ToString();
-                var timesUsed = _uadService.GetNumberofLogsID(loglist, logID);
-                timesFeaturedUsed.Add(timesUsed);
+                //listOfIDs.TryGetValue(features[i], out int clickLogID);
+                //var logID = clickLogID.ToString();
+                //var timesUsed = _uadService.GetNumberofLogsID(loglist, logID);
+                //timesFeaturedUsed.Add(timesUsed);
             }
             _uadService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
             result = _uadService.FormatTop5Features(features, timesFeaturedUsed);
