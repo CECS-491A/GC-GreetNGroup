@@ -10,6 +10,8 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
+// Vue-moment is used to have accurate time based on location
+Vue.use(require('vue-moment'))
 
 /* eslint-disable no-new */
 new Vue({
