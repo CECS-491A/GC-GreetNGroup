@@ -100,6 +100,7 @@
     <Compile Include="Services\JWTService.cs" />
     <Compile Include="Services\RatingService.cs" />
     <Compile Include="Services\SignatureService.cs" />
+    <Compile Include="Services\SortService.cs" />
     <Compile Include="Services\UADService.cs" />
     <Compile Include="Services\UserClaimsService.cs" />
     <Compile Include="Services\UserService.cs" />
