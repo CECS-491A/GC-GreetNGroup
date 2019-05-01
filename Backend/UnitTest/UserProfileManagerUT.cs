@@ -25,39 +25,6 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void DoesUserExist_Pass()
-        {
-            //Arrange
-            var newUser = tu.CreateUser();
-            var userID = newUser.UserId;
-            var expected = true;
-
-            //Act
-            var actual = profileMan.DoesUserExists(userID);
-            tu.DeleteUserFromDB(newUser);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void DoesUserExist_Fail_UserNotInDB()
-        {
-            //Arrange
-            var newUser = new User
-            {
-                UserId = _userService.GetNextUserID()
-            };
-            var expected = false;
-
-            //Act
-            var actual = profileMan.DoesUserExists(newUser.UserId);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
         public void GetUserRating_Pass()
         {
 

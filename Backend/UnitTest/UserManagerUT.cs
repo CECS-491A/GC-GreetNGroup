@@ -12,13 +12,13 @@ using ManagerLayer.UserManagement;
 namespace UnitTest
 {
     [TestClass]
-    public class ProfileManagerUT
+    public class UserManagerUT
     {
         TestingUtils tu;
         UserManager userMan;
         UserService _userService;
 
-        public ProfileManagerUT()
+        public UserManagerUT()
         {
             tu = new TestingUtils();
             userMan = new UserManager();
@@ -68,58 +68,6 @@ namespace UnitTest
         public void GetUserRating_Fail_UserNotInDB()
         {
 
-        }
-
-        [TestMethod]
-        public void GetUser_Pass()
-        {
-            //Arrange
-            var newUser = tu.CreateUser();
-            var userID = newUser.UserId;
-            UserProfile userPro = new UserProfile
-            {
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                UserName = newUser.UserName,
-                DoB = newUser.DoB,
-                City = newUser.City,
-                State = newUser.State,
-                Country = newUser.Country,
-                EventCreationCount = newUser.EventCreationCount,
-                Rating = profileMan.GetUserRating(userID)
-            };
-            var expected = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(JsonConvert.SerializeObject(userPro))
-            };
-
-            //Act
-            var actual = profileMan.GetUser(Convert.ToString(userID));
-            tu.DeleteUserFromDB(newUser);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-
-        }
-
-        [TestMethod]
-        public void GetUser_Fail_UserNotInDB()
-        {
-            //Arrange
-            User newUser = new User
-            {
-                UserId = _userService.GetNextUserID()
-            };
-            var expected = new HttpResponseMessage(HttpStatusCode.NotFound)
-            {
-                Content = new StringContent("User does not exist")
-            };
-
-            //Act
-            var actual = profileMan.GetUser(Convert.ToString(newUser.UserId));
-
-            //Assert
-            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
