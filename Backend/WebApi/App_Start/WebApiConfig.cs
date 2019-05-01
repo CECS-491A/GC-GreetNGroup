@@ -53,6 +53,14 @@ namespace WebApi
                 constraints: null,
                 handler: new HealthHandler()
             );
+
+            config.Routes.MapHttpRoute(
+                name: "LogOutRoute",
+                routeTemplate: "logout",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new LogOutHandler()
+            );
         }
     }
 }

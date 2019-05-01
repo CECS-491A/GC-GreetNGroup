@@ -1,16 +1,28 @@
 <template>
   <div class="UpdateProfile">
+    <div class="NotLoggedIn" v-if="!isLoggedIn.isLogin">
+      <v-alert
+      :value="loggedInMessage"
+      dismissible
+      type="error"
+      transition="scale-transition"
+    >
+    {{loggedInMessage}}
+    </v-alert>
+    </div>
+    <div class="UpdateProfileFields" v-if="isLoggedIn.isLogin">
     <h1>Update Profile</h1>
 
     <br />
     <v-alert
-      :value="message"
+      :value="httpMessage"
       dismissible
       type="success"
       transition="scale-transition"
     >
-    {{message}}
+    {{httpMessage}}
     </v-alert>
+
     <v-alert
       :value="errorMessage"
       dismissible
@@ -19,105 +31,139 @@
     >
     {{errorMessage}}
     </v-alert>
-    
     <br />
-
     <v-text-field
             name="FirstName"
             id="FirstName"
-            v-model="FirstName"
+            v-model="firstName"
             type="text"
-            label="First Name"/>
+            label="First Name"
+            :rules='fieldRules'/>
       <br />
       <v-text-field
             name="LastName"
             id="LastName"
-            v-model="LastName"
+            v-model="lastName"
             type="text"
-            label="Last Name"/>
+            label="Last Name"
+            :rules='fieldRules'/>
+      <br />
+      <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="DoB"
+            label="Date of Birth"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+            id="DoB"
+            :rules='fieldRules'
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          ref="picker"
+          v-model="DoB"
+          :max="new Date().toISOString().substr(0, 10)"
+          min="1900-01-01"
+          @change="updateDate"
+        ></v-date-picker>
+      </v-menu>
       <br />
       <v-text-field
             name="City"
             id="City"
-            v-model="City"
+            v-model="city"
             type="text"
-            label="City"/>
+            label="City"
+            :rules='fieldRules'/>
       <br />
       <v-text-field
             name="State"
             id="State"
-            v-model="State"
+            v-model="state"
             type="text"
-            label="State"/>
+            label="State"
+            :rules='fieldRules'/>
       <br />
       <v-text-field
             name="Country"
             id="Country"
-            v-model="this.profile.Country"
+            v-model="country"
             type="text"
-            label="Country"/>
+            label="Country"
+            :rules='fieldRules'/>
       <br />
       <v-btn color="success" v-on:click="UpdateProfile">Update Profile</v-btn>
+      </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { apiURL } from '@/const.js'
+import { store } from '@/router/request'
 
 export default {
   name: 'UpdateProfile',
   data () {
     return {
+      isLoggedIn: store.state,
+      fieldRules: [v => !!v || 'This field is required'],
+      menu: false,
+      firstName: null,
+      lastName: null,
+      DoB: '',
+      city: null,
+      state: null,
+      country: null,
+      httpMessage: null,
       errorMessage: null,
-      profile: {
-        FirstName: null,
-        LastName: null,
-        DoB: null,
-        City: null,
-        State: null,
-        Country: null,
-        JwtToken: null
-      },
-      message: null
+      loggedInMessage: 'You must be logged in to update your profile'
     }
   },
-  created () {
-    axios({
-      method: 'GET',
-      url: `${apiURL}` + 'user/update/getuser',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      data: {
-        jwtToken: localStorage.getItem('token')
-      }
-    })
-      .then(response => (this.profile = response.data))
-      .catch(e => { this.errorMessage = e.response.data })
+  watch: {
+    menu (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
   },
   methods: {
+    updateDate (date) {
+      this.$refs.menu.save(date)
+    },
     UpdateProfile: function () {
-      axios({
-        method: 'GET',
-        url: `${apiURL}` + 'user/update',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        data: {
-          FirstName: this.profile.FirstName,
-          LastName: this.profile.LastName,
-          DoB: this.profile.DoB,
-          City: this.profile.City,
-          State: this.profile.State,
-          Country: this.profile.Country,
-          JwtToken: null
-        }
-      })
-        .then(response => (this.message = response.data))
-        .catch(e => { this.errorMessage = e.response.data })
+      if (!this.firstName || !this.lastName || !this.DoB || !this.city || !this.state || !this.country) {
+        this.errorMessage = 'Fields cannot be empty'
+      } else {
+        axios({
+          method: 'POST',
+          url: `${apiURL}` + 'profile/update',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+          },
+          data: {
+            FirstName: this.firstName,
+            LastName: this.lastName,
+            DoB: this.DoB,
+            City: this.city,
+            State: this.state,
+            Country: this.country,
+            JwtToken: localStorage.getItem('token')
+          }
+        })
+          .then(response => (this.message = response.data))
+          .catch(e => { this.errorMessage = e.response.data })
+      }
     }
   }
 }

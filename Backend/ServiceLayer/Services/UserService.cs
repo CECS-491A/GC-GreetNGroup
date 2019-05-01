@@ -12,14 +12,12 @@ namespace Gucci.ServiceLayer.Services
 {
     public class UserService : IUserService
     {
-        private ICryptoService _cryptoService;
         private ILoggerService _gngLoggerService;
         private Configurations configurations;
         private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public UserService()
         {
-            _cryptoService = new CryptoService(AppLaunchSecretKey);
             _gngLoggerService = new LoggerService();
             configurations = new Configurations();
         }

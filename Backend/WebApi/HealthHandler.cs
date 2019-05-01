@@ -36,13 +36,14 @@ namespace WebApi
                     _db.SaveChanges();
 
                     Ping pingSender = new Ping();
-                    PingOptions options = new PingOptions();
+                    PingOptions options = new PingOptions
+                    {
+                        // Use the default Ttl value which is 128,
+                        // but change the fragmentation behavior.
+                        DontFragment = true
+                    };
 
-                    // Use the default Ttl value which is 128,
-                    // but change the fragmentation behavior.
-                    options.DontFragment = true;
-                    
-                    
+
                     byte[] buffer = Encoding.ASCII.GetBytes(data);
                     PingReply reply = pingSender.Send(awsInstanceIPAddress, timeout, buffer, options);
                     if (reply.Status == IPStatus.Success)
