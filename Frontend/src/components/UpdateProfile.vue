@@ -1,5 +1,16 @@
 <template>
   <div class="UpdateProfile">
+    <div class="NotLoggedIn" v-if="!isLoggedIn.isLogin">
+      <v-alert
+      :value="loggedInMessage"
+      dismissible
+      type="error"
+      transition="scale-transition"
+    >
+    {{loggedInMessage}}
+    </v-alert>
+    </div>
+    <div class="UpdateProfileFields" v-if="isLoggedIn.isLogin">
     <h1>Update Profile</h1>
 
     <br />
@@ -21,7 +32,6 @@
     {{errorMessage}}
     </v-alert>
     <br />
-
     <v-text-field
             name="FirstName"
             id="FirstName"
@@ -94,17 +104,20 @@
             :rules='fieldRules'/>
       <br />
       <v-btn color="success" v-on:click="UpdateProfile">Update Profile</v-btn>
+      </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { apiURL } from '@/const.js'
+import { store } from '@/router/request'
 
 export default {
   name: 'UpdateProfile',
   data () {
     return {
+      isLoggedIn: store.state,
       fieldRules: [v => !!v || 'This field is required'],
       menu: false,
       firstName: null,
@@ -114,7 +127,8 @@ export default {
       state: null,
       country: null,
       httpMessage: null,
-      errorMessage: null
+      errorMessage: null,
+      loggedInMessage: 'You must be logged in to update your profile'
     }
   },
   watch: {

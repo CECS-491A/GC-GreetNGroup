@@ -26,12 +26,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { apiURL } from '@/const.js'
-import { store } from '@/router/request.js'
+import { store, isProfileEnabled } from '@/router/request.js'
 
 export default {
-  name: 'Home',
+  name: 'Login',
   data () {
     return {
       loading: false,
@@ -41,19 +39,7 @@ export default {
   },
   created () {
     this.loading = true
-
-    axios({
-      method: 'GET',
-      url: `${apiURL}/profile/isprofileactivated/` + this.$route.params.token,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      }
-    })
-      .then(response => { this.isValidToken = response.data })
-      .catch(e => { this.isValidToken = e.data })
-
-    if (this.isTokenValid) {
+    if (isProfileEnabled === true) {
       localStorage.setItem('token', this.$route.params.token)
       store.state.isLogin = true
       store.getEmail()

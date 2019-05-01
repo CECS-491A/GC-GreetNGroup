@@ -17,7 +17,11 @@ export default {
     }
   },
   created () {
-    isProfileEnabled()
+    if (localStorage.getItem('token') !== null) {
+      if (isProfileEnabled() !== true) {
+        this.$router.push('/updateprofile')
+      }
+    }
   }
 }
 </script>

@@ -44,13 +44,8 @@ function isProfileEnabled () {
     },
   })
   .then(response =>{
-    if(response.data !== true){
-      this.$router.push('/updateprofile')
-    }
+    return response.data
   })
-  .catch(
-    this.$router.push('/')
-  )
 }
 
 export{
