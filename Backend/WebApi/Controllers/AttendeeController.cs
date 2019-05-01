@@ -1,4 +1,5 @@
 ﻿using Gucci.ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace WebApi.Controllers
     public class AttendeeController : ApiController
     {
         private AttendeesService attendeeService = new AttendeesService();
+        private ILoggerService _gngLoggerService = new LoggerService();
+
         [HttpGet]
         [Route("api/attendee/{eventid}")]
         public IHttpActionResult GetAttendeesList(int eventId)
@@ -23,7 +26,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
-                //gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", "https://www.greetngroup.com/attendee/" + eventId, e.ToString());
                 return BadRequest();
             }
         }

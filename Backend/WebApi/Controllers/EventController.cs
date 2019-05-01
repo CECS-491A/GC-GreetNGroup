@@ -5,6 +5,7 @@ using Gucci.ServiceLayer.Requests;
 using System.Net;
 using Gucci.ManagerLayer.SearchManager;
 using Gucci.ServiceLayer.Interface;
+using System;
 
 namespace WebApi.Controllers
 {
@@ -30,9 +31,9 @@ namespace WebApi.Controllers
                 //gngLogManager.LogGNGSearchAction(userId.ToString(), id.ToString(), ip);
                 return Ok(e);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
-                //gngLogManager.LogBadRequest(userId.ToString(), ip, url, e.ToString());
+                _gngLoggerService.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
         }
@@ -59,7 +60,7 @@ namespace WebApi.Controllers
                 }
                 
             }
-            catch(HttpRequestException e)
+            catch(Exception e)
             {
                 _gngLoggerService.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
                 return BadRequest();
@@ -86,7 +87,7 @@ namespace WebApi.Controllers
                     return Content(HttpStatusCode.Conflict, "The update was unsuccessful");
                 }
             }
-            catch(HttpResponseException e)
+            catch(Exception e)
             {
                 _gngLoggerService.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
                 return BadRequest();
@@ -96,11 +97,11 @@ namespace WebApi.Controllers
         /*
         [HttpGet]
         [Route("api/event/{eventid}/delete")]
-        public IHttpActionResult DeleteEvent([FromBody] int eventId)
+        public IHttpActionResult DeleteEvent([FromBody] int eventId, int userId, string ip)
         {
             try
             {
-                var isSuccessfulDelete = eventService.DeleteEvent(eventId);
+                var isSuccessfulDelete = eventService.DeleteEvent(eventId, userId, ip);
                 if(isSuccessfulDelete == true)
                 {
 
@@ -113,7 +114,8 @@ namespace WebApi.Controllers
             }
             catch(HttpResponseException e)
             {
-                _gngLoggerService.LogBadRequest("", "", "", e.ToString());
+                _gngLoggerService.LogBadRequest(userId.ToString(), ip, "https://www.greetngroup.com/event/" +
+                    eventId + "/delete", e.ToString());
                 return BadRequest();
             }
         }
@@ -138,10 +140,10 @@ namespace WebApi.Controllers
 
                 return Ok(eventFound);
             }
-            catch (HttpRequestException error)
+            catch (Exception e)
             {
                 // logs error -- does not care about ip or userId
-                // gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", "https://greetngroup.com/search", e.ToString());
                 return BadRequest();
             }
         }
@@ -162,10 +164,10 @@ namespace WebApi.Controllers
 
                 return Ok(tags);
             }
-            catch (HttpRequestException error)
+            catch (Exception e)
             {
                 // logs error -- does not care about ip or userId
-                // gngLogManager.LogBadRequest("", "", "https://greetngroup.com/search", e.ToString());
+                _gngLoggerService.LogBadRequest("N/A", "N/A", "https://greetngroup.com/search", e.ToString());
                 return BadRequest();
             }
         }

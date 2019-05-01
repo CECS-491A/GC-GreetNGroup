@@ -214,7 +214,7 @@ namespace Gucci.ServiceLayer.Services
             }
             // Exception caught specifically as it is used in the event that the context 
             // doesnt exist or is broken or fails to dispose
-            catch (ObjectDisposedException od) 
+            catch (Exception od) 
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;

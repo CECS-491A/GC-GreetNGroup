@@ -155,14 +155,12 @@ namespace Gucci.ServiceLayer.Services
         // Finds events byn the state they are hosted within
         public List<Event> FindEventsByState(string state)
         {
-            var resultList = new List<Event>();
-
             try
             {
                 using (var ctx = new GreetNGroupContext())
                 {
                     // Finds events where state location exists within event location of event
-                    resultList = ctx.Events.Where(events => events.EventLocation.Contains(state)).ToList();
+                    var resultList = ctx.Events.Where(events => events.EventLocation.Contains(state)).ToList();
 
                     // Sorts result by StartDate
                     resultList.Sort((event1, event2) => DateTime.Compare(event1.StartDate, event2.StartDate));
