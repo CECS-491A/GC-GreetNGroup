@@ -1,7 +1,5 @@
 ﻿using Gucci.DataAccessLayer.Models;
-using System;
 using System.Collections.Generic;
-using Gucci.DataAccessLayer.Models;
 
 namespace Gucci.ServiceLayer.Interface
 {
@@ -13,5 +11,7 @@ namespace Gucci.ServiceLayer.Interface
         double CalculateAverageSessionTime(List<GNGLog> session);
         void GetEntryLogswithURL(List<GNGLog> logs, string url);
         void GetExitLogswithURL(List<GNGLog> logs, string url);
+        List<GNGLog> GetLogsForMonthAndYear(List<GNGLog> logs, string month, int year);
+        List<GNGLog> PairStartAndEndLogs(List<GNGLog> startLogs, List<GNGLog> endLogs);
     }
 }
