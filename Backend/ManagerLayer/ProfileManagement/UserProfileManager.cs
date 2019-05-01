@@ -60,7 +60,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
                     FirstName = retrievedUser.FirstName,
                     LastName = retrievedUser.LastName,
                     UserName = retrievedUser.UserName,
-                    DoB = retrievedUser.DoB,
+                    DoB = retrievedUser.DoB.ToString("MMM dd, yyyy"),
                     City = retrievedUser.City,
                     State = retrievedUser.State,
                     Country = retrievedUser.Country,

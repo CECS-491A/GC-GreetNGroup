@@ -17,14 +17,14 @@
     {{errorMessage}}
     </v-alert>
   <div v-if="!userRetrieved">
-  <h1>Finding user</h1>
+
   </div>
   <div v-if="userRetrieved">
     <h1>{{this.json.FirstName + ' ' + this.json.LastName }}</h1>
     <br />
-    <h1>Stats:</h1>
-    <h2>Events Created:{{this.json.EventCreationCount}}</h2>
-    <h2 id="rating">Rating:{{this.json.Rating}}</h2> 
+    <h1>Stats: </h1>
+    <h3>Events Created: {{this.json.EventCreationCount}}</h3>
+    <h3 id="rating">Rating: {{this.json.Rating}}</h3> 
 
     <v-flex xs12 sm3 id="thumbsUp">
             <v-btn flat icon color="green" v-on:click="submitRating" value="1">
@@ -38,9 +38,9 @@
           </v-flex>
           
     <br />
-    <h1>Birthday: {{this.json.DoB}}</h1>
+    <h2>Birthday: {{this.json.DoB}}</h2>
     <br />
-    <h1>Residence: {{this.json.city + ', ' + this.json.State + ', ' + this.json.Country}}</h1>
+    <h2>Residence: {{this.json.City + ', ' + this.json.State + ', ' + this.json.Country}}</h2>
     <br />
     </div>
   </div>
@@ -59,8 +59,7 @@ export default {
       message: null,
       errorMessage: null,
       userID: this.$route.params.id,
-      json: [],
-      FirstName: null
+      json: []
     }
   },
   created () {
@@ -76,33 +75,36 @@ export default {
       }
     })
       .then(response => (this.json = response.data), this.userRetrieved = true)
-      .catch(e => { this.errorMessage = e.response.data })
+      .catch(e => { this.errorMessage = e.response.data, this.userRetrieved = false })
   },
   methods: {
-    /*
     submitRating: function (value) {
-      axios({
-        method: 'POST',
-        url: `${apiURL}/user/` + this.userID + '/rate',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        data: {
-          jwtToken: this.localStorage.getItem('Token'),
-          rating: value
-        }
-      })
-        .then(response => (this.json = response.data))
-        .catch(e => { this.errorMessage = e.response.data })
+      if (localStorage.getItem('token') !== null) {
+        axios({
+          method: 'POST',
+          url: `${apiURL}/user/` + this.userID + '/rate',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+          },
+          data: {
+            jwtToken: localStorage.getItem('Token'),
+            rating: value
+          }
+        })
+          .then(response => (this.json = response.data))
+          .catch(e => { this.errorMessage = e.response.data })
+      } else {
+        this.errorMessage = 'Must be logged in to rate user'
+      }
     }
-    */ 
   }
 }
 </script>
 
 <style>
 .Profile{
+  text-align: left;
   width: 70%;
   margin: 1px auto;
 }
