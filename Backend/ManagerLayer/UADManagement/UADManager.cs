@@ -8,70 +8,83 @@ namespace Gucci.ManagerLayer.UADManagement
 {
     public class UADManager
     {
-        private static List<GNGLog> loglist = new List<GNGLog>();
-        LoggerService _gngLoggerService;
-        UADService _uadService;
+        private List<GNGLog> loglist = new List<GNGLog>();
+        ILoggerService _gngLoggerService;
+        IUADService _uadService;
         UserService _userService;
+        ISortService _sortService;
         private static List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-
+        private List<UADObject> uadObjects = new List<UADObject>();
         public UADManager()
         {
             _gngLoggerService = new LoggerService();
             _uadService = new UADService();
             _userService = new UserService();
+            _sortService = new SortService();
             loglist = _gngLoggerService.ReadLogs();
         }
 
         /// <summary>
         /// Function that returns the number of registered accounts compared to the number of logins for a month
         /// </summary>
-        /// <param name="month">specific month</param>
-        /// <returns>the number of logins vs registered users for a month</returns>
-        public string GetLoginComparedToRegistered(string month, int year)
+        /// <param name="month">referenced month</param>
+        /// <param name="year">referenced year</param>
+        /// <returns>A list of objects that hold number of logins and registered users for a month</returns>
+        public List<UADObject> GetLoginComparedToRegistered(string month, int year)
         {
-            string results = "";
-            var loginID = "1004";
+            var loginID = "EntryToWebsite";
             loglist = _uadService.GetLogsForMonthAndYear(loglist, month, year);
             var registered = _userService.GetRegisteredUserCount();
             var loginCount = _uadService.GetNumberofLogsID(loglist, loginID);
-            results = "Logins: " + loginCount +
-                                    "\nRegistered Accounts: " + registered;
-            return results;
+
+            var loginUADObject = new UADObject
+            {
+                InfoType = "Logins",
+                Value = loginCount.ToString()
+            };
+            var registeredUADObject = new UADObject
+            {
+                InfoType = "Registered",
+                Value = registered.ToString()
+            };
+
+            uadObjects.Add(loginUADObject);
+            uadObjects.Add(registeredUADObject);
+            return uadObjects;
         }
 
         /// <summary>
         /// Function that returns the average session duration for a month
         /// </summary>
         /// <returns>the average session duration for a month</returns>
-        public string GetAverageSessionDuration(string month, int year)
+        public UADObject GetAverageSessionDuration(string month, int year)
         {
-            string[] logID = { "1004", "1005" };
+            string[] logID = { "EntryToWebsite", "ExitFromWebsite" };
             var entryToWebsite = new List<GNGLog>(loglist);
             var exitFromWebsite = new List<GNGLog>(loglist);
             var sessions = new List<GNGLog>();
-            string results = "";
+            var average = 0.0;
 
             // Get two seperate logs 
             entryToWebsite = _uadService.GetLogsForMonthAndYear(entryToWebsite, month, year);
             exitFromWebsite = _uadService.GetLogsForMonthAndYear(exitFromWebsite, month, year);
+
             // Get logs for when they leave the website and for when they enter it
             entryToWebsite = _uadService.GetLogswithID(entryToWebsite, logID[0]);
             exitFromWebsite = _uadService.GetLogswithID(exitFromWebsite, logID[1]);
 
-           
             // Pair sessions beginning and ending logs
             sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
-            if (sessions.Count == 0)
+            if (sessions.Count > 0)
             {
-                results = "Average Session Time for " + month + ": " + 0;
+                average = _uadService.CalculateAverageSessionTime(sessions);
             }
-            else
+            var sessionUADObject = new UADObject
             {
-                var average = _uadService.CalculateAverageSessionTime(sessions);
-                string sAverage = String.Format("{0:0.00}", average);
-                results = "Average Session Time for " + month + ": " + sAverage;
-            }
-            return results;
+                InfoType = "Average Session Duration",
+                Value = average.ToString()
+            };
+            return sessionUADObject;
         }
 
         /// <summary>
@@ -79,12 +92,10 @@ namespace Gucci.ManagerLayer.UADManagement
         /// </summary>
         /// <param name="month">specific month</param>
         /// <returns>top 5 page used for a month</returns>
-        public string GetTop5AveragePageSession(string month, int year)
+        public List<UADObject> GetTop5AveragePageSession(string month, int year)
         {
-            var urlPages = new List<string>() { "https://www.greetngroup.com/create", "https://www.greetngroup.com/join", "https://www.greetngroup.com/searchUser", "https://www.greetngroup.com/searchEvent", "https://www.greetngroup.com/help", "https://www.greetngroup.com/faq" };
+            var urlPages = new List<string>() { "https://www.greetngroup.com/createevent", "https://www.greetngroup.com", "https://www.greetngroup.com/search", "https://www.greetngroup.com/findeventsforme", "https://www.greetngroup.com/help", "https://www.greetngroup.com/faq" };
             var averageTimeSpent = new List<double>() ;
-            string results = "";
-            var monthValid = _uadService.IsMonthValid(month);
 
             // For every URL in the list get the average time spent on it
             for (int i = 0; i < urlPages.Count; i++)
@@ -116,10 +127,32 @@ namespace Gucci.ManagerLayer.UADManagement
                 }    
             }
             //Sort Pages view time by shortest to longest
-            _uadService.QuickSortDouble(averageTimeSpent, urlPages);
-            results = _uadService.FormatTop5Pages(urlPages, averageTimeSpent);
-
-            return results;
+            _sortService.QuickSortDouble(averageTimeSpent, urlPages);
+            if (urlPages.Count >= 5)
+            {
+                for (int i = urlPages.Count - 1; i >= urlPages.Count - 5; i--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        InfoType = urlPages[i],
+                        Value = averageTimeSpent[i].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            else
+            {
+                for (int i = urlPages.Count - 1; i >= 0; i--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        InfoType = urlPages[i],
+                        Value = averageTimeSpent[i].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            return uadObjects;
         }
 
         /// <summary>
@@ -127,27 +160,46 @@ namespace Gucci.ManagerLayer.UADManagement
         /// </summary>
         /// <param name="month">specific month</param>
         /// <returns>the top 5 most used features</returns>
-        public string GetTop5MostUsedFeature(string month, int year)
+        public List<UADObject> GetTop5MostUsedFeature(string month, int year)
         {
             loglist = _uadService.GetLogsForMonthAndYear(loglist, month, year);
+            // List of features wanting to be analyzed
             var features = new List<String>() { "EventCreated", "EventJoined", "SearchAction", "FindEventForMe", "UserRatings"};
             var timesFeaturedUsed = new List<int>() {};
-            //Dictionary<string, int> listOfIDs = _gngLoggerService.GetLogIDs();
-            var result = "";
-
             // For each feature get the amount of times they were used
             for (int i = 0; i < features.Count; i++)
             {
                 // Get the log id for the feature
-                //listOfIDs.TryGetValue(features[i], out int clickLogID);
-                //var logID = clickLogID.ToString();
-                //var timesUsed = _uadService.GetNumberofLogsID(loglist, logID);
-                //timesFeaturedUsed.Add(timesUsed);
+                var timesUsed = _uadService.GetNumberofLogsID(loglist, features[i]);
+                timesFeaturedUsed.Add(timesUsed);
             }
-            _uadService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
-            result = _uadService.FormatTop5Features(features, timesFeaturedUsed);
-
-            return result;
+            // Sort Features from 
+            _sortService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
+            if (features.Count >= 5)
+            {
+                for (int i = features.Count - 1; i >= features.Count - 5; i--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        InfoType = features[i],
+                        Value = timesFeaturedUsed[i].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            else
+            {
+                for (int i = features.Count - 1; i >= 0; i--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        InfoType = features[i],
+                        Value = timesFeaturedUsed[i].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            return uadObjects;
         }
 
         /// <summary>
@@ -155,23 +207,19 @@ namespace Gucci.ManagerLayer.UADManagement
         /// </summary>
         /// <param name="month">specific month to start from</param>
         /// <returns>the average session duration over six months</returns>
-        public string GetAverageSessionMonthly(string month, int year)
+        public List<UADObject> GetAverageSessionMonthly(string month, int year)
         {
-            var logID = new List<string>() { "1004", "1005" };
-            var averages = new List<string>() { };
-            var monthsUsed = new List<string> { };
-            var monthIndex = 0;
-            var result = "";
+            var logID = new List<string>() { "EntryToWebsite", "ExitFromWebsite" };
+            var averages = new List<string>();
+            var monthIndex = months.IndexOf(month); 
 
-            for (int index = 0; index < 6; index++)
+            var entryToWebsite = new List<GNGLog>();
+            var exitFromWebsite = new List<GNGLog>();
+            var sessions = new List<GNGLog>();
+            for (int i = 0; i < 6; i++)
             {
-                var entryToWebsite = new List<GNGLog>(loglist);
-                var exitFromWebsite = new List<GNGLog>(loglist);
-                var sessions = new List<GNGLog>();
-                if (monthIndex >= 0)
-                {
-                    monthIndex = months.IndexOf(month) - index;
-                }
+                entryToWebsite.AddRange(loglist);
+                exitFromWebsite.AddRange(loglist);
                 if (monthIndex < 0)
                 {
                     monthIndex = monthIndex + months.Count;
@@ -183,8 +231,7 @@ namespace Gucci.ManagerLayer.UADManagement
                 // Get exit from website logs
                 exitFromWebsite = _uadService.GetLogsForMonthAndYear(exitFromWebsite, months[monthIndex], year);
                 exitFromWebsite = _uadService.GetLogswithID(exitFromWebsite, logID[1]);
-
-                monthsUsed.Add(months[monthIndex]);
+                // Add the currently used month
                 sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
                 if (sessions.Count == 0)
                 {
@@ -193,38 +240,32 @@ namespace Gucci.ManagerLayer.UADManagement
                 else
                 {
                     var average = _uadService.CalculateAverageSessionTime(sessions);
-                    string sAverage = String.Format("{0:0.00}", average);
-                    averages.Add(sAverage);
+                    averages.Add(average.ToString());
                 }
+                var sessionUADObject = new UADObject
+                {
+                    InfoType = months[monthIndex],
+                    Value = averages[i].ToString()
+                };
+                uadObjects.Add(sessionUADObject);
+                monthIndex--;
+                // Clear List for next month
+                entryToWebsite.Clear();
+                exitFromWebsite.Clear();
+                sessions.Clear();
             }
-            result =
-                                    monthsUsed[0] + ": " + averages[0] + " " +
-                                    monthsUsed[1] + ": " + averages[1] + " " +
-                                    monthsUsed[2] + ": " + averages[2] + " " +
-                                    monthsUsed[3] + ": " + averages[3] + " " +
-                                    monthsUsed[4] + ": " + averages[4] + " " +
-                                    monthsUsed[5] + ": " + averages[5];
-
-            return result;
+            return uadObjects;
         }
 
         /// <summary>
         /// Function that returns the number of logins over six months
         /// </summary>
         /// <returns>number of logins over six months</returns>
-        public string GetLoggedInMonthly(string month, int year)
+        public List<UADObject> GetLoggedInMonthly(string month, int year)
         {
-            var logins = new List<int>() { };
-            var monthsUsed = new List<string> {};
-            var monthIndex = 0;
-            var result = "";
-
-            for (int index = 0; index < 6; index++)
+            var monthIndex = months.IndexOf(month);
+            for (int i = 0; i < 6; i++)
             {
-                if (monthIndex >= 0)
-                {
-                    monthIndex = months.IndexOf(month) - index;
-                }
                 if (monthIndex < 0)
                 {
                     monthIndex = monthIndex + months.Count;
@@ -232,18 +273,16 @@ namespace Gucci.ManagerLayer.UADManagement
                 }
                 loglist = _gngLoggerService.ReadLogs();
                 loglist = _uadService.GetLogsForMonthAndYear(loglist, months[monthIndex], year);
-                monthsUsed.Add(months[monthIndex]);
-                var loginCount = _uadService.GetNumberofLogsID(loglist, "1004");
-                logins.Add(loginCount);
+                var loginCount = _uadService.GetNumberofLogsID(loglist, "EntryToWebsite");
+                var loginUADObject = new UADObject
+                {
+                    InfoType = months[monthIndex],
+                    Value = loginCount.ToString()
+                };
+                uadObjects.Add(loginUADObject);
+                monthIndex--;
             }
-            result =
-                                    monthsUsed[0] + ": " + logins[0] + " " +
-                                    monthsUsed[1] + ": " + logins[1] + " " +
-                                    monthsUsed[2] + ": " + logins[2] + " " +
-                                    monthsUsed[3] + ": " + logins[3] + " " +
-                                    monthsUsed[4] + ": " + logins[4] + " " +
-                                    monthsUsed[5] + ": " + logins[5];
-        return result;
+            return uadObjects;
         }
     }
 

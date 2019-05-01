@@ -66,6 +66,7 @@
     <Compile Include="GNGArchiverTest\ArchiverTests.cs" />
     <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="JWTTest\JWTTests.cs" />
+    <Compile Include="SortTest\SortTest.cs" />
     <Compile Include="UserManagerUT.cs" />
     <Compile Include="LoginUT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,10 +76,16 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="UADTest\TestLogs\FailedLogs\SessionTimes1.json" />
-    <None Include="UADTest\TestLogs\PassLogs\NumberofLogsIDTest1.json" />
-    <None Include="UADTest\TestLogs\PassLogs\NumberofLogsIDTest2.json" />
-    <None Include="UADTest\TestLogs\PassLogs_SessionTimes\SessionTimes1.json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-01-2019_gnglog .json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-02-2019_gnglog.json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-03-2019_gnglog.json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-04-2019_gnglog.json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-11-2018_gnglog.json" />
+    <None Include="UADTest\TestLogs\ManagerLogs\22-12-2018_gnglog.json" />
+    <None Include="UADTest\TestLogs\ServiceLogs\FailedLogs\SessionTimes1.json" />
+    <None Include="UADTest\TestLogs\ServiceLogs\PassLogs\NumberofLogsIDTest1.json" />
+    <None Include="UADTest\TestLogs\ServiceLogs\PassLogs\NumberofLogsIDTest2.json" />
+    <None Include="UADTest\TestLogs\ServiceLogs\PassLogs_SessionTimes\SessionTimes1.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\Gucci.DataAccessLayer.csproj">
@@ -94,6 +101,7 @@
       <Name>Gucci.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

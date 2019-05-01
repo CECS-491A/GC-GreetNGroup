@@ -1,0 +1,72 @@
+[
+  {
+    "logID": "EntryToWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 9:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "1/22/2019 10:48:35 AM",
+    "description": "https://www.greetngroup.com to https://www.greetngroup.com/createevent"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "1/22/2019 10:51:31 AM",
+    "description": "https://www.greetngroup.com/createevent to https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 12:56:14 PM",
+    "description": "1 exited website from https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 3:36:14 PM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "1/22/2019 4:48:35 PM",
+    "description": "https://www.greetngroup.com to https://www.greetngroup.com/createevent"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "1/22/2019 9:51:31 PM",
+    "description": "https://www.greetngroup.com/createevent to https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 11:56:14 PM",
+    "description": "1 exited website from https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 10:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "1/22/2019 11:49:42 AM",
+    "description": "1 exited website from https://www.greetngroup.com"
+  }
+]
