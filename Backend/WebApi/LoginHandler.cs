@@ -12,6 +12,8 @@ namespace WebApi
 {
     public class LoginHandler : DelegatingHandler
     {
+        private const string redirectBaseUrl = "https://greetngroup.com/login/";
+
         protected override Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -35,11 +37,12 @@ namespace WebApi
             }
             else
             {
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.Redirect)
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.SeeOther)
                 {
-                    Content = new StringContent("https://greetngroup.com/login/" + response)
+                    Content = new StringContent(redirectBaseUrl + response)
                 };
                 var tsc = new TaskCompletionSource<HttpResponseMessage>();
+                httpResponse.Headers.Location = new Uri(redirectBaseUrl + response);
                 tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
                 return tsc.Task;
             }

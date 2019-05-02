@@ -15,6 +15,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
 
     public class UserProfileManager
     {
+        private readonly DateTime requiredAgeOfUser = DateTime.Now.AddYears(-18); // Must be 18 years old to use this application
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
@@ -94,6 +95,15 @@ namespace Gucci.ManagerLayer.ProfileManagement
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
                 {
                     Content = new StringContent("Session is invalid")
+                };
+                return httpResponseFail;
+            }
+
+            if(request.DoB > requiredAgeOfUser)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                {
+                    Content = new StringContent("This software is intended for persons over 18 years of age.")
                 };
                 return httpResponseFail;
             }
