@@ -7,11 +7,20 @@
 </template>
 
 <script>
+import { isProfileEnabled } from '@/router/request'
+
 export default {
+  
   name: 'Welcome',
   data () {
     return {
-      
+    }
+  },
+  created () {
+    if (localStorage.getItem('token') !== null) {
+      if (isProfileEnabled() !== true) {
+        this.$router.push('/updateprofile')
+      }
     }
   }
 }

@@ -16,7 +16,7 @@ namespace Gucci.ServiceLayer.Model
         [Required]
         public string UserName { get; set; }
         [Required]
-        public DateTime DoB { get; set; }
+        public string DoB { get; set; }
         [Required]
         public string City { get; set; }
         [Required]

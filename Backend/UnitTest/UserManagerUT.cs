@@ -1,84 +1,97 @@
 ﻿using Gucci.DataAccessLayer.Tables;
-using Gucci.ServiceLayer.Requests;
+using Gucci.ManagerLayer.ProfileManagement;
+using Gucci.ServiceLayer.Model;
 using Gucci.ServiceLayer.Services;
-using ManagerLayer.UserManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
+using ManagerLayer.UserManagement;
+
 namespace UnitTest
 {
     [TestClass]
     public class UserManagerUT
     {
-        
+        TestingUtils tu;
+        UserManager userMan;
+        UserService _userService;
+
+        public UserManagerUT()
+        {
+            tu = new TestingUtils();
+            userMan = new UserManager();
+            _userService = new UserService();
+        }
+
         [TestMethod]
-        public void DeleteUser_Pass()
+        public void DoesUserExist_Pass()
         {
             //Arrange
-            UserManager userMan = new UserManager("D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE");
-            UserService _userService = new UserService();
-            SSOUserRequest request = new SSOUserRequest();
+            var newUser = tu.CreateUser();
+            var userID = newUser.UserId;
+            var expected = true;
 
-            var user = new User(9999, null, null, "julianpoyo+22@gmail.com", null, null, null, DateTime.Now, false);
+            //Act
+            var actual = userMan.DoesUserExists(userID);
+            tu.DeleteUserFromDB(newUser);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void DoesUserExist_Fail_UserNotInDB()
+        {
+            //Arrange
+            var newUser = new User
+            {
+                UserId = _userService.GetNextUserID()
+            };
+            var expected = false;
+
+            //Act
+            var actual = userMan.DoesUserExists(newUser.UserId);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetUserRating_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void GetUserRating_Fail_UserNotInDB()
+        {
+
+        }
+
+        [TestMethod]
+        public void UpdateUserProfile_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void UpdateUserProfile_Fail()
+        {
+
+        }
+
+        [TestMethod]
+        public void GetEmail_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void GetEmail_Fail()
+        {
             
-            request.email = "julianpoyo+22@gmail.com";
-            request.signature = "4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=";
-            request.ssoUserId = "0743cd2c-fec3-4b79-a5b6-a6c52a752c71";
-            request.timestamp = "1552766624957";
-
-            var expected = true;
-
-            //Act
-            var actual = userMan.DeleteUserSSO(request);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
         }
-
-        [TestMethod]
-        public void DeleteUser_Fail_InvalidRequest()
-        {
-            //Arrange
-            UserManager userMan = new UserManager("D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE");
-            UserService _userService = new UserService();
-            SSOUserRequest request = new SSOUserRequest();
-
-            var user = new User(9999, null, null, "julianpoyo+22@gmail.com", null, null, null, DateTime.Now, false);
-            request.email = "julianpoyo+22@gmail.com";
-            request.signature = "4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=";
-            request.ssoUserId = "0743cd2c-fec3-4b79-a5b6-a6c52a752c71";
-            request.timestamp = "1552766624957";
-
-            var expected = true;
-
-            //Act
-            var actual = userMan.DeleteUserSSO(request);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void DeleteUser_Fail_UserNotInDB()
-        {
-            //Arrange
-            UserManager userMan = new UserManager("D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE");
-            UserService _userService = new UserService();
-            SSOUserRequest request = new SSOUserRequest();
-
-            var user = new User(9999, null, null, "julianpoyo+22@gmail.com", null, null, null, DateTime.Now, false);
-            request.email = "julianpoyo+22@gmail.com";
-            request.signature = "4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=";
-            request.ssoUserId = "0743cd2c-fec3-4b79-a5b6-a6c52a752c71";
-            request.timestamp = "1552766624957";
-
-            var expected = true;
-
-            //Act
-            var actual = userMan.DeleteUserSSO(request);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-        
     }
 }

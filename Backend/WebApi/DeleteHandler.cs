@@ -34,7 +34,7 @@ namespace WebApi
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent("Invalid Signature")
+                    Content = new StringContent("User has not been deleted")
                 };
                 var tsc = new TaskCompletionSource<HttpResponseMessage>();
                 tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
