@@ -11,12 +11,14 @@ namespace ManagerLayer.UserManagement
         private readonly string AppLaunchSecretKey;
         private IUserService _userService;
         private ICryptoService _cryptoService;
+        private ILoggerService _gngLoggerService;
 
         public UserManager()
         {
             AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
             _userService = new UserService();
             _cryptoService = new CryptoService(AppLaunchSecretKey);
+            _gngLoggerService = new LoggerService();
         }
 
         public UserManager(string SSOLaunchKey)
@@ -50,7 +52,7 @@ namespace ManagerLayer.UserManagement
             }
             catch (Exception ex)
             {
-                //log
+                _gngLoggerService.LogGNGInternalErrors(ex.ToString());
                 return false;
             }
         }

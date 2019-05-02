@@ -13,7 +13,7 @@ import Login from '@/components/Login'
 import Welcome from '@/components/Welcome'
 import Logout from '@/components/Logout'
 import EventPage from '@/components/EventPage'
-// import Axios from 'axios'
+import Axios from 'axios'
 
 Vue.use(Router)
 
@@ -47,7 +47,11 @@ const router = new Router({
     {
       path: '/createevent',
       name: 'createevent',
-      component: CreateEvent
+      component: CreateEvent,
+      meta: {
+        isLoggedIn: true,
+        canCreateEvents: true
+      }
     },
     {
       path: '/helloworld',
@@ -81,7 +85,10 @@ const router = new Router({
     {
       path: '/logout',
       name: 'logout',
-      component: Logout
+      component: Logout,
+      meta:{
+        isLoggedIn: true
+      }
     },
     {
       path: '/eventpage/:name',
@@ -90,21 +97,43 @@ const router = new Router({
     }
   ]
 })
-/*
+
 router.beforeEach((to, from, next) => {
+  Axios.post('http://localhost:62008/api/logclicks', {
+    jwt: localStorage.getItem('token'),
+    ip: localStorage.getItem('ip'),
+    startPoint: from.toString(),
+    endPoint: to.toString()
+  })
   if (to.matched.some(value => value.meta.isLoggedIn)) {
-    if (localStorage.getItem('JWT') == null){
-      next('/testlogin')
+    if (localStorage.getItem('token') == null){
+      next('/')
     }
     else{
       if (to.method.some(value => value.meta.isAdmin)) {
-        var canView = async() => {
-          Axios.post('http://localhost:50884/api/JWT/check', {
-            jwt: localStorage.getItem('JWT'),
+        let canView = async() => {
+          Axios.post('http://localhost:62008/api/JWT/check', {
+            jwt: localStorage.getItem('token'),
             claimsToCheck: ['isAdmin']
+          }).then((response) => {
+            canView = response
           })
         }
         if(canView == true) {
+          next()
+        }
+        else{
+          next('/')
+        }
+      }
+      if(to.method.some(value => value.meta.canCreateEvents)) {
+        let canMakeEvents = async() => {
+          Axios.post('http://http://localhost:62008/api/JWT/check', {
+            jwt: localStorage.getItem('token'),
+            claimsToCheck: ['canCreateEvents']
+          })
+        }
+        if(canMakeEvents == true) {
           next()
         }
         else{
@@ -120,5 +149,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-*/
+
 export default router
