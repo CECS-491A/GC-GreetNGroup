@@ -36,12 +36,32 @@ const store = {
 
 function isProfileEnabled () {
   return axios({
-    method: 'GET',
-    url: `${apiURL}/profile/isprofileactivated/` + localStorage.getItem('token'),
+    method: 'POST',
+    url: `${apiURL}/profile/isprofileactivated/`,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
+    data: {
+      token: localStorage.getItem('token')
+    }
+  })
+  .then(response =>{
+    return response.data
+  })
+}
+
+function isTokenValid (jwtToken) {
+  return axios({
+    method: 'POST',
+    url: `${apiURL}/jwt/isvalidtoken/`,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+    data: {
+      token: jwtToken
+    }
   })
   .then(response =>{
     return response.data
@@ -50,5 +70,6 @@ function isProfileEnabled () {
 
 export{
   store,
-  isProfileEnabled
+  isProfileEnabled,
+  isTokenValid
 }

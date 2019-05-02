@@ -13,7 +13,7 @@ namespace WebApi.Controllers
     {
         [HttpPost]
         [Route("api/login")]
-        public IHttpActionResult Login([FromBody] SSOUserRequest request)
+        public HttpResponseMessage Login([FromBody] SSOUserRequest request)
         {
             LoginManager loginMan = new LoginManager();
             var response = loginMan.Login(request);
@@ -23,16 +23,17 @@ namespace WebApi.Controllers
                 {
                     Content = new StringContent("Invalid Session")
                 };
-                //return httpResponse;
-                return BadRequest();
+                return httpResponse;
+                //return BadRequest();
             }
             else
             {
-                var redirectURL = new Uri("https://greetngroup.com/login/" + response);
+                var redirectURL = "https://greetngroup.com";
                 var redirect = Request.CreateResponse(HttpStatusCode.SeeOther);
-                //redirect.Content = new StringContent(redirectURL);
-                //redirect.Headers.Location = new Uri(redirectURL);
-                return Redirect(redirectURL);
+                redirect.Content = new StringContent(redirectURL);
+                redirect.Headers.Location = new Uri(redirectURL);
+
+                return redirect;
             }
         }
     }

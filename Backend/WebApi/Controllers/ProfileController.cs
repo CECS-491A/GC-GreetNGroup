@@ -9,10 +9,13 @@ namespace WebApi.Controllers
 {
     public class ProfileController : ApiController
     {
-
+        public class IsProfileActivatedRequest
+        {
+            public string token { get; set; }
+        }
         // Method to get the user profile given their ID
         [HttpGet]
-        [Route("api/profile/{userID}")]
+        [Route("api/profile/getprofile/{userID}")]
         public HttpResponseMessage Get(string userID)
         {
             try
@@ -55,14 +58,14 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpGet]
-        [Route("api/profile/isprofileactivated/{jwtToken}")]
-        public HttpResponseMessage IsProfileActivated(string jwtToken)
+        [HttpPost]
+        [Route("api/profile/isprofileactivated")]
+        public HttpResponseMessage IsProfileActivated([FromBody] IsProfileActivatedRequest request)
         {
             try
             {
                 var profileMan = new UserProfileManager();
-                var response = profileMan.IsProfileActivated(jwtToken);
+                var response = profileMan.IsProfileActivated(request.token);
                 return response;
             }
             catch

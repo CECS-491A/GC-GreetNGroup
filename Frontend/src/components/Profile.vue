@@ -74,6 +74,7 @@ export default {
         userID: this.userID
       }
     })
+    /* eslint-disable */
       .then(response => (this.json = response.data), this.userRetrieved = true)
       .catch(e => { this.errorMessage = e.response.data, this.userRetrieved = false })
   },

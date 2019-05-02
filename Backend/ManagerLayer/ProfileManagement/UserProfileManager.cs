@@ -18,7 +18,6 @@ namespace Gucci.ManagerLayer.ProfileManagement
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
-        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public UserProfileManager()
         {
