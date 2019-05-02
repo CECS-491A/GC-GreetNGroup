@@ -8,6 +8,7 @@
           <v-btn to="/Search">Search</v-btn>
           <v-btn to="/HelloWorld">HelloPage</v-btn>
           <v-btn to="/analysisdashboard">User Analysis</v-btn>
+          <v-btn to="/findeventsforme">FindEventsForMe</v-btn>
           <v-btn v-if="isLoggedIn.isLogin" to="/CreateEvent">Create Event</v-btn>
       </div>
       <div>
