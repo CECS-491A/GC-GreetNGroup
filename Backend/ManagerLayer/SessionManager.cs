@@ -7,6 +7,9 @@ using ServiceLayer.Services;
 using Gucci.DataAccessLayer.Context;
 using DataAccessLayer.Tables;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
+using System.Web.Http;
 
 namespace Gucci.ManagerLayer
 {
@@ -16,6 +19,7 @@ namespace Gucci.ManagerLayer
         private IUserService _userService;
         private IJWTService _jwtService;
         private UserClaimsService _userClaimService;
+        private string baseRedirectURL = "https://greetngroup.com/login?token=";
 
         public SessionManager()
         {
@@ -25,19 +29,30 @@ namespace Gucci.ManagerLayer
             _userClaimService = new UserClaimsService();
         }
 
-        public string Login(SSOUserRequest request)
+        public HttpResponseMessage Login(ApiController controller, SSOUserRequest request)
         {
             try
             {
                 // Check if signature is valid
-                if (_signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature))
+                var response = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
+                if (!response)
                 {
-                    return "-1";
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("Invalid Session")
+                    };
+                    return httpResponse;
                 }
                 // Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
+                    var generatedToken = _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
+                    var redirectURL = baseRedirectURL + generatedToken;
+                    var redirect = controller.Request.CreateResponse(HttpStatusCode.SeeOther);
+                    redirect.Content = new StringContent(redirectURL);
+                    redirect.Headers.Location = new Uri(redirectURL);
+
+                    return redirect;
                 }
                 else
                 {
@@ -47,12 +62,22 @@ namespace Gucci.ManagerLayer
                     };
                     _userService.InsertUser(createdUser);
                     _userClaimService.AddDefaultClaims(createdUser);
-                    return _jwtService.CreateToken(request.email, createdUser.UserId);
+                    var generatedToken = _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
+                    var redirectURL = baseRedirectURL + generatedToken;
+                    var redirect = controller.Request.CreateResponse(HttpStatusCode.SeeOther);
+                    redirect.Content = new StringContent(redirectURL);
+                    redirect.Headers.Location = new Uri(redirectURL);
+
+                    return redirect;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return "-1";
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.ToString())
+                };
+                return httpResponse;
             }
         }
 

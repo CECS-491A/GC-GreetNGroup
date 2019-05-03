@@ -21,7 +21,7 @@ namespace DataAccessLayer.Tables
         public string Token { get; set; }
 
         [Required, ForeignKey("User")]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
     
     }

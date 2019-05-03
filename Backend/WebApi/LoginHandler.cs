@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Gucci.ServiceLayer.Requests;
 using System;
 using Gucci.ManagerLayer;
+using System.IO;
 
 namespace WebApi
 {
@@ -18,31 +19,34 @@ namespace WebApi
         {
             try
             {
-                var jsonContent = request.Content.ReadAsStringAsync().Result;
-                if (jsonContent == null)
+                var body = string.Empty;
+                using(var reader = new StreamReader(request.Content.ReadAsStreamAsync().Result))
                 {
-                    var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                    body = reader.ReadToEnd();
+                }
+                if (body == null)
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                     {
                         Content = new StringContent("Unable to read request body")
                     };
-                    var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                    tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
-                    return tsc.Task;
+                    var tscFail = new TaskCompletionSource<HttpResponseMessage>();
+                    tscFail.SetResult(httpResponseFail);   // Also sets the task state to "RanToCompletion"
+                    return tscFail.Task;
                 }
                 SSOUserRequest ssoRequest = new SSOUserRequest();
-                ssoRequest = JsonConvert.DeserializeObject<SSOUserRequest>(jsonContent);
+                ssoRequest = JsonConvert.DeserializeObject<SSOUserRequest>(body);
+
+                Console.WriteLine(ssoRequest.ToString());
 
                 var sessionMan = new SessionManager();
+                /*
                 var response = sessionMan.Login(ssoRequest);
+                
                 if (response == "-1")
                 {
-                    var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        Content = new StringContent("Invalid Session")
-                    };
-                    var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                    tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
-                    return tsc.Task;
+                    
                 }
                 else
                 {
@@ -52,6 +56,14 @@ namespace WebApi
                     tsc.SetResult(redirect);   // Also sets the task state to "RanToCompletion"
                     return tsc.Task;
                 }
+                */
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Invalid Session")
+                };
+                var tsc = new TaskCompletionSource<HttpResponseMessage>();
+                tsc.SetResult(httpResponse);   // Also sets the task state to "RanToCompletion"
+                return tsc.Task;
             }
             catch (Exception e)
             {
