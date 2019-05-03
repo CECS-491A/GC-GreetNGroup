@@ -154,6 +154,7 @@
     <Compile Include="Tables\Claim.cs" />
     <Compile Include="Tables\Event.cs" />
     <Compile Include="Tables\EventTag.cs" />
+    <Compile Include="Tables\JWTToken.cs" />
     <Compile Include="Tables\Tag.cs" />
     <Compile Include="Tables\User.cs" />
     <Compile Include="Tables\UserAction.cs" />

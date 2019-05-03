@@ -71,7 +71,7 @@ const router = new Router({
       component: Profile
     },
     {
-      path: '/login/:token',
+      path: '/login',
       name: 'login',
       component: Login
     },

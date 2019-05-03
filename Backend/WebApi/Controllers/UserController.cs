@@ -59,6 +59,26 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        [Route("api/user/logout")]
+        public IHttpActionResult Logout([FromBody] TokenRequest request)
+        {
+            try
+            {
+                JWTService _jwtService = new JWTService();
+                var response = _jwtService.DeleteTokenFromDB(request.token);
+                if (response)
+                {
+                    return Ok("Successfully logged out");
+                }
+                return InternalServerError();
+            }
+            catch(Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
         
 
         /*

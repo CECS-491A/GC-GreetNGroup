@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { apiURL } from '@/const.js'
 
-/* eslint-disable */
+npm 
 let token = localStorage.getItem('token');
 
 const store = {

@@ -21,6 +21,8 @@ namespace WebApi
                               "application/json"));
             config.EnableCors(cors);
 
+            GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

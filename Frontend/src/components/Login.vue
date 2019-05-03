@@ -18,8 +18,8 @@ export default {
   },
   created () {
     this.loading = true
-    if (isTokenValid(this.$route.params.token) === true) {
-      localStorage.setItem('token', this.$route.params.token)
+    if (isTokenValid(this.$route.query.token) === true) {
+      localStorage.setItem('token', this.$route.query.token)
       store.state.isLogin = true
       store.getEmail()
       this.$router.push('/')

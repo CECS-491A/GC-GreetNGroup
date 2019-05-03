@@ -28,7 +28,7 @@ namespace WebApi.Controllers
             }
             else
             {
-                var redirectURL = "https://greetngroup.com";
+                var redirectURL = "https://greetngroup.com/login?token=" + response;
                 var redirect = Request.CreateResponse(HttpStatusCode.SeeOther);
                 redirect.Content = new StringContent(redirectURL);
                 redirect.Headers.Location = new Uri(redirectURL);

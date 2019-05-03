@@ -10,7 +10,6 @@
 import { isProfileEnabled } from '@/router/request'
 
 export default {
-  
   name: 'Welcome',
   data () {
     return {
