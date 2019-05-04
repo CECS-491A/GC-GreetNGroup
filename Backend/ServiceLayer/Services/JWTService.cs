@@ -15,6 +15,7 @@ namespace Gucci.ServiceLayer.Services
         private ILoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
+
         public JWTService()
         {
             _gngLoggerService = new LoggerService();
@@ -22,6 +23,13 @@ namespace Gucci.ServiceLayer.Services
             credentials = GenerateJWTSignature(symmetricKeyFinal);
         }
 
+        /// <summary>
+        /// Method CreateToken creates the JWT which will be given to the user who
+        /// is registered with GNG.
+        /// </summary>
+        /// <param name="username">username of the user</param>
+        /// <param name="uId">userId of the user</param>
+        /// <returns>The JWT in string form</returns>
         public string CreateToken(string username, int uId)
         {
             var jwtHeader = new JwtHeader(credentials);
@@ -48,6 +56,13 @@ namespace Gucci.ServiceLayer.Services
             return tokenHandler.WriteToken(jwt);
         }
 
+        /// <summary>
+        /// Method UpdateToken returns the refreshed JWT of the user with an
+        /// expired JWT so long as their JWT has not been tampered with.
+        /// </summary>
+        /// <param name="jwtToken">The expired JWT as a string</param>
+        /// <returns>Return refreshed JWT string or an empty string if the JWT has been
+        /// tampered</returns>
         public string UpdateToken(string jwtToken)
         {
             if (!IsJWTSignatureTampered(jwtToken))
@@ -60,6 +75,11 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        /// <summary>
+        /// Method RefreshToken creates the refreshed JWT.
+        /// </summary>
+        /// <param name="userJwtString">Expired JWT as a string</param>
+        /// <returns>Refreshed JWT as a string</returns>
         public string RefreshToken(string userJwtString)
         {
             var jwtHeader = new JwtHeader(credentials);
@@ -221,7 +241,7 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
-        public SigningCredentials GenerateJWTSignature(string symmetricKey)
+        private SigningCredentials GenerateJWTSignature(string symmetricKey)
         {
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
                 SecurityAlgorithms.HmacSha256Signature);
