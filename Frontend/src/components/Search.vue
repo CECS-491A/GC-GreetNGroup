@@ -20,7 +20,7 @@
             ></v-select>
             <v-select
               v-model="newPageLimit"
-              v-on:click="restResults()"
+              v-on:click="resetResults()"
               :items="resultCount"
               :menu-props="{ maxHeight: '200' }"
               label="Select display count"

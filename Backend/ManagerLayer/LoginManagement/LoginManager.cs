@@ -3,30 +3,20 @@ using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
+using ServiceLayer.Services;
 
 namespace Gucci.ManagerLayer.LoginManagement
 {
     public class LoginManager
     {
-        private readonly string AppLaunchSecretKey;
-        private ICryptoService _cryptoService;
+        private SignatureService _signatureService;
         private IUserService _userService;
         private IJWTService _jwtService;
         private UserClaimsService _userClaimService;
 
         public LoginManager()
         {
-            AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
-            _cryptoService = new CryptoService(AppLaunchSecretKey);
-            _userService = new UserService();
-            _jwtService = new JWTService();
-            _userClaimService = new UserClaimsService();
-        }
-
-        public LoginManager(string SSOSecretKey)
-        {
-            AppLaunchSecretKey = SSOSecretKey;
-            _cryptoService = new CryptoService(AppLaunchSecretKey);
+            _signatureService = new SignatureService();
             _userService = new UserService();
             _jwtService = new JWTService();
             _userClaimService = new UserClaimsService();
@@ -34,40 +24,33 @@ namespace Gucci.ManagerLayer.LoginManagement
 
         public string Login(SSOUserRequest request)
         {
-            // TODO: Make the concatenation more extensible
-            // foreach property in request
-
-            var message = "ssoUserId=" + request.ssoUserId + ";" +
-                             "email=" + request.email + ";" +
-                             "timestamp=" + request.timestamp + ";";
-            var hashedMessage = _cryptoService.HashHMAC(message);
-            // Check if signature is valid
-            if (hashedMessage == request.signature)
+            try
             {
+                // Check if signature is valid
+                if (_signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature))
+                {
+                    return "-1";
+                }
                 // Check if user exists
                 if (_userService.IsUsernameFound(request.email))
                 {
-                    return "https://greetngroup.com/login/" + _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
+                    return _jwtService.CreateToken(request.email, _userService.GetUserUid(request.email));
                 }
                 else
                 {
-                    User createdUser = new User(  // If user doesn't exist, create a placeholder user that is not activated
-                        _userService.GetNextUserID(), // UserID
-                        null, // First name
-                        null, // Last name
-                        request.email, // Username
-                        null, // City
-                        null, // State
-                        null, // Country
-                        DateTime.Now, // Minimum datetime for DOB
-                        false // IsActivated
-                        );
-                    _userService.InsertUser(createdUser); // Check for user acivation on home page
+                    User createdUser = new User
+                    {
+                        UserId = _userService.GetNextUserID()
+                    };
+                    _userService.InsertUser(createdUser);
                     _userClaimService.AddDefaultClaims(createdUser);
                     return _jwtService.CreateToken(request.email, createdUser.UserId);
                 }
             }
-            return "-1";
+            catch (Exception)
+            {
+                return "-1";
+            }
         }
     }
 }

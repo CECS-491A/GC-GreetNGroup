@@ -38,14 +38,9 @@ namespace Gucci.ServiceLayer.Services
                     return eventList;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException objd)
             {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                throw;
-            }
-            catch (Exception e) // This is a catch all for error occuring in db
-            {
-                Console.WriteLine(e);
+                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
                 throw;
             }
         }
@@ -85,14 +80,9 @@ namespace Gucci.ServiceLayer.Services
                     return filteredEventList;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException objd)
             {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                throw;
-            }
-            catch (Exception e) // This is a catch all for error occuring in db
-            {
-                Console.WriteLine(e);
+                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
                 throw;
             }
         }
@@ -121,14 +111,9 @@ namespace Gucci.ServiceLayer.Services
                     return resultList;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException objd)
             {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                throw;
-            }
-            catch (Exception e) // Catch all for error occuring in db
-            {
-                Console.WriteLine(e);
+                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
                 throw;
             }
         }
@@ -170,14 +155,9 @@ namespace Gucci.ServiceLayer.Services
                     return resultList;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException objd)
             {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                throw;
-            }
-            catch (Exception e) // Catch all for error occuring in db
-            {
-                Console.WriteLine(e);
+                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
                 throw;
             }
         }

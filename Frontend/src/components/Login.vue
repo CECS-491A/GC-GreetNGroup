@@ -26,21 +26,25 @@
 </template>
 
 <script>
-import { store } from '@/router/request.js'
+import { store, isProfileEnabled } from '@/router/request.js'
 
 export default {
-  name: 'Home',
+  name: 'Login',
   data () {
     return {
       loading: false,
-      profileIsActivated: false
+      profileIsActivated: false,
+      isValidToken: false
     }
   },
   created () {
     this.loading = true
-    localStorage.setItem('token', this.$route.params.token)
-    store.state.isLogin = true
-    store.getEmail()
+    if (isProfileEnabled === true) {
+      localStorage.setItem('token', this.$route.params.token)
+      store.state.isLogin = true
+      store.getEmail()
+      this.$router.push('/')
+    }
     this.$router.push('/')
   }
 }
