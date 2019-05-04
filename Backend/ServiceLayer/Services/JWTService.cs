@@ -48,7 +48,7 @@ namespace Gucci.ServiceLayer.Services
 
             var jwtToken = tokenHandler.WriteToken(jwt);
 
-            AddTokenToDB(jwtToken, username); 
+            AddTokenToDB(jwtToken, uId); 
 
             return jwtToken;
         }
@@ -72,9 +72,10 @@ namespace Gucci.ServiceLayer.Services
 
                 var newJwtToken = tokenHandler.WriteToken(newJwt); // Create a new token
 
-                var usernameOnToken = GetUsernameFromToken(oldJwtToken);
+                
+                var userIDOnToken = GetUserIDFromToken(oldJwtToken);
 
-                AddTokenToDB(newJwtToken, usernameOnToken); // Add new token to DB
+                AddTokenToDB(newJwtToken, userIDOnToken); // Add new token to DB
                 DeleteTokenFromDB(oldJwtToken); // Delete old token from DB to 'revoke' 
 
                 return newJwtToken;
@@ -237,7 +238,7 @@ namespace Gucci.ServiceLayer.Services
 
 
         #region Winn
-        public bool AddTokenToDB(string jwtToken, string username)
+        public bool AddTokenToDB(string jwtToken, int userID)
         {
             try
             {
@@ -249,7 +250,7 @@ namespace Gucci.ServiceLayer.Services
                         return false;
                     }
 
-                    var JWTTokenToAdd = new JWTToken(newTokenID, jwtToken, username);
+                    var JWTTokenToAdd = new JWTToken(newTokenID, jwtToken, userID);
 
                     ctx.JWTTokens.Add(JWTTokenToAdd);
                     ctx.SaveChanges();

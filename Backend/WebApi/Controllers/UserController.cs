@@ -61,25 +61,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/user/logout")]
-        public IHttpActionResult Logout([FromBody] TokenRequest request)
+        [Route("api/user/deleteuser")]
+        public HttpResponseMessage DeleteUser([FromBody] TokenRequest request)
         {
-            try
-            {
-                JWTService _jwtService = new JWTService();
-                var response = _jwtService.DeleteTokenFromDB(request.token);
-                if (response)
-                {
-                    return Ok("Successfully logged out");
-                }
-                return InternalServerError();
-            }
-            catch(Exception e)
-            {
-                return InternalServerError(e);
-            }
+            UserManager userMan = new UserManager();
+            //check if token is valid
+            //get the email from token
+            var response = userMan.DeleteUser()
         }
-        
 
         /*
         [HttpPost]

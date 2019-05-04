@@ -7,11 +7,11 @@ namespace DataAccessLayer.Tables
     [Table("JWTToken")]
     public class JWTToken
     {
-        public JWTToken(int ID, string jwtToken, string username)
+        public JWTToken(int ID, string jwtToken, int userID)
         {
             Id = ID;
             Token = jwtToken;
-            UserName = username;
+            UserId = userID;
         }
 
         [Required, Key]
@@ -21,7 +21,7 @@ namespace DataAccessLayer.Tables
         public string Token { get; set; }
 
         [Required, ForeignKey("User")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
     
     }

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Web.Http;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace Gucci.ManagerLayer
 {
@@ -58,7 +60,8 @@ namespace Gucci.ManagerLayer
                 {
                     User createdUser = new User
                     {
-                        UserId = _userService.GetNextUserID()
+                        UserId = _userService.GetNextUserID(),
+                        UserName = request.email
                     };
                     _userService.InsertUser(createdUser);
                     _userClaimService.AddDefaultClaims(createdUser);
@@ -71,7 +74,7 @@ namespace Gucci.ManagerLayer
                     return redirect;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -81,34 +84,57 @@ namespace Gucci.ManagerLayer
             }
         }
 
-        public bool Logout(SSOUserRequest request)
+        public HttpResponseMessage Logout(SSOUserRequest request)
         {
             try
             {
-                if (!_signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature))
+                // Check if signature is valid
+                var response = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
+                if (!response)
                 {
-                    return false;
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("Invalid Session")
+                    };
+                    return httpResponse;
                 }
                 if (!_userService.IsUsernameFound(request.email))
                 {
-                    return false;
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent("User Does Not Exist")
+                    };
+                    return httpResponse;
                 }
 
                 using(var ctx = new GreetNGroupContext())
                 {
-                    var JWTTokenToRemove = ctx.JWTTokens.Where(j => j.UserName == request.email).FirstOrDefault<JWTToken>();
+                    var userToLogout = ctx.Users.Where(u => u.UserName == request.email).FirstOrDefault<User>();
+                    var JWTTokenToRemove = ctx.JWTTokens.Where(j => j.UserId == userToLogout.UserId).FirstOrDefault<JWTToken>();
                     if(JWTTokenToRemove != null)
                     {
                         _jwtService.DeleteTokenFromDB(JWTTokenToRemove.Token);
                         ctx.SaveChanges();
-                        return true;
+                        var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent("User has logged out of GreetNGroup")
+                        };
+                        return httpResponseSuccess;
                     }
-                    return false;  
+                    var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("Unable to log out at this time")
+                    };
+                    return httpResponse;
                 }
             }
             catch (Exception)
             {
-                return false;
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("Unable to log out at this time")
+                };
+                return httpResponse;
             }
         }
     }
