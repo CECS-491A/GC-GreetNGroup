@@ -18,12 +18,14 @@ export default {
   },
   created () {
     this.loading = true
-    if (isTokenValid(this.$route.query.token) === true) {
+    if (isTokenValid(this.$route.query.token)) {
       localStorage.setItem('token', this.$route.query.token)
       store.state.isLogin = true
       store.getEmail()
+      console.log('logged in')
       this.$router.push('/')
     }
+    console.log('unable to log in')
     this.$router.push('/')
   }
 }
