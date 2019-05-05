@@ -1,15 +1,5 @@
 <template>
   <div class="ActivateProfile">
-    <div class="NotLoggedIn" v-if="!isLoggedIn.isLogin">
-      <v-alert
-      :value="loggedInMessage"
-      dismissible
-      type="error"
-      transition="scale-transition"
-    >
-    {{loggedInMessage}}
-    </v-alert>
-    </div>
     <div class="UpdateProfileFields" v-if="isLoggedIn.isLogin">
     <h1>Activate Profile</h1>
 
@@ -166,7 +156,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: `${apiURL}` + 'profile/update',
+          url: `${apiURL}` + '/profile/update',
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true
@@ -181,7 +171,7 @@ export default {
             JwtToken: localStorage.getItem('token')
           }
         })
-          .then(response => (this.message = response.data))
+          .then(response => (this.httpMessage = response.data))
           .catch(e => { this.errorMessage = e.response.data })
       }
     }
