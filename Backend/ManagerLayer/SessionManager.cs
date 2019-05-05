@@ -36,8 +36,8 @@ namespace Gucci.ManagerLayer
             try
             {
                 // Check if signature is valid
-                var response = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
-                if (!response)
+                var isSignatureValid = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
+                if (!isSignatureValid)
                 {
                     var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
@@ -58,6 +58,7 @@ namespace Gucci.ManagerLayer
                 }
                 else
                 {
+                    // If user doesn't have account in greetngroup, create account
                     User createdUser = new User
                     {
                         UserId = _userService.GetNextUserID(),
@@ -78,7 +79,7 @@ namespace Gucci.ManagerLayer
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    Content = new StringContent(e.ToString())
+                    Content = new StringContent("Unable to login at this time")
                 };
                 return httpResponse;
             }
@@ -89,8 +90,8 @@ namespace Gucci.ManagerLayer
             try
             {
                 // Check if signature is valid
-                var response = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
-                if (!response)
+                var isSignatureValid = _signatureService.IsValidClientRequest(request.ssoUserId, request.email, request.timestamp, request.signature);
+                if (!isSignatureValid)
                 {
                     var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
