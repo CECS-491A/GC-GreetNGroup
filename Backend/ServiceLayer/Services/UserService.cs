@@ -7,6 +7,7 @@ using Gucci.ServiceLayer.Interface;
 using Gucci.DataAccessLayer.DataTransferObject;
 using Gucci.ServiceLayer.Model;
 using Gucci.DataAccessLayer.Models;
+using System.Data.Entity;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -71,22 +72,17 @@ namespace Gucci.ServiceLayer.Services
         /// The following region handles updating user information within the database
         /// </summary>
         #region Update User Information
-        
+
         // Updates user by replacing user object in database with new user object with updated fields
         public bool UpdateUser(User updatedUser)
         {
             try
             {
-                using(var ctx = new GreetNGroupContext())
+                using (var ctx = new GreetNGroupContext())
                 {
-                    User retrievedUser = ctx.Users.FirstOrDefault(c => c.UserId.Equals(updatedUser.UserId));
-                    if(retrievedUser != null)
-                    {
-                        retrievedUser = updatedUser;
-                        ctx.SaveChanges();
-                        return true;
-                    }
-                    return false;
+                    ctx.Entry(updatedUser).State = EntityState.Modified;
+                    ctx.SaveChanges();
+                    return true;
                 }
             }
             catch (ObjectDisposedException od)
@@ -95,7 +91,7 @@ namespace Gucci.ServiceLayer.Services
                 return false;
             }
         }
-        
+
         // Updates city information on user
         public bool UpdateUserCity(int uId, string city)
         {
@@ -150,7 +146,7 @@ namespace Gucci.ServiceLayer.Services
         /// The following region handles deletion of data from the user table in the database
         /// </summary>
         #region Delete User Information
-        
+
         /*
          * For our application, the DeleteUser function is made to set user values to null
          * apart from UserId and userName which is used as reference 
