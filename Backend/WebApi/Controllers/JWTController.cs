@@ -21,7 +21,11 @@ namespace WebApi.Controllers
             try
             {
                 var _jwtService = new JWTService();
-                var isJwtValid = _jwtService.IsJWTSignatureTampered(request.token);
+                var isJwtValid = _jwtService.IsTokenValid(request.token);
+                if (!isJwtValid)
+                {
+                    return Content(HttpStatusCode.BadRequest, false);
+                }
                 return Content(HttpStatusCode.OK, true);
             }
             catch

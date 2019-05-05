@@ -7,6 +7,10 @@ namespace DataAccessLayer.Tables
     [Table("JWTToken")]
     public class JWTToken
     {
+        public JWTToken()
+        {
+
+        }
         public JWTToken(int ID, string jwtToken, int userID)
         {
             Id = ID;

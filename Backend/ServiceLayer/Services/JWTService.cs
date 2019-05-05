@@ -48,7 +48,11 @@ namespace Gucci.ServiceLayer.Services
 
             var jwtToken = tokenHandler.WriteToken(jwt);
 
-            AddTokenToDB(jwtToken, uId); 
+            var isTokenAddedToDB = AddTokenToDB(jwtToken, uId);
+            if (!isTokenAddedToDB)
+            {
+                return null;
+            }
 
             return jwtToken;
         }
@@ -257,8 +261,9 @@ namespace Gucci.ServiceLayer.Services
                     return true;
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
                 return false;
             }
         }
@@ -292,11 +297,16 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     var lastTokenInDB = ctx.JWTTokens.OrderByDescending(j => j.Id).FirstOrDefault();
+                    if(lastTokenInDB == null)
+                    {
+                        return 1;
+                    }
                     return lastTokenInDB.Id + 1;
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
                 return -1;
             }
         }
@@ -319,8 +329,9 @@ namespace Gucci.ServiceLayer.Services
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 return false;
             }
         }
