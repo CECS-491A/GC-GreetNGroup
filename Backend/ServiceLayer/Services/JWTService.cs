@@ -6,12 +6,13 @@ using System.Linq;
 using Gucci.ServiceLayer.Interface;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DataAccessLayer.Tables;
 
 namespace Gucci.ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.Machine);
         private ILoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
@@ -45,36 +46,44 @@ namespace Gucci.ServiceLayer.Services
 
             var jwt = new JwtSecurityToken(jwtHeader, jwtPayload);
 
-            return tokenHandler.WriteToken(jwt);
+            var jwtToken = tokenHandler.WriteToken(jwt);
+
+            AddTokenToDB(jwtToken, uId); 
+
+            return jwtToken;
         }
 
-        public string UpdateToken(string jwtToken)
+        // Method to refresh the token that the user has
+        public string RefreshToken(string oldJwtToken)
         {
-            if (!IsJWTSignatureTampered(jwtToken))
+            if (!IsJWTSignatureTampered(oldJwtToken))
             {
-                return RefreshToken(jwtToken);
+                var jwtHeader = new JwtHeader(credentials);
+
+                var oldJwt = tokenHandler.ReadJwtToken(oldJwtToken); 
+                var newJwtPayload = new JwtPayload( 
+                    issuer: oldJwt.Issuer,
+                    audience: oldJwt.Audiences.ToString(),
+                    claims: oldJwt.Claims,
+                    notBefore: null,
+                    expires: DateTime.UtcNow.AddMinutes(30));
+
+                var newJwt = new JwtSecurityToken(jwtHeader, newJwtPayload);
+
+                var newJwtToken = tokenHandler.WriteToken(newJwt); // Create a new token
+
+                
+                var userIDOnToken = GetUserIDFromToken(oldJwtToken);
+
+                AddTokenToDB(newJwtToken, userIDOnToken); // Add new token to DB
+                DeleteTokenFromDB(oldJwtToken); // Delete old token from DB to 'revoke' 
+
+                return newJwtToken;
             }
             else
             {
                 return "";
             }
-        }
-
-        public string RefreshToken(string userJwtString)
-        {
-            var jwtHeader = new JwtHeader(credentials);
-
-            var oldJwt = tokenHandler.ReadJwtToken(userJwtString);
-            var newJwtPayload = new JwtPayload(
-                issuer: oldJwt.Issuer,
-                audience: oldJwt.Audiences.ToString(),
-                claims: oldJwt.Claims,
-                notBefore: null,
-                expires: DateTime.UtcNow.AddMinutes(30));
-
-            var newJwt = new JwtSecurityToken(jwtHeader, newJwtPayload);
-
-            return tokenHandler.WriteToken(newJwt);
         }
 
         /// <summary>
@@ -121,7 +130,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Return the user id as an int</returns>
         public int GetUserIDFromToken(string userJwtToken)
         {
-            if(IsJWTSignatureTampered(userJwtToken) == false)
+            if (IsJWTSignatureTampered(userJwtToken) == false)
             {
                 var jwt = tokenHandler.ReadJwtToken(userJwtToken);
                 var usersCurrClaims = jwt.Claims;
@@ -142,7 +151,7 @@ namespace Gucci.ServiceLayer.Services
             {
                 return -1;
             }
-            
+
         }
 
         /// <summary>
@@ -153,7 +162,7 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>Returns username as string</returns>
         public string GetUsernameFromToken(string userJwtString)
         {
-            if(IsJWTSignatureTampered(userJwtString) == false)
+            if (IsJWTSignatureTampered(userJwtString) == false)
             {
                 var jwt = tokenHandler.ReadJwtToken(userJwtString);
                 return jwt.Audiences.First();
@@ -214,7 +223,7 @@ namespace Gucci.ServiceLayer.Services
             }
             // Exception caught specifically as it is used in the event that the context 
             // doesnt exist or is broken or fails to dispose
-            catch (Exception od) 
+            catch (Exception od)
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;
@@ -226,5 +235,95 @@ namespace Gucci.ServiceLayer.Services
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
                 SecurityAlgorithms.HmacSha256Signature);
         }
+
+
+        #region Winn
+        public bool AddTokenToDB(string jwtToken, int userID)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var newTokenID = GetNextJWTTokenID();
+                    if (newTokenID == -1)
+                    {
+                        return false;
+                    }
+
+                    var JWTTokenToAdd = new JWTToken(newTokenID, jwtToken, userID);
+
+                    ctx.JWTTokens.Add(JWTTokenToAdd);
+                    ctx.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteTokenFromDB(string jwtToken)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var TokenToRemove = ctx.JWTTokens.Where(j => j.Token == jwtToken).FirstOrDefault<JWTToken>();
+                    if (TokenToRemove != null)
+                    {
+                        ctx.JWTTokens.Remove(TokenToRemove);
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private int GetNextJWTTokenID()
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var lastTokenInDB = ctx.JWTTokens.OrderByDescending(j => j.Id).FirstOrDefault();
+                    return lastTokenInDB.Id + 1;
+                }
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public bool IsTokenValid(string JwtToken)
+        {
+            try
+            {
+                if (IsJWTSignatureTampered(JwtToken))
+                {
+                    return false;
+                }
+                using(var ctx = new GreetNGroupContext())
+                {
+                    var tokenToFind = ctx.JWTTokens.Where(j => j.Token == JwtToken).FirstOrDefault<JWTToken>();
+                    if(tokenToFind == null)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }

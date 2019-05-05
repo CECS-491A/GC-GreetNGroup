@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using DataAccessLayer.Tables;
 using Gucci.DataAccessLayer.Tables;
 
 namespace Gucci.DataAccessLayer.Context
@@ -19,6 +20,7 @@ namespace Gucci.DataAccessLayer.Context
         public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<ActionsTable> Actions { get; set; }
         public DbSet<UserAction> UserAction { get; set; }
+        public DbSet<JWTToken> JWTTokens { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -1,18 +1,20 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
-import SearchPage from '@/components/Search'
-import FindEventsForMe from '@/components/FindEventsForMe'
-import HelloWorld from '@/components/HelloWorld'
-import PageNotFound from '@/components/PageNotFound'
-import AnalysisDashboard from '@/components/AnalysisDashboard'
-import CreateEvent from '@/components/CreateEvent'
-import Profile from '@/components/Profile'
-import UpdateProfile from '@/components/UpdateProfile'
 import Login from '@/components/Login'
-import Welcome from '@/components/Welcome'
 import Logout from '@/components/Logout'
+import Profile from '@/components/Profile'
+import Welcome from '@/components/Welcome'
 import EventPage from '@/components/EventPage'
+import SearchPage from '@/components/Search'
+import HelloWorld from '@/components/HelloWorld'
+import CreateEvent from '@/components/CreateEvent'
+import PageNotFound from '@/components/PageNotFound'
+import UpdateProfile from '@/components/UpdateProfile'
+import FindEventsForMe from '@/components/FindEventsForMe'
+import ActivateProfile from '@/components/ActivateProfile'
+import TermsConditions from '@/components/TermsConditions'
+import AnalysisDashboard from '@/components/AnalysisDashboard'
 // import Axios from 'axios'
 
 Vue.use(Router)
@@ -69,7 +71,7 @@ const router = new Router({
       component: Profile
     },
     {
-      path: '/login/:token',
+      path: '/login',
       name: 'login',
       component: Login
     },
@@ -77,6 +79,11 @@ const router = new Router({
       path: '/updateprofile',
       name: 'updateprofile',
       component: UpdateProfile
+    },
+    {
+      path: '/activateprofile',
+      name: 'activateprofile',
+      component: ActivateProfile
     },
     {
       path: '/logout',
@@ -87,6 +94,11 @@ const router = new Router({
       path: '/eventpage/:name',
       name: 'eventpage',
       component: EventPage
+    },
+    {
+      path: '/termsandconditions',
+      name: 'termsconditions',
+      component: TermsConditions
     }
   ]
 })

@@ -87,6 +87,7 @@
     <Compile Include="Requests\SearchBarRequest.cs" />
     <Compile Include="Requests\SSOUserRequest.cs" />
     <Compile Include="Requests\SystemAdminRequest.cs" />
+    <Compile Include="Requests\TokenRequest.cs" />
     <Compile Include="Requests\UpdateProfileRequest.cs" />
     <Compile Include="Services\AttendeesService.cs" />
     <Compile Include="Services\ClaimService.cs" />

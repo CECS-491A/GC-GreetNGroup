@@ -141,6 +141,10 @@
     <Compile Include="Migrations\201904292035171_event_edit03.Designer.cs">
       <DependentUpon>201904292035171_event_edit03.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905032154461_AddJWTTokens.cs" />
+    <Compile Include="Migrations\201905032154461_AddJWTTokens.Designer.cs">
+      <DependentUpon>201905032154461_AddJWTTokens.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="Models\UADObject.cs" />
@@ -154,6 +158,7 @@
     <Compile Include="Tables\Claim.cs" />
     <Compile Include="Tables\Event.cs" />
     <Compile Include="Tables\EventTag.cs" />
+    <Compile Include="Tables\JWTToken.cs" />
     <Compile Include="Tables\Tag.cs" />
     <Compile Include="Tables\User.cs" />
     <Compile Include="Tables\UserAction.cs" />
@@ -240,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904292035171_event_edit03.resx">
       <DependentUpon>201904292035171_event_edit03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905032154461_AddJWTTokens.resx">
+      <DependentUpon>201905032154461_AddJWTTokens.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

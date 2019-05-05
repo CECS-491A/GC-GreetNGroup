@@ -15,10 +15,10 @@ namespace Gucci.ManagerLayer.ProfileManagement
 
     public class UserProfileManager
     {
+        private readonly DateTime requiredAgeOfUser = DateTime.Now.AddYears(-18); // Must be 18 years old to use this application
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
-        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public UserProfileManager()
         {
@@ -36,8 +36,8 @@ namespace Gucci.ManagerLayer.ProfileManagement
         {
             try
             {
-                int userIDConverted = Convert.ToInt32(userID);
-                if (!_userService.IsUsernameFoundById(userIDConverted))
+                int convertedUserID = Convert.ToInt32(userID);
+                if (!_userService.IsUsernameFoundById(convertedUserID))
                 {
                     var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
@@ -46,7 +46,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
                     return httpResponseFail;
                 }
 
-                User retrievedUser = _userService.GetUserById(userIDConverted);
+                User retrievedUser = _userService.GetUserById(convertedUserID);
                 if (retrievedUser == null)
                 {
                     var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
@@ -65,7 +65,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
                     State = retrievedUser.State,
                     Country = retrievedUser.Country,
                     EventCreationCount = retrievedUser.EventCreationCount,
-                    Rating = GetUserRating(userIDConverted)
+                    Rating = GetUserRating(convertedUserID)
                 };
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -84,17 +84,23 @@ namespace Gucci.ManagerLayer.ProfileManagement
             }
         }
 
-        public int RateUser(RateRequest request, string userID)
-        {
-            throw new NotImplementedException();
-        }
-        
         public HttpResponseMessage UpdateUserProfile(UpdateProfileRequest request)
         {
-            if (_jwtServce.IsJWTSignatureTampered(request.JwtToken)){
+            var isSignatureTampered = _jwtServce.IsJWTSignatureTampered(request.JwtToken);
+            if (isSignatureTampered){
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
                 {
                     Content = new StringContent("Session is invalid")
+                };
+                return httpResponseFail;
+            }
+
+
+            if(request.DoB > requiredAgeOfUser) // Check if the user is over 18
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                {
+                    Content = new StringContent("This software is intended for persons over 18 years of age.")
                 };
                 return httpResponseFail;
             }
@@ -135,7 +141,8 @@ namespace Gucci.ManagerLayer.ProfileManagement
                 retrievedUser.IsActivated = true;
             }
 
-            if (!_userService.UpdateUser(retrievedUser))
+            var isUserUpdated = _userService.UpdateUser(retrievedUser);
+            if (!isUserUpdated)
             {
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                 {
@@ -151,45 +158,38 @@ namespace Gucci.ManagerLayer.ProfileManagement
             return httpResponse;
         }
 
-        public HttpResponseMessage GetEmail(string jwtToken)
-        {
-            if (_jwtServce.IsJWTSignatureTampered(jwtToken))
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                {
-                    Content = new StringContent("Session is invalid")
-                };
-                return httpResponseFail;
-            }
-            var retrievedEmail = _jwtServce.GetUsernameFromToken(jwtToken);
-
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(retrievedEmail)
-            };
-            return httpResponse;
-        }
-
         public HttpResponseMessage IsProfileActivated(string jwtToken)
         {
-            var userID = _jwtServce.GetUserIDFromToken(jwtToken);
-            if (!_userService.IsUsernameFoundById(userID))
+            try
             {
-                var failHttpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                var userIDFromToken = _jwtServce.GetUserIDFromToken(jwtToken);
+                if (!_userService.IsUsernameFoundById(userIDFromToken))
                 {
-                    Content = new StringContent("false")
+                    var failHttpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("false")
+                    };
+                    return failHttpResponse;
+                }
+
+                User retrievedUser = _userService.GetUserById(userIDFromToken);
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(Convert.ToString(retrievedUser.IsActivated))
                 };
-                return failHttpResponse;
+                return httpResponse;
             }
-
-            User retrievedUser = _userService.GetUserById(userID);
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            catch
             {
-                Content = new StringContent(Convert.ToString(retrievedUser.IsActivated))
-            };
-            return httpResponse;
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    Content = new StringContent("Unable to check if user is activated at this time.")
+                };
+                return httpResponse;
+            }
+            
         }
-
+        
         /*
         public int RateUser(RateRequest request, string rateeID)
         {
