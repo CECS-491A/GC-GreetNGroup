@@ -21,6 +21,7 @@ namespace WebApi.Controllers
     {
         private ILoggerService _gngLoggerService = new LoggerService();
         private UserService userService = new UserService();
+        private IJWTService _jwtService = new JWTService();
 
         // Method to get the email of a user given the JWTToken
         [HttpPost]
@@ -33,9 +34,9 @@ namespace WebApi.Controllers
                 var result = profileMan.GetEmail(request.token);
                 return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                _gngLoggerService.LogBadRequest(userID, "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
+                _gngLoggerService.LogBadRequest(_jwtService.GetUserIDFromToken(request.token).ToString(), "N/A", "https://www.greetngroup.com/user/", e.ToString());
                 //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
@@ -58,7 +59,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
-                _gngLoggerService.LogBadRequest("N/A", "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
+                _gngLoggerService.LogBadRequest(userID.ToString(), "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
                 return BadRequest();
             }
         }
