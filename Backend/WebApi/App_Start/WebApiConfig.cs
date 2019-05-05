@@ -33,35 +33,11 @@ namespace WebApi
             );
 
             config.Routes.MapHttpRoute(
-                name: "LoginRoute",
-                routeTemplate: "login",
-                defaults: new { id = RouteParameter.Optional },
-                constraints: null,
-                handler: new LoginHandler()
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "DeleteUserRoute",
-                routeTemplate: "deleteuser",
-                defaults: new { id = RouteParameter.Optional },
-                constraints: null,
-                handler: new DeleteHandler()
-            );
-
-            config.Routes.MapHttpRoute(
                 name: "HealthCheckRoute",
                 routeTemplate: "health",
                 defaults: new { id = RouteParameter.Optional },
                 constraints: null,
                 handler: new HealthHandler()
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "LogOutRoute",
-                routeTemplate: "logout",
-                defaults: new { id = RouteParameter.Optional },
-                constraints: null,
-                handler: new LogOutHandler()
             );
         }
     }

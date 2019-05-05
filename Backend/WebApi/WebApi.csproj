@@ -153,14 +153,11 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchBarController.cs" />
     <Compile Include="Controllers\UADController.cs" />
-    <Compile Include="DeleteHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HealthHandler.cs" />
     <Compile Include="JWTHandler.cs" />
-    <Compile Include="LogOutHandler .cs" />
-    <Compile Include="LoginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
