@@ -10,7 +10,6 @@
 import { isProfileEnabled } from '@/router/request'
 
 export default {
-  
   name: 'Welcome',
   data () {
     return {
@@ -19,7 +18,7 @@ export default {
   created () {
     if (localStorage.getItem('token') !== null) {
       if (isProfileEnabled() !== true) {
-        this.$router.push('/updateprofile')
+        this.$router.push('/activateprofile')
       }
     }
   }

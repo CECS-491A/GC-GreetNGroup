@@ -47,7 +47,7 @@ namespace UnitTest
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 UserName = newUser.UserName,
-                DoB = newUser.DoB,
+                DoB = newUser.DoB.ToString(),
                 City = newUser.City,
                 State = newUser.State,
                 Country = newUser.Country,

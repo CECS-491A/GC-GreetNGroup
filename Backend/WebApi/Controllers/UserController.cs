@@ -30,8 +30,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                UserProfileManager profileMan = new UserProfileManager();
-                var result = profileMan.GetEmail(request.token);
+                UserManager userMan = new UserManager();
+                var result = userMan.GetEmail(request.token);
                 return result;
             }
             catch (Exception e)
@@ -63,7 +63,27 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
-        
+
+        [HttpPost]
+        [Route("api/user/deleteuser")]
+        public HttpResponseMessage DeleteUser([FromBody] TokenRequest request)
+        {
+            UserManager userMan = new UserManager();
+            JWTService _jwtService = new JWTService();
+            var isTokenValid = _jwtService.IsTokenValid(request.token);
+            if (!isTokenValid)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Unable to delete user, token is invalid")
+                };
+                return httpResponseFail;
+            }
+
+            var retrievedEmailFromToken = _jwtService.GetUsernameFromToken(request.token);
+            var response = userMan.DeleteUser(retrievedEmailFromToken);
+            return response;
+        }
 
         /*
         [HttpPost]

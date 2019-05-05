@@ -9,28 +9,18 @@ namespace WebApi.Controllers
 {
     public class ProfileController : ApiController
     {
-
+        public class IsProfileActivatedRequest
+        {
+            public string token { get; set; }
+        }
         // Method to get the user profile given their ID
         [HttpGet]
-        [Route("api/profile/{userID}")]
+        [Route("api/profile/getprofile/{userID}")]
         public HttpResponseMessage Get(string userID)
         {
-            try
-            {
-                UserProfileManager profileMan = new UserProfileManager();
-                var result = profileMan.GetUser(userID);
-                return result;
-            }
-            catch (Exception e)
-            {
-                //gngLogManager.LogBadRequest("", "", "", e.ToString());
-                //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Service Unavailable")
-                };
-                return httpResponseFail;
-            }
+            UserProfileManager profileMan = new UserProfileManager();
+            var retrievedUser = profileMan.GetUser(userID);
+            return retrievedUser;
         }
 
         // Method to update the user
@@ -55,24 +45,13 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpGet]
-        [Route("api/profile/isprofileactivated/{jwtToken}")]
-        public HttpResponseMessage IsProfileActivated(string jwtToken)
+        [HttpPost]
+        [Route("api/profile/isprofileactivated")]
+        public HttpResponseMessage IsProfileActivated([FromBody] IsProfileActivatedRequest request)
         {
-            try
-            {
-                var profileMan = new UserProfileManager();
-                var response = profileMan.IsProfileActivated(jwtToken);
-                return response;
-            }
-            catch
-            {
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    Content = new StringContent("Unable to check if user is activated at this time.")
-                };
-                return httpResponse;
-            }
+            var profileMan = new UserProfileManager();
+            var isProfileActivated = profileMan.IsProfileActivated(request.token);
+            return isProfileActivated;
         }
     }
 }

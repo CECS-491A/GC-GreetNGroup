@@ -10,14 +10,18 @@ namespace WebApi.Controllers
 {
     public class JWTController : ApiController
     {
-        [HttpGet]
+        public class TokenRequest
+        {
+            public string token { get; set; }
+        }
+        [HttpPost]
         [Route("api/jwt/isvalidtoken")]
-        public IHttpActionResult IsJWTTokenValid([FromUri] string jwtToken)
+        public IHttpActionResult IsJWTTokenValid([FromBody] TokenRequest request)
         {
             try
             {
                 var _jwtService = new JWTService();
-                var isJwtValid = _jwtService.IsJWTSignatureTampered(jwtToken);
+                var isJwtValid = _jwtService.IsJWTSignatureTampered(request.token);
                 return Content(HttpStatusCode.OK, true);
             }
             catch
