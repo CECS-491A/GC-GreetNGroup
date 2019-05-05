@@ -31,7 +31,6 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                //TODO: Update so that ip & url is included in FromBody for logging purposes
                 _gngLoggerService.LogBadRequest(jwtService.GetUserIDFromToken(jwtToken).ToString(), 
                     "N/A", "https://www.greetngroup.com/", ex.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
@@ -79,7 +78,8 @@ namespace WebApi.Controllers
         public IHttpActionResult CheckUsersClaims([FromBody] ClaimCheckRequest request) {
             try
             {
-                if(jwtService.CheckUserClaims(request.JWT, request.ClaimsToCheck) == true)
+                if(jwtService.CheckUserClaims(request.JWT, request.ClaimsToCheck) == true && 
+                    jwtService.IsTokenExpired(request.JWT) == false)
                 {
                     return Content(HttpStatusCode.Accepted, true);
                 }

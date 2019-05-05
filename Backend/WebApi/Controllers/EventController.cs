@@ -22,12 +22,11 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/event/{id}")]
-        public IHttpActionResult GetEventById(int id, int userId, string ip, string url)
+        public IHttpActionResult GetEventById(int eventId, int userId, string ip, string url)
         {
             try
             {
-                var eventService = new EventService();
-                var e = eventService.GetEventById(id);
+                var e = eventService.GetEventById(eventId);
                 //gngLogManager.LogGNGSearchAction(userId.ToString(), id.ToString(), ip);
                 return Ok(e);
             }

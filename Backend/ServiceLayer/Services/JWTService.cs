@@ -61,6 +61,29 @@ namespace Gucci.ServiceLayer.Services
             return jwtToken;
         }
 
+        public bool IsTokenExpired(string jwt)
+        {
+            var isExpired = false;
+            if (!IsJWTSignatureTampered(jwt))
+            {
+                var jwtPayload = tokenHandler.ReadJwtToken(jwt).Payload;
+                var assignTime = new DateTime(jwtPayload.Exp.Value).ToUniversalTime();
+                if((DateTime.UtcNow - assignTime).TotalMinutes > 30)
+                {
+                    isExpired = true;
+                }
+                else
+                {
+                    isExpired = false;
+                }
+                return isExpired;
+            }
+            else
+            {
+                return isExpired;
+            }
+        }
+
         /// <summary>
         /// Method RefreshToken returns the refreshed JWT of the user with an
         /// expired JWT so long as their JWT has not been tampered with.
