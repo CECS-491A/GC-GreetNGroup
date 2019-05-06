@@ -70,10 +70,12 @@ namespace Gucci.WebApi.Controllers
             }
             catch (ArgumentException argExcept) // Wrong should not be found, but if they are, catch here
             {
+                // log service has not been made for this yet
                 return BadRequest();
             }
             catch (Exception e) // Catch all of errors bubbling up from services
             {
+                // log service has not been made for this yet
                 return BadRequest();
             }
             // Return results

@@ -16,11 +16,11 @@ namespace Gucci.ServiceLayer.Services
         {
             var filtered = new List<Event>();
             var currentTime = new DateTime().ToLocalTime();
-            foreach (var c in unfiltered)
+            foreach (var uEvent in unfiltered)
             {
-                if (DateTime.Compare(c.StartDate, currentTime) >= 0)
+                if (DateTime.Compare(uEvent.StartDate, currentTime) >= 0)
                 {
-                    filtered.Add(c);
+                    filtered.Add(uEvent);
                 }
             }
 
@@ -102,6 +102,7 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     // Return events where the startDate of the event is within the range of startDate and endDate
+                    // e stands for events
                     resultList = ctx.Events.Where(e => e.StartDate.CompareTo(startDate) >= 0 && e.StartDate.CompareTo(endDate) <= 0).ToList();
                     // Sorts result by StartDate
                     resultList.Sort((event1, event2) => DateTime.Compare(event1.StartDate, event2.StartDate));
