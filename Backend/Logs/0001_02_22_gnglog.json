@@ -1,0 +1,93 @@
+[
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:11:48 PM",
+    "description": "User searched for p"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:12:16 PM",
+    "description": "User searched for ee"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:12:21 PM",
+    "description": "User searched for part"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:12:32 PM",
+    "description": "User searched for part"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:12:43 PM",
+    "description": "User searched for bobvong@gmail.com"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:12:46 PM",
+    "description": "User searched for bobvong@gmail.com"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:14:22 PM",
+    "description": "User searched for ee"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:14:26 PM",
+    "description": "User searched for part"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:14:37 PM",
+    "description": "User searched for part"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:14:47 PM",
+    "description": "User searched for bobvong@gmail.com"
+  },
+  {
+    "logID": "SearchAction",
+    "userID": "",
+    "ipAddress": "",
+    "dateTime": "2/22/0001 4:14:50 PM",
+    "description": "User searched for bobvong@gmail.com"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "2/22/0001 2:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "2/22/0001 11:49:42 AM",
+    "description": "1 exited website from https://www.greetngroup.com"
+  }
+]

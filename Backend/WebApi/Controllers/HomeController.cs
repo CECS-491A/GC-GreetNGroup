@@ -1,4 +1,3 @@
-using Gucci.ManagerLayer.LoginManagement;
 using Gucci.ManagerLayer.ProfileManagement;
 using Gucci.ServiceLayer.Requests;
 using System;
@@ -6,6 +5,7 @@ using System.Net;
 using System.Web.Http;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Services;
+using System.Web.Profile;
 
 namespace WebApi.Controllers
 {
@@ -15,6 +15,7 @@ namespace WebApi.Controllers
         private UserService userService = new UserService();
         private IJWTService jwtService = new JWTService();
 
+        /*
         [HttpGet]
         [Route("api/profile")]
         public IHttpActionResult Get([FromBody]string jwtToken)
@@ -95,5 +96,6 @@ namespace WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, "Service is unavailable");
             }
         }
+        */
     }
 }

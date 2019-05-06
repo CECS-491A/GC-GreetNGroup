@@ -13,6 +13,7 @@ namespace Gucci.ServiceLayer.Interface
         bool LogBadRequest(string usersID, string ip, string url, string exception);
         bool LogErrorsEncountered(string usersID, string errorCode, string urlOfErr, string errDesc, string ip);
         bool LogGNGSearchAction(string usersID, string searchedItem, string ip);
+
         bool WriteGNGLogToFile(List<GNGLog> logList);
         string GetCurrentLogPath();
     }

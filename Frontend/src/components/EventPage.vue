@@ -1,5 +1,6 @@
 <template>
 <div class="EventPage">
+  <h1 class='display-2'>{{message}}</h1>
   <v-container fluid grid-list-md>
   <v-layout>
     <v-flex xs12 sm6 offset-sm3>
@@ -70,7 +71,8 @@ export default {
       userID: null,
       json: {},
       usersAttending: [],
-      eventTags: []
+      eventTags: [],
+      jwt: localStorage.getItem('token')
     }
   },
   created () {
@@ -83,7 +85,7 @@ export default {
       }
     })
       .then(response => (this.json = response.data))
-      .catch(e => { this.errorMessage = e.response.data })   
+      .catch(e => { this.errorMessage = e.response.data })  
   },
   beforeUpdate () {
     axios({
@@ -121,36 +123,34 @@ export default {
     joinEvent: function () {
       axios({
         method: 'POST',
-        url: `${apiURL}/event/joinevent`,
+        url: `${apiURL}/joinevent`,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
         data: {
-          jwtToken: this.localStorage.getItem('Token'),
+          jwtToken: this.jwt,
           eventID: this.json.eventId
         }
       })
         .then(response => (this.message = response.data))
         .catch(e => { this.errorMessage = e.response.data })
-      alert(this.message)
     },
     leaveEvent: function () {
       axios({
         method: 'POST',
-        url: `${apiURL}/event/leaveevent`,
+        url: `${apiURL}/leaveevent`,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
         data: {
-          jwtToken: this.localStorage.getItem('Token'),
+          jwtToken: this.jwt,
           eventID: this.json.eventId
         }
       })
         .then(response => (this.message = response.data))
         .catch(e => { this.errorMessage = e.response.data })
-      alert(this.message)
     },
     formatDate (date) {
       // DateTime objects formatted as 'YYYY-MM-DD T HH:MM:SS', formatting will result in array of size 6

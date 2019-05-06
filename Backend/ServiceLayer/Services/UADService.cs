@@ -12,7 +12,7 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         /// <param name="logs">list of logs</param>
         /// <param name="logID">log id that wants to be counted</param>
-        /// <returns>returns an integer with the number of logs found</returns>
+        /// <returns>returns the number of logs with the passed logid found</returns>
         public int GetNumberofLogsID(List<GNGLog> logs, string logID)
         {
             int logcount = 0;
@@ -25,7 +25,69 @@ namespace Gucci.ServiceLayer.Services
             }
             return logcount;
         }
-
+        /// <summary>
+        /// Function that returns the login information(average logins, max, min) for the current year and month
+        /// </summary>
+        /// <param name="logs">list of logs</param>
+        /// <returns>returns the number of logs with the passed logid found</returns>
+        public List<string> GetLoginInfo(List<GNGLog> logs)
+        {
+            var loginID = "EntryToWebsite";
+            var totalLogin = 0;
+            var currentLogin = 0;
+            int minLogin = 0;
+            int maxLogin = 0;
+            var totalDays = 1.0;
+            var firstDate = DateTime.Parse(logs[0].DateTime);
+            var firstDay = firstDate.Day;
+            var loginInfoList = new List<string>();
+            var averageLogins = 0.0;
+            for (int i = 0; i < logs.Count; i++)
+            {
+                var currentDate = DateTime.Parse(logs[i].DateTime);
+                var currentDay = currentDate.Day;
+                if (logs[i].LogID.Equals(loginID) == true)
+                {
+                    totalLogin++;
+                    currentLogin++;
+                }
+                // Sets max and min for first day
+                if (totalDays == 1.0)
+                {
+                    minLogin = currentLogin;
+                    maxLogin = currentLogin;
+                }
+                // Checks to see if days have changed
+                if (firstDay != currentDay)
+                {
+                    firstDay = currentDay;
+                    totalDays++;
+                    if(currentLogin > maxLogin)
+                    {
+                        maxLogin = currentLogin;
+                    }
+                    else if(currentLogin < minLogin)
+                    {
+                        minLogin = currentLogin;
+                    }
+                    currentLogin = 0;
+                }
+            }
+            // Checks last day of logs
+            if (currentLogin > maxLogin)
+            {
+                maxLogin = currentLogin;
+            }
+            else if (currentLogin < minLogin)
+            {
+                minLogin = currentLogin;
+            }
+            averageLogins = totalLogin / totalDays;
+            loginInfoList.Add(averageLogins.ToString("0.##"));
+            loginInfoList.Add(minLogin.ToString("0.##"));
+            loginInfoList.Add(maxLogin.ToString("0.##"));
+            return loginInfoList;
+        }
         /// <summary>
         /// Function that takes a list of logs and removes the logs not related to the specific month
         /// </summary>
@@ -59,7 +121,7 @@ namespace Gucci.ServiceLayer.Services
             {
                 //Return the Name of the month
                 DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
-                if (string.Compare(parsedDate.ToString("MMMM"), month) != 0 || parsedDate.Year != year)
+                if (month.CompareTo(parsedDate.ToString("MMMM")) != 0 || parsedDate.Year != year)
                 {
                     logs.Remove(logs[i]);
                 }
@@ -89,47 +151,68 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         /// <param name="session">List of session times</param>
         /// <returns>the average session time</returns>
-        public double CalculateAverageSessionTime(List<GNGLog> session)
+        public List<string> CalculateAverageSessionInformation(List<GNGLog> session)
         {
-            var average = 0;
-            var totalSessions = (session.Count) / 2;
+            var average = 0.0;
+            var totalSessions = session.Count / 2.0;
             var totalTime = 0;
+            var maxSession = 0;
+            var minSession = 0;
+            var sessionInformation = new List<string>();
             //Iterate list as pairs and find time difference for each pair
             for(int i = 1; i < session.Count;)
             {
-                DateTime end = DateTime.Parse(session[i - 1].DateTime);
-                DateTime beginning = DateTime.Parse(session[i].DateTime);
-                TimeSpan duration = end - beginning;
+                
+                var end = DateTime.Parse(session[i - 1].DateTime);
+                var beginning = DateTime.Parse(session[i].DateTime);
+                var duration = end - beginning;
                 //Convert time to minutes
                 totalTime = totalTime + (int)duration.TotalMinutes;
+                if (i == 1)
+                {
+                    maxSession = (int)duration.TotalMinutes;
+                    minSession = (int)duration.TotalMinutes;
+                }
+                if(duration.TotalMinutes > maxSession)
+                {
+                    maxSession = (int)duration.TotalMinutes;
+                }
+                else if(duration.TotalMinutes < minSession)
+                {
+                    minSession = (int)duration.TotalMinutes;
+                }
                 i = i + 2;
             }
             //Calculate the average time
             average = totalTime / totalSessions;
-            return average;
+            sessionInformation.Add(average.ToString("0.##"));
+            sessionInformation.Add(minSession.ToString("0.##"));
+            sessionInformation.Add(maxSession.ToString("0.##"));
+            return sessionInformation;
         }
 
         /// <summary>
-        /// Functions that removes logs without the specified string and keeps only entrence logs
+        /// Functions that removes logs without the specified url and keeps only entrence logs
         /// </summary>
         /// <param name="logs">list of logs</param>
         /// <param name="url">specific url</param>
         public void GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
             logs = GetLogswithID(logs, "ClickEvent");
+            var entryLogs = new List<GNGLog>();
             //For every log check to see if the urls dont match
-            for (int i = logs.Count - 1; i >= 0; i--)
+            for (int i = 0; i < logs.Count; i++)
             {
                 string[] words = logs[i].Description.Split(' ');
                 if (string.Compare(words[2], url) != 0)
                 {
-                    logs.Remove(logs[i]);
+                    entryLogs.Add(logs[i]);
                 }
             }
         }
 
         /// <summary>
-        /// Functions that removes logs without the specified string and keeps only the exit logs
+        /// Functions that removes logs without the specified url and keeps only the exit logs
         /// </summary>
         /// <param name="logs">List of logs</param>
         /// <param name="url">specific url</param>
@@ -139,13 +222,13 @@ namespace Gucci.ServiceLayer.Services
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 string logID = logs[i].LogID;
-                //Check if its not logID ClickEvent or ExitFromWebsite
+                //Check if log is does not have logID ClickEvent or ExitFromWebsite
                 if(string.Compare(logID, "ClickEvent") != 0 && string.Compare(logID, "ExitFromWebsite") != 0)
                 {
                         logs.Remove(logs[i]);
                 }
                 //Check to see if the url of the log doesnt match with the passed url
-                if (string.Compare(logID, "ClickEvent") == 0)
+                else if (string.Compare(logID, "ClickEvent") == 0)
                 {
                     string[] lastPageUrl = logs[i].Description.Split(' ');
                     if (string.Compare(lastPageUrl[0], url) != 0)
@@ -154,7 +237,7 @@ namespace Gucci.ServiceLayer.Services
                     }
                 }
                 //Check to see if the url when the user logs off doesnt matches the passed url
-                if (string.Compare(logID, "ExitFromWebsite") == 0)
+                else if (string.Compare(logID, "ExitFromWebsite") == 0)
                 {
                     string[] logoutUrl = logs[i].Description.Split(' ');
                     if (string.Compare(logoutUrl[4], url) != 0)
@@ -163,29 +246,6 @@ namespace Gucci.ServiceLayer.Services
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Functions that removes logs without the specified month and keeps only the exit logs
-        /// </summary>
-        /// <param name="logs">List of logs</param>
-        /// <param name="url">specific url</param>
-        public bool IsMonthValid(string month)
-        {
-            var result = false;
-            var months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-            if (string.IsNullOrEmpty(month))
-            {
-                return result;
-            }
-            for(int i = 0; i < months.Count; i++)
-            {
-                if(month.CompareTo(months[i]) == 0)
-                {
-                    result = true;
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -229,5 +289,26 @@ namespace Gucci.ServiceLayer.Services
             }
             return sessions;
         }
+        /// <summary>
+        /// Function that Pairs starting and ending logs together to create sessions
+        /// </summary>
+        /// <param name="startLogs">List of Logs for when sessions begin</param>
+        /// <param name="endLogs">List of Logs whenever sessions end</param>
+        /// <returns>Paired List of Logs</returns>
+        public List<UADObject> ConvertListToUADObjects(string[] informationTitles, List<string> values)
+        {
+            var uadObjects = new List<UADObject>();
+            for(int i = 0; i < informationTitles.Length; i++)
+            {
+                var currentUADObject = new UADObject
+                {
+                    InfoType = informationTitles[i],
+                    Value = values[i]
+                };
+                uadObjects.Add(currentUADObject);
+            }
+            return uadObjects;
+        }
+        
     }
 }

@@ -59,7 +59,7 @@
     "logID": "EntryToWebsite",
     "userID": "2",
     "ipAddress": "1.1.1.1",
-    "dateTime": "11/22/2018 10:56:14 AM",
+    "dateTime": "11/22/2018 2:56:14 AM",
     "description": "1 entered at https://www.greetngroup.com"
   },
   {
@@ -68,5 +68,61 @@
     "ipAddress": "1.1.1.1",
     "dateTime": "11/22/2018 11:49:42 AM",
     "description": "1 exited website from https://www.greetngroup.com"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 5:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 11:49:42 AM",
+    "description": "1 exited website from https://www.greetngroup.com"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 7:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "2",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 11:49:42 AM",
+    "description": "1 exited website from https://www.greetngroup.com"
+  },
+  {
+    "logID": "EntryToWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 9:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "11/22/2018 10:48:35 AM",
+    "description": "https://www.greetngroup.com to https://www.greetngroup.com/createevent"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "1",
+    "ipAddress": "1.103.23.102",
+    "dateTime": "11/22/2018 10:51:31 AM",
+    "description": "https://www.greetngroup.com/createevent to https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "1",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "11/22/2018 12:56:14 PM",
+    "description": "1 exited website from https://www.greetngroup.com/search"
   }
 ]
