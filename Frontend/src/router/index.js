@@ -109,7 +109,7 @@ const router = new Router({
     }
   ]
 })
-
+/*
 router.beforeEach((to, from, next) => {
   Axios.post('http://localhost:62008/api/logclicks', {
     jwt: localStorage.getItem('token'),
@@ -161,5 +161,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
+*/
 export default router
