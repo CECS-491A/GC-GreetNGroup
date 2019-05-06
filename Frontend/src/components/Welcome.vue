@@ -17,7 +17,7 @@ export default {
   },
   created () {
     if (localStorage.getItem('token') !== null) {
-      if (isProfileEnabled() !== true) {
+      if (!isProfileEnabled()) {
         this.$router.push('/activateprofile')
       }
     }
