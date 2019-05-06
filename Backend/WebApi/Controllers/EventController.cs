@@ -14,6 +14,7 @@ namespace WebApi.Controllers
         private EventService eventService = new EventService();
         private ILoggerService _gngLoggerService = new LoggerService();
         private EventTagService eventTagService = new EventTagService();
+        private IJWTService _jwtService = new JWTService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -41,11 +42,12 @@ namespace WebApi.Controllers
         [Route("api/event/createEvent")]
         public IHttpActionResult CreateNewEvent([FromBody] EventRequest request)
         {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
             try
             {
-                var newEvent = eventService.InsertEvent(request.userId, request.startDate, request.eventName,
-                    request.address, request.city, request.state, request.zip, 
-                    request.eventTags, request.eventDescription, request.ip, request.url);
+                var newEvent = eventService.InsertEvent(userId, request.StartDate, request.EventName,
+                    request.Address, request.City, request.State, request.Zip, 
+                    request.EventTags, request.EventDescription, request.Ip, request.Url);
                 var eventId = newEvent.EventId;
                 if(newEvent != null)
                 {
@@ -53,30 +55,32 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    _gngLoggerService.LogErrorsEncountered(request.userId.ToString(), HttpStatusCode.Conflict.ToString(),
-                        request.url, "The event failed to be created", request.ip);
+                    _gngLoggerService.LogErrorsEncountered(userId.ToString(), HttpStatusCode.Conflict.ToString(),
+                        request.Url, "The event failed to be created", request.Ip);
                     return Content(HttpStatusCode.Conflict, "Event Creation was unsuccessful");
                 }
                 
             }
             catch(Exception e)
             {
-                _gngLoggerService.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
+                _gngLoggerService.LogBadRequest(userId.ToString(), request.Ip, request.Url, e.ToString());
                 return BadRequest();
             }
 
         }
 
         [HttpPost]
-        [Route("api/event/{eventId}/updateevent")]
+        [Route("api/event/updateEvent")]
         public IHttpActionResult UpdateEvent([FromBody] EventRequest request)
         {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
             try
             {
-                var eventToUpdate = eventService.GetEventById(request.eventId);
-                var isSuccessfulUpdate = eventService.UpdateEvent(request.eventId, request.userId, request.startDate, request.eventName,
-                    request.address, request.city, request.state, request.zip, request.eventTags, request.eventDescription, request.url,
-                    request.ip);
+                var eventToUpdate = eventService.GetEventById(request.EventId);
+                
+                var isSuccessfulUpdate = eventService.UpdateEvent(request.EventId, userId, request.StartDate, request.EventName,
+                    request.Address, request.City, request.State, request.Zip, request.EventTags, request.EventDescription, request.Url,
+                    request.Ip);
                 if(isSuccessfulUpdate == true)
                 {
                     return Content(HttpStatusCode.OK, true);
@@ -88,7 +92,7 @@ namespace WebApi.Controllers
             }
             catch(Exception e)
             {
-                _gngLoggerService.LogBadRequest(request.userId.ToString(), request.ip, request.url, e.ToString());
+                _gngLoggerService.LogBadRequest(userId.ToString(), request.Ip, request.Url, e.ToString());
                 return BadRequest();
             }
         }

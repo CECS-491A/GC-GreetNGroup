@@ -227,7 +227,7 @@
         startTime: null,
         formHasErrors: false,
         selected: [],
-        ip: ''
+        json: {}
         }),
         computed: {
             form () {
@@ -265,12 +265,17 @@
                 return timeString;
             }
         },
-        mounted () {
-            axios.get("http://localhost:62008/api/event/{id}", {
-                params: {
-
-                }
+        created () {
+            axios({
+            method: 'GET',
+            url: `${apiURL}/event/info?name=` + this.eventNames,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            }
             })
+            .then(response => (this.json = response.data))
+            .catch(e => { this.errorMessage = e.response.data })   
         },
         watch: {
             name () {
@@ -333,9 +338,10 @@
                     eventDate[2], eventStartTime[0], eventStartTime[1]));
                     var eventTagsSelected = this.selected;
 
-                    axios.post("http://localhost:62008/api/event/createevent",
+                    axios.post("http://localhost:62008/api/event/updateEvent",
                         {
-                            userId: 1,
+                            eventId: this.json.EventId,
+                            userId: this.json.UserId,
                             startDate: eventStartDateTime,
                             eventName: this.form.name,
                             address: this.form.address,
@@ -345,14 +351,14 @@
                             eventTags: eventTagsSelected,
                             eventDescription: this.form.description,
                             ip: this.ip,
-                            url: "http://www.greetngroup.com/CreateEvent"
+                            url: "https://www.greetngroup.com/UpdateEvent"
                         }).then((response) => {
                         if(response != null) {
-                            alert("Your event has been created! Redirecting.");
+                            alert("Your event has been updated! Redirecting.");
                             this.$router.push('/');
                         }
                         else {
-                            alert("There was a problem creating your event. Redirecting.");
+                            alert("There was a problem updating your event. Redirecting.");
                             this.$router.push('/');
                         }
                     }).catch(error => console.log(error));
