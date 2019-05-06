@@ -38,33 +38,36 @@ namespace Gucci.ServiceLayer.Services
             int minLogin = 0;
             int maxLogin = 0;
             var totalDays = 1.0;
-            var firstDate = DateTime.Parse(logs[0].DateTime);
-            var firstDay = firstDate.Day;
             var loginInfoList = new List<string>();
             var averageLogins = 0.0;
-            for (int i = 0; i < logs.Count; i++)
+            if (logs.Count != 0)
             {
-                var currentDate = DateTime.Parse(logs[i].DateTime);
-                var currentDay = currentDate.Day;
-                if (logs[i].LogID.Equals(loginID) == true)
+                var firstDate = DateTime.Parse(logs[0].DateTime);
+                var firstDay = firstDate.Day;
+                for (int i = 0; i < logs.Count; i++)
                 {
-                    totalLogin++;
-                    currentLogin++;
-                }
-                // Sets max and min for first day
-                if (totalDays == 1.0)
-                {
-                    minLogin = currentLogin;
-                    maxLogin = currentLogin;
-                }
-                // Checks to see if days have changed
-                if (firstDay != currentDay)
-                {
-                    firstDay = currentDay;
-                    totalDays++;
-                    maxLogin = Math.Max(currentLogin, maxLogin);
-                    minLogin = Math.Min(currentLogin, minLogin);
-                    currentLogin = 0;
+                    var currentDate = DateTime.Parse(logs[i].DateTime);
+                    var currentDay = currentDate.Day;
+                    if (logs[i].LogID.Equals(loginID) == true)
+                    {
+                        totalLogin++;
+                        currentLogin++;
+                    }
+                    // Sets max and min for first day
+                    if (totalDays == 1.0)
+                    {
+                        minLogin = currentLogin;
+                        maxLogin = currentLogin;
+                    }
+                    // Checks to see if days have changed
+                    if (firstDay != currentDay)
+                    {
+                        firstDay = currentDay;
+                        totalDays++;
+                        maxLogin = Math.Max(currentLogin, maxLogin);
+                        minLogin = Math.Min(currentLogin, minLogin);
+                        currentLogin = 0;
+                    }
                 }
             }
             // Checks last day of logs
