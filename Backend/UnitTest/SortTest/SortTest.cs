@@ -54,7 +54,7 @@ namespace UnitTest.SortTest
             bool expected = true;
             bool actual = false;
             List<double> numList = new List<double> { 5.5, 4.4, 3.3, 2.2, 1.1 };
-            List<string> wordList = new List<string> { "E", "D", "C", "B", "A" };
+            string[] wordList = { "E", "D", "C", "B", "A" };
 
             // Act
             sortServicer.QuickSortDouble(numList, wordList);

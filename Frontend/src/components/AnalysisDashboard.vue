@@ -8,12 +8,12 @@
     </div>
     <div>
     <button @click=" searchInput(month, year)">Search</button>
-
+    <div v-bind:style="{ color: 'red', fontSize: 30 + 'px' }"> {{messageResults}}</div>
     <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login VS Registered Users</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login Compared To Registered Users</v-card-title>
           <v-card-text><li v-for="(value, index) in this.logvsreg"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}}
             </li></v-card-text>
@@ -22,12 +22,14 @@
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
           <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Average Session Time (minutes)</v-card-title>
-          <v-card-text>{{avgsession.InfoType}}: {{avgsession.Value}}</v-card-text>
+          <v-card-text><li v-for="(value, index) in this.avgsession"  v-bind:key="index" style = "list-style-type : none;">
+            {{value.InfoType}} : {{value.Value}}
+            </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Features</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Most Used Features</v-card-title>
           <v-card-text><li v-for="(value, index) in this.top5feature"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
@@ -39,21 +41,21 @@
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Time Spent on A Page (minutes)</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Times Spent on A Page (minutes)</v-card-title>
           <v-card-text><li v-for="(value, index) in this.top5pages"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Logins Last 6 Months</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Total Logins Last 6 Months</v-card-title>
           <v-card-text><li v-for="(value, index) in this.loginmonthly"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session Last 6 Months (minutes)</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session Time Last 6 Months (minutes)</v-card-title>
           <v-card-text><li v-for="(value, index) in this.sessionmonthly"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
@@ -79,7 +81,8 @@ export default {
       loginmonthly: {},
       sessionmonthly: {},
       month: '',
-      year: ''
+      year: '',
+      messageResults: ''
     }
   },
 
@@ -99,7 +102,8 @@ export default {
       var checkMonth = this.checkMonth(month)
       var checkYear = this.checkYear(year)
       if (checkYear === true && checkMonth === true) {
-        // month = month.charAt(0).toUpperCase() + month.slice(1)
+        this.messageResults = ''
+        month = month.charAt(0).toUpperCase() + month.slice(1)
         axios.all([
           this.LoginVsRegistered(month, year),
           this.AverageSessionDuration(month, year),
@@ -117,7 +121,7 @@ export default {
             this.sessionmonthly = sixthResponse.data
           }))  
       } else {
-        alert('Not a valid Date')
+        this.messageResults = 'Date not Valid'
       }
     },
     LoginVsRegistered (month, year) {
@@ -127,7 +131,7 @@ export default {
       return axios.get(`${apiURL}/UAD/AverageSessionDuration/` + month + '/' + year).catch(error => console.log(error))
     },
     Top5Features (month, year) {
-      return axios.get(`${apiURL}/UAD/GetTop5MostUsedFeature/` + month + '/' + year).catch(error => console.log(error))
+      return axios.get(`${apiURL}/UAD/Top5MostUsedFeature/` + month + '/' + year).catch(error => console.log(error))
     },
     Top5Pages (month, year) {
       return axios.get(`${apiURL}/UAD/Top5AveragePageSession/` + month + '/' + year).catch(error => console.log(error))

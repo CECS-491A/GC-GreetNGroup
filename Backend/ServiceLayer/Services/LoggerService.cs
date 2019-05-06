@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
+using System.Globalization;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -218,6 +219,45 @@ namespace Gucci.ServiceLayer.Services
             return logList;
         }
 
+        /// <summary> 
+        /// Author: Dylan
+        /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
+        /// </summary>
+        /// <returns></returns>
+        public List<GNGLog> ReadLogsGivenMonthYear(string month, int year)
+        {
+            var logList = new List<GNGLog>();
+            var intMonth = DateTime.ParseExact(month, "MMMM", CultureInfo.CurrentCulture).Month;
+            int daysOfMonth = System.DateTime.DaysInMonth(year, intMonth);
+            var utcMonth = intMonth.ToString("00");
+            var utcYear = year.ToString("0000");
+
+            for (int i = 1; i <= daysOfMonth; i++)
+            {
+                var utcDay = i.ToString("00");
+                var currentDate = utcYear + "_" + utcMonth + "_" + utcDay;
+                var currentFile = configurations.GetLogDirectory() + currentDate + "_gnglog.json";
+                if(File.Exists(currentFile))
+                {
+                    if (new FileInfo(currentFile).Length != 0)
+                    {
+                        using (var r = new StreamReader(currentFile))
+                        {
+                            var jsonFile = r.ReadToEnd();
+                            //Retrieve Current Logs
+                            var logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
+                            for (var index = 0; index < logs.Count; index++)
+                            {
+                                logList.Add(logs[index]);
+                            }
+                            r.Close();
+                        }
+                    }
+                }
+            }
+            return logList;
+        }
+
         /// <summary>
         /// Method WriteGNGLogToFile writes the logs into the JSON log file. Should the
         /// write fail, the error counter is incremented and the exception is sent to
@@ -368,6 +408,32 @@ namespace Gucci.ServiceLayer.Services
                 IpAddress = ip,
                 DateTime = DateTime.UtcNow.ToString(),
                 Description = "User searched for " + searchedItem
+            };
+
+            var logList = FillCurrentLogsList();
+            logList.Add(log);
+
+            logMade = WriteGNGLogToFile(logList);
+
+            return logMade;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool LogFailedLogin(string userID)
+        {
+            var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
+            CreateNewLog(fileName, configurations.GetLogDirectory());
+            var logMade = false;
+            var log = new GNGLog
+            {
+                LogID = "FailedLogin",
+                UserID = "",
+                IpAddress = "",
+                DateTime = DateTime.UtcNow.ToString(),
+                Description = userID +" Failed to Login"
             };
 
             var logList = FillCurrentLogsList();
