@@ -56,7 +56,7 @@ namespace ServiceLayer.Services
         public string Sign(string payloadString)
         {
             // Instantiate a new hashing algorithm with the provided key
-            HMACSHA256 hashingAlg = new HMACSHA256(Encoding.ASCII.GetBytes("5E5DDBD9B984E4C95BBFF621DF91ABC9A5318DAEC0A3B231B4C1BC8FE0851610"));
+            HMACSHA256 hashingAlg = new HMACSHA256(Encoding.ASCII.GetBytes("8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C"));
 
             //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine)
 
