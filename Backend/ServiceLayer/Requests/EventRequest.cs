@@ -6,28 +6,28 @@ namespace Gucci.ServiceLayer.Requests
 {
     public class EventRequest
     {
-        public int eventId { get; set; }
+        public int EventId { get; set; }
         [Required]
-        public int userId { get; set; }
+        public string JWT { get; set; }
         [Required]
-        public DateTime startDate { get; set; }
+        public DateTime StartDate { get; set; }
         [Required]
-        public string eventName { get; set; }
+        public string EventName { get; set; }
         [Required]
-        public string address { get; set; }
+        public string Address { get; set; }
         [Required]
-        public string city { get; set; }
+        public string City { get; set; }
         [Required]
-        public string state { get; set; }
+        public string State { get; set; }
         [Required]
-        public string zip { get; set; }
+        public string Zip { get; set; }
         [Required]
-        public List<string> eventTags { get; set; }
-        public string eventDescription { get; set; }
+        public List<string> EventTags { get; set; }
+        public string EventDescription { get; set; }
         [Required]
-        public string ip { get; set; }
+        public string Ip { get; set; }
         [Required]
-        public string url { get; set; }
+        public string Url { get; set; }
 
     }
 }

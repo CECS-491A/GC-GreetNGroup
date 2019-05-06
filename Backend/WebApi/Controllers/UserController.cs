@@ -1,11 +1,11 @@
 ﻿using Gucci.ManagerLayer.ProfileManagement;
 using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
+using Gucci.ServiceLayer.Interface;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Gucci.ManagerLayer.LogManagement;
 using ManagerLayer.UserManagement;
 
 namespace WebApi.Controllers
@@ -19,8 +19,9 @@ namespace WebApi.Controllers
 
     public class UserController : ApiController
     {
-        private LogManager gngLogManager = new LogManager();
-        UserService userService = new UserService();
+        private ILoggerService _gngLoggerService = new LoggerService();
+        private UserService userService = new UserService();
+        private IJWTService _jwtService = new JWTService();
 
         // Method to get the email of a user given the JWTToken
         [HttpPost]
@@ -33,8 +34,10 @@ namespace WebApi.Controllers
                 var result = userMan.GetEmail(request.token);
                 return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _gngLoggerService.LogBadRequest(_jwtService.GetUserIDFromToken(request.token).ToString(), "N/A", "https://www.greetngroup.com/user/", e.ToString());
+                //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("Unable to retrieve email")
@@ -56,6 +59,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException e)
             {
+                _gngLoggerService.LogBadRequest(userID.ToString(), "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
                 return BadRequest();
             }
         }
@@ -109,7 +113,7 @@ namespace WebApi.Controllers
             }
             catch (Exception e) //Catch all errors
             {
-                //gngLogManager.LogBadRequest("", "", "", e.ToString());
+                _gngLoggerService.LogBadRequest(userID, "N/A", "https://www.greetngroup.com/user/" + userID + "/rate", e.ToString());
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
                 /*
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
