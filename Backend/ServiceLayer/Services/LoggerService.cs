@@ -221,7 +221,7 @@ namespace Gucci.ServiceLayer.Services
 
         /// <summary> 
         /// Author: Dylan
-        /// Reads all json files in directory and deserializes into GNGlog and puts them all into a list
+        /// Finds json files given month and year and dezerlizes them into a list
         /// </summary>
         /// <returns></returns>
         public List<GNGLog> ReadLogsGivenMonthYear(string month, int year)
@@ -418,10 +418,10 @@ namespace Gucci.ServiceLayer.Services
             return logMade;
         }
         /// <summary>
-        /// 
+        /// Method LogFailed Login logs falied apptempts to login from SSO
         /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
+        /// <param name="usersID">user ID</param>
+        /// <returns>Returns true or false if the log was successfully made</returns>
         public bool LogFailedLogin(string userID)
         {
             var fileName = DateTime.UtcNow.ToString(configurations.GetDateTimeFormat()) + configurations.GetLogExtention();
