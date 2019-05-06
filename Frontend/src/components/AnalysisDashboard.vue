@@ -62,6 +62,17 @@
       </v-flex>
     </v-layout>
   </v-container>
+  <v-container fluid grid-list-md>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Successful vs Unsuccessful Logins</v-card-title>
+          <v-card-text><li v-for="(value, index) in this.loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;">
+            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
     </div>
   </div>
 </template>
@@ -75,6 +86,7 @@ export default {
     return {
       input: '',
       logvsreg: {},
+      loginsuccessfail: {},
       avgsession: {},
       top5feature: {},
       top5pages: {},
@@ -110,15 +122,17 @@ export default {
           this.Top5Features(month, year),
           this.Top5Pages(month, year),
           this.MonthlyLogin(month, year),
-          this.MonthlySessionDuration(month, year)
+          this.MonthlySessionDuration(month, year),
+          this.LoginSuccessFail(month, year)
         ])
-          .then(axios.spread((firstResponse, secondResponse, thirdResponse, fourthResponse, fifthResponse, sixthResponse) => {
+          .then(axios.spread((firstResponse, secondResponse, thirdResponse, fourthResponse, fifthResponse, sixthResponse, seventhResponse) => {
             this.logvsreg = firstResponse.data
             this.avgsession = secondResponse.data
             this.top5feature = thirdResponse.data
             this.top5pages = fourthResponse.data
             this.loginmonthly = fifthResponse.data
             this.sessionmonthly = sixthResponse.data
+            this.loginsuccessfail = seventhResponse.data
           }))  
       } else {
         this.messageResults = 'Date not Valid'
@@ -141,6 +155,9 @@ export default {
     },
     MonthlySessionDuration (month, year) {
       return axios.get(`${apiURL}/UAD/AverageSessionMonthly/` + month + '/' + year).catch(error => console.log(error))
+    },
+    LoginSuccessFail (month, year) {
+      return axios.get(`${apiURL}/UAD/LoginSuccessFail/` + month + '/' + year).catch(error => console.log(error))
     }
   } 
     

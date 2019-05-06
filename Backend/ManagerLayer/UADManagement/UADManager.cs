@@ -48,8 +48,8 @@ namespace Gucci.ManagerLayer.UADManagement
         public List<UADObject> GetLoginSuccessFail(string month, int year)
         {
             loglist = _gngLoggerService.ReadLogsGivenMonthYear(month, year);
-            string[] logID = {"EntrytoWebsite", "FailedLogin"};
-            string[] informationList = {"Sucessful Logins", "Unsucessful Logins"};
+            string[] logID = {"EntryToWebsite", "FailedLogin"};
+            string[] informationList = {"Successful Logins", "Unsuccessful Logins"};
             var valueList = new List<string>();
             valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[0]).ToString());
             valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[1]).ToString());

@@ -28,6 +28,22 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
+        [Route("api/UAD/LoginSuccessFail/{month}/{year}")]
+        public IHttpActionResult GetLoginSuccessFail(string month, int year)
+        {
+            UADManager _uadManager = new UADManager();
+            try
+            {
+                var result = _uadManager.GetLoginSuccessFail(month, year);
+                return Ok(result);
+            }
+            catch (HttpRequestException error) // Catch Logger Errors
+            {
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
+                return BadRequest();
+            }
+        }
+        [HttpGet]
         [Route("api/UAD/AverageSessionDuration/{month}/{year}")]
         public IHttpActionResult GetAverageSessionDuration(string month, int year)
         {

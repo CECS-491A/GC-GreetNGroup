@@ -39,6 +39,28 @@ namespace UnitTest.UADTest
         }
 
         [TestMethod]
+        public void GetLoginSuccessFail_Pass()
+        {
+            // Arrange
+            bool expected = true;
+            bool actual = false;
+            var expectedSuccessfulLogins = "3";
+            var expectedFailLogins = "0";
+            // Act
+            var test = uadManager.GetLoginSuccessFail("April", 1);
+            if (test[0].Value.CompareTo(expectedSuccessfulLogins) == 0 && test[1].Value.CompareTo(expectedFailLogins) == 0)
+            {
+                actual = true;
+            }
+            for (int i = 0; i < test.Count; i++)
+            {
+                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
+            }
+            // Assert
+            Assert.AreEqual(actual, expected);
+        }
+
+        [TestMethod]
         public void GetMonthlyLoginOverSixMonths_Pass()
         {
             // Arrange
