@@ -1,13 +1,14 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.UADManagement;
-using Gucci.ManagerLayer.LogManagement;
+using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Services;
 
 namespace WebApi.Controllers
 {
     public class UADController : ApiController
     {
-        private LogManager gngLogManager = new LogManager();
+        private ILoggerService _gngLoggerService = new LoggerService();
         private const string url = "https://www.greetngroup.com/analysisdashboard";
 
         [HttpGet]
@@ -20,9 +21,25 @@ namespace WebApi.Controllers
                 var result = _uadManager.GetLoginComparedToRegistered(month, year);
                 return Ok(result);
             }
-            catch (HttpRequestException error)
+            catch (HttpRequestException error) // Catch Logger Errors
             {
-                //gngLogManager.LogBadRequest("", "", url, e.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        [Route("api/UAD/LoginSuccessFail/{month}/{year}")]
+        public IHttpActionResult GetLoginSuccessFail(string month, int year)
+        {
+            UADManager _uadManager = new UADManager();
+            try
+            {
+                var result = _uadManager.GetLoginSuccessFail(month, year);
+                return Ok(result);
+            }
+            catch (HttpRequestException error) // Catch Logger Errors
+            {
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }
@@ -38,12 +55,12 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException error)
             {
-                //gngLogManager.LogBadRequest("", "", url, error.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }
         [HttpGet]
-        [Route("api/UAD/GetTop5MostUsedFeature/{month}/{year}")]
+        [Route("api/UAD/Top5MostUsedFeature/{month}/{year}")]
         public IHttpActionResult GetTop5MostUsedFeature(string month, int year)
         {
             UADManager _uadManager = new UADManager();
@@ -54,7 +71,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException error)
             {
-                //gngLogManager.LogBadRequest("", "", url, error.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }
@@ -70,7 +87,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException error)
             {
-                //gngLogManager.LogBadRequest("", "", url, error.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }
@@ -86,7 +103,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException error)
             {
-                //gngLogManager.LogBadRequest("", "", url, error.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }
@@ -102,7 +119,7 @@ namespace WebApi.Controllers
             }
             catch (HttpRequestException error)
             {
-                //gngLogManager.LogBadRequest("", "", url, error.ToString());
+                _gngLoggerService.LogBadRequest("", "", url, error.ToString());
                 return BadRequest();
             }
         }

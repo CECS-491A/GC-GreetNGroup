@@ -1,4 +1,3 @@
-using Gucci.ManagerLayer.LoginManagement;
 using Gucci.ManagerLayer.ProfileManagement;
 using Gucci.ServiceLayer.Requests;
 using System;
@@ -6,13 +5,14 @@ using System.Net;
 using System.Web.Http;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Services;
+using System.Web.Profile;
 
 namespace WebApi.Controllers
 {
     public class HomeController : ApiController
     {
         private ILoggerService _gngLoggerService = new LoggerService();
-
+        /*
         [HttpGet]
         [Route("api/profile")]
         public IHttpActionResult Get([FromBody]string jwtToken)
@@ -34,5 +34,6 @@ namespace WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, "Service Unavailable");
             }
         }
+        */
     }
 }

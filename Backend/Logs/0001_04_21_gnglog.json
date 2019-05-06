@@ -1,0 +1,23 @@
+[
+  {
+    "logID": "EntryToWebsite",
+    "userID": "3",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "4/21/0001 9:56:14 AM",
+    "description": "1 entered at https://www.greetngroup.com"
+  },
+  {
+    "logID": "ClickEvent",
+    "userID": "3",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "4/21/0001 10:48:35 AM",
+    "description": "https://www.greetngroup.com to https://www.greetngroup.com/search"
+  },
+  {
+    "logID": "ExitFromWebsite",
+    "userID": "3",
+    "ipAddress": "1.1.1.1",
+    "dateTime": "4/21/0001 11:56:14 PM",
+    "description": "1 exited website from https://www.greetngroup.com/search"
+  }
+]

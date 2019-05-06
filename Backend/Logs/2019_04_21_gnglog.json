@@ -314,12 +314,5 @@
     "ipAddress": "",
     "dateTime": "4/21/2019 4:53:18 PM",
     "description": "User searched for p"
-  },
-  {
-    "logID": "EntryToWebsite",
-    "userID": "1",
-    "ipAddress": "1.1.1.1",
-    "dateTime": "4/21/2019 11:05:58 PM",
-    "description": "1 entered at https://www.startpoint.com"
   }
 ]

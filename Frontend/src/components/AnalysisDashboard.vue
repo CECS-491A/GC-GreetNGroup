@@ -8,12 +8,12 @@
     </div>
     <div>
     <button @click=" searchInput(month, year)">Search</button>
-
+    <div v-bind:style="{ color: 'red', fontSize: 30 + 'px' }"> {{messageResults}}</div>
     <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login VS Registered Users</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login Compared To Registered Users</v-card-title>
           <v-card-text><li v-for="(value, index) in this.logvsreg"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}}
             </li></v-card-text>
@@ -22,12 +22,14 @@
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
           <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Average Session Time (minutes)</v-card-title>
-          <v-card-text>{{avgsession.InfoType}}: {{avgsession.Value}}</v-card-text>
+          <v-card-text><li v-for="(value, index) in this.avgsession"  v-bind:key="index" style = "list-style-type : none;">
+            {{value.InfoType}} : {{value.Value}}
+            </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Features</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Most Used Features</v-card-title>
           <v-card-text><li v-for="(value, index) in this.top5feature"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
@@ -39,22 +41,33 @@
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Time Spent on A Page (minutes)</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Times Spent on A Page (minutes)</v-card-title>
           <v-card-text><li v-for="(value, index) in this.top5pages"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Logins Last 6 Months</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Total Logins Last 6 Months</v-card-title>
           <v-card-text><li v-for="(value, index) in this.loginmonthly"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session Last 6 Months (minutes)</v-card-title>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session Time Last 6 Months (minutes)</v-card-title>
           <v-card-text><li v-for="(value, index) in this.sessionmonthly"  v-bind:key="index" style = "list-style-type : none;">
+            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+  <v-container fluid grid-list-md>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm6 md4>
+        <v-card color="purple" dark>
+          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Successful vs Unsuccessful Logins</v-card-title>
+          <v-card-text><li v-for="(value, index) in this.loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;">
             {{value.InfoType}} : {{value.Value}} </li></v-card-text>
         </v-card>
       </v-flex>
@@ -73,13 +86,15 @@ export default {
     return {
       input: '',
       logvsreg: {},
+      loginsuccessfail: {},
       avgsession: {},
       top5feature: {},
       top5pages: {},
       loginmonthly: {},
       sessionmonthly: {},
       month: '',
-      year: ''
+      year: '',
+      messageResults: ''
     }
   },
 
@@ -99,25 +114,28 @@ export default {
       var checkMonth = this.checkMonth(month)
       var checkYear = this.checkYear(year)
       if (checkYear === true && checkMonth === true) {
-        // month = month.charAt(0).toUpperCase() + month.slice(1)
+        this.messageResults = ''
+        month = month.charAt(0).toUpperCase() + month.slice(1)
         axios.all([
           this.LoginVsRegistered(month, year),
           this.AverageSessionDuration(month, year),
           this.Top5Features(month, year),
           this.Top5Pages(month, year),
           this.MonthlyLogin(month, year),
-          this.MonthlySessionDuration(month, year)
+          this.MonthlySessionDuration(month, year),
+          this.LoginSuccessFail(month, year)
         ])
-          .then(axios.spread((firstResponse, secondResponse, thirdResponse, fourthResponse, fifthResponse, sixthResponse) => {
+          .then(axios.spread((firstResponse, secondResponse, thirdResponse, fourthResponse, fifthResponse, sixthResponse, seventhResponse) => {
             this.logvsreg = firstResponse.data
             this.avgsession = secondResponse.data
             this.top5feature = thirdResponse.data
             this.top5pages = fourthResponse.data
             this.loginmonthly = fifthResponse.data
             this.sessionmonthly = sixthResponse.data
+            this.loginsuccessfail = seventhResponse.data
           }))  
       } else {
-        alert('Not a valid Date')
+        this.messageResults = 'Date not Valid'
       }
     },
     LoginVsRegistered (month, year) {
@@ -127,7 +145,7 @@ export default {
       return axios.get(`${apiURL}/UAD/AverageSessionDuration/` + month + '/' + year).catch(error => console.log(error))
     },
     Top5Features (month, year) {
-      return axios.get(`${apiURL}/UAD/GetTop5MostUsedFeature/` + month + '/' + year).catch(error => console.log(error))
+      return axios.get(`${apiURL}/UAD/Top5MostUsedFeature/` + month + '/' + year).catch(error => console.log(error))
     },
     Top5Pages (month, year) {
       return axios.get(`${apiURL}/UAD/Top5AveragePageSession/` + month + '/' + year).catch(error => console.log(error))
@@ -137,6 +155,9 @@ export default {
     },
     MonthlySessionDuration (month, year) {
       return axios.get(`${apiURL}/UAD/AverageSessionMonthly/` + month + '/' + year).catch(error => console.log(error))
+    },
+    LoginSuccessFail (month, year) {
+      return axios.get(`${apiURL}/UAD/LoginSuccessFail/` + month + '/' + year).catch(error => console.log(error))
     }
   } 
     
