@@ -25,7 +25,7 @@ namespace UnitTest.UADTest
             var expectedAverageLogins = "1.5";
             var expectedRegistered = "14";
             // Act
-            var test = uadManager.GetLoginComparedToRegistered("April", 1);
+            var test = uadManager.GetLoginComparedToRegistered("April", 2020);
             if(test[0].Value.CompareTo(expectedAverageLogins) == 0 && test[3].Value.CompareTo(expectedRegistered) == 0)
             {
                 actual = true;
