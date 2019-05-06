@@ -65,26 +65,31 @@ namespace Gucci.ServiceLayer.Services
             return jwtToken;
         }
 
-        public bool IsTokenExpired(string jwt)
+        /// <summary>
+        /// Method IsTokenExpired checks if the JWT of the user is expired or not
+        /// by comparing the time of expiration to the current time. The JWT must
+        /// first be checked if it was tampered with or not.
+        /// </summary>
+        /// <param name="jwt">JWT in string form</param>
+        /// <returns>Return a string based on the status of the JWT</returns>
+        public string IsTokenExpired(string jwt)
         {
-            var isExpired = false;
             if (!IsJWTSignatureTampered(jwt))
             {
                 var jwtPayload = tokenHandler.ReadJwtToken(jwt).Payload;
-                var assignTime = new DateTime(jwtPayload.Exp.Value).ToUniversalTime();
+                var assignTime = jwtPayload.ValidTo;
                 if((DateTime.UtcNow - assignTime).TotalMinutes > 30)
                 {
-                    isExpired = true;
+                    return "Is Expired";
                 }
                 else
                 {
-                    isExpired = false;
+                    return "Not Expired";
                 }
-                return isExpired;
             }
             else
             {
-                return isExpired;
+                return "Tampered";
             }
         }
 

@@ -10,6 +10,6 @@ namespace Gucci.ServiceLayer.Interface
         bool IsJWTSignatureTampered(string userJwtToken);
         string GetUsernameFromToken(string jwtToken);
         bool DeleteTokenFromDB(string jwtToken);
-        bool IsTokenExpired(string jwt);
+        string IsTokenExpired(string jwt);
     }
 }
