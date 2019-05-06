@@ -12,12 +12,16 @@ namespace ManagerLayer.UserManagement
     public class UserManager
     {
         private IUserService _userService;
+        private ICryptoService _cryptoService;
+        private ILoggerService _gngLoggerService;
         private SignatureService _signatureService;
         private JWTService _jwtService;
 
         public UserManager()
         {
             _userService = new UserService();
+            _cryptoService = new CryptoService(AppLaunchSecretKey);
+            _gngLoggerService = new LoggerService();
             _signatureService = new SignatureService();
             _jwtService = new JWTService();
         }
@@ -106,8 +110,10 @@ namespace ManagerLayer.UserManagement
                 };
                 return httpResponse;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _gngLoggerService.LogGNGInternalErrors(ex.ToString());
+                return false;
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent("Unable to delete user at this time")

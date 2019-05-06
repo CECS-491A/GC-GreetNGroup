@@ -15,6 +15,16 @@ export default {
   name: 'app',
   components: {
     NavBar
+  },
+  mounted () {
+    localStorage.setItem('ip', 'N/A')
+    axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
+      var ipAddr = result.data.origin.split(',');
+      localStorage.setItem('ip', ipAddr[0])
+    }, error => {
+      localStorage.setItem('ip', 'Error')
+      console.error(error);
+    });
   }
 }
 </script>

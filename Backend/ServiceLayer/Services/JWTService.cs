@@ -16,6 +16,7 @@ namespace Gucci.ServiceLayer.Services
         private ILoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
+
         public JWTService()
         {
             _gngLoggerService = new LoggerService();
@@ -23,6 +24,13 @@ namespace Gucci.ServiceLayer.Services
             credentials = GenerateJWTSignature(symmetricKeyFinal);
         }
 
+        /// <summary>
+        /// Method CreateToken creates the JWT which will be given to the user who
+        /// is registered with GNG.
+        /// </summary>
+        /// <param name="username">username of the user</param>
+        /// <param name="uId">userId of the user</param>
+        /// <returns>The JWT in string form</returns>
         public string CreateToken(string username, int uId)
         {
             var jwtHeader = new JwtHeader(credentials);
@@ -57,7 +65,41 @@ namespace Gucci.ServiceLayer.Services
             return jwtToken;
         }
 
-        // Method to refresh the token that the user has
+        /// <summary>
+        /// Method IsTokenExpired checks if the JWT of the user is expired or not
+        /// by comparing the time of expiration to the current time. The JWT must
+        /// first be checked if it was tampered with or not.
+        /// </summary>
+        /// <param name="jwt">JWT in string form</param>
+        /// <returns>Return a string based on the status of the JWT</returns>
+        public string IsTokenExpired(string jwt)
+        {
+            if (!IsJWTSignatureTampered(jwt))
+            {
+                var jwtPayload = tokenHandler.ReadJwtToken(jwt).Payload;
+                var assignTime = jwtPayload.ValidTo;
+                if((DateTime.UtcNow - assignTime).TotalMinutes > 30)
+                {
+                    return "Is Expired";
+                }
+                else
+                {
+                    return "Not Expired";
+                }
+            }
+            else
+            {
+                return "Tampered";
+            }
+        }
+
+        /// <summary>
+        /// Method RefreshToken returns the refreshed JWT of the user with an
+        /// expired JWT so long as their JWT has not been tampered with.
+        /// </summary>
+        /// <param name="jwtToken">The expired JWT as a string</param>
+        /// <returns>Return refreshed JWT string or an empty string if the JWT has been
+        /// tampered</returns>
         public string RefreshToken(string oldJwtToken)
         {
             if (!IsJWTSignatureTampered(oldJwtToken))
@@ -234,7 +276,7 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
-        public SigningCredentials GenerateJWTSignature(string symmetricKey)
+        private SigningCredentials GenerateJWTSignature(string symmetricKey)
         {
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
                 SecurityAlgorithms.HmacSha256Signature);
