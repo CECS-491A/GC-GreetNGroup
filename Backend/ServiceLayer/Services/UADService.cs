@@ -62,26 +62,14 @@ namespace Gucci.ServiceLayer.Services
                 {
                     firstDay = currentDay;
                     totalDays++;
-                    if(currentLogin > maxLogin)
-                    {
-                        maxLogin = currentLogin;
-                    }
-                    else if(currentLogin < minLogin)
-                    {
-                        minLogin = currentLogin;
-                    }
+                    maxLogin = Math.Max(currentLogin, maxLogin);
+                    minLogin = Math.Min(currentLogin, minLogin);
                     currentLogin = 0;
                 }
             }
             // Checks last day of logs
-            if (currentLogin > maxLogin)
-            {
-                maxLogin = currentLogin;
-            }
-            else if (currentLogin < minLogin)
-            {
-                minLogin = currentLogin;
-            }
+            maxLogin = Math.Max(currentLogin, maxLogin);
+            minLogin = Math.Min(currentLogin, minLogin);
             averageLogins = totalLogin / totalDays;
             loginInfoList.Add(averageLogins.ToString("0.##"));
             loginInfoList.Add(minLogin.ToString("0.##"));
@@ -130,20 +118,21 @@ namespace Gucci.ServiceLayer.Services
         }
 
         /// <summary>
-        /// Removes logs from list that does not have the specified ID
+        /// Gets logs from list that have the specified ID
         /// </summary>
         /// <param name="logs">List of Logs</param>
         /// <param name="ID">Specified ID</param>
         public List<GNGLog> GetLogswithID(List<GNGLog> logs, string ID)
         {
-            for (int i = logs.Count - 1; i >= 0; i--)
+            var loglist = new List<GNGLog>();
+            for (int i = 0;  i < logs.Count; i++)
             {
-                if (string.Compare(logs[i].LogID, ID) != 0)
+                if (string.Compare(logs[i].LogID, ID) == 0)
                 {
-                    logs.Remove(logs[i]);
+                    loglist.Add(logs[i]);
                 }
             }
-            return logs;
+            return loglist;
         }
 
         /// <summary>
@@ -173,14 +162,8 @@ namespace Gucci.ServiceLayer.Services
                     maxSession = (int)duration.TotalMinutes;
                     minSession = (int)duration.TotalMinutes;
                 }
-                if(duration.TotalMinutes > maxSession)
-                {
-                    maxSession = (int)duration.TotalMinutes;
-                }
-                else if(duration.TotalMinutes < minSession)
-                {
-                    minSession = (int)duration.TotalMinutes;
-                }
+                maxSession = Math.Max((int)duration.TotalMinutes, maxSession);
+                minSession = Math.Min((int)duration.TotalMinutes, minSession);
                 i = i + 2;
             }
             //Calculate the average time
@@ -199,14 +182,13 @@ namespace Gucci.ServiceLayer.Services
         public void GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
             logs = GetLogswithID(logs, "ClickEvent");
-            var entryLogs = new List<GNGLog>();
             //For every log check to see if the urls dont match
-            for (int i = 0; i < logs.Count; i++)
+            for (int i = logs.Count - 1; i >= 0; i--)
             {
                 string[] words = logs[i].Description.Split(' ');
                 if (string.Compare(words[2], url) != 0)
                 {
-                    entryLogs.Add(logs[i]);
+                    logs.Remove(logs[i]);
                 }
             }
         }
@@ -290,11 +272,11 @@ namespace Gucci.ServiceLayer.Services
             return sessions;
         }
         /// <summary>
-        /// Function that Pairs starting and ending logs together to create sessions
+        /// Function that converts arrays of strings and list into UAD objects
         /// </summary>
-        /// <param name="startLogs">List of Logs for when sessions begin</param>
-        /// <param name="endLogs">List of Logs whenever sessions end</param>
-        /// <returns>Paired List of Logs</returns>
+        /// <param name="informationTitles">Array of titles for information</param>
+        /// <param name="values">List of values that go with the titles</param>
+        /// <returns>List of UADObjects</returns>
         public List<UADObject> ConvertListToUADObjects(string[] informationTitles, List<string> values)
         {
             var uadObjects = new List<UADObject>();
