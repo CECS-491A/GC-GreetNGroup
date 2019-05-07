@@ -65,7 +65,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: `${apiURL}/profile/` + this.userID,
+      url: `${apiURL}/profile/getprofile/` + this.userID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
