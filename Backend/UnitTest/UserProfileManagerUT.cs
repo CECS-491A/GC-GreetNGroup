@@ -27,13 +27,35 @@ namespace UnitTest
         [TestMethod]
         public void GetUserRating_Pass()
         {
+            // Arrange
+            var expected = true;
+            var actual = false;
 
+            // Act
+            if(profileMan.GetUserRating(1) != null)
+            {
+                actual = true;
+            }
+            
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void GetUserRating_Fail_UserNotInDB()
         {
+            // Arrange
+            var expected = false;
+            var actual = true;
 
+            // Act
+            if (profileMan.GetUserRating(1) == null)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -95,21 +117,33 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void UpdateUserProfile_Fail()
+        public void UpdateUserProfile_Fail_InvalidJwtToken()
         {
 
         }
 
         [TestMethod]
-        public void GetEmail_Pass()
+        public void UpdateUserProfile_Fail_Under18()
         {
 
         }
 
         [TestMethod]
-        public void GetEmail_Fail()
+        public void UpdateUserProfile_Fail_FieldIsNull()
         {
-            
+
+        }
+
+        [TestMethod]
+        public void IsProfileActivated_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void IsProfileActivated_Fail_UserNotInDB()
+        {
+
         }
     }
 }

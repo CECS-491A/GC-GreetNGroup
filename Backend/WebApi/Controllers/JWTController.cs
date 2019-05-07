@@ -1,27 +1,20 @@
-﻿using Gucci.ServiceLayer.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Gucci.ServiceLayer.Requests;
+using Gucci.ServiceLayer.Services;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace WebApi.Controllers
 {
     public class JWTController : ApiController
     {
-        public class TokenRequest
-        {
-            public string token { get; set; }
-        }
         [HttpPost]
-        [Route("api/jwt/isvalidtoken")]
-        public IHttpActionResult IsJWTTokenValid([FromBody] TokenRequest request)
+        [Route("api/jwt/isvalidtoken/{jwtToken}")]
+        public IHttpActionResult IsJWTTokenValid([FromUri] string jwtToken)
         {
             try
             {
                 var _jwtService = new JWTService();
-                var isJwtValid = _jwtService.IsTokenValid(request.token);
+                var isJwtValid = _jwtService.IsTokenValid(jwtToken);
                 if (!isJwtValid)
                 {
                     return Content(HttpStatusCode.BadRequest, false);
@@ -32,7 +25,6 @@ namespace WebApi.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, false);
             }
-            
         }
     }
 }

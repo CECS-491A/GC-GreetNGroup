@@ -1,5 +1,4 @@
-﻿using Gucci.ManagerLayer.ProfileManagement;
-using Gucci.ServiceLayer.Requests;
+﻿using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
 using Gucci.ServiceLayer.Interface;
 using System;
@@ -10,12 +9,6 @@ using ManagerLayer.UserManagement;
 
 namespace WebApi.Controllers
 {
-    // Necessary for reading the token
-    // Odd bug where token was null if not using this request class
-    public class GetEmailRequest
-    {
-        public string token { get; set; }
-    }
 
     public class UserController : ApiController
     {
@@ -23,10 +16,13 @@ namespace WebApi.Controllers
         private UserService userService = new UserService();
         private IJWTService _jwtService = new JWTService();
 
+        // Winn 
         // Method to get the email of a user given the JWTToken
+        // HTTPPost Necessary for reading the token
+        // Odd bug where token was null if not using this request class
         [HttpPost]
         [Route("api/user/getemail")]
-        public HttpResponseMessage GetEmail([FromBody]GetEmailRequest request)
+        public HttpResponseMessage GetEmail([FromBody] JWTTokenRequest request)
         {
             try
             {
@@ -37,13 +33,33 @@ namespace WebApi.Controllers
             catch (Exception e)
             {
                 _gngLoggerService.LogBadRequest(_jwtService.GetUserIDFromToken(request.token).ToString(), "N/A", "https://www.greetngroup.com/user/", e.ToString());
-                //return Content(HttpStatusCode.BadRequest, "Service Unavailable");
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent("Unable to retrieve email")
                 };
                 return httpResponseFail;
             }
+        }
+        // Winn
+        [HttpPost]
+        [Route("api/user/deleteuser")]
+        public HttpResponseMessage DeleteUser([FromBody] TokenRequest request)
+        {
+            JWTService _jwtService = new JWTService();
+            var isTokenValid = _jwtService.IsTokenValid(request.token);
+            if (!isTokenValid)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Unable to delete user, token is invalid")
+                };
+                return httpResponseFail;
+            }
+            var retrievedEmailFromToken = _jwtService.GetUsernameFromToken(request.token);
+
+            UserManager userMan = new UserManager();
+            var response = userMan.DeleteUser(retrievedEmailFromToken);
+            return response;
         }
 
         [HttpGet]
@@ -62,27 +78,6 @@ namespace WebApi.Controllers
                 _gngLoggerService.LogBadRequest(userID.ToString(), "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
                 return BadRequest();
             }
-        }
-
-        [HttpPost]
-        [Route("api/user/deleteuser")]
-        public HttpResponseMessage DeleteUser([FromBody] TokenRequest request)
-        {
-            UserManager userMan = new UserManager();
-            JWTService _jwtService = new JWTService();
-            var isTokenValid = _jwtService.IsTokenValid(request.token);
-            if (!isTokenValid)
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to delete user, token is invalid")
-                };
-                return httpResponseFail;
-            }
-
-            var retrievedEmailFromToken = _jwtService.GetUsernameFromToken(request.token);
-            var response = userMan.DeleteUser(retrievedEmailFromToken);
-            return response;
         }
 
         /*

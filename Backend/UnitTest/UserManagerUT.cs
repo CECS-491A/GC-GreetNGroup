@@ -59,39 +59,39 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void GetUserRating_Pass()
-        {
-
-        }
-
-        [TestMethod]
-        public void GetUserRating_Fail_UserNotInDB()
-        {
-
-        }
-
-        [TestMethod]
-        public void UpdateUserProfile_Pass()
-        {
-
-        }
-
-        [TestMethod]
-        public void UpdateUserProfile_Fail()
-        {
-
-        }
-
-        [TestMethod]
         public void GetEmail_Pass()
         {
 
         }
 
         [TestMethod]
-        public void GetEmail_Fail()
+        public void GetEmail_Fail_InvalidJwtToken()
         {
             
+        }
+
+        [TestMethod]
+        public void DeleteUserUsingSSO_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void DeleteUserUsingSSO_Fail_InvalidRequest()
+        {
+
+        }
+
+        [TestMethod]
+        public void DeleteUser_Pass()
+        {
+
+        }
+
+        [TestMethod]
+        public void DeleteUser_Fail_UserNotInDB()
+        {
+
         }
     }
 }

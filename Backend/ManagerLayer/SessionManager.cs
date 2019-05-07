@@ -10,8 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Web.Http;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
 
 namespace Gucci.ManagerLayer
 {
