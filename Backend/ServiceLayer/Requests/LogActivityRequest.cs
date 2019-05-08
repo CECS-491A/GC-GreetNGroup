@@ -8,9 +8,9 @@ namespace Gucci.ServiceLayer.Requests
 {
     public class LogActivityRequest
     {
-        public string Jwt { get; }
-        public string Ip { get; }
-        public string StartPoint { get; }
-        public string EndPoint { get; }
+        public string Jwt { get; set; }
+        public string Ip { get; set; }
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
     }
 }

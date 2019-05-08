@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Gucci.ManagerLayer.UADManagement;
 using Gucci.ServiceLayer.Interface;
+using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
 
 namespace WebApi.Controllers
@@ -124,5 +127,43 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/logclicks")]
+        public IHttpActionResult TrackUserActivity([FromBody] LogActivityRequest request)
+        {
+            var userService = new UserService();
+            var jwtService = new JWTService();
+
+            try
+            {
+                if (request.Jwt == null || request.Jwt.Equals(""))
+                {
+                    userService.LogClicksMade(request.StartPoint, request.EndPoint,
+                    "N/A", request.Ip);
+
+                    return Content(HttpStatusCode.Accepted, true);
+                }
+                else
+                {
+                    userService.LogClicksMade(request.StartPoint, request.EndPoint,
+                    jwtService.GetUserIDFromToken(request.Jwt).ToString(), request.Ip);
+
+                    return Content(HttpStatusCode.Accepted, true);
+                }
+
+            }
+            catch (Exception e)
+            {
+                if (request.Jwt == null)
+                {
+                    _gngLoggerService.LogBadRequest("N/A", request.Ip, request.StartPoint, e.ToString());
+                }
+                else
+                {
+                    _gngLoggerService.LogBadRequest(jwtService.GetUserIDFromToken(request.Jwt).ToString(), request.Ip, request.StartPoint, e.ToString());
+                }
+                return Content(HttpStatusCode.BadRequest, "Failed to log user activity");
+            }
+        }
     }
 }

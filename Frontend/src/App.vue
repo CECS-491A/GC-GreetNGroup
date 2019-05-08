@@ -10,21 +10,22 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue'
+import axios from 'axios'
 
 export default {
   name: 'app',
   components: {
     NavBar
   },
-  mounted () {
+  created () {
     localStorage.setItem('ip', 'N/A')
-    axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
-      var ipAddr = result.data.origin.split(',');
+    axios({method: 'GET', 'url': 'https://httpbin.org/ip'}).then(result => {
+      var ipAddr = result.data.origin.split(',')
       localStorage.setItem('ip', ipAddr[0])
     }, error => {
       localStorage.setItem('ip', 'Error')
-      console.error(error);
-    });
+      console.error(error)
+    })
   }
 }
 </script>

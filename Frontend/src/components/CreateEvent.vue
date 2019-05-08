@@ -264,15 +264,6 @@ import { error } from 'util';
                 return timeString;
             }
         },
-        mounted () {
-            axios({method: "GET", "url": "https://httpbin.org/ip" }).then(result => {
-                var ipAddr = result.data.origin.split(',');
-                this.ip = ipAddr[0];
-            }, error => {
-                this.ip = "Error";
-                console.error(error);
-            });
-        },
         watch: {
             name () {
                 this.errorMessages = ''
@@ -345,7 +336,7 @@ import { error } from 'util';
                             zip: this.form.zip,
                             eventTags: eventTagsSelected,
                             eventDescription: this.form.description,
-                            ip: this.ip,
+                            ip: localStorage.getItem('ip'),
                             url: "http://www.greetngroup.com/CreateEvent"
                         }).then((response) => {
                         if(response != null) {

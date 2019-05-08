@@ -15,7 +15,7 @@ import FindEventsForMe from '@/components/FindEventsForMe'
 import ActivateProfile from '@/components/ActivateProfile'
 import TermsConditions from '@/components/TermsConditions'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
-// import Axios from 'axios'
+import Axios from 'axios'
 
 Vue.use(Router)
 
@@ -109,46 +109,54 @@ const router = new Router({
     }
   ]
 })
-/*
+
+/* Before a user reaches certain paths, their JWT must first be checked to ensure they have the proper claims
+ * to view the content
+ */
 router.beforeEach((to, from, next) => {
-  Axios.post('http://localhost:62008/api/logclicks', {
-    jwt: localStorage.getItem('token'),
-    ip: localStorage.getItem('ip'),
-    startPoint: from.toString(),
-    endPoint: to.toString()
-  })
   if (to.matched.some(value => value.meta.isLoggedIn)) {
     if (localStorage.getItem('token') == null){
+      alert('Please log in to view this page!')
       next('/')
     }
     else{
       if (to.method.some(value => value.meta.isAdmin)) {
+        let message = ''
         let canView = async() => {
-          Axios.post('http://localhost:62008/api/JWT/check', {
+          Axios.post('http://localhost:62008/api/jwt/check', {
             jwt: localStorage.getItem('token'),
             claimsToCheck: ['isAdmin']
           }).then((response) => {
-            canView = response
+            canView = response.status,
+            message = response
           })
         }
-        if(canView == true) {
+        if(canView == 200) {
+          alert(message)
           next()
         }
         else{
+          alert(message)
           next('/')
         }
       }
       if(to.method.some(value => value.meta.canCreateEvents)) {
+        let message = ''
         let canMakeEvents = async() => {
           Axios.post('http://http://localhost:62008/api/JWT/check', {
             jwt: localStorage.getItem('token'),
             claimsToCheck: ['canCreateEvents']
+          }).then((response) => {
+            canMakeEvents = response.status,
+            message = response
           })
         }
-        if(canMakeEvents == true) {
+        if(canMakeEvents == 200) {
+          alert(message)
           next()
         }
         else{
+          alert(message)
           next('/')
         }
       }
@@ -161,5 +169,16 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-*/
+
+// This will make sure that only successful entries to a certain path will be logged
+router.afterEach((to, from) => {
+  let ipAddress = localStorage.getItem('ip')
+  Axios.post('http://localhost:62008/api/logclicks', {
+    Jwt: localStorage.getItem('token'),
+    Ip: ipAddress,
+    StartPoint: 'https://www.greetngroup.com' + from.fullPath.toString(),
+    EndPoint: 'https://www.greetngroup.com' + to.fullPath.toString()
+  })
+})
+
 export default router

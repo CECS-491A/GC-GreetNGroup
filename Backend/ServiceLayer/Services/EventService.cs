@@ -7,6 +7,8 @@ using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
 using Gucci.DataAccessLayer.DataTransferObject;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -90,7 +92,7 @@ namespace Gucci.ServiceLayer.Services
                     }
                     return userEvent;
                 }
-                catch (ObjectDisposedException od)
+                catch (Exception od)
                 {
                     _gngLoggerService.LogGNGInternalErrors(od.ToString());
                     return userEvent;
@@ -102,6 +104,28 @@ namespace Gucci.ServiceLayer.Services
             }
             
         }
+
+        //public bool InsertEventCheckinCode(int eventId)
+        //{
+        //    bool isSuccessfullyAdded = false;
+        //    try
+        //    {
+        //        var checkinCode = GenerateCheckinCode(4);
+        //        using(var ctx = new GreetNGroupContext())
+        //        {
+        //            var eventToAddCode = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eventId));
+        //            eventToAddCode.CheckinCode = checkinCode;
+        //            ctx.SaveChanges();
+        //            isSuccessfullyAdded = true;
+        //            return isSuccessfullyAdded;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _gngLoggerService.LogGNGInternalErrors(e.ToString());
+        //        return isSuccessfullyAdded;
+        //    }
+        //}
 
         #endregion
 
@@ -485,6 +509,20 @@ namespace Gucci.ServiceLayer.Services
             }
 
             return filtered;
+        }
+
+        public string GenerateCheckinCode(int length)
+        {
+            Random rng = new Random();
+            string alphanumerics = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder checkinCode = new StringBuilder(length);
+            
+            for(int i = 0; i < length; i++)
+            {
+                checkinCode.Append(alphanumerics[rng.Next(alphanumerics.Length)]);
+            }
+
+            return checkinCode.ToString();
         }
 
         #endregion
