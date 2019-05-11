@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Requests;
@@ -9,6 +10,8 @@ namespace Gucci.WebApi.Controllers
 {
     public class FindEventsForMeController : ApiController
     {
+
+        // DO NOT HARD CODE YOUR API ROUTES, ADD TO A FILE TO REF
         [HttpPost]
         [Route("api/FindEventsForMe/")]
         public IHttpActionResult GetEvents([FromBody] FindEventsForMeRequest request)
@@ -17,7 +20,7 @@ namespace Gucci.WebApi.Controllers
             var tempList = new List<Event>();
 
             var filteredEventList = new List<Event>();
-
+            
             try
             {
                 // Return list of events unfiltered
@@ -70,11 +73,11 @@ namespace Gucci.WebApi.Controllers
             }
             catch (ArgumentException argExcept) // Wrong should not be found, but if they are, catch here
             {
-                return BadRequest();
+                return Content(HttpStatusCode.BadRequest, argExcept);
             }
             catch (Exception e) // Catch all of errors bubbling up from services
             {
-                return BadRequest();
+                return Content(HttpStatusCode.InternalServerError, e);
             }
             // Return results
             return Ok(filteredEventList);
