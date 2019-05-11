@@ -19,7 +19,7 @@ export default {
   },
   created () {
     localStorage.setItem('ip', 'N/A')
-    axios({method: 'GET', 'url': 'https://httpbin.org/ip'}).then(result => {
+    axios({ method: 'GET', 'url': 'https://httpbin.org/ip' }).then(result => {
       var ipAddr = result.data.origin.split(',')
       localStorage.setItem('ip', ipAddr[0])
     }, error => {
