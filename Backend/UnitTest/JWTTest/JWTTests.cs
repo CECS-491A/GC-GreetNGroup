@@ -35,7 +35,7 @@ namespace UnitTest.JWTTest
         [TestMethod]
         public void JwtIsTampered_Pass()
         {
-            var tamperedJwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU1NjcyMDEyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.2qSi4OwEFrbTD9GG3hx6fqZFuYVIjUzPG";
+            var tamperedJwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU3MzEwMjUyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.Myf8OpUV0EAAUqaJz1sWPoc0";
             var expected = true;
 
             var actual = jwtService.IsJWTSignatureTampered(tamperedJwtString);
@@ -46,7 +46,7 @@ namespace UnitTest.JWTTest
         [TestMethod]
         public void JwtIsUntampered_Pass()
         {
-            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU1NjcyMDEyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.2qSi4OwEFrbTD9GG3hx6fqZFuYVIjUzPGIRs8ZLjWB0";
+            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU3MzEwMjUyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.Myf8OpUV0EAAUqaJz1sWPoc0Z1ssWeeSQ7gkBD_9HtE";
             var expected = false;
 
             var actual = jwtService.IsJWTSignatureTampered(jwtString);
@@ -57,7 +57,7 @@ namespace UnitTest.JWTTest
         [TestMethod]
         public void RetrieveUIdFromJwt_Pass()
         {
-            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU1NjcyMDEyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.2qSi4OwEFrbTD9GG3hx6fqZFuYVIjUzPGIRs8ZLjWB0";
+            var jwtString = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5WaWV3RXZlbnRzIjoiOTkiLCJDYW5DcmVhdGVFdmVudHMiOiI5OSIsIk92ZXIxOCI6Ijk5IiwiZXhwIjoxNTU3MzEwMjUyLCJpc3MiOiJncmVldG5ncm91cC5jb20iLCJhdWQiOiJ0ZXN0QGdtYWlsLmNvbSJ9.Myf8OpUV0EAAUqaJz1sWPoc0Z1ssWeeSQ7gkBD_9HtE";
             var expected = 99;
 
             var actual = jwtService.GetUserIDFromToken(jwtString);

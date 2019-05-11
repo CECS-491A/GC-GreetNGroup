@@ -224,6 +224,39 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+
+        /// <summary>
+        /// Method IsUserAtMaxEventCreation queries the database to check the creation
+        /// count of the user attempting to create an event. If the user has reached 5
+        /// or more events created, the method returns false and the user cannot create
+        /// any more events.
+        /// </summary>
+        /// <param name="userId">Hashed user id of the user attempting to create an event</param>
+        /// <returns>Return a bool value depending on if the user has reached the creation
+        /// count threshold or not</returns>
+        public bool IsUserAtMaxEventCreation(int userId)
+        {
+            var isAtMax = false;
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var user = ctx.Users.FirstOrDefault(u => u.UserId.Equals(userId));
+                    var creationCount = user.EventCreationCount;
+
+                    if (creationCount >= 5)
+                    {
+                        isAtMax = true;
+                    }
+                }
+                return isAtMax;
+            }
+            catch (Exception od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return isAtMax;
+            }
+        }
         #endregion
 
         /// <summary>

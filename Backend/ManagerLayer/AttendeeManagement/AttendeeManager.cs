@@ -28,7 +28,7 @@ namespace Gucci.ManagerLayer.AttendeeManagement
             var eventJoinedMessage = "Joined Event";
             var userID = _jWTService.GetUserIDFromToken(jwt);
             var hasClaims = _jWTService.CheckUserClaims(jwt, joinEventClaims);
-            if(hasClaims)
+            if(hasClaims.Equals("Authorized"))
             {
                 var isEventandUserValid = _attendeeService.DoesEventandUserExist(eventId, userID);
                 if (isEventandUserValid == false)

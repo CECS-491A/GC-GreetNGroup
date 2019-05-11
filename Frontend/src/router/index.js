@@ -15,7 +15,7 @@ import FindEventsForMe from '@/components/FindEventsForMe'
 import ActivateProfile from '@/components/ActivateProfile'
 import TermsConditions from '@/components/TermsConditions'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
-// import Axios from 'axios'
+import Axios from 'axios'
 
 Vue.use(Router)
 
@@ -51,7 +51,6 @@ const router = new Router({
       name: 'createevent',
       component: CreateEvent,
       meta: {
-        isLoggedIn: true,
         canCreateEvents: true
       }
     },
@@ -100,7 +99,10 @@ const router = new Router({
     {
       path: '/eventpage/:name',
       name: 'eventpage',
-      component: EventPage
+      component: EventPage,
+      meta:{
+        canViewEvents: true
+      }
     },
     {
       path: '/termsandconditions',
@@ -109,57 +111,81 @@ const router = new Router({
     }
   ]
 })
-/*
+
+/* Before a user reaches certain paths, their JWT must first be checked to ensure they have the proper claims
+ * to view the content
+ */
 router.beforeEach((to, from, next) => {
-  Axios.post('http://localhost:62008/api/logclicks', {
-    jwt: localStorage.getItem('token'),
-    ip: localStorage.getItem('ip'),
-    startPoint: from.toString(),
-    endPoint: to.toString()
-  })
+  let userJwt = localStorage.getItem('token')
+  let ipAddress = localStorage.getItem('ip')
   if (to.matched.some(value => value.meta.isLoggedIn)) {
     if (localStorage.getItem('token') == null){
+      alert('Please log in to view this page!')
       next('/')
     }
-    else{
-      if (to.method.some(value => value.meta.isAdmin)) {
-        let canView = async() => {
-          Axios.post('http://localhost:62008/api/JWT/check', {
-            jwt: localStorage.getItem('token'),
-            claimsToCheck: ['isAdmin']
-          }).then((response) => {
-            canView = response
-          })
-        }
-        if(canView == true) {
-          next()
-        }
-        else{
-          next('/')
-        }
-      }
-      if(to.method.some(value => value.meta.canCreateEvents)) {
-        let canMakeEvents = async() => {
-          Axios.post('http://http://localhost:62008/api/JWT/check', {
-            jwt: localStorage.getItem('token'),
-            claimsToCheck: ['canCreateEvents']
-          })
-        }
-        if(canMakeEvents == true) {
-          next()
-        }
-        else{
-          next('/')
-        }
-      }
-      else{
-        next()
-      }
-    }
+  }
+  if (to.matched.some(value => value.meta.isAdmin)) {
+    Axios.post('http://localhost:62008/api/JWT/check', {
+      JWT: userJwt,
+      ClaimsToCheck: ['AdminRights'],
+      Ip: ipAddress,
+      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+    }).then((response) => {
+      alert(response.data)
+      next()
+    }).catch((error) => {
+      next('/')
+      setTimeout(() => {
+        alert(error.response.data)
+      }, 1000)
+    })
+  }
+  if(to.matched.some(value => value.meta.canCreateEvents)) {
+    Axios.post('http://localhost:62008/api/JWT/check', {
+      JWT: userJwt,
+      ClaimsToCheck: ['CanCreateEvents'],
+      Ip: ipAddress,
+      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+    }).then((response) => {
+      alert(response.data)
+      next()
+    }).catch((error) => {
+      next('/')
+      setTimeout(() => {
+        alert(error.response.data)
+      }, 1000)
+    })
+  }
+  if(to.matched.some(value => value.meta.canViewEvents)) {
+    Axios.post('http://localhost:62008/api/JWT/check', {
+      JWT: userJwt,
+      ClaimsToCheck: ['CanViewEvents'],
+      Ip: ipAddress,
+      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+    }).then((response) => {
+      alert(response.data)
+      next()
+    }).catch((error) => {
+      next('/')
+      setTimeout(() => {
+        alert(error.response.data)
+      }, 1000)
+    })
   }
   else{
     next()
   }
 })
-*/
+
+// This will make sure that only successful entries to a certain path will be logged
+router.afterEach((to, from) => {
+  let ipAddress = localStorage.getItem('ip')
+  Axios.post('http://localhost:62008/api/logclicks', {
+    Jwt: localStorage.getItem('token'),
+    Ip: ipAddress,
+    StartPoint: 'https://www.greetngroup.com' + from.fullPath.toString(),
+    EndPoint: 'https://www.greetngroup.com' + to.fullPath.toString()
+  })
+})
+
 export default router

@@ -1,5 +1,6 @@
 ﻿using Gucci.DataAccessLayer.Context;
 using Gucci.DataAccessLayer.Tables;
+using Gucci.ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace Gucci.ServiceLayer.Services
 {
     public class UserClaimsService
     {
+        private ILoggerService _gngLoggerService = new LoggerService();
+
         public bool AddClaimToUser(string username, Claim claim)
         {
             var isSuccessfulAdd = false;
@@ -27,6 +30,7 @@ namespace Gucci.ServiceLayer.Services
             }
             catch(ObjectDisposedException od)
             {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfulAdd;
             }
         }
@@ -58,8 +62,9 @@ namespace Gucci.ServiceLayer.Services
                     return isSuccessfulAdd;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (Exception od)
             {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return isSuccessfulAdd;
             }
         }
@@ -81,9 +86,9 @@ namespace Gucci.ServiceLayer.Services
                     return claimsList;
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (Exception od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return claimsList;
             }
         }
@@ -98,9 +103,9 @@ namespace Gucci.ServiceLayer.Services
                     return userClaims.Any(c => c.ClaimId.Equals(claimId));
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (Exception od)
             {
-                // log
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
                 return false;
             }
         }
