@@ -7,6 +7,8 @@ using Gucci.DataAccessLayer.Models;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Model;
 using Gucci.DataAccessLayer.DataTransferObject;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace Gucci.ServiceLayer.Services
 {
@@ -62,45 +64,66 @@ namespace Gucci.ServiceLayer.Services
             string ip, string url)
         {
             Event userEvent = null;
-            if (IsUserAtMaxEventCreation(userId) == false)
+            try
             {
-                try
-                {
-                    string eventLocation = ParseAddress(address, city, state, zip);
+                string eventLocation = ParseAddress(address, city, state, zip);
 
-                    using (var ctx = new GreetNGroupContext())
+                using (var ctx = new GreetNGroupContext())
+                {
+                    userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
+
+                    ctx.Events.Add(userEvent);
+                    ctx.SaveChanges();
+                    foreach(var tags in eventTags)
                     {
-                        userEvent = new Event(userId, eventId, startDate, eventName, eventLocation, eventDescription);
-
-                        ctx.Events.Add(userEvent);
-                        ctx.SaveChanges();
-                        foreach(var tags in eventTags)
+                        if (_eventTagService.InsertEventTag(eventId, tags) == false)
                         {
-                            if (_eventTagService.InsertEventTag(eventId, tags) == false)
-                            {
-                                userEvent = null;
-                                _gngLoggerService.LogErrorsEncountered(userId.ToString(), "409 Conflict",
-                                    url, "The event failed to be created", ip);
-                                return userEvent;
-                            }
+                            userEvent = null;
+                            _gngLoggerService.LogErrorsEncountered(userId.ToString(), "409 Conflict",
+                                url, "The event failed to be created", ip);
+                            return userEvent;
                         }
-                        LogGNGEventsCreated(userId.ToString(), eventId, ip);
-                        eventId++;
-                        Environment.SetEnvironmentVariable("EventId", eventId.ToString(), EnvironmentVariableTarget.User);
+                        if (InsertEventCheckinCode(eventId) == false)
+                        {
+                            userEvent = null;
+                            _gngLoggerService.LogErrorsEncountered(userId.ToString(), "409 Conflict", 
+                                url, "The event failed to be created", ip);
+                        }
                     }
-                    return userEvent;
+                    LogGNGEventsCreated(userId.ToString(), eventId, ip);
+                    eventId++;
+                    Environment.SetEnvironmentVariable("EventId", eventId.ToString(), EnvironmentVariableTarget.User);
                 }
-                catch (ObjectDisposedException od)
-                {
-                    _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                    return userEvent;
-                }
-            }
-            else
-            {
+                
                 return userEvent;
             }
-            
+            catch (Exception od)
+            {
+                _gngLoggerService.LogGNGInternalErrors(od.ToString());
+                return userEvent;
+            }
+        }
+
+        public bool InsertEventCheckinCode(int eventId)
+        {
+            bool isSuccessfullyAdded = false;
+            try
+            {
+                var checkinCode = GenerateCheckinCode(4);
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var eventToAddCode = ctx.Events.FirstOrDefault(e => e.EventId.Equals(eventId));
+                    eventToAddCode.EventCheckinCode = checkinCode;
+                    ctx.SaveChanges();
+                    isSuccessfullyAdded = true;
+                    return isSuccessfullyAdded;
+                }
+            }
+            catch (Exception e)
+            {
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
+                return isSuccessfullyAdded;
+            }
         }
 
         #endregion
@@ -109,7 +132,7 @@ namespace Gucci.ServiceLayer.Services
         /// The following region handles update of Event specific information
         /// </summary>
         #region Update Event Information
- 
+
         public bool UpdateEvent(int eId, int userId, DateTime startDate, string eventName,
             string address, string city, string state, string zip, List<string> eventTags, string eventDescription,
             string url, string ip)
@@ -415,40 +438,6 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
-        /// <summary>
-        /// Method IsUserAtMaxEventCreation queries the database to check the creation
-        /// count of the user attempting to create an event. If the user has reached 5
-        /// or more events created, the method returns false and the user cannot create
-        /// any more events.
-        /// </summary>
-        /// <param name="userId">Hashed user id of the user attempting to create an event</param>
-        /// <returns>Return a bool value depending on if the user has reached the creation
-        /// count threshold or not</returns>
-        public bool IsUserAtMaxEventCreation(int userId)
-        {
-            bool isAtMax = false;
-            try
-            {
-                using (var ctx = new GreetNGroupContext())
-                {
-                    int creationCount;
-                    var user = ctx.Users.Where(c => c.UserId.Equals(userId));
-                    Int32.TryParse(user.Select(c => c.EventCreationCount).ToString(), out creationCount);
-
-                    if (creationCount >= 5)
-                    {
-                        isAtMax = true;
-                    }
-                }
-                return isAtMax;
-            }
-            catch (ObjectDisposedException od)
-            {
-                _gngLoggerService.LogGNGInternalErrors(od.ToString());
-                return isAtMax;
-            }
-        }
-
         #endregion
 
         /// <summary>
@@ -485,6 +474,20 @@ namespace Gucci.ServiceLayer.Services
             }
 
             return filtered;
+        }
+
+        public string GenerateCheckinCode(int length)
+        {
+            Random rng = new Random();
+            string alphanumerics = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder checkinCode = new StringBuilder(length);
+            
+            for(int i = 0; i < length; i++)
+            {
+                checkinCode.Append(alphanumerics[rng.Next(alphanumerics.Length)]);
+            }
+
+            return checkinCode.ToString();
         }
 
         #endregion

@@ -39,5 +39,8 @@ namespace Gucci.DataAccessLayer.Tables
 
         [Required]
         public bool IsEventExpired { get; set; }
+
+        [Required]
+        public string EventCheckinCode { get; set; }
     }
 }
