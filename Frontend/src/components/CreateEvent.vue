@@ -327,27 +327,24 @@ import { error } from 'util';
 
                     axios.post("http://localhost:62008/api/event/createevent",
                         {
-                            userId: 1,
-                            startDate: eventStartDateTime,
-                            eventName: this.form.name,
-                            address: this.form.address,
-                            city: this.form.city,
-                            state: this.form.state,
-                            zip: this.form.zip,
-                            eventTags: eventTagsSelected,
-                            eventDescription: this.form.description,
-                            ip: localStorage.getItem('ip'),
-                            url: "http://www.greetngroup.com/CreateEvent"
+                            JWT: localStorage.getItem('token'),
+                            StartDate: eventStartDateTime,
+                            EventName: this.form.name,
+                            Address: this.form.address,
+                            City: this.form.city,
+                            State: this.form.state,
+                            Zip: this.form.zip,
+                            EventTags: eventTagsSelected,
+                            EventDescription: this.form.description,
+                            Ip: localStorage.getItem('ip'),
+                            Url: "https://www.greetngroup.com/CreateEvent"
                         }).then((response) => {
-                        if(response != null) {
-                            alert("Your event has been created! Redirecting.");
+                            alert(response.data);
                             this.$router.push('/');
-                        }
-                        else {
-                            alert("There was a problem creating your event. Redirecting.");
-                            this.$router.push('/');
-                        }
-                    }).catch(error => console.log(error));
+                    }).catch((error) => {
+                        alert(error.response.data);
+                        this.$router.push('/');
+                    });
 
                 }
             }

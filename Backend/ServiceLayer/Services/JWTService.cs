@@ -285,10 +285,34 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        /// <summary>
+        /// Method GenerateJWTSignature generates the signature for the JWT
+        /// </summary>
+        /// <param name="symmetricKey">The key used to generate the signature</param>
+        /// <returns>Returns the SigningCredentials object which is the signature</returns>
         private SigningCredentials GenerateJWTSignature(string symmetricKey)
         {
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
                 SecurityAlgorithms.HmacSha256Signature);
+        }
+
+        /// <summary>
+        /// Method InvalidateUserJWT revokes the user's session should their JWT be
+        /// tampered with.
+        /// </summary>
+        /// <param name="jwt">User's JWT as a string</param>
+        /// <returns>Tampered string message or conflict if an error occurred in
+        /// revoking their session on the database.</returns>
+        public string InvalidateUserJWT(string jwt)
+        {
+            if(DeleteTokenFromDB(jwt) == true)
+            {
+                return TAMPERED_MESSAGE;
+            }
+            else
+            {
+                return "Conflict";
+            }
         }
 
 

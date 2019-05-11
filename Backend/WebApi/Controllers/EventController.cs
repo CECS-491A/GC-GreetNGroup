@@ -15,6 +15,7 @@ namespace WebApi.Controllers
         private ILoggerService _gngLoggerService = new LoggerService();
         private EventTagService eventTagService = new EventTagService();
         private IJWTService _jwtService = new JWTService();
+        private UserService _userService = new UserService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -45,26 +46,35 @@ namespace WebApi.Controllers
             var userId = _jwtService.GetUserIDFromToken(request.JWT);
             try
             {
-                var newEvent = eventService.InsertEvent(userId, request.StartDate, request.EventName,
-                    request.Address, request.City, request.State, request.Zip, 
-                    request.EventTags, request.EventDescription, request.Ip, request.Url);
-                var eventId = newEvent.EventId;
-                if(newEvent != null)
+                if(_userService.IsUserAtMaxEventCreation(userId) == false)
                 {
-                    return Ok(newEvent);
+                    var newEvent = eventService.InsertEvent(userId, request.StartDate, request.EventName,
+                    request.Address, request.City, request.State, request.Zip,
+                    request.EventTags, request.EventDescription, request.Ip, request.Url);
+                    var eventId = newEvent.EventId;
+                    if (newEvent != null)
+                    {
+                        return Content(HttpStatusCode.OK, "Your event was successfully created. Redirecting" +
+                            " you to the homepage");
+                    }
+                    else
+                    {
+                        return Content(HttpStatusCode.Conflict, "Event Creation was unsuccessful. Redirecting " +
+                            "you to the homepage. Please try again.");
+                    }
                 }
                 else
                 {
-                    _gngLoggerService.LogErrorsEncountered(userId.ToString(), HttpStatusCode.Conflict.ToString(),
-                        request.Url, "The event failed to be created", request.Ip);
-                    return Content(HttpStatusCode.Conflict, "Event Creation was unsuccessful");
+                    return Content(HttpStatusCode.Forbidden, "You have reached your maximum event creation count." +
+                        " If you want to create more, please wait until your other events expire");
                 }
+                
                 
             }
             catch(Exception e)
             {
                 _gngLoggerService.LogBadRequest(userId.ToString(), request.Ip, request.Url, e.ToString());
-                return BadRequest();
+                return Content(HttpStatusCode.BadRequest, "Service unavailable");
             }
 
         }
@@ -83,7 +93,8 @@ namespace WebApi.Controllers
                     request.Ip);
                 if(isSuccessfulUpdate == true)
                 {
-                    return Content(HttpStatusCode.OK, true);
+                    return Content(HttpStatusCode.OK, "The event has been updated. Redirecting you to " +
+                        "the homepage.");
                 }
                 else
                 {
@@ -140,6 +151,11 @@ namespace WebApi.Controllers
 
                 // Retrieves info for GET
                 var eventFound = eventService.GetEventByName(name);
+                if (eventService.IsEventExpired(eventFound.EventId))
+                {
+                    eventService.SetEventToExpired(eventFound.EventId);
+                    return Content(HttpStatusCode.OK, eventFound);
+                }
 
                 return Ok(eventFound);
             }
