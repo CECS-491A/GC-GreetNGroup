@@ -92,6 +92,7 @@
     <Compile Include="Requests\TokenRequest.cs" />
     <Compile Include="Requests\UpdateProfileRequest.cs" />
     <Compile Include="Services\AttendeesService.cs" />
+    <Compile Include="Services\CheckInService.cs" />
     <Compile Include="Services\ClaimService.cs" />
     <Compile Include="Services\ErrorHandlerService.cs" />
     <Compile Include="Services\EventFinderService.cs" />

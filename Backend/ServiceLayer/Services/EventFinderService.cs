@@ -9,6 +9,12 @@ namespace Gucci.ServiceLayer.Services
 {
     public class EventFinderService
     {
+        //  IQueryable is a better object to pass around, that way you can add to the 
+        //  query object than to actually constantly access the database 
+        //  the final action would be to execute the query that was added onto
+
+        // Logger not yet implemented in
+        // ! ! ! ! !
         private ILoggerService _gngLoggerService;
 
         // Filters list of given event information by removing passed dates
@@ -27,6 +33,7 @@ namespace Gucci.ServiceLayer.Services
             return filtered;
         }
 
+        // Returns full list of events that are not before the current date
         public List<Event> FindAllEvents()
         {
             try
@@ -38,9 +45,9 @@ namespace Gucci.ServiceLayer.Services
                     return eventList;
                 }
             }
-            catch (ObjectDisposedException objd)
+            catch (Exception e)     // Generic exception catch with specifics logged internally
             {
-                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
                 throw;
             }
         }
@@ -80,9 +87,9 @@ namespace Gucci.ServiceLayer.Services
                     return filteredEventList;
                 }
             }
-            catch (ObjectDisposedException objd)
+            catch (Exception e)
             {
-                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
                 throw;
             }
         }
@@ -95,7 +102,11 @@ namespace Gucci.ServiceLayer.Services
             var endDate = DateTime.Parse(eDate);
 
             // If the search start date exists after the end date
-            if (startDate.CompareTo(endDate) > 0) return resultList;
+            if (startDate.CompareTo(endDate) > 0)
+            {
+
+                return resultList;
+            }
 
             try
             {
@@ -112,9 +123,9 @@ namespace Gucci.ServiceLayer.Services
                     return resultList;
                 }
             }
-            catch (ObjectDisposedException objd)
+            catch (Exception e)
             {
-                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
                 throw;
             }
         }
@@ -156,9 +167,9 @@ namespace Gucci.ServiceLayer.Services
                     return resultList;
                 }
             }
-            catch (ObjectDisposedException objd)
+            catch (Exception e)
             {
-                _gngLoggerService.LogGNGInternalErrors(objd.ToString());
+                _gngLoggerService.LogGNGInternalErrors(e.ToString());
                 throw;
             }
         }
