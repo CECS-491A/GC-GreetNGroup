@@ -19,11 +19,21 @@ namespace Gucci.ManagerLayer
         private IUserService _userService;
         private IJWTService _jwtService;
         private UserClaimsService _userClaimService;
-        private string baseRedirectURL = "https://greetngroup.com/login?token=";
+        private readonly string baseRedirectURL = "https://greetngroup.com/login?token=";
 
         public SessionManager()
         {
-            _signatureService = new SignatureService();
+            //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine)
+            //8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C
+            _signatureService = new SignatureService("5E5DDBD9B984E4C95BBFF621DF91ABC9A5318DAEC0A3B231B4C1BC8FE0851610");
+            _userService = new UserService();
+            _jwtService = new JWTService();
+            _userClaimService = new UserClaimsService();
+        }
+
+        public SessionManager(string secretKey)
+        {
+            _signatureService = new SignatureService(secretKey);
             _userService = new UserService();
             _jwtService = new JWTService();
             _userClaimService = new UserClaimsService();
@@ -73,7 +83,7 @@ namespace Gucci.ManagerLayer
                     return redirect;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
