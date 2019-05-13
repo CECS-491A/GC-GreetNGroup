@@ -16,6 +16,7 @@ namespace WebApi.Controllers
         private EventTagService eventTagService = new EventTagService();
         private IJWTService _jwtService = new JWTService();
         private UserService _userService = new UserService();
+        private CheckInService _checkInService = new CheckInService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -38,6 +39,22 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
+
+        /*
+        [HttpPost]
+        [Route("api/event/{id}")]
+        public IHttpActionResult EventCheckIn([FromBody] CheckinRequest request)
+        {
+            try
+            {
+                return Ok(_checkInService.CheckInputCode(request.EventId, request.CheckinCode));
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+        */
 
         [HttpPost]
         [Route("api/event/createEvent")]
