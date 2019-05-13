@@ -52,7 +52,7 @@ namespace ManagerLayer.UserManagement
                 };
                 return httpResponse;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -94,20 +94,18 @@ namespace ManagerLayer.UserManagement
         {
             try
             {
-                // Check if user exists
-                var isExistingUser = _userService.IsUsernameFound(email);
-                if (!isExistingUser)
-                {
-                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("User not found in system")
-                    };
-                    return httpResponseFail;
-                }
-
                 using (var ctx = new GreetNGroupContext())
                 {
                     var retrievedUser = ctx.Users.Where(u => u.UserName == email).FirstOrDefault<User>();
+
+                    if (retrievedUser == null)
+                    {
+                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
+                        {
+                            Content = new StringContent("User not found in system")
+                        };
+                        return httpResponseFail;
+                    }
 
                     ctx.JWTTokens.RemoveRange(ctx.JWTTokens.Where(j => j.UserId == retrievedUser.UserId));
                     ctx.UserRatings.RemoveRange(ctx.UserRatings.Where(u => u.RatedId1 == retrievedUser.UserId));
@@ -118,33 +116,19 @@ namespace ManagerLayer.UserManagement
                     retrievedUser.FirstName = "Deleted";
                     retrievedUser.LastName = "User";
                     retrievedUser.UserName = "DeletedUser@greetngroup.com";
-                    retrievedUser.State = "State";
-                    retrievedUser.City = "City";
-                    retrievedUser.Country = "Country";
+                    retrievedUser.State = "CA";
+                    retrievedUser.City = "LB";
+                    retrievedUser.Country = "USA";
                     retrievedUser.DoB = DateTime.MinValue;
                     retrievedUser.IsActivated = false;
-
                     ctx.SaveChanges();
-                }
 
-
-
-
-                var isUserDeleted = _userService.DeleteUser(_userService.GetUserByUsername(email));
-                if (isUserDeleted)
-                {
                     var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
                     {
                         Content = new StringContent("User was deleted from GreetNGroup")
                     };
                     return httpResponseSuccess;
                 }
-
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent("Unable to delete user at this time")
-                };
-                return httpResponse;
             }
             catch (Exception ex)
             {
