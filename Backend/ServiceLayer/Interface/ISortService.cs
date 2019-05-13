@@ -7,7 +7,7 @@ namespace Gucci.ServiceLayer.Interface
     {
         void QuickSortInteger(List<int> usedCounts, List<string> logID, int left, int right);
         int PartitionInteger(List<int> usedCounts, List<string> logID, int left, int right);
-        void QuickSortDouble<T>(List<T> sessiontimes, string[] urls) where T : IComparable<T>;
-        void PartitionDouble<T>(List<T> sessiontimes, string[] urls, int left, int right) where T : IComparable<T>;
+        void QuickSortDouble<T>(List<T> sessiontimes, List<string> urls) where T : IComparable<T>;
+        void PartitionDouble<T>(List<T> sessiontimes, List<string> urls, int left, int right) where T : IComparable<T>;
     }
 }

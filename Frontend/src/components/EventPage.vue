@@ -130,7 +130,7 @@ export default {
         },
         data: {
           jwtToken: this.jwt,
-          eventID: this.json.eventId
+          eventID: this.json.EventId
         }
       })
         .then(response => (this.message = response.data))
@@ -146,7 +146,7 @@ export default {
         },
         data: {
           jwtToken: this.jwt,
-          eventID: this.json.eventId
+          eventID: this.json.EventId
         }
       })
         .then(response => (this.message = response.data))

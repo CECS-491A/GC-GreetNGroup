@@ -1,7 +1,6 @@
 <template>
   <div class="UserAnalytics">
     <h1 class='display-2'>Analysis Dashboard</h1>
-
     <div>
     <input v-model='month' type="text" :maxlength=15 placeholder="Search for a month">
     <input v-model='year' type="text" :maxlength=4 placeholder="Search for year">
@@ -12,64 +11,125 @@
     <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Login Compared To Registered Users</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.logvsreg"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}}
-            </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+              <div>Login Compared To Registered Users</div>
+            </template>
+            <v-card color="purple" dark>
+              <v-card-text>
+                <li v-for="(value, index) in this.logvsreg"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                <h1 v-if="index % 4 === 0"><u>{{value.Date}}</u><br /></h1>
+                {{value.InfoType}} : {{value.Value}} 
+                </li>
+                </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Average Session Time (minutes)</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.avgsession"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}}
-            </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+              <div>Session Time Information (minutes)</div>
+            </template>
+            <v-card color="purple" dark>
+              <v-card-text>
+                <li v-for="(value, index) in avgsession"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                  <h1 v-if="index % 3 === 0"><u>{{value.Date}}</u><br /></h1>
+                {{value.InfoType}} : {{value.Value}} </li>
+                </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Most Used Features</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.top5feature"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+            <div>Top 5 Most Used Features</div>
+            </template>
+            <v-card color="purple" dark>
+                <v-card-text>
+                  <li v-for="(value, index) in top5feature"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                  <h1 v-if="index % 5 === 0"><u>{{value.Date}}</u><br /></h1>
+                  {{value.InfoType}} : {{value.Value}} </li>
+                  </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>  
       </v-flex>
     </v-layout>
   </v-container>
-
    <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Top 5 Times Spent on A Page (minutes)</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.top5pages"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+            <div>Top 5 Pages (minutes)</div>
+            </template>
+            <v-card color="purple" dark>
+                <v-card-text>
+                  <li v-for="(value, index) in top5pages"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                  <h1 v-if="index % 5 === 0"><u>{{value.Date}}</u><br /></h1>
+                  {{value.InfoType}} : {{value.Value}} </li>
+                  </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Total Logins Last 6 Months</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.loginmonthly"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+          <template v-slot:header>
+          <div>Total Logins</div>
+          </template>
+          <v-card color="purple" dark>
+              <v-card-text>
+                <li v-for="(value, index) in loginmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                <h1 v-if="index % 1 === 0"><u>{{value.Date}}</u><br /></h1>
+                {{value.InfoType}} : {{value.Value}} </li>
+              </v-card-text>
+          </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Avg Session Time Last 6 Months (minutes)</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.sessionmonthly"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
-        </v-card>
+        <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+          <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+              <div>Avg Session Time (minutes)</div>
+            </template>
+            <v-card color="purple" dark>
+                <v-card-text>
+                  <li v-for="(value, index) in sessionmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                  <h1 v-if="index % 1 === 0"><u>{{value.Date}}</u><br /></h1>
+                  {{value.InfoType}} : {{value.Value}} </li>
+                </v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
     </v-layout>
   </v-container>
   <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="justify-center" style = "font-size: 20px; text-decoration: underline;">Successful vs Unsuccessful Logins</v-card-title>
-          <v-card-text><li v-for="(value, index) in this.loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;">
-            {{value.InfoType}} : {{value.Value}} </li></v-card-text>
-        </v-card>
+         <v-expansion-panel color="purple" style="maxWidth: 550px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;">
+            <v-expansion-panel-content style="background:purple;color:white">
+            <template v-slot:header>
+              <div>Successful Login VS Failed Logins</div>
+            </template>
+            <v-card color="purple" dark>
+                <v-card-text>
+                  <li v-for="(value, index) in loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;  font-size: 14px;">
+                  <h1 v-if="index % 3 === 0"><u>{{value.Date}}</u><br /></h1>
+                  {{value.InfoType}} : {{value.Value}} </li>
+                  </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
     </v-layout>
   </v-container>
@@ -114,7 +174,7 @@ export default {
       var checkMonth = this.checkMonth(month)
       var checkYear = this.checkYear(year)
       if (checkYear === true && checkMonth === true) {
-        this.messageResults = ''
+        this.messageResults = 'Loading'
         month = month.charAt(0).toUpperCase() + month.slice(1)
         axios.all([
           this.LoginVsRegistered(month, year),
@@ -133,7 +193,8 @@ export default {
             this.loginmonthly = fifthResponse.data
             this.sessionmonthly = sixthResponse.data
             this.loginsuccessfail = seventhResponse.data
-          }))  
+            this.messageResults = month + ' ' + year  
+          }))
       } else {
         this.messageResults = 'Date not Valid'
       }

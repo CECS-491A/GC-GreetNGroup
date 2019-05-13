@@ -78,7 +78,7 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         /// <param name="sessiontimes">array of session times</param>
         /// <param name="urls">list of urls</param>
-        public void QuickSortDouble<T>(List<T> sessiontimes, string[] urls) where T : IComparable<T>
+        public void QuickSortDouble<T>(List<T> sessiontimes, List<string> urls) where T : IComparable<T>
         {
             PartitionDouble(sessiontimes, urls, 0, sessiontimes.Count - 1);
         }
@@ -91,7 +91,7 @@ namespace Gucci.ServiceLayer.Services
         /// <param name="urls">list of urls</param>
         /// <param name="left">left index of array</param>
         /// <param name="right">right index of array</param>
-        public void PartitionDouble<T>(List<T> sessiontimes, string[] urls, int left, int right) where T : IComparable<T>
+        public void PartitionDouble<T>(List<T> sessiontimes, List<string> urls, int left, int right) where T : IComparable<T>
         {
             int i, j;
             T pivot, temp;
