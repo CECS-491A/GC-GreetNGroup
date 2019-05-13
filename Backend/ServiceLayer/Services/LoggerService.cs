@@ -219,11 +219,12 @@ namespace Gucci.ServiceLayer.Services
             return logList;
         }
 
-        /// <summary> 
-        /// Author: Dylan
-        /// Finds json files given month and year and dezerlizes them into a list
+        /// <summary>
+        /// Function that fins all logs that were made in the given month and year
         /// </summary>
-        /// <returns></returns>
+        /// <param name="month">Specified month</param>
+        /// <param name="year">Specified Year</param>
+        /// <returns>List logs that have given month and year</returns>
         public List<GNGLog> ReadLogsGivenMonthYear(string month, int year)
         {
             var logList = new List<GNGLog>();
@@ -241,20 +242,21 @@ namespace Gucci.ServiceLayer.Services
                 {
                     if (new FileInfo(currentFile).Length != 0)
                     {
-                        using (var r = new StreamReader(currentFile))
+                        using (var file = new StreamReader(currentFile))
                         {
-                            var jsonFile = r.ReadToEnd();
+                            var jsonFile = file.ReadToEnd();
                             //Retrieve Current Logs
                             var logs = JsonConvert.DeserializeObject<List<GNGLog>>(jsonFile);
                             for (var index = 0; index < logs.Count; index++)
                             {
                                 logList.Add(logs[index]);
                             }
-                            r.Close();
+                            file.Close();
                         }
                     }
                 }
             }
+
             return logList;
         }
 
