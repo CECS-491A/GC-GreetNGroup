@@ -17,7 +17,7 @@ export default {
   components: {
     NavBar
   },
-  mounted () {
+  created () {
     localStorage.setItem('ip', 'N/A')
     axios({ method: 'GET', 'url': 'https://httpbin.org/ip' }).then(result => {
       var ipAddr = result.data.origin.split(',')

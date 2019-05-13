@@ -12,10 +12,16 @@ namespace Gucci.ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.Machine);
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
         private ILoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
+
+        /* Since retrieving information in a JWT requires checking first if the JWT
+         * is tampered, a tampered message is required in the event that the JWT is 
+         * tampered with.
+         */ 
+        private const string TAMPERED_MESSAGE = "Tampered";
 
         public JWTService()
         {
@@ -80,16 +86,16 @@ namespace Gucci.ServiceLayer.Services
                 var assignTime = jwtPayload.ValidTo;
                 if((DateTime.UtcNow - assignTime).TotalMinutes > 30)
                 {
-                    return "Is Expired";
+                    return "Expired";
                 }
                 else
                 {
-                    return "Not Expired";
+                    return "NotExpired";
                 }
             }
             else
             {
-                return "Tampered";
+                return TAMPERED_MESSAGE;
             }
         }
 
@@ -128,7 +134,7 @@ namespace Gucci.ServiceLayer.Services
             }
             else
             {
-                return "";
+                return TAMPERED_MESSAGE;
             }
         }
 
@@ -140,7 +146,7 @@ namespace Gucci.ServiceLayer.Services
         /// <param name="jwt">JWT of the user</param>
         /// <param name="claimToCheck">Required claim needed to perform/access</param>
         /// <returns>True or false depending on if the user has the claim</returns>
-        public bool CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
+        public string CheckUserClaims(string userJwtToken, List<string> claimsToCheck)
         {
             //Must always check if JWT is tampered or not with JWT operations
             if (IsJWTSignatureTampered(userJwtToken) == false)
@@ -159,11 +165,18 @@ namespace Gucci.ServiceLayer.Services
                 var claimsCheck = claimsToCheck.Except(usersCurrClaimsNames);
                 pass = !claimsCheck.Any();
 
-                return pass;
+                if (pass == true)
+                {
+                    return "Authorized";
+                }
+                else
+                {
+                    return "Unauthorized";
+                }
             }
             else
             {
-                return false;
+                return TAMPERED_MESSAGE;
             }
         }
 
@@ -185,9 +198,7 @@ namespace Gucci.ServiceLayer.Services
                 {
                     return Convert.ToInt32(userID);
                 }
-                //Catch format exception to show that it could not parse the userId 
-                //into an int value, let other errors bubble
-                catch (FormatException e)
+                catch (Exception e)
                 {
                     _gngLoggerService.LogGNGInternalErrors(e.ToString());
                     return -1;
@@ -214,7 +225,7 @@ namespace Gucci.ServiceLayer.Services
             }
             else
             {
-                return null;
+                return TAMPERED_MESSAGE;
             }
         }
 
@@ -266,8 +277,6 @@ namespace Gucci.ServiceLayer.Services
                 }
                 return claimsList;
             }
-            // Exception caught specifically as it is used in the event that the context 
-            // doesnt exist or is broken or fails to dispose
             catch (Exception od)
             {
                 _gngLoggerService.LogGNGInternalErrors(od.ToString());
@@ -275,10 +284,34 @@ namespace Gucci.ServiceLayer.Services
             }
         }
 
+        /// <summary>
+        /// Method GenerateJWTSignature generates the signature for the JWT
+        /// </summary>
+        /// <param name="symmetricKey">The key used to generate the signature</param>
+        /// <returns>Returns the SigningCredentials object which is the signature</returns>
         private SigningCredentials GenerateJWTSignature(string symmetricKey)
         {
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricKey)),
                 SecurityAlgorithms.HmacSha256Signature);
+        }
+
+        /// <summary>
+        /// Method InvalidateUserJWT revokes the user's session should their JWT be
+        /// tampered with.
+        /// </summary>
+        /// <param name="jwt">User's JWT as a string</param>
+        /// <returns>Tampered string message or conflict if an error occurred in
+        /// revoking their session on the database.</returns>
+        public string InvalidateUserJWT(string jwt)
+        {
+            if(DeleteTokenFromDB(jwt) == true)
+            {
+                return TAMPERED_MESSAGE;
+            }
+            else
+            {
+                return "Conflict";
+            }
         }
 
 
