@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ManagerLayer.UserManagement;
+using Gucci.ManagerLayer;
 
 namespace WebApi.Controllers
 {
@@ -78,6 +79,15 @@ namespace WebApi.Controllers
                 _gngLoggerService.LogBadRequest(userID.ToString(), "N/A", "https://www.greetngroup.com/user/" + userID, e.ToString());
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        [Route("api/user/logout/{jwtToken}")]
+        public HttpResponseMessage Logout([FromUri] string jwtToken)
+        {
+            var sessionMan = new SessionManager();
+            var response = sessionMan.LogoutUsingGreetNGroup(jwtToken);
+            return response;
         }
 
         /*
