@@ -2,7 +2,7 @@
 using Gucci.ServiceLayer.Services;
 using System.Net;
 using System.Web.Http;
-using Gucci.ServiceLayer.Requests;
+using System;
 
 namespace WebApi.Controllers
 {

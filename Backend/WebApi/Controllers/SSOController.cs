@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         public HttpResponseMessage Logout([FromBody] SSOUserRequest request)
         {
             SessionManager sessionMan = new SessionManager();
-            var response = sessionMan.Logout(request);
+            var response = sessionMan.LogoutUsingSSO(request);
             return response;
         }
 
