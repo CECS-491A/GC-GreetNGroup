@@ -54,13 +54,10 @@ function isProfileEnabled () {
 function isTokenValid (jwtToken) {
   return axios({
     method: 'POST',
-    url: `${apiURL}/jwt/isvalidtoken/`,
+    url: `${apiURL}/jwt/isvalidtoken/` + jwtToken,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
-    },
-    data: {
-      token: jwtToken
     }
   })
   .then(response =>{

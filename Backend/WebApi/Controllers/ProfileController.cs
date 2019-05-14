@@ -9,10 +9,6 @@ namespace WebApi.Controllers
 {
     public class ProfileController : ApiController
     {
-        public class IsProfileActivatedRequest
-        {
-            public string token { get; set; }
-        }
         // Method to get the user profile given their ID
         [HttpGet]
         [Route("api/profile/getprofile/{userID}")]
@@ -28,29 +24,18 @@ namespace WebApi.Controllers
         [Route("api/profile/update")]
         public HttpResponseMessage Update([FromBody] UpdateProfileRequest request)
         {
-            try
-            {
-                UserProfileManager profileMan = new UserProfileManager();
-                var response = profileMan.UpdateUserProfile(request);
-                return response;
-            }
-            catch
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("Unable to update user")
-                };
-                return httpResponseFail;
-            }
+            UserProfileManager profileMan = new UserProfileManager();
+            var response = profileMan.UpdateUserProfile(request);
+            return response;
         }
 
-
+        // Method to check if the user profile is activated
         [HttpPost]
-        [Route("api/profile/isprofileactivated")]
-        public HttpResponseMessage IsProfileActivated([FromBody] IsProfileActivatedRequest request)
+        [Route("api/profile/isprofileactivated/{jwtToken}")]
+        public HttpResponseMessage IsProfileActivated([FromBody] string jwtToken)
         {
             var profileMan = new UserProfileManager();
-            var isProfileActivated = profileMan.IsProfileActivated(request.token);
+            var isProfileActivated = profileMan.IsProfileActivated(jwtToken);
             return isProfileActivated;
         }
     }

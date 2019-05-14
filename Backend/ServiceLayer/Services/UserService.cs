@@ -15,7 +15,6 @@ namespace Gucci.ServiceLayer.Services
     {
         private ILoggerService _gngLoggerService;
         private Configurations configurations;
-        private readonly string AppLaunchSecretKey = Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.User);
 
         public UserService()
         {

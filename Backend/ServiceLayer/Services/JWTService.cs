@@ -208,7 +208,6 @@ namespace Gucci.ServiceLayer.Services
             {
                 return -1;
             }
-
         }
 
         /// <summary>
@@ -338,7 +337,6 @@ namespace Gucci.ServiceLayer.Services
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }
@@ -406,7 +404,6 @@ namespace Gucci.ServiceLayer.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }
