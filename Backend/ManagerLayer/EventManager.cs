@@ -14,9 +14,11 @@ namespace ManagerLayer
     public class EventManager
     {
         private CheckInService _checkInService;
+        private AttendeesService _attendeeService;
         public EventManager()
         {
             _checkInService = new CheckInService();
+            _attendeeService = new AttendeesService();
         }
 
         public HttpResponseMessage CheckIn(int eventID, int userID, string inputtedCheckInCode)
@@ -38,20 +40,19 @@ namespace ManagerLayer
                         return httpResponseFail;
                     }
 
-                    var retrievedAttendee = ctx.Attendees.Where(a => a.EventId == eventID)
-                                                         .Where(a => a.UserId == userID).FirstOrDefault();
 
-                    if (retrievedAttendee == null)
+                    var updatedAttendee = new Attendance(eventID, userID, true);
+
+                    var response = _attendeeService.UpdateAttendance(updatedAttendee);
+
+                    if (response == null)
                     {
-                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                         {
                             Content = new StringContent("Unable to check in")
                         };
                         return httpResponseFail;
                     }
-
-                    retrievedAttendee.CheckedIn = true;
-                    ctx.SaveChanges();
 
                     var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                     {
@@ -60,10 +61,13 @@ namespace ManagerLayer
                     return httpResponse;
                 }
             }
-            catch
+            catch(Exception e)
             {
                 //log
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.ToString())
+                };
                 return httpResponse;
             }
         }
@@ -72,26 +76,20 @@ namespace ManagerLayer
         {
             try
             {
-                using (var ctx = new GreetNGroupContext())
+                var IsAttending = _attendeeService.DoesAttendeeExist(eventId, userId);
+                if (IsAttending)
                 {
-                    // Find if username exists within corresponding event attendee table
-                    var retrievedAttendee = ctx.Attendees.Where(a => a.EventId == eventId)
-                                                         .Where(a => a.UserId == userId)
-                                                         .FirstOrDefault();
-                    if (retrievedAttendee == null)
-                    {
-                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                        {
-                            Content = new StringContent("false")
-                        };
-                        return httpResponseFail;
-                    }
                     var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                     {
                         Content = new StringContent("true")
                     };
                     return httpResponse;
                 }
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("false")
+                };
+                return httpResponseFail;
             }
             catch
             {
@@ -99,6 +97,6 @@ namespace ManagerLayer
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 return httpResponse;
             }
-}
+        }
     }
 }

@@ -97,23 +97,24 @@ export default {
     })
       .then(response => (this.json = response.data))
       .catch(e => { this.errorMessage = e.response.data })
-
-    axios({
-      method: 'POST',
-      url: `${apiURL}/event/isAttendee`,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      data: {
-        EventId: this.EventId,
-        CheckinCode: this.checkinCode,
-        JWT: this.jwt
-      }
-    })
-      .then(response => {
-        this.isAttendee = response.data
+    if (localStorage.getItem('token') != null) {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/isAttendee`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          EventId: this.json.EventId,
+          CheckinCode: this.checkinCode,
+          JWT: this.jwt
+        }
       })
+        .then(response => {
+          this.isAttendee = response.data
+        })
+    }
   },
   /*
   beforeUpdate () {
@@ -150,7 +151,24 @@ export default {
   },
   */
   methods: {
-    
+    checkAttendance: function () {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/isAttendee`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          EventId: this.json.EventId,
+          CheckinCode: this.checkinCode,
+          JWT: this.jwt
+        }
+      })
+        .then(response => {
+          this.isAttendee = response.data
+        })
+    },
     checkIn: function () {
       axios({
         method: 'POST',
@@ -160,7 +178,7 @@ export default {
           'Access-Control-Allow-Credentials': true
         },
         data: {
-          EventId: this.EventId,
+          EventId: this.json.EventId,
           CheckinCode: this.checkinCode,
           JWT: this.jwt
         }
