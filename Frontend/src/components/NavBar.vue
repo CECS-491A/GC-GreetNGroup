@@ -35,14 +35,18 @@
 
 <script>
 import { store } from '@/router/request'
+import { apiURL } from '@/const.js'
+import axios from 'axios'
 export default {
   name: 'NavBar',
   data () {
     return {
+      userID: null,
+      jwt: localStorage.getItem('token'),
       isLoggedIn: store.state,
       UserMenuItems: [
         { title: 'Update Profile', route: '/updateprofile' },
-        { title: 'Logout', route: '/logout' } 
+        { title: 'Logout', route: '/logout' }
       ]
     }
   },
@@ -51,6 +55,19 @@ export default {
     if (store.state.isLogin === true) {
       store.getEmail()
     }
+    axios({
+      method: 'GET',
+      url: `${apiURL}/getuserid/?jwt=` + localStorage.getItem('token'),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then(response => {
+        this.userID = response.data
+        this.UserMenuItems.push({ title: 'Profile', route: '/profile/' + this.userID })
+      })
+      .catch(e => { this.errorMessage = e.response.data })
   }
 }
 </script>

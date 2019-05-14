@@ -93,7 +93,7 @@ namespace Gucci.ManagerLayer
             }
         }
 
-        private HttpResponseMessage Logout(string email)
+        public HttpResponseMessage Logout(string email)
         {
             using (var ctx = new GreetNGroupContext())
             {

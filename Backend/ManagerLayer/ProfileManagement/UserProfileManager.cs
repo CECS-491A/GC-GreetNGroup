@@ -18,6 +18,7 @@ namespace Gucci.ManagerLayer.ProfileManagement
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
+        private readonly List<string> canRateUsers = new List<string> { "CanRate" };
 
         public UserProfileManager()
         {
@@ -192,25 +193,37 @@ namespace Gucci.ManagerLayer.ProfileManagement
 
         }
 
-        /*
         public int RateUser(RateRequest request, string rateeID)
         {
+            int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);
+            UserRating ur = new UserRating
+            {
+                RatedId1 = Convert.ToInt32(rateeID),
+                RaterId1 = Convert.ToInt32(raterID),
+                Rating = Convert.ToInt32(request.rating)
+            };
+
             try
             {
-                int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);
-                UserRating ur = new UserRating();
-                ur.RatedId1 = Convert.ToInt32(rateeID);
-                ur.RaterId1 = Convert.ToInt32(raterID);
-                ur.Rating = Convert.ToInt32(request.rating);
-                _ratingService.CreateRating(ur);
-                return 1;
+                var hasClaims = _jwtServce.CheckUserClaims(request.jwtToken, canRateUsers);
+                if (hasClaims.CompareTo("Authorized") != 0)
+                {
+                    return -2;
+                }
+                var userRating = _ratingService.GetRating(Convert.ToInt32(raterID), Convert.ToInt32(rateeID));
+                if (userRating == false)
+                {
+                    _ratingService.CreateRating(ur, "");
+                    return 1;
+                }
+                _ratingService.UpdateRating(ur, "");
+                return 2;
             }
-            catch (FormatException)
+            catch (Exception e)
             {
                 //log
                 return -1;
             }
         }
-        */
     }
 }

@@ -9,7 +9,7 @@ namespace Gucci.ManagerLayer.AttendeeManagement
     {
         private AttendeesService _attendeeService;
         private JWTService _jWTService;
-        private readonly List<string> joinEventClaims = new List<string> ();
+        private readonly List<string> joinEventClaims = new List<string> {"CanJoinEvents"};
         GreetNGroupContext ctx = new GreetNGroupContext();
         public AttendeeManager()
         {
