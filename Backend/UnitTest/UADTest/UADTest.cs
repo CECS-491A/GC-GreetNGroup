@@ -26,11 +26,10 @@ namespace UnitTest.UADTest
             var expectedAverageLogins = "1.5";
             var expectedMinLogin = "1";
             var expectedMaxLogin = "2";
-            var expectedDate = "April 1";
             var expectedRegistered = userService.GetRegisteredUserCount();
             // Act
-            var test = uadManager.GetLoginComparedToRegistered("June", 1);
-            if (test[8].Date.CompareTo(expectedDate) == 0 && test[8].Value.CompareTo(expectedAverageLogins) == 0 && test[9].Value.CompareTo(expectedMinLogin) == 0 && test[10].Value.CompareTo(expectedMaxLogin) == 0 && test[11].Value.CompareTo(expectedRegistered.ToString()) == 0)
+            var test = uadManager.GetLoginComparedToRegistered("April", 1);
+            if (test[0].Value.Equals(expectedAverageLogins) && test[1].Value.Equals(expectedMinLogin) && test[2].Value.Equals(expectedMaxLogin))
             {
                 actual = true;
             }
@@ -91,20 +90,19 @@ namespace UnitTest.UADTest
             // Arrange
             bool expected = true;
             bool actual = false;
-            var expectedFeatures = new List<string> {"SearchAction", "FindEventForMe", "EventCreated", "UserRatings", "EventJoined", };
-            var expectedCount = new List<string> {"11", "4",  "3", "1", "1" };
+            var expectedFeatures = new List<string> {"SearchAction", "EventCreated", "EventJoined", "UserRatings", "FindEventForMe", };
+            var expectedCount = new List<string> {"11", "3",  "1", "0", "0" };
             var actualFeatures = new List<string>();
             var actualCount = new List<string>();
             // Act
-            var test = uadManager.GetTop5MostUsedFeature("June", 1);
+            var test = uadManager.GetTop5MostUsedFeature("April", 1);
             for (int i = 0; i < test.Count; i++)
             {
                 Console.WriteLine(test[i].Date + ' ' + test[i].InfoType + ' ' + test[i].Value);
                 actualFeatures.Add(test[i].InfoType);
                 actualCount.Add(test[i].Value);
             }
-            if ((actualFeatures[10].CompareTo(expectedFeatures[0]) == 0 && actualFeatures[11].CompareTo(expectedFeatures[1]) == 0 && actualFeatures[12].CompareTo(expectedFeatures[2]) == 0 && actualFeatures[13].CompareTo(expectedFeatures[3]) == 0 && actualFeatures[14].CompareTo(expectedFeatures[4]) == 0 &&
-                actualCount[10].CompareTo(expectedCount[0]) == 0 && actualCount[11].CompareTo(expectedCount[1]) == 0 && actualCount[12].CompareTo(expectedCount[2]) == 0 && actualCount[13].CompareTo(expectedCount[3]) == 0 && actualCount[14].CompareTo(expectedCount[4]) == 0))
+            if (expectedFeatures.SequenceEqual(actualFeatures) && expectedCount.SequenceEqual(actualCount))
             {
                 actual = true;
             }
