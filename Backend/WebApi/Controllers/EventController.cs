@@ -6,6 +6,7 @@ using System.Net;
 using Gucci.ManagerLayer.SearchManager;
 using Gucci.ServiceLayer.Interface;
 using System;
+using ManagerLayer;
 
 namespace WebApi.Controllers
 {
@@ -42,34 +43,22 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Route("api/event/checkIn/")]
-        public IHttpActionResult EventCheckIn([FromBody] CheckinRequest request)
+        public HttpResponseMessage EventCheckIn([FromBody] CheckinRequest request)
         {
             var userId = _jwtService.GetUserIDFromToken(request.JWT);
-            try
-            {
-                return Ok(_checkInService.CheckInputCode(request.EventId, userId, request.CheckinCode));
-            }
-            catch (Exception e)
-            {
-                _gngLoggerService.LogBadRequest("", "", "", e.Message);
-                return BadRequest();
-            }
+            var EventMan = new EventManager();
+            var response = EventMan.CheckIn(request.EventId, userId, request.CheckinCode);
+            return response;
         }
 
         [HttpPost]
         [Route("api/event/isAttendee")]
-        public IHttpActionResult CheckForAttendee([FromBody] CheckinRequest request)
+        public HttpResponseMessage CheckForAttendee([FromBody] CheckinRequest request)
         {
             var userId = _jwtService.GetUserIDFromToken(request.JWT);
-            try
-            {
-                return Ok(_checkInService.CheckAttendanceList(request.EventId, userId));
-            }
-            catch (Exception e)
-            {
-                _gngLoggerService.LogBadRequest("", "", "", e.Message);
-                throw;
-            }
+            var eventMan = new EventManager();
+            var response = eventMan.IsAttendee(request.EventId, userId);
+            return response;
         }
 
         [HttpPost]

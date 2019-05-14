@@ -14,17 +14,17 @@
           </div>
         </v-card-title>
         <v-card-actions primary class="justify-center">
-          <v-btn color="success" @click="joinEvent()">Join Event</v-btn>
-          <v-btn color="error" @click="leaveEvent()">Leave Event</v-btn>
+          <v-btn color="success" v-on:click="joinEvent">Join Event</v-btn>
+          <v-btn color="error" v-on:click="leaveEvent">Leave Event</v-btn>
         </v-card-actions>
-        <v-card>
-          <v-btn color="attendee" @click="isUserAttendee()">Verify Attendance</v-btn>
-        </v-card>
-        <v-card>
+        <div v-if="isAttendee">
+<v-card>
           <input id="checkInBox" type="text" :disabled=attendeeCheck v-model="checkinCode" :maxlength=50 placeholder= 'CHECKIN CODE' />
           <v-btn color="attendee"
-              v-on:click.native="checkIn()">Check In</v-btn>
+              v-on:click="checkIn">Check In</v-btn>
         </v-card>
+        </div>
+        
       </v-card>
     </v-flex>
   </v-layout>
@@ -96,7 +96,24 @@ export default {
       }
     })
       .then(response => (this.json = response.data))
-      .catch(e => { this.errorMessage = e.response.data })  
+      .catch(e => { this.errorMessage = e.response.data })
+
+    axios({
+      method: 'POST',
+      url: `${apiURL}/event/isAttendee`,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      data: {
+        EventId: this.EventId,
+        CheckinCode: this.checkinCode,
+        JWT: this.jwt
+      }
+    })
+      .then(response => {
+        this.isAttendee = response.data
+      })
   },
   /*
   beforeUpdate () {
@@ -133,25 +150,7 @@ export default {
   },
   */
   methods: {
-    isUserAttendee: function () {
-      axios({
-        method: 'POST',
-        url: `${apiURL}/event/isAttendee`,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        data: {
-          EventId: this.EventId,
-          CheckinCode: this.checkinCode,
-          JWT: this.jwt
-        }
-      })
-        .then(response => {
-          const isDataAvailable = response.data != null
-          this.isAttendee = isDataAvailable ? response.data : true
-        })
-    },
+    
     checkIn: function () {
       axios({
         method: 'POST',
@@ -184,7 +183,7 @@ export default {
           eventID: this.json.EventId
         }
       })
-        .then(response => (this.message = response.data))
+        .then(response => (this.message = response.data), this.isAttendee = true)
         .catch(e => { this.errorMessage = e.response.data })
     },
     leaveEvent: function () {
