@@ -109,9 +109,9 @@ namespace Gucci.ManagerLayer
                     };
                     return httpResponseSuccess;
                 }
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    Content = new StringContent("User has logged out of GreetNGroup")
+                    Content = new StringContent("User Does Not Exist")
                 };
                 return httpResponse;
             }
@@ -128,14 +128,6 @@ namespace Gucci.ManagerLayer
                     var httpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
                         Content = new StringContent("Invalid Session")
-                    };
-                    return httpResponse;
-                }
-                if (!_userService.IsUsernameFound(request.email))
-                {
-                    var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("User Does Not Exist")
                     };
                     return httpResponse;
                 }
