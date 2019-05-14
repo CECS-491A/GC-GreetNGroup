@@ -74,7 +74,7 @@ export default {
       eventRetrieved: false,
       message: null,
       errorMessage: null,
-      eventNames: this.$route.params.name,
+      eventID: this.$route.params.id,
       userName: null,
       userID: null,
       json: {},
@@ -89,7 +89,7 @@ export default {
   created () {
     axios({
       method: 'GET',
-      url: `${apiURL}/event/info?name=` + this.eventNames,
+      url: `${apiURL}/event/info?id=` + this.eventID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -106,7 +106,7 @@ export default {
           'Access-Control-Allow-Credentials': true
         },
         data: {
-          EventId: this.json.EventId,
+          EventId: this.eventID,
           CheckinCode: this.checkinCode,
           JWT: this.jwt
         }
