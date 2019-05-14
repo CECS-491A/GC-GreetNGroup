@@ -1,6 +1,6 @@
 <template>
 <div class="EventPage">
-  <h1 class='display-2'>{{message}}</h1>
+  <h1 class='display-2'>{{this.message}}</h1>
   <v-container fluid grid-list-md>
   <v-layout>
     <v-flex xs12 sm6 offset-sm3>
@@ -17,6 +17,14 @@
           <v-btn color="success" @click="joinEvent()">Join Event</v-btn>
           <v-btn color="error" @click="leaveEvent()">Leave Event</v-btn>
         </v-card-actions>
+        <v-card>
+          <v-btn color="attendee" @click="isUserAttendee()">Verify Attendance</v-btn>
+        </v-card>
+        <v-card>
+          <input id="checkInBox" type="text" :disabled=attendeeCheck v-model="checkinCode" :maxlength=50 placeholder= 'CHECKIN CODE' />
+          <v-btn color="attendee"
+              v-on:click.native="checkIn()">Check In</v-btn>
+        </v-card>
       </v-card>
     </v-flex>
   </v-layout>
@@ -72,7 +80,10 @@ export default {
       json: {},
       usersAttending: [],
       eventTags: [],
-      jwt: localStorage.getItem('token')
+      jwt: localStorage.getItem('token'),
+      checkinCode: '',
+      isAttendee: null,
+      checkedIn: null
     }
   },
   created () {
@@ -87,6 +98,7 @@ export default {
       .then(response => (this.json = response.data))
       .catch(e => { this.errorMessage = e.response.data })  
   },
+  /*
   beforeUpdate () {
     axios({
       method: 'GET',
@@ -119,7 +131,46 @@ export default {
       .then(response => (this.eventTags = response.data))
       .catch(e => { this.errorMessage = e.response.data })
   },
+  */
   methods: {
+    isUserAttendee: function () {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/isAttendee`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          EventId: this.EventId,
+          CheckinCode: this.checkinCode,
+          JWT: this.jwt
+        }
+      })
+        .then(response => {
+          const isDataAvailable = response.data != null
+          this.isAttendee = isDataAvailable ? response.data : true
+        })
+    },
+    checkIn: function () {
+      axios({
+        method: 'POST',
+        url: `${apiURL}/event/checkIn/`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          EventId: this.EventId,
+          CheckinCode: this.checkinCode,
+          JWT: this.jwt
+        }
+      })
+        .then(response => {
+          const isDataAvailable = response.data != null
+          this.checkIn = isDataAvailable ? response.data : true
+        })
+    },
     joinEvent: function () {
       axios({
         method: 'POST',
@@ -159,6 +210,11 @@ export default {
       var hour = parseInt(splitDate[3], 10) % 12 !== 0 ? parseInt(splitDate[3], 10) % 12 : 12
       var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
       return formattedDate
+    }
+  },
+  computed: {
+    attendeeCheck () {
+      return !this.isAttendee
     }
   }
 }

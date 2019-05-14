@@ -39,22 +39,38 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
         }
-
-        /*
+        
         [HttpPost]
-        [Route("api/event/{id}")]
+        [Route("api/event/checkIn/")]
         public IHttpActionResult EventCheckIn([FromBody] CheckinRequest request)
         {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
             try
             {
-                return Ok(_checkInService.CheckInputCode(request.EventId, request.CheckinCode));
+                return Ok(_checkInService.CheckInputCode(request.EventId, userId, request.CheckinCode));
             }
             catch (Exception e)
             {
+                _gngLoggerService.LogBadRequest("", "", "", e.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/event/isAttendee")]
+        public IHttpActionResult CheckForAttendee([FromBody] CheckinRequest request)
+        {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
+            try
+            {
+                return Ok(_checkInService.CheckAttendanceList(request.EventId, userId));
+            }
+            catch (Exception e)
+            {
+                _gngLoggerService.LogBadRequest("", "", "", e.Message);
                 throw;
             }
         }
-        */
 
         [HttpPost]
         [Route("api/event/createEvent")]
