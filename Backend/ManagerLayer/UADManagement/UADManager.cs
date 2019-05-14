@@ -9,22 +9,17 @@ namespace Gucci.ManagerLayer.UADManagement
     public class UADManager
     {
         private List<GNGLog> loglist = new List<GNGLog>();
-        LoggerService _gngLoggerService;
-        UADService _uadService;
-        UserService _userService;
-        SortService _sortService;
+        private LoggerService _gngLoggerService = new LoggerService();
+        private UADService _uadService = new UADService();
+        private UserService _userService = new UserService();
+        private SortService _sortService = new SortService();
         private static List<string> months = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
         private List<string> monthsUsed = new List<string>();
         private List<UADObject> uadObjects = new List<UADObject>();
 
         public UADManager()
         {
-            _gngLoggerService = new LoggerService();
-            _uadService = new UADService();
-            _userService = new UserService();
-            _sortService = new SortService();
         }
-
         /// <summary>
         /// Function that gets the number of registered accounts and compared to login information(average logins, min, max)
         /// </summary>
@@ -37,25 +32,13 @@ namespace Gucci.ManagerLayer.UADManagement
             var monthIndex = months.IndexOf(month);
             string[] informationList = { "Average Logins", "Minimum Logins", "Maximum Logins", "Registered Accounts" };
             
-            for (int i = 0; i < 6; i++)
-            {
-                if (monthIndex < 0)
-                {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
-                }
-                if (year > 0)
-                {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    var loginInfo = _uadService.GetLoginInfo(loglist);
-                    loginInfo.Add(registered.ToString("0.##"));
-                    var date = months[monthIndex] + " " + year;
-                    monthsUsed.Add(date);
-                    uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, loginInfo));
-                    monthsUsed.Clear();
-                    monthIndex--;
-                }
-            }
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
+            var loginInfo = _uadService.GetLoginInfo(loglist);
+            loginInfo.Add(registered.ToString("0.##"));
+            var date = months[monthIndex] + " " + year;
+            monthsUsed.Add(date);
+            uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, loginInfo));
+            monthsUsed.Clear();
 
             return uadObjects;
         }
@@ -72,26 +55,14 @@ namespace Gucci.ManagerLayer.UADManagement
             var valueList = new List<string>();
             var monthIndex = months.IndexOf(month);
 
-            for (int i = 0; i < 6; i++)
-            {
-                if (monthIndex < 0)
-                {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
-                }
-                if (year > 0)
-                {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[0]).ToString());
-                    valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[1]).ToString());
-                    var date = months[monthIndex] + " " + year;
-                    monthsUsed.Add(date);
-                    uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, valueList));
-                    valueList.Clear();
-                    monthsUsed.Clear();
-                    monthIndex--;
-                }
-            }
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
+            valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[0]).ToString());
+            valueList.Add(_uadService.GetNumberofLogsID(loglist, logID[1]).ToString());
+            var date = months[monthIndex] + " " + year;
+            monthsUsed.Add(date);
+            uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, valueList));
+            monthsUsed.Clear();
+
             return uadObjects;
         }
         /// <summary>
@@ -106,36 +77,22 @@ namespace Gucci.ManagerLayer.UADManagement
             string[] informationList = { "Average Session Duration", "Minimum Session Duration", "Maximum Session Duration" };
             var sessions = new List<GNGLog>();
             var sessionInfo = new List<string> { "0", "0", "0" };
-            
-            var monthIndex = months.IndexOf(month);
 
-            for (int i = 0; i < 6; i++)
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(month, year);
+            // Get two seperate logs 
+            var entryToWebsite = _uadService.GetLogswithID(loglist, logID[0]);
+            // Get exit from website logs
+            var exitFromWebsite = _uadService.GetLogswithID(loglist, logID[1]);
+            // Pair sessions beginning and ending logs
+            sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
+            if (sessions.Count > 0)
             {
-                if (monthIndex < 0)
-                {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
-                }
-                if (year > 0)
-                {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    // Get two seperate logs 
-                    var entryToWebsite = _uadService.GetLogswithID(loglist, logID[0]);
-                    // Get exit from website logs
-                    var exitFromWebsite = _uadService.GetLogswithID(loglist, logID[1]);
-                    // Pair sessions beginning and ending logs
-                    sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
-                    if (sessions.Count > 0)
-                    {
-                        sessionInfo = _uadService.CalculateSessionInformation(sessions);
-                    }
-                    var date = months[monthIndex] + " " + year;
-                    monthsUsed.Add(date);
-                    uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, sessionInfo));
-                    monthsUsed.Clear();
-                    monthIndex--;
-                }
+                sessionInfo = _uadService.CalculateSessionInformation(sessions);
             }
+            var date = month + " " + year;
+            monthsUsed.Add(date);
+            uadObjects.AddRange(_uadService.ConvertListToUADObjects(monthsUsed, informationList, sessionInfo));
+            monthsUsed.Clear();
 
             return uadObjects;
         }
@@ -152,71 +109,59 @@ namespace Gucci.ManagerLayer.UADManagement
             var urlPages =  new List<string> { "https://www.greetngroup.com/search", "https://www.greetngroup.com/createevent", "https://www.greetngroup.com", "https://www.greetngroup.com/help", "https://www.greetngroup.com/faq" };
             var averageTimeSpent = new List<double>() ;
             var monthIndex = months.IndexOf(month);
-            for (int i = 0; i < 6; i++)
+
+            var loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
+            // For every URL in the list get the average time spent on it
+            for (int j = 0; j < urlPages.Count; j++)
             {
-                
-                if (monthIndex < 0)
+                // Get logs where user enters a url
+                var entryToPage = _uadService.GetEntryLogswithURL(loglist, urlPages[j]);
+                // Get Logs when user leaves a url
+                var exitFromPage = _uadService.GetExitLogswithURL(loglist, urlPages[j]);
+                // Pair the exit from pages with the entrance to a page
+                sessions = _uadService.PairStartAndEndLogs(entryToPage, exitFromPage);
+                if (sessions.Count == 0)
                 {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
+                    averageTimeSpent.Add(0);
                 }
-                if (year > 0)
+                else
                 {
-                    var loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    // For every URL in the list get the average time spent on it
-                    for (int j = 0; j < urlPages.Count; j++)
-                    {
-                        // Get logs where user enters a url
-                        var entryToPage = _uadService.GetEntryLogswithURL(loglist, urlPages[j]);
-                        // Get Logs when user leaves a url
-                        var exitFromPage = _uadService.GetExitLogswithURL(loglist, urlPages[j]);
-                        // Pair the exit from pages with the entrance to a page
-                        sessions = _uadService.PairStartAndEndLogs(entryToPage, exitFromPage);
-                        if (sessions.Count == 0)
-                        {
-                            averageTimeSpent.Add(0);
-                        }
-                        else
-                        {
-                            // Get average time spent on the page
-                            var average = _uadService.CalculateSessionInformation(sessions);
-                            averageTimeSpent.Add(Convert.ToDouble(average[0]));
-                        }
-                        sessions.Clear();
-                    }
-                    //Sort Pages view time by shortest to longest
-                    _sortService.QuickSortDouble(averageTimeSpent, urlPages);
-                    // Transform list into UADObjects
-                    if (urlPages.Count >= 5)
-                    {
-                        for (int k = urlPages.Count - 1; k >= urlPages.Count - 5; k--)
-                        {
-                            var sessionUADObject = new UADObject
-                            {
-                                Date = months[monthIndex] + ' ' + year,
-                                InfoType = urlPages[k],
-                                Value = averageTimeSpent[k].ToString()
-                            };
-                            uadObjects.Add(sessionUADObject);
-                        }
-                    }
-                    else
-                    {
-                        for (int k = urlPages.Count - 1; k >= 0; k--)
-                        {
-                            var sessionUADObject = new UADObject
-                            {
-                                Date = months[monthIndex] + ' ' + year,
-                                InfoType = urlPages[k],
-                                Value = averageTimeSpent[k].ToString()
-                            };
-                            uadObjects.Add(sessionUADObject);
-                        }
-                    }
+                    // Get average time spent on the page
+                    var average = _uadService.CalculateSessionInformation(sessions);
+                    averageTimeSpent.Add(Convert.ToDouble(average[0]));
                 }
-                averageTimeSpent.Clear();
-                monthIndex--;
+                sessions.Clear();
             }
+            //Sort Pages view time by shortest to longest
+            _sortService.QuickSortDouble(averageTimeSpent, urlPages);
+            // Transform list into UADObjects
+            if (urlPages.Count >= 5)
+            {
+                for (int k = urlPages.Count - 1; k >= urlPages.Count - 5; k--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        Date = months[monthIndex] + ' ' + year,
+                        InfoType = urlPages[k],
+                        Value = averageTimeSpent[k].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            else
+            {
+                for (int k = urlPages.Count - 1; k >= 0; k--)
+                {
+                    var sessionUADObject = new UADObject
+                    {
+                        Date = month + ' ' + year,
+                        InfoType = urlPages[k],
+                        Value = averageTimeSpent[k].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
+                }
+            }
+            monthsUsed.Clear();
 
             return uadObjects;
         }
@@ -231,58 +176,44 @@ namespace Gucci.ManagerLayer.UADManagement
         {
             var features = new List<String>() { "EventCreated", "EventJoined", "SearchAction", "FindEventForMe", "UserRatings" };
             var timesFeaturedUsed = new List<int>() { };
-            var monthIndex = months.IndexOf(month);
-            for (int i = 0; i < 6; i++)
+
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(month, year);
+            // List of features wanting to be analyzed
+
+            // For each feature get the amount of times they were used
+            for (int j = 0; j < features.Count; j++)
             {
-
-                if (monthIndex < 0)
+                // Get the log id for the feature
+                var timesUsed = _uadService.GetNumberofLogsID(loglist, features[j]);
+                timesFeaturedUsed.Add(timesUsed);
+            }
+            // Sort Features from 
+            _sortService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
+            if (features.Count >= 5)
+            {
+                for (int k = features.Count - 1; k >= features.Count - 5; k--)
                 {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
+                    var sessionUADObject = new UADObject
+                    {
+                        Date = month + ' ' + year,
+                        InfoType = features[k],
+                        Value = timesFeaturedUsed[k].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
                 }
-                if (year > 0)
+            }
+            else
+            {
+                for (int k = features.Count - 1; k >= 0; k--)
                 {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    // List of features wanting to be analyzed
-
-                    // For each feature get the amount of times they were used
-                    for (int j = 0; j < features.Count; j++)
+                    var sessionUADObject = new UADObject
                     {
-                        // Get the log id for the feature
-                        var timesUsed = _uadService.GetNumberofLogsID(loglist, features[j]);
-                        timesFeaturedUsed.Add(timesUsed);
-                    }
-                    // Sort Features from 
-                    _sortService.QuickSortInteger(timesFeaturedUsed, features, 0, features.Count - 1);
-                    if (features.Count >= 5)
-                    {
-                        for (int k = features.Count - 1; k >= features.Count - 5; k--)
-                        {
-                            var sessionUADObject = new UADObject
-                            {
-                                Date = months[monthIndex] + ' ' + year,
-                                InfoType = features[k],
-                                Value = timesFeaturedUsed[k].ToString()
-                            };
-                            uadObjects.Add(sessionUADObject);
-                        }
-                    }
-                    else
-                    {
-                        for (int k = features.Count - 1; i >= 0; k--)
-                        {
-                            var sessionUADObject = new UADObject
-                            {
-                                Date = months[monthIndex] + ' ' + year,
-                                InfoType = features[k],
-                                Value = timesFeaturedUsed[k].ToString()
-                            };
-                            uadObjects.Add(sessionUADObject);
-                        }
-                    }
+                        Date = month + ' ' + year,
+                        InfoType = features[k],
+                        Value = timesFeaturedUsed[k].ToString()
+                    };
+                    uadObjects.Add(sessionUADObject);
                 }
-                timesFeaturedUsed.Clear();
-                monthIndex--;
             }
 
             return uadObjects;
@@ -297,58 +228,31 @@ namespace Gucci.ManagerLayer.UADManagement
         {
             string[] logID = { "EntryToWebsite", "ExitFromWebsite" };
             var averages = new List<string>();
-            var monthIndex = months.IndexOf(month); 
             var sessions = new List<GNGLog>();
-            for (int i = 0; i < 6; i++)
+
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(month, year);
+            // Get entry to website logs
+            var entryToWebsite = _uadService.GetLogswithID(loglist, logID[0]);
+            // Get exit from website logs
+            var exitFromWebsite = _uadService.GetLogswithID(loglist, logID[1]);
+            // Add the currently used month
+            sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
+            if (sessions.Count == 0)
             {
-                if (monthIndex < 0)
-                {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
-                }
-                if(year > 0)
-                {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    // Get entry to website logs
-                    var entryToWebsite = _uadService.GetLogswithID(loglist, logID[0]);
-                    // Get exit from website logs
-                    var exitFromWebsite = _uadService.GetLogswithID(loglist, logID[1]);
-                    // Add the currently used month
-                    sessions = _uadService.PairStartAndEndLogs(entryToWebsite, exitFromWebsite);
-                    if (sessions.Count == 0)
-                    {
-                        averages.Add("0");
-                    }
-                    else
-                    {
-                        var average = _uadService.CalculateSessionInformation(sessions);
-                        averages.Add(average[0]);
-                    }
-                    var sessionUADObject = new UADObject
-                    {
-                        Date = months[monthIndex] + ' ' + year,
-                        InfoType = "Average Session",
-                        Value = averages[i]
-                    };
-                    uadObjects.Add(sessionUADObject);
-                    monthIndex--;
-                    // Clear List for next month
-                    entryToWebsite.Clear();
-                    exitFromWebsite.Clear();
-                    sessions.Clear();
-                }
-                else
-                {
-                    var sessionUADObject = new UADObject
-                    {
-                        Date = months[monthIndex] + ' ' + year,
-                        InfoType = "Average Session",
-                        Value = "Not Valid"
-                    };
-                    uadObjects.Add(sessionUADObject);
-                    monthIndex--;
-                }
+                averages.Add("0");
             }
+            else
+            {
+                var average = _uadService.CalculateSessionInformation(sessions);
+                averages.Add(average[0]);
+            }
+            var sessionUADObject = new UADObject
+            {
+                Date = month + ' ' + year,
+                InfoType = "Average Session",
+                Value = averages[0]
+            };
+            uadObjects.Add(sessionUADObject);
 
             return uadObjects;
         }
@@ -361,39 +265,16 @@ namespace Gucci.ManagerLayer.UADManagement
         /// <returns>A list of objects that holds the number of logins over six months</returns>
         public List<UADObject> GetLoggedInMonthly(string month, int year)
         {
-            var monthIndex = months.IndexOf(month);
-            for (int i = 0; i < 6; i++)
+            loglist = _gngLoggerService.ReadLogsGivenMonthYear(month, year);
+            var loginCount = _uadService.GetNumberofLogsID(loglist, "EntryToWebsite");
+
+            var loginUADObject = new UADObject
             {
-                if (monthIndex < 0)
-                {
-                    monthIndex = monthIndex + months.Count;
-                    year = year - 1;
-                }
-                if(year > 0)
-                {
-                    loglist = _gngLoggerService.ReadLogsGivenMonthYear(months[monthIndex], year);
-                    var loginCount = _uadService.GetNumberofLogsID(loglist, "EntryToWebsite");
-                    var loginUADObject = new UADObject
-                    {
-                        Date = months[monthIndex] + ' ' + year,
-                        InfoType = "Logins",
-                        Value = loginCount.ToString()
-                    };
-                    uadObjects.Add(loginUADObject);
-                    monthIndex--;
-                }
-                else
-                {
-                    var loginUADObject = new UADObject
-                    {
-                        Date = months[monthIndex] + ' ' + year,
-                        InfoType = "Logins",
-                        Value = "Not Valid"
-                    };
-                    uadObjects.Add(loginUADObject);
-                    monthIndex--;
-                }
-            }
+                Date = month + ' ' + year,
+                InfoType = "Logins",
+                Value = loginCount.ToString()
+            };
+            uadObjects.Add(loginUADObject);
 
             return uadObjects;
         }
