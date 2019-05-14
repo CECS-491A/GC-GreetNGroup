@@ -192,7 +192,12 @@ namespace Gucci.ManagerLayer.ProfileManagement
             }
 
         }
-
+        /// <summary>
+        /// Either updates or adds a rating to the selected User
+        /// </summary>
+        /// <param name="request">Object that holds jwt and rating</param>
+        /// <param name="rateeID">User that is being rated</param>
+        /// <returns>an integer</returns>
         public int RateUser(RateRequest request, string rateeID)
         {
             int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);

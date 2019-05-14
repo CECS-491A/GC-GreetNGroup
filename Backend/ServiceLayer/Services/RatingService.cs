@@ -96,7 +96,12 @@ namespace Gucci.ServiceLayer.Services
 
             return logMade;
         }
-
+        /// <summary>
+        /// Returns boolean if rating aleady exist in the databse
+        /// </summary>
+        /// <param name="raterID">Rater user ID</param>
+        /// <param name="ratedID">the rated user ID</param>
+        /// <returns>boolean if exist or not</returns>
         public bool GetRating(int raterID, int ratedID)
         {
             var userRating = false;
@@ -106,7 +111,12 @@ namespace Gucci.ServiceLayer.Services
             }
             return userRating;
         }
-
+        /// <summary>
+        /// Updates current user rating with a new rating
+        /// </summary>
+        /// <param name="rating">new Rating information</param>
+        /// <param name="ip">user ip</param>
+        /// <returns></returns>
         public bool UpdateRating(UserRating rating, string ip)
         {
             var userRating = new UserRating();
