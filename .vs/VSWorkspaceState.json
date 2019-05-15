@@ -2,7 +2,6 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\Logs",
     "\\Backend\\UnitTest",
     "\\Backend\\UnitTest\\UADTest"
   ],
