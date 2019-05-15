@@ -34,10 +34,10 @@
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
-                  <div id="events" v-for="{Uid, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
+                  <div id="events" v-for="{Uid, EventId, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
                     <v-card ref="Event">
                         <p>{{findUserByUserId(Uid)}}</p>
-                        <router-link :to="'/eventpage/' + EventName">
+                        <router-link :to="'/eventpage/' + EventId">
                         <button  id="event-b"> {{EventName}} </button>
                         </router-link>
                         <article> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>

@@ -216,7 +216,7 @@ namespace UnitTest.SearchTest
 
             var eventTime = DateTime.Parse("5/20/2028");
             var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
-            var expectedEventDto = new DefaultEventSearchDto(UserId1, EventName, Place, eventTime); 
+            var expectedEventDto = new DefaultEventSearchDto(UserId1, EventId1, EventName, Place, eventTime); 
             eventService.InsertMadeEvent(expectedEvent);
 
             // Retrieves list based on input -- includes partial match
@@ -324,7 +324,7 @@ namespace UnitTest.SearchTest
 
             var eventTime = DateTime.Parse("5/20/2028");
             var expectedEvent = new Event(UserId1, EventId1, eventTime, EventName, Place, "");
-            var expectedEventDto = new DefaultEventSearchDto(UserId1, EventName, Place, eventTime);
+            var expectedEventDto = new DefaultEventSearchDto(UserId1, EventId1, EventName, Place, eventTime);
             eventService.InsertMadeEvent(expectedEvent);
 
             // Retrieves list based on input -- includes partial match
