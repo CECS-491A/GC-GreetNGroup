@@ -143,7 +143,7 @@
                 <div id="events" v-for="{UserId, EventId, StartDate, EventName, EventLocation, EventDescription, index} in limitSearchResultsEvents" :key="index">
                     <v-card ref="Event">
                         <p>{{findUserByUserId(UserId)}}</p>
-                        <router-link :to="'/eventpage/' + EventId">
+                        <router-link :to="'/event/' + EventId">
                         <button  id="event-b"> {{EventName}} </button>
                         </router-link>
                         <article> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>

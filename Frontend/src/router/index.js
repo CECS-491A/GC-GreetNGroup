@@ -99,13 +99,9 @@ const router = new Router({
       }
     },
     {
-      path: '/eventpage/:id',
-      name: 'eventpage',
-      component: EventPage,
-      meta:{
-        canViewEvents: true,
-        isLoggedIn: true
-      }
+      path: '/event/:id',
+      name: 'event',
+      component: EventPage
     },
     {
       path: '/termsandconditions',

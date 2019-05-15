@@ -24,17 +24,19 @@
         <v-card-title primary class="justify-center" >
           <div>
             <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">{{this.json.EventName}}</h3>
-            <h2>Host: {{this.userName}}</h2>
+            <h2 @click="hostProfile">Host: {{this.userName}}</h2>
             <h2>Time: {{formatDate(this.json.StartDate) }}</h2>
             <h2>Location: {{this.json.EventLocation }}</h2>
           </div>
         </v-card-title>
-        <v-card-actions primary class="justify-center">
+
+        <v-card-actions primary class="justify-center" v-if="isLoggedIn.isLogin">
           <v-btn color="success" v-on:click="joinEvent">Join Event</v-btn>
           <v-btn color="error" v-on:click="leaveEvent">Leave Event</v-btn>
         </v-card-actions>
+
         <div v-if="isAttendee">
-<v-card>
+        <v-card>
           <input id="checkInBox" type="text" :disabled=attendeeCheck v-model="checkinCode" :maxlength=50 placeholder= 'CHECKIN CODE' />
           <v-btn color="attendee"
               v-on:click="checkIn">Check In</v-btn>
@@ -81,12 +83,14 @@
 </div>
 </template>
 <script>
+import { store } from '@/router/request'
 import axios from 'axios'
 import { apiURL } from '@/const.js'
 export default {
   name: 'Profile',
   data () {
     return {
+      isLoggedIn: store.state,
       eventRetrieved: false,
       httpMessage: null,
       errorMessage: null,
@@ -246,6 +250,9 @@ export default {
       })
         .then(response => (this.userName = response.data))
         .catch(e => { this.errorMessage = e.response.data })
+    },
+    hostProfile () {
+      this.$router.push('/profile/' + this.json.UserId)
     }
   },
   computed: {
