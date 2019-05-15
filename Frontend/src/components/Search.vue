@@ -60,8 +60,8 @@
             <div id="user-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="user !== null">
-                <div id="user-d" v-for="{Username, index} in limitSearchResultsUsers" :key="index">
-                  <router-link :to="'/User/' + Username">
+                <div id="user-d" v-for="{Username, UserId, index} in limitSearchResultsUsers" :key="index">
+                  <router-link :to="'/profile/' + UserId">
                     <button id="user-b" > {{Username}} </button>
                   </router-link>
                 </div>

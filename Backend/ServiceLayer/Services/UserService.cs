@@ -337,7 +337,8 @@ namespace Gucci.ServiceLayer.Services
                     var user = ctx.Users.Where(u => u.UserName.Contains(username))
                         .Select(u => new DefaultUserSearchDto()
                         {
-                            Username = u.UserName
+                            Username = u.UserName,
+                            UserId = u.UserId
                         }).ToList();
 
                     return user;

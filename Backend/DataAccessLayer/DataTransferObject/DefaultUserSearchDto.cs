@@ -5,15 +5,18 @@ namespace Gucci.DataAccessLayer.DataTransferObject
     public class DefaultUserSearchDto
     {
         public string Username { get; set; }
+        public int UserId { get; set; }
 
         public DefaultUserSearchDto()
         {
             Username = "No username found";
+            UserId = 0;
         }
 
-        public DefaultUserSearchDto(string username)
+        public DefaultUserSearchDto(string username, int userID)
         {
             Username = username;
+            UserId = userID;
         }
 
         public bool CompareDefaultUserDto(DefaultUserSearchDto u)
