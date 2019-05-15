@@ -28,8 +28,8 @@ namespace Gucci.ServiceLayer.Services
             var listOfRatingsForUser = from r in context.UserRatings
                                        where r.RatedId1 == userID
                                        select r;
-            var totalRating = 0;
-            var totalRaters = 0;
+            var totalRating = 0.0;
+            var totalRaters = 0.0;
             // Iterate thorugh list of ratings and get total rating and raters
             foreach (UserRating rating in listOfRatingsForUser)
             {
@@ -44,6 +44,8 @@ namespace Gucci.ServiceLayer.Services
                 return 0;
             }
             var average = totalRating / totalRaters;
+            average = Math.Round(average, 2);
+            average = average * 100;
             return average;
         }
 
