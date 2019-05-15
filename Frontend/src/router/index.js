@@ -52,8 +52,7 @@ const router = new Router({
       name: 'createevent',
       component: CreateEvent,
       meta: {
-        canCreateEvents: true,
-        isLoggedIn: true
+        canCreateEvents: true
       }
     },
     {
