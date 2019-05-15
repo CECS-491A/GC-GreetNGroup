@@ -52,8 +52,7 @@ const router = new Router({
       name: 'createevent',
       component: CreateEvent,
       meta: {
-        canCreateEvents: true,
-        isLoggedIn: true
+        canCreateEvents: true
       }
     },
     {
@@ -93,10 +92,7 @@ const router = new Router({
     {
       path: '/logout',
       name: 'logout',
-      component: Logout,
-      meta:{
-        isLoggedIn: true
-      }
+      component: Logout
     },
     {
       path: '/event/:id',

@@ -22,7 +22,7 @@ namespace ManagerLayer.UserManagement
         {
             _userService = new UserService();
             _gngLoggerService = new LoggerService();
-            _signatureService = new SignatureService("8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C");
+            _signatureService = new SignatureService(Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine));
             _jwtService = new JWTService();
         }
 
