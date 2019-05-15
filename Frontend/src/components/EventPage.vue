@@ -95,7 +95,10 @@ export default {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => (this.json = response.data))
+      .then(response => {
+        this.json = response.data
+        this.getHostName(this.json.UserId)
+      })
       .catch(e => { this.errorMessage = e.response.data })
     if (localStorage.getItem('token') != null) {
       axios({
@@ -115,22 +118,9 @@ export default {
           this.isAttendee = response.data
         })
     }
-  },
-  /*
-  beforeUpdate () {
     axios({
       method: 'GET',
-      url: `${apiURL}/user/username/` + this.json.UserId,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      }
-    })
-      .then(response => (this.userName = response.data))
-      .catch(e => { this.errorMessage = e.response.data })
-    axios({
-      method: 'GET',
-      url: `${apiURL}/attendee/` + this.json.EventId,
+      url: `${apiURL}/attendee/` + this.eventID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -140,7 +130,7 @@ export default {
       .catch(e => { this.errorMessage = e.response.data })
     axios({
       method: 'GET',
-      url: `${apiURL}/event/tags/` + this.json.EventId,
+      url: `${apiURL}/event/tags/` + this.eventID,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
@@ -149,7 +139,6 @@ export default {
       .then(response => (this.eventTags = response.data))
       .catch(e => { this.errorMessage = e.response.data })
   },
-  */
   methods: {
     checkAttendance: function () {
       axios({
@@ -227,6 +216,18 @@ export default {
       var hour = parseInt(splitDate[3], 10) % 12 !== 0 ? parseInt(splitDate[3], 10) % 12 : 12
       var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
       return formattedDate
+    },
+    getHostName (userID) {
+      axios({
+        method: 'GET',
+        url: `${apiURL}/user/username/` + userID,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        }
+      })
+        .then(response => (this.userName = response.data))
+        .catch(e => { this.errorMessage = e.response.data })
     }
   },
   computed: {
