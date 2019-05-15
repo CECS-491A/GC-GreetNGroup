@@ -130,8 +130,6 @@
                         ref="timepicker"
                         v-model="startTime"
                         v-if="timeMenu"
-                        :allowed-hours="startAllowedHours"
-                        :allowed-minutes="startAllowedStep"
                         scrollable
                         class="mt-3"
                         :min="minTime"
@@ -152,8 +150,6 @@
                         <v-divider></v-divider>
                         <v-card-text style="height: 300px;">
                             <v-container fluid>
-                            <v-checkbox v-model="selected" label="Outdoors" value="Outdoors"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Indoors" value="Indoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Music" value="Music"></v-checkbox>
                             <v-checkbox v-model="selected" label="Games" value="Games"></v-checkbox>
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
@@ -174,7 +170,7 @@
             </v-card-text>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn  @click="cancel">Cancel</v-btn>
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition>
                 <v-tooltip
@@ -207,7 +203,8 @@
 /* eslint-disable */
     var todaysDate = new Date();
     import axios from 'axios'
-import { error } from 'util';
+    import { error } from 'util'
+    import { apiURL } from '@/const.js'
 
     export default {
         name: 'create-event',
@@ -310,6 +307,9 @@ import { error } from 'util';
                 this.$refs[f].reset()
             })
             },
+            cancel () {
+                this.$router.push('/');
+            },
             submit () {
                 this.formHasErrors = false
                 Object.keys(this.form).forEach(f => {
@@ -325,7 +325,7 @@ import { error } from 'util';
                     eventDate[2], eventStartTime[0], eventStartTime[1]));
                     var eventTagsSelected = this.selected;
 
-                    axios.post("http://localhost:62008/api/event/createevent",
+                    axios.post(`${apiURL}` + "/event/createevent",
                         {
                             JWT: localStorage.getItem('token'),
                             StartDate: eventStartDateTime,
