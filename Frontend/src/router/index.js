@@ -92,10 +92,7 @@ const router = new Router({
     {
       path: '/logout',
       name: 'logout',
-      component: Logout,
-      meta:{
-        isLoggedIn: true
-      }
+      component: Logout
     },
     {
       path: '/event/:id',
