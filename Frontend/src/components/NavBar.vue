@@ -1,7 +1,7 @@
 <template>
   <v-toolbar app dark>
       <v-toolbar-title class = "NavigationToolBar">
-        <span class="font-weight-light">GreetNGroup</span>
+        <span class="font-weight-light" @click="welcomePage">GreetNGroup</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
@@ -67,6 +67,11 @@ export default {
           this.UserMenuItems.push({ title: 'Profile', route: '/profile/' + this.userID })
         })
         .catch(e => { this.errorMessage = e.response.data })
+    }
+  },
+  methods: {
+    welcomePage () {
+      this.$router.push('/')
     }
   }
 }
