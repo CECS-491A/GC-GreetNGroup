@@ -1,6 +1,22 @@
 <template>
 <div class="EventPage">
-  <h1 class='display-2'>{{this.message}}</h1>
+  <v-alert
+      :value="httpMessage"
+      dismissible
+      type="success"
+      transition="scale-transition"
+    >
+    {{httpMessage}}
+    </v-alert>
+
+    <v-alert
+      :value="errorMessage"
+      dismissible
+      type="error"
+      transition="scale-transition"
+    >
+    {{errorMessage}}
+    </v-alert>
   <v-container fluid grid-list-md>
   <v-layout>
     <v-flex xs12 sm6 offset-sm3>
@@ -72,7 +88,7 @@ export default {
   data () {
     return {
       eventRetrieved: false,
-      message: null,
+      httpMessage: null,
       errorMessage: null,
       eventID: this.$route.params.id,
       userName: null,
@@ -175,7 +191,9 @@ export default {
         .then(response => {
           const isDataAvailable = response.data != null
           this.checkIn = isDataAvailable ? response.data : true
+          this.httpMessage = response.data
         })
+        .catch(e => { this.errorMessage = e.response.data })
     },
     joinEvent: function () {
       axios({
@@ -190,7 +208,7 @@ export default {
           eventID: this.json.EventId
         }
       })
-        .then(response => (this.message = response.data), this.isAttendee = true)
+        .then(response => (this.httpMessage = response.data), this.isAttendee = true)
         .catch(e => { this.errorMessage = e.response.data })
     },
     leaveEvent: function () {
@@ -206,7 +224,7 @@ export default {
           eventID: this.json.EventId
         }
       })
-        .then(response => (this.message = response.data))
+        .then(response => (this.httpMessage = response.data))
         .catch(e => { this.errorMessage = e.response.data })
     },
     formatDate (date) {
