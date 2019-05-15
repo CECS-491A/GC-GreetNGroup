@@ -29,12 +29,14 @@
             <h2>Location: {{this.json.EventLocation }}</h2>
           </div>
         </v-card-title>
-        <v-card-actions primary class="justify-center">
+
+        <v-card-actions primary class="justify-center" v-if="isLoggedIn.isLogin">
           <v-btn color="success" v-on:click="joinEvent">Join Event</v-btn>
           <v-btn color="error" v-on:click="leaveEvent">Leave Event</v-btn>
         </v-card-actions>
+
         <div v-if="isAttendee">
-<v-card>
+        <v-card>
           <input id="checkInBox" type="text" :disabled=attendeeCheck v-model="checkinCode" :maxlength=50 placeholder= 'CHECKIN CODE' />
           <v-btn color="attendee"
               v-on:click="checkIn">Check In</v-btn>
@@ -81,12 +83,14 @@
 </div>
 </template>
 <script>
+import { store } from '@/router/request'
 import axios from 'axios'
 import { apiURL } from '@/const.js'
 export default {
   name: 'Profile',
   data () {
     return {
+      isLoggedIn: store.state,
       eventRetrieved: false,
       httpMessage: null,
       errorMessage: null,
