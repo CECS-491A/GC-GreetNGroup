@@ -93,6 +93,7 @@
     <Compile Include="GNGArchiverTest\ArchiverTests.cs" />
     <Compile Include="GNGLoggerTest\LoggerTest.cs" />
     <Compile Include="JWTTest\JWTTests.cs" />
+    <Compile Include="RateTest\RateUserUT.cs" />
     <Compile Include="SessionManagerUT.cs" />
     <Compile Include="SortTest\SortTest.cs" />
     <Compile Include="UserManagerUT.cs" />

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="ArchiverManager\ArchiverManager.cs" />
     <Compile Include="AttendeeManagement\AttendeeManager.cs" />
+    <Compile Include="EventManager.cs" />
     <Compile Include="GNGLogManagement\LogManager.cs" />
     <Compile Include="SessionManager.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />

@@ -81,7 +81,7 @@ namespace UnitTest
             };
 
             // Act
-            var actual = sessionMan.LogoutUsingSSO(request);
+            var actual = sessionMan.Logout(request.email);
 
             // Assert
             Assert.AreEqual(expected.StatusCode, actual.StatusCode);
@@ -101,7 +101,7 @@ namespace UnitTest
             var expected = new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             // Act
-            var actual = sessionMan.LogoutUsingSSO(request);
+            var actual = sessionMan.Logout(request.email);
 
             // Assert
             Assert.AreEqual(expected.StatusCode, actual.StatusCode);
@@ -127,7 +127,7 @@ namespace UnitTest
             };
 
             // Act
-            var actual = sessionMan.LogoutUsingSSO(request);
+            var actual = sessionMan.Logout(request.email);
 
             // Assert
             Assert.AreEqual(expected.StatusCode, actual.StatusCode);

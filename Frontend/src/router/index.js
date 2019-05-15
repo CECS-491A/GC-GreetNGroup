@@ -97,7 +97,7 @@ const router = new Router({
       }
     },
     {
-      path: '/eventpage/:name',
+      path: '/eventpage/:id',
       name: 'eventpage',
       component: EventPage,
       meta:{
