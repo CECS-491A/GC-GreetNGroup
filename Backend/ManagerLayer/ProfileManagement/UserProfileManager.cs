@@ -165,6 +165,14 @@ namespace Gucci.ManagerLayer.ProfileManagement
         {
             try
             {
+                if(jwtToken == null)
+                {
+                    var failHttpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("false")
+                    };
+                    return failHttpResponse;
+                }
                 var userIDFromToken = _jwtServce.GetUserIDFromToken(jwtToken);
                 if (!_userService.IsUsernameFoundById(userIDFromToken))
                 {
@@ -176,17 +184,25 @@ namespace Gucci.ManagerLayer.ProfileManagement
                 }
 
                 User retrievedUser = _userService.GetUserById(userIDFromToken);
+                if (!retrievedUser.IsActivated)
+                {
+                    var failHttpResponse = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                    {
+                        Content = new StringContent("false")
+                    };
+                    return failHttpResponse;
+                }
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StringContent(Convert.ToString(retrievedUser.IsActivated))
+                    Content = new StringContent("true")
                 };
                 return httpResponse;
             }
-            catch
+            catch (Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                 {
-                    Content = new StringContent("Unable to check if user is activated at this time.")
+                    Content = new StringContent(e.ToString())
                 };
                 return httpResponse;
             }

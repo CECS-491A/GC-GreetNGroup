@@ -54,20 +54,20 @@ export default {
     store.isUserLogin()
     if (store.state.isLogin === true) {
       store.getEmail()
-    }
-    axios({
-      method: 'GET',
-      url: `${apiURL}/getuserid/?jwt=` + localStorage.getItem('token'),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      }
-    })
-      .then(response => {
-        this.userID = response.data
-        this.UserMenuItems.push({ title: 'Profile', route: '/profile/' + this.userID })
+      axios({
+        method: 'GET',
+        url: `${apiURL}/getuserid/?jwt=` + localStorage.getItem('token'),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        }
       })
-      .catch(e => { this.errorMessage = e.response.data })
+        .then(response => {
+          this.userID = response.data
+          this.UserMenuItems.push({ title: 'Profile', route: '/profile/' + this.userID })
+        })
+        .catch(e => { this.errorMessage = e.response.data })
+    }
   }
 }
 </script>

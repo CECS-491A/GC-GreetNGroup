@@ -39,11 +39,11 @@ namespace WebApi.Controllers
 
         // Method to check if the user profile is activated
         [HttpPost]
-        [Route("api/profile/isprofileactivated/{jwtToken}")]
-        public HttpResponseMessage IsProfileActivated([FromBody] string jwtToken)
+        [Route("api/profile/isprofileactivated")]
+        public HttpResponseMessage IsProfileActivated([FromBody] TokenRequest request)
         {
             var profileMan = new UserProfileManager();
-            var isProfileActivated = profileMan.IsProfileActivated(jwtToken);
+            var isProfileActivated = profileMan.IsProfileActivated(request.token);
             return isProfileActivated;
         }
 

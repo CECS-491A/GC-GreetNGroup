@@ -82,11 +82,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/user/logout/{jwtToken}")]
-        public HttpResponseMessage Logout([FromUri] string jwtToken)
+        [Route("api/user/logout")]
+        public HttpResponseMessage Logout([FromBody] TokenRequest request)
         {
             var sessionMan = new SessionManager();
-            var response = sessionMan.LogoutUsingGreetNGroup(jwtToken);
+            var response = sessionMan.LogoutUsingGreetNGroup(request.token);
             return response;
         }
 

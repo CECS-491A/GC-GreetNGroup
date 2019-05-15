@@ -11,11 +11,12 @@ namespace DataAccessLayer.Tables
         {
 
         }
-        public JWTToken(int ID, string jwtToken, int userID)
+        public JWTToken(int ID, string jwtToken, int userID, bool validity)
         {
             Id = ID;
             Token = jwtToken;
             UserId = userID;
+            isValid = validity;
         }
 
         [Required, Key]
@@ -27,6 +28,8 @@ namespace DataAccessLayer.Tables
         [Required, ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }
-    
+        
+        [Required]
+        public bool isValid { get; set; }
     }
 }

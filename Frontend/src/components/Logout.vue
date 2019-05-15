@@ -17,12 +17,13 @@ export default {
   created () {
     axios({
       method: 'POST',
-      url: `${apiURL}` + 'user/logout/' + localStorage.getItem('token'),
+      url: `${apiURL}` + '/user/logout/',
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
       data: {
+        token: localStorage.getItem('token')
       }
     })
       .then(response => (this.message = response.data))

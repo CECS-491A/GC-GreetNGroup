@@ -23,9 +23,7 @@ namespace Gucci.ManagerLayer
 
         public SessionManager()
         {
-            //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine)
-            //8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C
-            _signatureService = new SignatureService("5E5DDBD9B984E4C95BBFF621DF91ABC9A5318DAEC0A3B231B4C1BC8FE0851610");
+            _signatureService = new SignatureService(Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine));
             _userService = new UserService();
             _jwtService = new JWTService();
             _userClaimService = new UserClaimsService();
@@ -98,16 +96,24 @@ namespace Gucci.ManagerLayer
             using (var ctx = new GreetNGroupContext())
             {
                 var userToLogout = ctx.Users.Where(u => u.UserName == email).FirstOrDefault<User>();
-                var JWTTokenToRemove = ctx.JWTTokens.Where(j => j.UserId == userToLogout.UserId).FirstOrDefault<JWTToken>();
-                if (JWTTokenToRemove != null)
+                var JWTTokenToInvalidate = ctx.JWTTokens.Where(j => j.UserId == userToLogout.UserId)
+                                                        .OrderByDescending(p => p.Id).First();
+                if (JWTTokenToInvalidate != null)
                 {
-                    _jwtService.DeleteTokenFromDB(JWTTokenToRemove.Token);
-                    ctx.SaveChanges();
-                    var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
+                    var isTokenInvalidated = _jwtService.InvalidateToken(JWTTokenToInvalidate.Token);
+                    if (isTokenInvalidated)
                     {
-                        Content = new StringContent("User has logged out of GreetNGroup")
+                        var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent("User has logged out of GreetNGroup")
+                        };
+                        return httpResponseSuccess;
+                    }
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("Unable to delete token")
                     };
-                    return httpResponseSuccess;
+                    return httpResponseFail;
                 }
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
@@ -151,11 +157,11 @@ namespace Gucci.ManagerLayer
                 var email = _jwtService.GetUsernameFromToken(jwtToken);
                 return Logout(email);
             }
-            catch
+            catch(Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    Content = new StringContent("Unable to log out at this time")
+                    Content = new StringContent(e.ToString())
                 };
                 return httpResponse;
             }
