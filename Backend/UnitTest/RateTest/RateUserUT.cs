@@ -3,6 +3,7 @@ using Gucci.ManagerLayer.ProfileManagement;
 using Gucci.ServiceLayer.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ManagerLayer.UserManagement;
+using System;
 
 namespace UnitTest
 {
@@ -28,7 +29,7 @@ namespace UnitTest
             UserRating ur = new UserRating
             {
                 RatedId1 = 1,
-                RaterId1 = 2,
+                RaterId1 = 3,
                 Rating = 1
             };
             var rateExist = ratingService.CreateRating(ur, "");
@@ -60,6 +61,14 @@ namespace UnitTest
         {
             var userRating = ratingService.GetRating(2, 3);
             Assert.IsFalse(userRating);
+        }
+
+        [TestMethod]
+        public void GetAverageRating_Pass()
+        {
+            var userRating = ratingService.GetRating(1);
+            Console.WriteLine(userRating);
+            Assert.AreEqual(userRating, 1);
         }
     }
 }

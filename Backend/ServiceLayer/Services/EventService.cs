@@ -375,10 +375,11 @@ namespace Gucci.ServiceLayer.Services
                 using (var ctx = new GreetNGroupContext())
                 {
                     // Grabs events by needed columns and returns data transfer object
-                    e = ctx.Events.Where(n => n.EventName.Contains(searchInput))
+                    e = ctx.Events.Where(uEvent => uEvent.EventName.Contains(searchInput))
                         .Select(n => new DefaultEventSearchDto()
                         {
                             Uid = n.UserId,
+                            EventId = n.EventId,
                             EventName = n.EventName,
                             EventLocation = n.EventLocation,
                             StartDate = n.StartDate
