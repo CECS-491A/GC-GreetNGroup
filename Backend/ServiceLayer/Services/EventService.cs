@@ -491,6 +491,20 @@ namespace Gucci.ServiceLayer.Services
             return checkinCode.ToString();
         }
 
+
+        public bool IsEventTimeValid(DateTime eventDateTime)
+        {
+            var currentDateTime = DateTime.UtcNow;
+            if((currentDateTime - eventDateTime).TotalSeconds < 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            
+        }
         #endregion
 
         /// <summary>

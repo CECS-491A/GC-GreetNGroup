@@ -1,6 +1,7 @@
 <template>
   <div class="Welcome">
-    <h1>Welcome</h1>
+    <h1>Welcome to GreetNGroup</h1>
+    <h3>Greet people with your interests. Group up to do what you love.</h3>
     <br />
     <br />
   </div>

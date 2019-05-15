@@ -1,35 +1,42 @@
 <template>
   <v-app>
     <div class="Search">
-      <h1>{{ title }}</h1>
+      <h1>Search</h1>
     </div>
     <v-container fluid>
-      <v-layout align-start justify-center row wrap>
-        <v-flex xs5>
-          <input id="searchbar" type="text" v-model="search" :maxlength=50 placeholder= 'search' />
-          <button v-on:click="checkSearchFilter(filter) ? findUserByUsername(search) : findEventsByName(search)">Search</button>
-        </v-flex>
-      </v-layout>
-      <v-layout align-start justify-center row wrap>
-        <v-flex xs2>
+      <v-layout row justify-center>
+          <v-flex sm5>
+            <v-text-field
+              v-model="search"
+              single-line
+              outline
+              :maxlength=50 
+              placeholder= 'Find events or users'
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm1>
             <v-select
               v-model="filter"
               :items="searchFilter"
-              :menu-props="{ maxHeight: '200' }"
-              label="Select a filter"
+              label="Search Filter"
             ></v-select>
+          </v-flex>
+          <v-flex sm1>
             <v-select
               v-model="newPageLimit"
               v-on:click="resetResults()"
               :items="resultCount"
               :menu-props="{ maxHeight: '200' }"
-              label="Select display count"
+              label="Display Count"
               hide-details
             ></v-select>
-      </v-flex>
+          </v-flex>
+          <v-flex sm2>
+            <v-btn v-on:click="checkSearchFilter(filter) ? findUserByUsername(search) : findEventsByName(search)">Search</v-btn>
+          </v-flex>
       </v-layout>
       <v-layout align-start justify-center row wrap>
-        <v-flex xs3>
+        <v-flex sm8>
           <div v-if="!checkSearchFilter(filter)">
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
@@ -38,11 +45,11 @@
                     <v-card ref="Event">
                         <p>{{findUserByUserId(Uid)}}</p>
                         <router-link :to="'/eventpage/' + EventId">
-                        <button  id="event-b"> {{EventName}} </button>
+                        <button id="event-b"> {{EventName}} </button>
                         </router-link>
-                        <article> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>
-                        <article> {{'Location: ' + EventLocation}} </article>
-                        <article> {{'Host: ' + eventHost}} </article>
+                        <article class="text-sm-left"> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>
+                        <article class="text-sm-left"> {{'Location: ' + EventLocation}} </article>
+                        <article class="text-sm-left"> {{'Host: ' + eventHost}} </article>
                     </v-card>
                 </div>
               </div>
@@ -62,21 +69,23 @@
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
             </div>
           </div>
-          <div>
-            <v-btn small color="primary" dark 
-            v-if="events.length > this.pageLimit"
-            v-on:click.native="limitSearchResultsPrevious(events)">Previous</v-btn>
-            <v-btn small color="primary" dark 
-              v-if="events.length > this.pageLimit"
-              v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
-            <v-btn small color="primary" dark 
-            v-if="user.length > this.pageLimit"
-            v-on:click.native="limitSearchResultsPrevious(user)">Previous</v-btn>
-            <v-btn small color="primary" dark 
-              v-if="user.length > this.pageLimit"
-              v-on:click.native="limitSearchResultsNext(user)">Next</v-btn>
-          </div>
         </v-flex>
+      </v-layout>
+      <v-layout justify-center>
+        <div>
+          <v-btn small color="primary" dark 
+          v-if="events.length > this.pageLimit"
+          v-on:click.native="limitSearchResultsPrevious(events)">Previous</v-btn>
+          <v-btn small color="primary" dark 
+            v-if="events.length > this.pageLimit"
+            v-on:click.native="limitSearchResultsNext(events)">Next</v-btn>
+          <v-btn small color="primary" dark 
+          v-if="user.length > this.pageLimit"
+          v-on:click.native="limitSearchResultsPrevious(user)">Previous</v-btn>
+          <v-btn small color="primary" dark 
+            v-if="user.length > this.pageLimit"
+            v-on:click.native="limitSearchResultsNext(user)">Next</v-btn>
+        </div>
       </v-layout>
     </v-container>
   </v-app>
@@ -93,12 +102,11 @@ export default {
       events: [],
       user: [],
       eventHost: [],
-      title: 'GreetNGroup',
       placeholderText: 'search for events',
       search: '',
       eventName: '',
       errorInSearch: '',
-      searchFilter: ['Users', 'Events'],
+      searchFilter: [{text: 'Users'}, {text: 'Events'}],
       resultCount: [5, 10, 15, 20, 40],
       filter: 'Events',
       pageturner: false,
@@ -212,17 +220,16 @@ h1 {
   font-weight: normal;
 }
 #event-b, #user-b {
+  text-align: left;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 22px;
 }
 #events-list, h2 {
   margin: 25px;
+  text-align: left;
 }
 #events {
-  min-height: 100px;
-}
-#searchbar {
-  width: 200px;
-  height: 25px
+  min-height: 120px;
+  font-size: 16px;
 }
 </style>

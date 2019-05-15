@@ -130,8 +130,6 @@
                         ref="timepicker"
                         v-model="startTime"
                         v-if="timeMenu"
-                        :allowed-hours="startAllowedHours"
-                        :allowed-minutes="startAllowedStep"
                         scrollable
                         class="mt-3"
                         :min="minTime"
@@ -152,8 +150,6 @@
                         <v-divider></v-divider>
                         <v-card-text style="height: 300px;">
                             <v-container fluid>
-                            <v-checkbox v-model="selected" label="Outdoors" value="Outdoors"></v-checkbox>
-                            <v-checkbox v-model="selected" label="Indoors" value="Indoors"></v-checkbox>
                             <v-checkbox v-model="selected" label="Music" value="Music"></v-checkbox>
                             <v-checkbox v-model="selected" label="Games" value="Games"></v-checkbox>
                             <v-checkbox v-model="selected" label="Fitness" value="Fitness"></v-checkbox>
@@ -174,7 +170,7 @@
             </v-card-text>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn  @click="cancel">Cancel</v-btn>
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition>
                 <v-tooltip
@@ -309,6 +305,9 @@ import { error } from 'util';
             Object.keys(this.form).forEach(f => {
                 this.$refs[f].reset()
             })
+            },
+            cancel () {
+                this.$router.push('/');
             },
             submit () {
                 this.formHasErrors = false
