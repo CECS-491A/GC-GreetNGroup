@@ -203,7 +203,8 @@
 /* eslint-disable */
     var todaysDate = new Date();
     import axios from 'axios'
-import { error } from 'util';
+    import { error } from 'util'
+    import { apiURL } from '@/const.js'
 
     export default {
         name: 'create-event',
@@ -324,7 +325,7 @@ import { error } from 'util';
                     eventDate[2], eventStartTime[0], eventStartTime[1]));
                     var eventTagsSelected = this.selected;
 
-                    axios.post("http://localhost:62008/api/event/createevent",
+                    axios.post(`${apiURL}` + "/event/createevent",
                         {
                             JWT: localStorage.getItem('token'),
                             StartDate: eventStartDateTime,
