@@ -80,11 +80,11 @@ namespace ManagerLayer.UserManagement
 
                 return response;
             }
-            catch
+            catch(Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    Content = new StringContent("Unable to delete user at this time")
+                    Content = new StringContent(e.ToString())
                 };
                 return httpResponse;
             }
@@ -119,7 +119,7 @@ namespace ManagerLayer.UserManagement
                     retrievedUser.State = "CA";
                     retrievedUser.City = "LB";
                     retrievedUser.Country = "USA";
-                    retrievedUser.DoB = DateTime.MinValue;
+                    retrievedUser.DoB = DateTime.Now;
                     retrievedUser.IsActivated = false;
                     ctx.SaveChanges();
 
@@ -135,7 +135,7 @@ namespace ManagerLayer.UserManagement
                 _gngLoggerService.LogGNGInternalErrors(ex.ToString());
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    Content = new StringContent("Unable to delete user at this time")
+                    Content = new StringContent(ex.ToString())
                 };
                 return httpResponse;
             }
