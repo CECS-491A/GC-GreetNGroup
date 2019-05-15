@@ -24,7 +24,7 @@
         <v-card-title primary class="justify-center" >
           <div>
             <h3 class="headline mb-0" style = "font-size: 20px; text-decoration: underline;">{{this.json.EventName}}</h3>
-            <h2>Host: {{this.userName}}</h2>
+            <h2 @click="hostProfile">Host: {{this.userName}}</h2>
             <h2>Time: {{formatDate(this.json.StartDate) }}</h2>
             <h2>Location: {{this.json.EventLocation }}</h2>
           </div>
@@ -246,6 +246,9 @@ export default {
       })
         .then(response => (this.userName = response.data))
         .catch(e => { this.errorMessage = e.response.data })
+    },
+    hostProfile () {
+      this.$router.push('/profile/' + this.json.UserId)
     }
   },
   computed: {
