@@ -9,6 +9,12 @@ namespace ServiceLayer.Services
     // This class provides a set of signing methods that conform to LTI spec
     public class SignatureService
     {
+        private string AppLaunchSecretKey = "";
+        public SignatureService(string secretKey)
+        {
+            AppLaunchSecretKey = secretKey;
+        }
+
         public bool IsValidClientRequest(string userId, string email, string timestamp, string signature)
         {
             // Dictionary represents the signed body of the request to the destination server
@@ -56,9 +62,7 @@ namespace ServiceLayer.Services
         public string Sign(string payloadString)
         {
             // Instantiate a new hashing algorithm with the provided key
-            HMACSHA256 hashingAlg = new HMACSHA256(Encoding.ASCII.GetBytes("8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C"));
-
-            //Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine)
+            HMACSHA256 hashingAlg = new HMACSHA256(Encoding.ASCII.GetBytes(AppLaunchSecretKey));
 
             // Get the raw bytes from our payload string
             byte[] payloadBuffer = Encoding.ASCII.GetBytes(payloadString);

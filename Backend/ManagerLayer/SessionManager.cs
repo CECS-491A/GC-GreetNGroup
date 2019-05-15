@@ -10,8 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Web.Http;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
 
 namespace Gucci.ManagerLayer
 {
@@ -21,11 +19,19 @@ namespace Gucci.ManagerLayer
         private IUserService _userService;
         private IJWTService _jwtService;
         private UserClaimsService _userClaimService;
-        private string baseRedirectURL = "https://greetngroup.com/login?token=";
+        private readonly string baseRedirectURL = "https://greetngroup.com/login?token=";
 
         public SessionManager()
         {
-            _signatureService = new SignatureService();
+            _signatureService = new SignatureService(Environment.GetEnvironmentVariable("AppLaunchSecretKey", EnvironmentVariableTarget.Machine));
+            _userService = new UserService();
+            _jwtService = new JWTService();
+            _userClaimService = new UserClaimsService();
+        }
+
+        public SessionManager(string secretKey)
+        {
+            _signatureService = new SignatureService(secretKey);
             _userService = new UserService();
             _jwtService = new JWTService();
             _userClaimService = new UserClaimsService();
@@ -75,7 +81,7 @@ namespace Gucci.ManagerLayer
                     return redirect;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -85,7 +91,39 @@ namespace Gucci.ManagerLayer
             }
         }
 
-        public HttpResponseMessage Logout(SSOUserRequest request)
+        public HttpResponseMessage Logout(string email)
+        {
+            using (var ctx = new GreetNGroupContext())
+            {
+                var userToLogout = ctx.Users.Where(u => u.UserName == email).FirstOrDefault<User>();
+                var JWTTokenToInvalidate = ctx.JWTTokens.Where(j => j.UserId == userToLogout.UserId)
+                                                        .OrderByDescending(p => p.Id).First();
+                if (JWTTokenToInvalidate != null)
+                {
+                    var isTokenInvalidated = _jwtService.InvalidateToken(JWTTokenToInvalidate.Token);
+                    if (isTokenInvalidated)
+                    {
+                        var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent("User has logged out of GreetNGroup")
+                        };
+                        return httpResponseSuccess;
+                    }
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                    {
+                        Content = new StringContent("Unable to delete token")
+                    };
+                    return httpResponseFail;
+                }
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent("User Does Not Exist")
+                };
+                return httpResponse;
+            }
+        }
+
+        public HttpResponseMessage LogoutUsingSSO(SSOUserRequest request)
         {
             try
             {
@@ -99,41 +137,31 @@ namespace Gucci.ManagerLayer
                     };
                     return httpResponse;
                 }
-                if (!_userService.IsUsernameFound(request.email))
-                {
-                    var httpResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("User Does Not Exist")
-                    };
-                    return httpResponse;
-                }
 
-                using(var ctx = new GreetNGroupContext())
-                {
-                    var userToLogout = ctx.Users.Where(u => u.UserName == request.email).FirstOrDefault<User>();
-                    var JWTTokenToRemove = ctx.JWTTokens.Where(j => j.UserId == userToLogout.UserId).FirstOrDefault<JWTToken>();
-                    if(JWTTokenToRemove != null)
-                    {
-                        _jwtService.DeleteTokenFromDB(JWTTokenToRemove.Token);
-                        ctx.SaveChanges();
-                        var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
-                        {
-                            Content = new StringContent("User has logged out of GreetNGroup")
-                        };
-                        return httpResponseSuccess;
-                    }
-                    var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                    {
-                        Content = new StringContent("Unable to log out at this time")
-                    };
-                    return httpResponse;
-                }
+                return Logout(request.email);
             }
             catch (Exception)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent("Unable to log out at this time")
+                };
+                return httpResponse;
+            }
+        }
+
+        public HttpResponseMessage LogoutUsingGreetNGroup(string jwtToken)
+        {
+            try
+            {
+                var email = _jwtService.GetUsernameFromToken(jwtToken);
+                return Logout(email);
+            }
+            catch(Exception e)
+            {
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.ToString())
                 };
                 return httpResponse;
             }

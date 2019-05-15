@@ -11,5 +11,6 @@ namespace Gucci.ServiceLayer.Interface
         string GetUsernameFromToken(string jwtToken);
         bool DeleteTokenFromDB(string jwtToken);
         string IsTokenExpired(string jwt);
+        bool InvalidateToken(string jwt);
     }
 }

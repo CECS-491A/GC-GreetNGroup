@@ -6,6 +6,7 @@ using System.Net;
 using Gucci.ManagerLayer.SearchManager;
 using Gucci.ServiceLayer.Interface;
 using System;
+using ManagerLayer;
 
 namespace WebApi.Controllers
 {
@@ -16,6 +17,7 @@ namespace WebApi.Controllers
         private EventTagService eventTagService = new EventTagService();
         private IJWTService _jwtService = new JWTService();
         private UserService _userService = new UserService();
+        private CheckInService _checkInService = new CheckInService();
 
         /// <summary>
         /// Returns value that has been requested for retrieval in Ok response
@@ -37,6 +39,26 @@ namespace WebApi.Controllers
                 _gngLoggerService.LogBadRequest(userId.ToString(), ip, url, e.ToString());
                 return BadRequest();
             }
+        }
+        
+        [HttpPost]
+        [Route("api/event/checkIn/")]
+        public HttpResponseMessage EventCheckIn([FromBody] CheckinRequest request)
+        {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
+            var EventMan = new EventManager();
+            var response = EventMan.CheckIn(request.EventId, userId, request.CheckinCode);
+            return response;
+        }
+
+        [HttpPost]
+        [Route("api/event/isAttendee")]
+        public HttpResponseMessage CheckForAttendee([FromBody] CheckinRequest request)
+        {
+            var userId = _jwtService.GetUserIDFromToken(request.JWT);
+            var eventMan = new EventManager();
+            var response = eventMan.IsAttendee(request.EventId, userId);
+            return response;
         }
 
         [HttpPost]
@@ -142,15 +164,17 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/event/info")]
-        public IHttpActionResult GetEventByName([FromUri]string name)
+        public IHttpActionResult GetEventByName([FromUri]string id)
         {
             try
             {
                 // Prevents no input search
-                if (name.Length < 0) Ok();
+                if (id.Length < 0) BadRequest();
 
                 // Retrieves info for GET
-                var eventFound = eventService.GetEventByName(name);
+                var convertedID = Convert.ToInt32(id);
+                
+                var eventFound = eventService.GetEventById(convertedID);
                 if (eventService.IsEventExpired(eventFound.EventId))
                 {
                     eventService.SetEventToExpired(eventFound.EventId);

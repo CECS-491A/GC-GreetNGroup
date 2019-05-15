@@ -15,17 +15,20 @@ namespace UnitTest
 
         public User CreateUser()
         {
-            var newUser = new User
-            {
-                UserId = _userService.GetNextUserID()
-            };
-            return InsertUserInDB(newUser);
+            var newUser = new User();
+            newUser.UserId = _userService.GetNextUserID();
+            newUser.UserName = "test@gmail.com";
+            return newUser;
         }
 
         public User InsertUserInDB(User userToAdd)
         {
-            _userService.InsertUser(userToAdd);
-            return userToAdd;
+            if (_userService.InsertUser(userToAdd))
+            {
+                return userToAdd;
+            }
+
+            return null;
         }
 
         public bool DeleteUserFromDB(User userToDelete)

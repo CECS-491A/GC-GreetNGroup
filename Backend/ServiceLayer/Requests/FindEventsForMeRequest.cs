@@ -2,6 +2,7 @@
 
 namespace Gucci.ServiceLayer.Requests
 {
+    // This class holds information to be passed using the FromBody tag in the controller
     public class FindEventsForMeRequest
     {
         public bool UseTags { get; set; }

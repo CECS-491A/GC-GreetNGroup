@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Backend",
-    "\\Backend\\UnitTest",
-    "\\Backend\\UnitTest\\UADTest"
+    "\\Backend"
   ],
   "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false

@@ -149,6 +149,10 @@
     <Compile Include="Migrations\201905110158119_add_eventcheckincode.Designer.cs">
       <DependentUpon>201905110158119_add_eventcheckincode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905150433129_addcolumnjwttoken.cs" />
+    <Compile Include="Migrations\201905150433129_addcolumnjwttoken.Designer.cs">
+      <DependentUpon>201905150433129_addcolumnjwttoken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GNGLog.cs" />
     <Compile Include="Models\UADObject.cs" />
@@ -255,6 +259,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905110158119_add_eventcheckincode.resx">
       <DependentUpon>201905110158119_add_eventcheckincode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905150433129_addcolumnjwttoken.resx">
+      <DependentUpon>201905150433129_addcolumnjwttoken.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

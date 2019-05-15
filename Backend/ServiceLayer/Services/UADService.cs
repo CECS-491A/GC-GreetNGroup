@@ -15,31 +15,33 @@ namespace Gucci.ServiceLayer.Services
         /// <returns>returns the number of logs with the passed logid found</returns>
         public int GetNumberofLogsID(List<GNGLog> logs, string logID)
         {
-            int logcount = 0;
+            var logcount = 0;
             for (int index = 0; index < logs.Count; index++)
             {
-                if (logs[index].LogID.Equals(logID) == true)
+                if (logs[index].LogID.Equals(logID))
                 {
                     logcount++;
                 }
             }
+
             return logcount;
         }
         /// <summary>
         /// Function that returns the login information(average logins, max, min) for the current year and month
         /// </summary>
         /// <param name="logs">list of logs</param>
-        /// <returns>returns the number of logs with the passed logid found</returns>
+        /// <returns>returns the list of login infor</returns>
         public List<string> GetLoginInfo(List<GNGLog> logs)
         {
             var loginID = "EntryToWebsite";
             var totalLogin = 0;
             var currentLogin = 0;
-            int minLogin = 0;
-            int maxLogin = 0;
+            var minLogin = 0;
+            var maxLogin = 0;
             var totalDays = 1.0;
             var loginInfoList = new List<string>();
             var averageLogins = 0.0;
+          
             if (logs.Count != 0)
             {
                 var firstDate = DateTime.Parse(logs[0].DateTime);
@@ -48,7 +50,7 @@ namespace Gucci.ServiceLayer.Services
                 {
                     var currentDate = DateTime.Parse(logs[i].DateTime);
                     var currentDay = currentDate.Day;
-                    if (logs[i].LogID.Equals(loginID) == true)
+                    if (logs[i].LogID.Equals(loginID))
                     {
                         totalLogin++;
                         currentLogin++;
@@ -77,47 +79,8 @@ namespace Gucci.ServiceLayer.Services
             loginInfoList.Add(averageLogins.ToString("0.##"));
             loginInfoList.Add(minLogin.ToString("0.##"));
             loginInfoList.Add(maxLogin.ToString("0.##"));
-            return loginInfoList;
-        }
-        /// <summary>
-        /// Function that takes a list of logs and removes the logs not related to the specific month
-        /// </summary>
-        /// <param name="logs">List of logs</param>
-        /// <param name="month">specified month</param>
-        /// <returns>returns logs with the specified month</returns>
-        public List<GNGLog> GetLogsFortheMonth(List<GNGLog> logs, string month)
-        {
-            for (int i = logs.Count - 1; i >= 0; i--)
-            {
-                //Return the Name of the month
-                DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
-                if (string.Compare(parsedDate.ToString("MMMM"), month) != 0)
-                {
-                    logs.Remove(logs[i]);
-                }
-            }
-            return logs;
-        }
 
-        /// <summary>
-        /// Function that takes a list of logs and removes the logs not related to the specific month and year
-        /// </summary>
-        /// <param name="logs">List of logs</param>
-        /// <param name="month">specified month</param>
-        /// <param name="year">specified year</param>
-        /// <returns>returns logs with the specified month and year</returns>
-        public List<GNGLog> GetLogsForMonthAndYear(List<GNGLog> logs, string month, int year)
-        {
-            for (int i = logs.Count - 1; i >= 0; i--)
-            {
-                //Return the Name of the month
-                DateTime parsedDate = DateTime.Parse(logs[i].DateTime);
-                if (month.CompareTo(parsedDate.ToString("MMMM")) != 0 || parsedDate.Year != year)
-                {
-                    logs.Remove(logs[i]);
-                }
-            }
-            return logs;
+            return loginInfoList;
         }
 
         /// <summary>
@@ -130,6 +93,7 @@ namespace Gucci.ServiceLayer.Services
             var loglist = new List<GNGLog>();
             for (int i = 0;  i < logs.Count; i++)
             {
+                
                 if (string.Compare(logs[i].LogID, ID) == 0)
                 {
                     loglist.Add(logs[i]);
@@ -139,35 +103,50 @@ namespace Gucci.ServiceLayer.Services
         }
 
         /// <summary>
-        /// Function the calcualtes the average session time over the number of sessions
+        /// Function the calculates session information(average, min, max)
         /// </summary>
         /// <param name="session">List of session times</param>
-        /// <returns>the average session time</returns>
-        public List<string> CalculateAverageSessionInformation(List<GNGLog> session)
+        /// <returns>List of session information</returns>
+        public List<string> CalculateSessionInformation(List<GNGLog> session)
         {
             var average = 0.0;
             var totalSessions = session.Count / 2.0;
-            var totalTime = 0;
-            var maxSession = 0;
-            var minSession = 0;
+            var totalTime = 0.0;
+            var maxSession = 0.0;
+            var minSession = 0.0;
             var sessionInformation = new List<string>();
-            //Iterate list as pairs and find time difference for each pair
+            // Iterate list as pairs and find time difference for each pair and check if can replace current max and min
             for(int i = 1; i < session.Count;)
             {
                 
                 var end = DateTime.Parse(session[i - 1].DateTime);
                 var beginning = DateTime.Parse(session[i].DateTime);
                 var duration = end - beginning;
-                //Convert time to minutes
-                totalTime = totalTime + (int)duration.TotalMinutes;
-                if (i == 1)
+                // Add current time in minutes to current time
+                if(duration.TotalMinutes > 0)
                 {
-                    maxSession = (int)duration.TotalMinutes;
-                    minSession = (int)duration.TotalMinutes;
+                    totalTime = totalTime + duration.TotalMinutes;
+                    if (i == 1)
+                    {
+                        maxSession = duration.TotalMinutes;
+                        minSession = duration.TotalMinutes;
+                    }
+                    if (duration.TotalMinutes > maxSession)
+                    {
+                        maxSession = duration.TotalMinutes;
+                    }
+                    else if (duration.TotalMinutes < minSession)
+                    {
+                        minSession = duration.TotalMinutes;
+                    }
+                    i = i + 2;
+                    
                 }
-                maxSession = Math.Max((int)duration.TotalMinutes, maxSession);
-                minSession = Math.Min((int)duration.TotalMinutes, minSession);
-                i = i + 2;
+                else
+                {
+                    i = i + 2;
+                    totalSessions--;
+                }
             }
             //Calculate the average time
             average = totalTime / totalSessions;
@@ -182,18 +161,21 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         /// <param name="logs">list of logs</param>
         /// <param name="url">specific url</param>
-        public void GetEntryLogswithURL(List<GNGLog> logs, string url)
+        /// <returns>List of Logs with entry to url</returns>
+        public List<GNGLog> GetEntryLogswithURL(List<GNGLog> logs, string url)
         {
-            logs = GetLogswithID(logs, "ClickEvent");
+            var entryID = "EntryToWebsite";
+            var newList = new List<GNGLog>();
             //For every log check to see if the urls dont match
-            for (int i = logs.Count - 1; i >= 0; i--)
+            for (int i = 0; i < logs.Count; i++)
             {
                 string[] words = logs[i].Description.Split(' ');
-                if (string.Compare(words[2], url) != 0)
+                if (url.CompareTo(words[2]) == 0 || (logs[i].LogID.CompareTo(entryID) == 0 && url.CompareTo("https://www.greetngroup.com") == 0))
                 {
-                    logs.Remove(logs[i]);
+                    newList.Add(logs[i]);
                 }
             }
+            return newList;
         }
 
         /// <summary>
@@ -201,36 +183,35 @@ namespace Gucci.ServiceLayer.Services
         /// </summary>
         /// <param name="logs">List of logs</param>
         /// <param name="url">specific url</param>
-        public void GetExitLogswithURL(List<GNGLog> logs, string url)
+        /// <returns>List of logs that exit url</returns>
+        public List<GNGLog> GetExitLogswithURL(List<GNGLog> logs, string url)
         {
+            var newList = new List<GNGLog>();
+            var clickEventID = "ClickEvent";
+            var exitFromWebsiteID = "ExitFromWebsite";
             //For everylog find the exit point to the website
-            for (int i = logs.Count - 1; i >= 0; i--)
+            for (int i = 0; i < logs.Count; i++)
             {
-                string logID = logs[i].LogID;
-                //Check if log is does not have logID ClickEvent or ExitFromWebsite
-                if(string.Compare(logID, "ClickEvent") != 0 && string.Compare(logID, "ExitFromWebsite") != 0)
-                {
-                        logs.Remove(logs[i]);
-                }
-                //Check to see if the url of the log doesnt match with the passed url
-                else if (string.Compare(logID, "ClickEvent") == 0)
+                var logID = logs[i].LogID;
+                if (clickEventID.CompareTo(logID) == 0)
                 {
                     string[] lastPageUrl = logs[i].Description.Split(' ');
-                    if (string.Compare(lastPageUrl[0], url) != 0)
+                    if (url.CompareTo(lastPageUrl[0]) == 0)
                     {
-                        logs.Remove(logs[i]);
+                        newList.Add(logs[i]);
                     }
                 }
                 //Check to see if the url when the user logs off doesnt matches the passed url
-                else if (string.Compare(logID, "ExitFromWebsite") == 0)
+                else if (exitFromWebsiteID.CompareTo(logID) == 0)
                 {
                     string[] logoutUrl = logs[i].Description.Split(' ');
-                    if (string.Compare(logoutUrl[4], url) != 0)
+                    if (url.CompareTo(logoutUrl[4]) == 0)
                     {
-                        logs.Remove(logs[i]);
+                        newList.Add(logs[i]);
                     }
                 }
             }
+            return newList;
         }
 
         /// <summary>
@@ -280,13 +261,14 @@ namespace Gucci.ServiceLayer.Services
         /// <param name="informationTitles">Array of titles for information</param>
         /// <param name="values">List of values that go with the titles</param>
         /// <returns>List of UADObjects</returns>
-        public List<UADObject> ConvertListToUADObjects(string[] informationTitles, List<string> values)
+        public List<UADObject> ConvertListToUADObjects(List<string> months, string[] informationTitles, List<string> values)
         {
             var uadObjects = new List<UADObject>();
             for(int i = 0; i < informationTitles.Length; i++)
             {
                 var currentUADObject = new UADObject
                 {
+                    Date = months[0],
                     InfoType = informationTitles[i],
                     Value = values[i]
                 };

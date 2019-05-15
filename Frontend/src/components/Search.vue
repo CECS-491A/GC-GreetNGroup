@@ -34,15 +34,17 @@
             <div id="events-list">
               <h2>{{ errorInSearch }} </h2>
               <div v-if="events !== null">
-                  <div id="events" v-for="{Uid, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
-                    <p>{{findUserByUserId(Uid)}}</p>
-                    <router-link :to="'/eventpage/' + EventName">
-                      <button  id="event-b"> {{EventName}} </button>
-                    </router-link>
-                    <article> {{'Start Date: ' + formatDate(StartDate)}} </article>
-                    <article> {{'Location: ' + EventLocation}} </article>
-                    <article> {{'Host: ' + eventHost}} </article>
-                  </div>
+                  <div id="events" v-for="{Uid, EventId, EventName, EventLocation, StartDate, index} in limitSearchResultsEvents" :key="index">
+                    <v-card ref="Event">
+                        <p>{{findUserByUserId(Uid)}}</p>
+                        <router-link :to="'/eventpage/' + EventId">
+                        <button  id="event-b"> {{EventName}} </button>
+                        </router-link>
+                        <article> {{StartDate | moment("dddd, MMMM Do YYYY, h:mm a")}} </article>
+                        <article> {{'Location: ' + EventLocation}} </article>
+                        <article> {{'Host: ' + eventHost}} </article>
+                    </v-card>
+                </div>
               </div>
               <div v-else>{{ errorInSearch = 'Sorry! The we couldn\'t find anything!' }}</div>
             </div>
@@ -104,7 +106,8 @@ export default {
       newPageLimit: 5,
       pageLimit: 5,
       pageEnd: 5,
-      endReached: false
+      endReached: false,
+      caughtError: ''
     }
   },
   methods: {
@@ -123,15 +126,6 @@ export default {
     checkInput: function (i) {
       if (i !== '') return true
       return false
-    },
-    // Formats date into standard reading format
-    formatDate (date) {
-      // DateTime objects formatted as 'YYYY-MM-DD T HH:MM:SS', formatting will result in array of size 6
-      var splitDate = date.split('-').join(',').split('T').join(',').split(':').join(',').split(',')
-      var interval = parseInt(splitDate[3]) >= 12 ? 'PM' : 'AM'
-      var hour = parseInt(splitDate[3], 10) % 12 !== 0 ? parseInt(splitDate[3], 10) % 12 : 12
-      var formattedDate = splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0] + ' ' + hour + ':' + splitDate[4] + interval
-      return formattedDate
     },
     // Return username given id in event search
     findUserByUserId: function (i) {

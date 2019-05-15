@@ -15,6 +15,7 @@ namespace UnitTest.UADTest
         private UADManager uadManager = new UADManager();
         private UADService _uadService = new UADService();
         private LoggerService _loggerService = new LoggerService();
+        private UserService userService = new UserService();
         #region ManagerTest
         [TestMethod]
         public void GetLoginComparedToRegistered_Pass()
@@ -23,16 +24,18 @@ namespace UnitTest.UADTest
             bool expected = true;
             bool actual = false;
             var expectedAverageLogins = "1.5";
-            var expectedRegistered = "14";
+            var expectedMinLogin = "1";
+            var expectedMaxLogin = "2";
+            var expectedRegistered = userService.GetRegisteredUserCount();
             // Act
-            var test = uadManager.GetLoginComparedToRegistered("April", 2020);
-            if(test[0].Value.CompareTo(expectedAverageLogins) == 0 && test[3].Value.CompareTo(expectedRegistered) == 0)
+            var test = uadManager.GetLoginComparedToRegistered("April", 1);
+            if (test[0].Value.Equals(expectedAverageLogins) && test[1].Value.Equals(expectedMinLogin) && test[2].Value.Equals(expectedMaxLogin))
             {
                 actual = true;
             }
             for(int i = 0; i < test.Count; i++)
             {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
+                Console.WriteLine(test[i].Date + ' ' + test[i].InfoType + ' ' + test[i].Value);
             }
             // Assert
             Assert.AreEqual(actual, expected);
@@ -45,41 +48,35 @@ namespace UnitTest.UADTest
             bool expected = true;
             bool actual = false;
             var expectedSuccessfulLogins = "3";
-            var expectedFailLogins = "0";
+            var expectedFailLogins = "1";
             // Act
-            var test = uadManager.GetLoginSuccessFail("April", 1);
-            if (test[0].Value.CompareTo(expectedSuccessfulLogins) == 0 && test[1].Value.CompareTo(expectedFailLogins) == 0)
+            var test = uadManager.GetLoginSuccessFail("June", 1);
+            if (test[4].Value.CompareTo(expectedSuccessfulLogins) == 0 && test[5].Value.CompareTo(expectedFailLogins) == 0)
             {
                 actual = true;
-            }
-            for (int i = 0; i < test.Count; i++)
-            {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
             }
             // Assert
             Assert.AreEqual(actual, expected);
         }
 
         [TestMethod]
-        public void GetMonthlyLoginOverSixMonths_Pass()
+        public void GetLoggedinMonthly_Pass()
         {
             // Arrange
             bool expected = true;
             bool actual = false;
+            var expectedDates = new List<string> { "June 1", "May 1", "April 1", "March 1", "February 1", "January 1" };
             var expectedLogins = new List<string> { "0", "0", "3", "2", "1", "0" };
-            var expectedMonths = new List<string> { "June", "May", "April", "March", "February", "January" };
+            var actualDates = new List<string>();
             var actualLogin = new List<string>();
-            var actualMonths = new List<string>();
-
             // Act
             var test = uadManager.GetLoggedInMonthly("June", 1);
             for (int i = 0; i < test.Count; i++)
             {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
+                actualDates.Add(test[i].Date);
                 actualLogin.Add(test[i].Value);
-                actualMonths.Add(test[i].InfoType);
             }
-            if(expectedLogins.SequenceEqual(actualLogin) && expectedMonths.SequenceEqual(actualMonths))
+            if(expectedDates.SequenceEqual(actualDates) && expectedLogins.SequenceEqual(actualLogin))
             {
                 actual = true;
             }
@@ -93,7 +90,7 @@ namespace UnitTest.UADTest
             // Arrange
             bool expected = true;
             bool actual = false;
-            var expectedFeatures = new List<string> {"SearchAction", "EventCreated", "EventJoined", "UserRatings" ,"FindEventForMe"};
+            var expectedFeatures = new List<string> {"SearchAction", "EventCreated", "EventJoined", "UserRatings", "FindEventForMe", };
             var expectedCount = new List<string> {"11", "3",  "1", "0", "0" };
             var actualFeatures = new List<string>();
             var actualCount = new List<string>();
@@ -101,7 +98,7 @@ namespace UnitTest.UADTest
             var test = uadManager.GetTop5MostUsedFeature("April", 1);
             for (int i = 0; i < test.Count; i++)
             {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
+                Console.WriteLine(test[i].Date + ' ' + test[i].InfoType + ' ' + test[i].Value);
                 actualFeatures.Add(test[i].InfoType);
                 actualCount.Add(test[i].Value);
             }
@@ -120,19 +117,15 @@ namespace UnitTest.UADTest
             // Arrange
             bool expected = true;
             bool actual = false;
-            var expectedAverageSession = "417.67";
-            var expectedMinSession = "53";
-            var expectedMaxSession = "840";
+            var expectedAverageSession = "180";
+            var expectedMinSession = "60";
+            var expectedMaxSession = "300";
 
             // Act
-            var test = uadManager.GetAverageSessionDuration("April", 1);
-            if(expectedAverageSession == test[0].Value && expectedMinSession == test[1].Value && expectedMaxSession == test[2].Value)
+            var test = uadManager.GetAverageSessionDuration("June", 1);
+            if(expectedAverageSession == test[6].Value && expectedMinSession == test[7].Value && expectedMaxSession == test[8].Value)
             {
                 actual = true;
-            }
-            for (int i = 0; i < test.Count; i++)
-            {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
             }
             // Assert
             Assert.AreEqual(actual, expected);
@@ -144,20 +137,19 @@ namespace UnitTest.UADTest
             // Assign
             bool expected = true;
             bool actual = false;
-            var expectedDuration = new List<string> { "0", "0", "417.67", "956.5", "533", "0" };
-            var expectedMonths = new List<string> { "June", "May", "April", "March", "February", "January" };
+            var expectedDates = new List<string> { "June 1", "May 1", "April 1", "March 1", "February 1", "January 1" };
+            var expectedDuration = new List<string> { "0", "0", "180", "956.73", "533.47", "0" };
             var actualDuration = new List<string>();
             var actualMonths = new List<string>();
-
+            var actualDates = new List<string>();
             // Act
             var test = uadManager.GetAverageSessionMonthly("June", 1);
             for (int i = 0; i < test.Count; i++)
             {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
-                actualMonths.Add(test[i].InfoType);
+                actualDates.Add(test[i].Date);
                 actualDuration.Add(test[i].Value);
             }
-            if (expectedDuration.SequenceEqual(actualDuration) && expectedMonths.SequenceEqual(actualMonths))
+            if (expectedDuration.SequenceEqual(actualDuration) && expectedDates.SequenceEqual(actualDates))
             {
                 actual = true;
             }
@@ -172,19 +164,19 @@ namespace UnitTest.UADTest
             bool expected = true;
             bool actual = false;
             var expectedUrls = new List<string> { "https://www.greetngroup.com/search", "https://www.greetngroup.com/createevent", "https://www.greetngroup.com", "https://www.greetngroup.com/faq", "https://www.greetngroup.com/help" };
-            var expectedDuration = new List<string> { "547", "62", "0", "0", "0" };
+            var expectedDuration = new List<string> { "150", "60", "60", "0", "0" };
             var actualUrls = new List<string>();
             var actualDuration = new List<string>();
 
             // Act
-            var test = uadManager.GetTop5AveragePageSession("April", 1);
+            var test = uadManager.GetTop5AveragePageSession("June", 1);
             for (int i = 0; i < test.Count; i++)
             {
-                Console.WriteLine(test[i].InfoType + ' ' + test[i].Value);
                 actualUrls.Add(test[i].InfoType);
                 actualDuration.Add(test[i].Value);
             }
-            if (expectedDuration.SequenceEqual(actualDuration) && expectedUrls.SequenceEqual(actualUrls))
+            if (actualUrls[10].CompareTo(expectedUrls[0]) == 0 && actualUrls[11].CompareTo(expectedUrls[1]) == 0 && actualUrls[12].CompareTo(expectedUrls[2]) == 0 && actualUrls[13].CompareTo(expectedUrls[3]) == 0 && actualUrls[14].CompareTo(expectedUrls[4]) == 0 &&
+                actualDuration[10].CompareTo(expectedDuration[0]) == 0 && actualDuration[11].CompareTo(expectedDuration[1]) == 0 && actualDuration[12].CompareTo(expectedDuration[2]) == 0 && actualDuration[13].CompareTo(expectedDuration[3]) == 0 && actualDuration[14].CompareTo(expectedDuration[4]) == 0)
             {
                 actual = true;
             }
@@ -214,26 +206,6 @@ namespace UnitTest.UADTest
             Assert.AreEqual(actual, expected);
         }
 
-        [TestMethod]
-        public void GetLogsFortheMonth_Pass()
-        {
-            // Arrange
-            bool expected = true;
-            bool actual = false;
-            string month = "March";
-            string path = "C:\\Users\\Midnightdrop\\Documents\\GitHub\\GreetNGroup\\Backend\\UnitTest\\UADTest\\TestLogs\\ServiceLogs\\PassLogs";
-            List<GNGLog> logList = new List<GNGLog>();
-
-            // Act
-            logList = _loggerService.ReadLogsPath(path);
-            logList = _uadService.GetLogsFortheMonth(logList, month);
-            if (logList.Count == 3)
-            {
-                actual = true;
-            }
-            // Assert
-            Assert.AreEqual(actual, expected);
-        }
 
         [TestMethod]
         public void GetLogswithID_Pass()
@@ -264,7 +236,6 @@ namespace UnitTest.UADTest
         public void CalculateAverageSessionTime_Pass()
         {
             // Arrange
-            IUADService _uadService = new UADService();
             LoggerService _loggerService = new LoggerService();
             bool expected = true;
             bool actual = false;
@@ -275,7 +246,7 @@ namespace UnitTest.UADTest
 
             // Act
             logList = _loggerService.ReadLogsPath(path);
-            var averageTime = _uadService.CalculateAverageSessionInformation(logList);
+            var averageTime = _uadService.CalculateSessionInformation(logList);
             if(averageTime[0].CompareTo("60") == 0)
             {
                 actual = true;
@@ -295,8 +266,8 @@ namespace UnitTest.UADTest
 
             // Act
             logList = _loggerService.ReadLogsPath(path);
-            _uadService.GetEntryLogswithURL(logList, entryLog);
-            if (logList.Count == 3)
+            var newLog = _uadService.GetEntryLogswithURL(logList, entryLog);
+            if (newLog.Count == 3)
             {
                 actual = true;
             }
@@ -316,8 +287,8 @@ namespace UnitTest.UADTest
 
             // Act
             logList = _loggerService.ReadLogsPath(path);
-            _uadService.GetExitLogswithURL(logList, entryLog);
-            if (logList.Count == 4)
+            var newLog = _uadService.GetExitLogswithURL(logList, entryLog);
+            if (newLog.Count == 4)
             {
                 actual = true;
             }
@@ -344,27 +315,6 @@ namespace UnitTest.UADTest
             }
             // Assert
             Assert.AreNotSame(actual, expected);
-        }
-
-        [TestMethod]
-        public void GetLogsFortheMonth_Pass_MonthNotLogged()
-        {
-            // Arrange
-            bool expected = true;
-            bool actual = false;
-            string month = "December";
-            string path = "C:\\Users\\Midnightdrop\\Documents\\GitHub\\GreetNGroup\\Backend\\UnitTest\\UADTest\\TestLogs\\ServiceLogs\\PassLogs";
-            List<GNGLog> logList = new List<GNGLog>();
-
-            // Act
-            logList = _loggerService.ReadLogsPath(path);
-            logList = _uadService.GetLogsFortheMonth(logList, month);
-            if (logList.Count == 0)
-            {
-                actual = true;
-            }
-            // Assert
-            Assert.AreEqual(actual, expected);
         }
 
         [TestMethod]
@@ -402,8 +352,8 @@ namespace UnitTest.UADTest
 
             //Act
             logList = _loggerService.ReadLogsPath(path);
-            _uadService.GetEntryLogswithURL(logList, entryLog);
-            if (logList.Count == 0)
+            var newLog = _uadService.GetEntryLogswithURL(logList, entryLog);
+            if (newLog.Count == 0)
             {
                 actual = true;
             }
@@ -425,8 +375,8 @@ namespace UnitTest.UADTest
 
             //Act
             logList = _loggerService.ReadLogsPath(path);
-            _uadService.GetExitLogswithURL(logList, entryLog);
-            if (logList.Count == 0)
+            var newLog = _uadService.GetExitLogswithURL(logList, entryLog);
+            if (newLog.Count == 0)
             {
                 actual = true;
             }
@@ -450,7 +400,7 @@ namespace UnitTest.UADTest
 
             //Act
             logList = _loggerService.ReadLogsPath(path);
-            var averageTime = _uadService.CalculateAverageSessionInformation(logList);
+            var averageTime = _uadService.CalculateSessionInformation(logList);
             Console.WriteLine(averageTime);
             if(averageTime[0].CompareTo("60") == 0)
             {

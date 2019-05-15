@@ -7,12 +7,13 @@ using Gucci.ServiceLayer.Interface;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DataAccessLayer.Tables;
+using System.Data.Entity;
 
 namespace Gucci.ServiceLayer.Services
 {
     public class JWTService : IJWTService
     {
-        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.User);
+        private readonly string symmetricKeyFinal = Environment.GetEnvironmentVariable("JWTSignature", EnvironmentVariableTarget.Machine);
         private ILoggerService _gngLoggerService;
         private JwtSecurityTokenHandler tokenHandler;
         private readonly SigningCredentials credentials;
@@ -208,7 +209,6 @@ namespace Gucci.ServiceLayer.Services
             {
                 return -1;
             }
-
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Gucci.ServiceLayer.Services
                         return false;
                     }
 
-                    var JWTTokenToAdd = new JWTToken(newTokenID, jwtToken, userID);
+                    var JWTTokenToAdd = new JWTToken(newTokenID, jwtToken, userID, true);
 
                     ctx.JWTTokens.Add(JWTTokenToAdd);
                     ctx.SaveChanges();
@@ -338,7 +338,32 @@ namespace Gucci.ServiceLayer.Services
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                return false;
+            }
+        }
+
+        public bool InvalidateToken(string jwtToken)
+        {
+            try
+            {
+                using (var ctx = new GreetNGroupContext())
+                {
+                    var userID = GetUserIDFromToken(jwtToken);
+                    var retrievedToken = ctx.JWTTokens.Where(j => j.Token == jwtToken)
+                                                     .Where(j => j.UserId == userID)
+                                                     .First();
+                    if (retrievedToken != null)
+                    {
+                        retrievedToken.isValid = false;
+                        ctx.Entry(retrievedToken).State = EntityState.Modified;
+                        ctx.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
                 return false;
             }
         }
@@ -349,7 +374,10 @@ namespace Gucci.ServiceLayer.Services
             {
                 using (var ctx = new GreetNGroupContext())
                 {
-                    var TokenToRemove = ctx.JWTTokens.Where(j => j.Token == jwtToken).FirstOrDefault<JWTToken>();
+                    var userID = GetUserIDFromToken(jwtToken);
+                    var TokenToRemove = ctx.JWTTokens.Where(j => j.Token == jwtToken)
+                                                     .Where(j => j.UserId == userID)
+                                                     .First();
                     if (TokenToRemove != null)
                     {
                         ctx.JWTTokens.Remove(TokenToRemove);
@@ -401,12 +429,11 @@ namespace Gucci.ServiceLayer.Services
                     {
                         return false;
                     }
-                    return true;
+                    return tokenToFind.isValid;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }

@@ -25,8 +25,6 @@ export default {
       console.log('logged in')
       this.$router.push('/')
     }
-    console.log('unable to log in')
-    this.$router.push('/')
   }
 }
 </script>

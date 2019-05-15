@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { isProfileEnabled } from '@/router/request'
-
+import axios from 'axios'
+import { apiURL } from '@/const.js'
 export default {
   name: 'Welcome',
   data () {
@@ -17,9 +17,25 @@ export default {
   },
   created () {
     if (localStorage.getItem('token') !== null) {
-      if (!isProfileEnabled()) {
-        this.$router.push('/activateprofile')
-      }
+      axios({
+        method: 'POST',
+        url: `${apiURL}/profile/isprofileactivated/`,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        data: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(e => {
+          if (e.response.status === 403) {
+            this.$router.push('/activateprofile')
+          }
+        })
     }
   }
 }

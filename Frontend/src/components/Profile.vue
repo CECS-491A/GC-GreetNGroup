@@ -27,12 +27,12 @@
     <h3 id="rating">Rating: {{this.json.Rating}}</h3> 
 
     <v-flex xs12 sm3 id="thumbsUp">
-            <v-btn flat icon color="green" v-on:click="submitRating" value="1">
+            <v-btn flat icon color="green" @click="submitRating(1)">
               <v-icon>thumb_up</v-icon>
             </v-btn>
           </v-flex>
     <v-flex xs12 sm3 id="thumbsDown">
-            <v-btn flat icon color="red" v-on:click="submitRating" value="-1">
+            <v-btn flat icon color="red" @click="submitRating(-1)">
               <v-icon>thumb_down</v-icon>
             </v-btn>
           </v-flex>
@@ -69,9 +69,6 @@ export default {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
-      },
-      data: {
-        userID: this.userID
       }
     })
     /* eslint-disable */
@@ -83,17 +80,17 @@ export default {
       if (localStorage.getItem('token') !== null) {
         axios({
           method: 'POST',
-          url: `${apiURL}/user/` + this.userID + '/rate',
+          url: `${apiURL}/profile/` + this.userID + '/rate',
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true
           },
           data: {
-            jwtToken: localStorage.getItem('Token'),
+            jwtToken: localStorage.getItem('token'),
             rating: value
           }
         })
-          .then(response => (this.json = response.data))
+          .then(response => (this.message = response.data))
           .catch(e => { this.errorMessage = e.response.data })
       } else {
         this.errorMessage = 'Must be logged in to rate user'

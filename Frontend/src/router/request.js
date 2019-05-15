@@ -59,8 +59,8 @@ function isTokenValid (jwtToken) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    data: {
-      token: jwtToken
+    data:{
+      token: localStorage.getItem('token')
     }
   })
   .then(response =>{

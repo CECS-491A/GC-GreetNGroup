@@ -3,17 +3,18 @@ using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Gucci.ServiceLayer.Services
 {
-    
+
     public class AttendeesService
     {
         private ILoggerService _gngLoggerService;
         private EventService _eventService;
         private UserService _userService;
-        public AttendeesService ()
+        public AttendeesService()
         {
             _gngLoggerService = new LoggerService();
             _eventService = new EventService();
@@ -30,7 +31,7 @@ namespace Gucci.ServiceLayer.Services
         {
             try
             {
-                Attendance attendee = new Attendance(eventId, userId, false) ;
+                Attendance attendee = new Attendance(eventId, userId, false);
                 using (var ctx = new GreetNGroupContext())
                 {
                     ctx.Attendees.Add(attendee);
@@ -78,6 +79,16 @@ namespace Gucci.ServiceLayer.Services
         }
         #endregion
 
+        public Attendance UpdateAttendance(Attendance updatedAtendance)
+        {
+            using (var _db = new GreetNGroupContext())
+            {
+                _db.Entry(updatedAtendance).State = EntityState.Modified;
+                _db.SaveChanges();
+                return updatedAtendance;
+            }
+        }
+
         #region Validation
         /// <summary>
         /// Checks to see if user and event exist
@@ -90,7 +101,7 @@ namespace Gucci.ServiceLayer.Services
             var isValid = false;
             var isEventValid = _eventService.IsEventIdFound(eventId);
             var isUserValid = _userService.IsUsernameFoundById(userId);
-            if(isEventValid == true && isUserValid == true)
+            if (isEventValid == true && isUserValid == true)
             {
                 isValid = true;
             }
@@ -136,16 +147,16 @@ namespace Gucci.ServiceLayer.Services
             {
 
                 attendees = ctx.Attendees.Where(c => c.EventId.Equals(eventId)).ToList();
-                if(attendees.Count != 0)
+                if (attendees.Count != 0)
                 {
-                    for(int i = 0; i < attendees.Count; i++)
+                    for (int i = 0; i < attendees.Count; i++)
                     {
-                       
+
                         user.Add(_userService.GetUserById(attendees[i].UserId));
-                  
+
                     }
-                   
-                    for(int i = 0; i < user.Count; i++)
+
+                    for (int i = 0; i < user.Count; i++)
                     {
                         names.Add(user[i].FirstName + " " + user[i].LastName);
                     }

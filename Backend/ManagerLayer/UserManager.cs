@@ -1,9 +1,11 @@
+using Gucci.DataAccessLayer.Context;
 using Gucci.DataAccessLayer.Tables;
 using Gucci.ServiceLayer.Interface;
 using Gucci.ServiceLayer.Requests;
 using Gucci.ServiceLayer.Services;
 using ServiceLayer.Services;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -20,7 +22,7 @@ namespace ManagerLayer.UserManagement
         {
             _userService = new UserService();
             _gngLoggerService = new LoggerService();
-            _signatureService = new SignatureService();
+            _signatureService = new SignatureService("8934DC8043EE545D7759F2089267A5EDF1B424DC5E100A85E85B65E5C5C9E72C");
             _jwtService = new JWTService();
         }
 
@@ -31,22 +33,33 @@ namespace ManagerLayer.UserManagement
 
         public HttpResponseMessage GetEmail(string jwtToken)
         {
-            var isSignatureTampered = _jwtService.IsJWTSignatureTampered(jwtToken);
-            if (isSignatureTampered)
+            try
             {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                var isSignatureTampered = _jwtService.IsJWTSignatureTampered(jwtToken);
+                if (isSignatureTampered)
                 {
-                    Content = new StringContent("Session is invalid")
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                    {
+                        Content = new StringContent("Session is invalid")
+                    };
+                    return httpResponseFail;
+                }
+                var retrievedEmail = _jwtService.GetUsernameFromToken(jwtToken);
+
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(retrievedEmail)
+                };
+                return httpResponse;
+            }
+            catch (Exception e)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("Unable to get email at this time.")
                 };
                 return httpResponseFail;
             }
-            var retrievedEmail = _jwtService.GetUsernameFromToken(jwtToken);
-
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(retrievedEmail)
-            };
-            return httpResponse;
         }
 
         public HttpResponseMessage DeleteUserUsingSSO(SSOUserRequest request)
@@ -81,32 +94,41 @@ namespace ManagerLayer.UserManagement
         {
             try
             {
-                // Check if user exists
-                var isExistingUser = _userService.IsUsernameFound(email);
-                if (!isExistingUser)
+                using (var ctx = new GreetNGroupContext())
                 {
-                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("User not found in system")
-                    };
-                    return httpResponseFail;
-                }
+                    var retrievedUser = ctx.Users.Where(u => u.UserName == email).FirstOrDefault<User>();
 
-                var isUserDeleted = _userService.DeleteUser(_userService.GetUserByUsername(email));
-                if (isUserDeleted)
-                {
+                    if (retrievedUser == null)
+                    {
+                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
+                        {
+                            Content = new StringContent("User not found in system")
+                        };
+                        return httpResponseFail;
+                    }
+
+                    ctx.JWTTokens.RemoveRange(ctx.JWTTokens.Where(j => j.UserId == retrievedUser.UserId));
+                    ctx.UserRatings.RemoveRange(ctx.UserRatings.Where(u => u.RatedId1 == retrievedUser.UserId));
+                    ctx.UserRatings.RemoveRange(ctx.UserRatings.Where(u => u.RaterId1 == retrievedUser.UserId));
+                    var retrievedClaims = ctx.UserClaims.Where(c => c.UId == retrievedUser.UserId).FirstOrDefault<UserClaim>();
+                    ctx.UserClaims.Remove(retrievedClaims);
+
+                    retrievedUser.FirstName = "Deleted";
+                    retrievedUser.LastName = "User";
+                    retrievedUser.UserName = "DeletedUser@greetngroup.com";
+                    retrievedUser.State = "CA";
+                    retrievedUser.City = "LB";
+                    retrievedUser.Country = "USA";
+                    retrievedUser.DoB = DateTime.MinValue;
+                    retrievedUser.IsActivated = false;
+                    ctx.SaveChanges();
+
                     var httpResponseSuccess = new HttpResponseMessage(HttpStatusCode.OK)
                     {
                         Content = new StringContent("User was deleted from GreetNGroup")
                     };
                     return httpResponseSuccess;
                 }
-
-                var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent("Unable to delete user at this time")
-                };
-                return httpResponse;
             }
             catch (Exception ex)
             {

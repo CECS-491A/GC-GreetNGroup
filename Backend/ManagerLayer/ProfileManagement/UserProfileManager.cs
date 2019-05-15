@@ -12,13 +12,13 @@ using Newtonsoft.Json;
 
 namespace Gucci.ManagerLayer.ProfileManagement
 {
-
     public class UserProfileManager
     {
         private readonly DateTime requiredAgeOfUser = DateTime.Now.AddYears(-18); // Must be 18 years old to use this application
         private IUserService _userService;
         private IJWTService _jwtServce;
         private RatingService _ratingService;
+        private readonly List<string> canRateUsers = new List<string> { "CanRate" };
 
         public UserProfileManager()
         {
@@ -37,14 +37,6 @@ namespace Gucci.ManagerLayer.ProfileManagement
             try
             {
                 int convertedUserID = Convert.ToInt32(userID);
-                if (!_userService.IsUsernameFoundById(convertedUserID))
-                {
-                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("User does not exist")
-                    };
-                    return httpResponseFail;
-                }
 
                 User retrievedUser = _userService.GetUserById(convertedUserID);
                 if (retrievedUser == null)
@@ -86,26 +78,28 @@ namespace Gucci.ManagerLayer.ProfileManagement
 
         public HttpResponseMessage UpdateUserProfile(UpdateProfileRequest request)
         {
-            var isSignatureTampered = _jwtServce.IsJWTSignatureTampered(request.JwtToken);
-            if (isSignatureTampered){
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                {
-                    Content = new StringContent("Session is invalid")
-                };
-                return httpResponseFail;
-            }
-
-
-            if(request.DoB > requiredAgeOfUser) // Check if the user is over 18
+            try
             {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                var isSignatureTampered = _jwtServce.IsJWTSignatureTampered(request.JwtToken);
+                if (isSignatureTampered) // Check if signature is tampered
                 {
-                    Content = new StringContent("This software is intended for persons over 18 years of age.")
-                };
-                return httpResponseFail;
-            }
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                    {
+                        Content = new StringContent("Session is invalid")
+                    };
+                    return httpResponseFail;
+                }
 
-            List<string> userInfo = new List<string>
+                if (request.DoB > requiredAgeOfUser) // Check if the user is over 18
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                    {
+                        Content = new StringContent("This software is intended for persons over 18 years of age.")
+                    };
+                    return httpResponseFail;
+                }
+
+                List<string> userInfo = new List<string>
                 {
                 request.FirstName,
                 request.LastName,
@@ -114,54 +108,71 @@ namespace Gucci.ManagerLayer.ProfileManagement
                 request.State,
                 request.Country
             };
-            
-            foreach(string item in userInfo)
-            {
-                if (String.IsNullOrWhiteSpace(item))
+
+                foreach (string item in userInfo) // Check if any of the fields are null
                 {
-                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    if (String.IsNullOrWhiteSpace(item))
                     {
-                        Content = new StringContent("Fields cannot be null")
+                        var httpResponseFail = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                        {
+                            Content = new StringContent("Fields cannot be null")
+                        };
+                        return httpResponseFail;
+                    }
+                }
+
+                int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
+                User retrievedUser = _userService.GetUserById(userID);
+                retrievedUser.FirstName = request.FirstName;
+                retrievedUser.LastName = request.LastName;
+                retrievedUser.DoB = request.DoB;
+                retrievedUser.City = request.City;
+                retrievedUser.State = request.State;
+                retrievedUser.Country = request.Country;
+
+                if (!retrievedUser.IsActivated) // Check to see if the profile is activated, if not, activate it
+                {
+                    retrievedUser.IsActivated = true;
+                }
+
+                var isUserUpdated = _userService.UpdateUser(retrievedUser); // Update user with new fields
+                if (!isUserUpdated)
+                {
+                    var httpResponseFail = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                    {
+                        Content = new StringContent("Unable to update user")
                     };
                     return httpResponseFail;
                 }
-            }
 
-            int userID = _jwtServce.GetUserIDFromToken(request.JwtToken);
-            User retrievedUser = _userService.GetUserById(userID);
-            retrievedUser.FirstName = request.FirstName;
-            retrievedUser.LastName = request.LastName;
-            retrievedUser.DoB = request.DoB;
-            retrievedUser.City = request.City;
-            retrievedUser.State = request.State;
-            retrievedUser.Country = request.Country;
-
-            if (!retrievedUser.IsActivated) //Check to see if the profile is activated, if not, activate it
-            {
-                retrievedUser.IsActivated = true;
-            }
-
-            var isUserUpdated = _userService.UpdateUser(retrievedUser);
-            if (!isUserUpdated)
-            {
-                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StringContent("Unable to update user")
+                    Content = new StringContent("Profile has been updated")
+                };
+                return httpResponse;
+            }
+            catch (Exception e)
+            {
+                var httpResponseFail = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("Unable to update user at this time, internal server error.")
                 };
                 return httpResponseFail;
             }
-
-            var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent("Profile has been updated")
-            };
-            return httpResponse;
         }
 
         public HttpResponseMessage IsProfileActivated(string jwtToken)
         {
             try
             {
+                if(jwtToken == null)
+                {
+                    var failHttpResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("false")
+                    };
+                    return failHttpResponse;
+                }
                 var userIDFromToken = _jwtServce.GetUserIDFromToken(jwtToken);
                 if (!_userService.IsUsernameFoundById(userIDFromToken))
                 {
@@ -173,42 +184,67 @@ namespace Gucci.ManagerLayer.ProfileManagement
                 }
 
                 User retrievedUser = _userService.GetUserById(userIDFromToken);
+                if (!retrievedUser.IsActivated)
+                {
+                    var failHttpResponse = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                    {
+                        Content = new StringContent("false")
+                    };
+                    return failHttpResponse;
+                }
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StringContent(Convert.ToString(retrievedUser.IsActivated))
+                    Content = new StringContent("true")
                 };
                 return httpResponse;
             }
-            catch
+            catch (Exception e)
             {
                 var httpResponse = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                 {
-                    Content = new StringContent("Unable to check if user is activated at this time.")
+                    Content = new StringContent(e.ToString())
                 };
                 return httpResponse;
             }
-            
+
         }
-        
-        /*
+        /// <summary>
+        /// Either updates or adds a rating to the selected User
+        /// </summary>
+        /// <param name="request">Object that holds jwt and rating</param>
+        /// <param name="rateeID">User that is being rated</param>
+        /// <returns>an integer</returns>
         public int RateUser(RateRequest request, string rateeID)
         {
+            int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);
+            UserRating ur = new UserRating
+            {
+                RatedId1 = Convert.ToInt32(rateeID),
+                RaterId1 = Convert.ToInt32(raterID),
+                Rating = Convert.ToInt32(request.rating)
+            };
+
             try
             {
-                int raterID = _jwtServce.GetUserIDFromToken(request.jwtToken);
-                UserRating ur = new UserRating();
-                ur.RatedId1 = Convert.ToInt32(rateeID);
-                ur.RaterId1 = Convert.ToInt32(raterID);
-                ur.Rating = Convert.ToInt32(request.rating);
-                _ratingService.CreateRating(ur);
-                return 1;
+                var hasClaims = _jwtServce.CheckUserClaims(request.jwtToken, canRateUsers);
+                if (hasClaims.CompareTo("Authorized") != 0)
+                {
+                    return -2;
+                }
+                var userRating = _ratingService.GetRating(Convert.ToInt32(raterID), Convert.ToInt32(rateeID));
+                if (userRating == false)
+                {
+                    _ratingService.CreateRating(ur, "");
+                    return 1;
+                }
+                _ratingService.UpdateRating(ur, "");
+                return 2;
             }
-            catch (FormatException)
+            catch (Exception e)
             {
                 //log
                 return -1;
             }
         }
-        */
     }
 }

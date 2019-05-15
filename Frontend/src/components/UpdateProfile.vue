@@ -146,7 +146,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: `${apiURL}` + 'profile/update',
+          url: `${apiURL}` + '/profile/update',
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true

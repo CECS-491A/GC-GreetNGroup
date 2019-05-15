@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Vue from 'vue'
+import Axios from 'axios'
 import Router from 'vue-router'
+import { apiURL } from '@/const.js'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
 import Profile from '@/components/Profile'
@@ -15,7 +17,6 @@ import FindEventsForMe from '@/components/FindEventsForMe'
 import ActivateProfile from '@/components/ActivateProfile'
 import TermsConditions from '@/components/TermsConditions'
 import AnalysisDashboard from '@/components/AnalysisDashboard'
-import Axios from 'axios'
 
 Vue.use(Router)
 
@@ -97,7 +98,7 @@ const router = new Router({
       }
     },
     {
-      path: '/eventpage/:name',
+      path: '/eventpage/:id',
       name: 'eventpage',
       component: EventPage,
       meta:{
@@ -125,7 +126,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (to.matched.some(value => value.meta.isAdmin)) {
-    Axios.post('http://localhost:62008/api/JWT/check', {
+    Axios.post(`${apiURL}` + '/JWT/check', {
       JWT: userJwt,
       ClaimsToCheck: ['AdminRights'],
       Ip: ipAddress,
@@ -141,7 +142,7 @@ router.beforeEach((to, from, next) => {
     })
   }
   if(to.matched.some(value => value.meta.canCreateEvents)) {
-    Axios.post('http://localhost:62008/api/JWT/check', {
+    Axios.post(`${apiURL}` + '/JWT/check', {
       JWT: userJwt,
       ClaimsToCheck: ['CanCreateEvents'],
       Ip: ipAddress,
@@ -157,7 +158,7 @@ router.beforeEach((to, from, next) => {
     })
   }
   if(to.matched.some(value => value.meta.canViewEvents)) {
-    Axios.post('http://localhost:62008/api/JWT/check', {
+    Axios.post(`${apiURL}` + '/JWT/check', {
       JWT: userJwt,
       ClaimsToCheck: ['CanViewEvents'],
       Ip: ipAddress,
@@ -180,7 +181,7 @@ router.beforeEach((to, from, next) => {
 // This will make sure that only successful entries to a certain path will be logged
 router.afterEach((to, from) => {
   let ipAddress = localStorage.getItem('ip')
-  Axios.post('http://localhost:62008/api/logclicks', {
+  Axios.post(`${apiURL}` + '/logclicks', {
     Jwt: localStorage.getItem('token'),
     Ip: ipAddress,
     StartPoint: 'https://www.greetngroup.com' + from.fullPath.toString(),
