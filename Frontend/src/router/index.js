@@ -52,7 +52,8 @@ const router = new Router({
       name: 'createevent',
       component: CreateEvent,
       meta: {
-        canCreateEvents: true
+        canCreateEvents: true,
+        isLoggedIn: true
       }
     },
     {
@@ -122,56 +123,58 @@ router.beforeEach((to, from, next) => {
       next('/')
     }
   }
-  if (to.matched.some(value => value.meta.isAdmin)) {
-    Axios.post(`${apiURL}` + '/JWT/check', {
-      JWT: userJwt,
-      ClaimsToCheck: ['AdminRights'],
-      Ip: ipAddress,
-      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
-    }).then((response) => {
-      alert(response.data)
-      next()
-    }).catch((error) => {
-      next('/')
-      setTimeout(() => {
-        alert(error.response.data)
-      }, 1000)
-    })
-  }
-  if(to.matched.some(value => value.meta.canCreateEvents)) {
-    Axios.post(`${apiURL}` + '/JWT/check', {
-      JWT: userJwt,
-      ClaimsToCheck: ['CanCreateEvents'],
-      Ip: ipAddress,
-      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
-    }).then((response) => {
-      alert(response.data)
-      next()
-    }).catch((error) => {
-      next('/')
-      setTimeout(() => {
-        alert(error.response.data)
-      }, 1000)
-    })
-  }
-  if(to.matched.some(value => value.meta.canViewEvents)) {
-    Axios.post(`${apiURL}` + '/JWT/check', {
-      JWT: userJwt,
-      ClaimsToCheck: ['CanViewEvents'],
-      Ip: ipAddress,
-      UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
-    }).then((response) => {
-      alert(response.data)
-      next()
-    }).catch((error) => {
-      next('/')
-      setTimeout(() => {
-        alert(error.response.data)
-      }, 1000)
-    })
-  }
   else{
-    next()
+    if (to.matched.some(value => value.meta.isAdmin)) {
+      Axios.post(`${apiURL}` + '/JWT/check', {
+        JWT: userJwt,
+        ClaimsToCheck: ['AdminRights'],
+        Ip: ipAddress,
+        UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+      }).then((response) => {
+        alert(response.data)
+        next()
+      }).catch((error) => {
+        next('/')
+        setTimeout(() => {
+          alert(error.response.data)
+        }, 1000)
+      })
+    }
+    if(to.matched.some(value => value.meta.canCreateEvents)) {
+      Axios.post(`${apiURL}` + '/JWT/check', {
+        JWT: userJwt,
+        ClaimsToCheck: ['CanCreateEvents'],
+        Ip: ipAddress,
+        UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+      }).then((response) => {
+        alert(response.data)
+        next()
+      }).catch((error) => {
+        next('/')
+        setTimeout(() => {
+          alert(error.response.data)
+        }, 1000)
+      })
+    }
+    if(to.matched.some(value => value.meta.canViewEvents)) {
+      Axios.post(`${apiURL}` + '/JWT/check', {
+        JWT: userJwt,
+        ClaimsToCheck: ['CanViewEvents'],
+        Ip: ipAddress,
+        UrlToEnter: 'https://www.greetngroup.com' + to.fullPath.toString()
+      }).then((response) => {
+        alert(response.data)
+        next()
+      }).catch((error) => {
+        next('/')
+        setTimeout(() => {
+          alert(error.response.data)
+        }, 1000)
+      })
+    }
+    else{
+      next()
+    }
   }
 })
 
