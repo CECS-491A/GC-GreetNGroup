@@ -65,7 +65,6 @@ const router = new Router({
       name: 'useranalysisdashboard',
       component: AnalysisDashboard,
       meta: {
-        isLoggedIn: true,
         isAdmin: true
       }
     },
