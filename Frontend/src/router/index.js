@@ -7,8 +7,9 @@ import Login from '@/components/Login'
 import Logout from '@/components/Logout'
 import Profile from '@/components/Profile'
 import Welcome from '@/components/Welcome'
-import EventPage from '@/components/EventPage'
 import SearchPage from '@/components/Search'
+import EventPage from '@/components/EventPage'
+import AdminPanel from '@/components/AdminPanel'
 import HelloWorld from '@/components/HelloWorld'
 import CreateEvent from '@/components/CreateEvent'
 import PageNotFound from '@/components/PageNotFound'
@@ -102,6 +103,11 @@ const router = new Router({
       path: '/termsandconditions',
       name: 'termsconditions',
       component: TermsConditions
+    },
+    {
+      path: '/adminpanel',
+      name: 'adminpanel',
+      component: AdminPanel
     }
   ]
 })

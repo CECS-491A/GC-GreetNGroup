@@ -5,10 +5,15 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
-          <v-btn to="/Search">Search</v-btn>
+          <v-btn v-for="link in NavBarLinks" :key="link.title" :to="link.route">
+            {{link.title}}
+          </v-btn>
+          <div v-if="isLoggedIn.isLogin">
+            <v-btn  v-for="link in UserMenuItems" :key="link.title" :to="link.route">
+              {{link.title}}
+            </v-btn>
+          </div>
           <v-btn v-if="isLoggedIn.isLogin" to="/analysisdashboard">User Analysis</v-btn>
-          <v-btn to="/findeventsforme">FindEventsForMe</v-btn>
-          <v-btn v-if="isLoggedIn.isLogin" to="/CreateEvent">Create Event</v-btn>
       </div>
       <div>
       <v-menu v-if="isLoggedIn.isLogin" offset-y
@@ -46,6 +51,13 @@ export default {
       UserMenuItems: [
         { title: 'Update Profile', route: '/updateprofile' },
         { title: 'Logout', route: '/logout' }
+      ],
+      NavBarLinks: [
+        {title: 'Search', route: '/search'},
+        {title: 'Find Events for Me', route: '/findeventsforme'}
+      ],
+      LoggedInLinks: [
+        {title: 'Create Events', route: '/createevent'}
       ]
     }
   },
