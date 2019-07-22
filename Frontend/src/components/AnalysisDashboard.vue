@@ -2,7 +2,7 @@
   <div class="UserAnalytics">
     <h1 class='display-2'>Analysis Dashboard</h1>
     <div>
-    <v-layout align-start justify-center row wrap>
+      <v-layout align-start justify-center row wrap>
         <v-flex xs2>
             <v-select
               v-model="month"
@@ -15,62 +15,61 @@
               :items="years"
               :menu-props="{ maxHeight: '200' }"
               label="Select A Year"
-              hide-details
             ></v-select>
-      </v-flex>
+            <v-btn v-on:click="searchInput(month, year)">Search</v-btn>
+        </v-flex>
       </v-layout>
     </div>
-    <div>
-    <button @click=" searchInput(month, year)">Search</button>
+
     <div v-bind:style="{ color: 'black', fontSize: 30 + 'px' }"> {{messageResults}}</div>
-    <v-expansion-panel
-      v-model="panel"
-      expand
-      v-expansion-panel color="purple" style="maxWidth: 800px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;"
-    >
-      <v-expansion-panel-content
-        v-for="(item, i) in 7"
-        :key="i"
-        style="background:purple;color:white"
+      <v-expansion-panel
+        v-model="panel"
+        expand
+        v-expansion-panel color="purple" 
+        style="maxWidth: 800px; text-align: center; margin: auto; font-size: 20px; font-weight: bold;"
       >
-        <template v-slot:header>
-          <div>{{titles[i]}}</div>
-        </template>
-        <v-card>
-          <template v-if="i === 0">
-            <li v-for="(value, index) in logvsreg"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
-                {{value.InfoType}} : {{value.Value}} 
-                </li>
+        <v-expansion-panel-content
+          v-for="(item, i) in 7"
+          :key="i"
+          style="background:purple;color:white"
+        >
+          <template v-slot:header>
+            <div>{{titles[i]}}</div>
           </template>
-          <template v-if="i === 1">
-            <li v-for="(value, index) in avgsession"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
-                {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-          <template v-if="i === 2">
-            <li v-for="(value, index) in top5feature"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+          <v-card>
+            <template v-if="i === 0">
+              <li v-for="(value, index) in logvsreg"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+                  {{value.InfoType}} : {{value.Value}} 
+                  </li>
+            </template>
+            <template v-if="i === 1">
+              <li v-for="(value, index) in avgsession"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
                   {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-          <template v-if="i === 3">
-            <li v-for="(value, index) in top5pages"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+            </template>
+            <template v-if="i === 2">
+              <li v-for="(value, index) in top5feature"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+                    {{value.InfoType}} : {{value.Value}} </li>
+            </template>
+            <template v-if="i === 3">
+              <li v-for="(value, index) in top5pages"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+                    {{value.InfoType}} : {{value.Value}} </li>
+            </template>
+            <template v-if="i === 4">
+              <li v-for="(value, index) in loginmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
                   {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-          <template v-if="i === 4">
-            <li v-for="(value, index) in loginmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
-                {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-          <template v-if="i === 5">
-            <li v-for="(value, index) in sessionmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
-                  {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-          <template v-if="i === 6">
-            <li v-for="(value, index) in loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
-                  {{value.InfoType}} : {{value.Value}} </li>
-          </template>
-        </v-card>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-  </div>
-  </div>
+            </template>
+            <template v-if="i === 5">
+              <li v-for="(value, index) in sessionmonthly"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+                    {{value.InfoType}} : {{value.Value}} </li>
+            </template>
+            <template v-if="i === 6">
+              <li v-for="(value, index) in loginsuccessfail"  v-bind:key="index" style = "list-style-type : none;  font-size: 18px;">
+                    {{value.InfoType}} : {{value.Value}} </li>
+            </template>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </div>
 </template>
 
 <script>
@@ -219,6 +218,6 @@ ul {
   padding:0;
   margin:0;
   display: inline-block;
-  text-align:left;
+  text-align: center;
 }
 </style>

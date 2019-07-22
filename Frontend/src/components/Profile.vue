@@ -1,13 +1,11 @@
 <template>
   <div class="Profile" >
-     <v-alert
-      :value="message"
-      dismissible
-      type="success"
-      transition="scale-transition"
-    >
-    {{message}}
-    </v-alert>
+    <v-alert
+    :value="message"
+    dismissible
+    type="success"
+    transition="scale-transition"
+    > {{message}} </v-alert>
     <v-alert
       :value="errorMessage"
       dismissible
