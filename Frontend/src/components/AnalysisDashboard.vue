@@ -31,7 +31,7 @@
         <v-expansion-panel-content
           v-for="(item, i) in 7"
           :key="i"
-          style="background:purple;color:white"
+          style="background:rgba(15,157,88);color:white"
         >
           <template v-slot:header>
             <div>{{titles[i]}}</div>

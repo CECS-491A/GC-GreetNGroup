@@ -4,7 +4,7 @@
         <div>
           <v-tabs
             v-model="active"
-            color="cyan"
+            color="rgba(66,133,244)"
             dark
             slider-color="yellow"
           >
@@ -15,7 +15,6 @@
               <v-card flat v-if="item.title=='User Analysis Dashboard'">
                 <analysis-dashboard></analysis-dashboard>
               </v-card>
-
               <v-card flat v-if="item.title=='Search'">
                 <search></search>
               </v-card>
